@@ -5,7 +5,7 @@ import { LuSave, LuRefreshCw, LuEye, LuMail, LuPhone, LuMapPin, LuClock, LuGlobe
 import { FaFacebookF, FaYoutube, FaLinkedinIn, FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import { useTheme } from '@/providers/ThemeProvider';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://motionboss-backend.vercel.app/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://extrain-web-server.vercel.app/api';
 
 const ContactDesignPage = () => {
     const { isDark } = useTheme();

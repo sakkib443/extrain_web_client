@@ -51,7 +51,7 @@ export default function EditSoftwarePage() {
     const imageFields = useFieldArray({ control, name: 'images' });
 
     const fetchData = useCallback(async () => {
-        const BASE_URL = 'https://motionboss-backend.vercel.app/api';
+        const BASE_URL = 'https://extrain-web-server.vercel.app/api';
         const token = localStorage.getItem('token');
         try {
             setFetching(true);
@@ -91,7 +91,7 @@ export default function EditSoftwarePage() {
 
     const onSubmit = async (values) => {
         setLoading(true);
-        const BASE_URL = 'https://motionboss-backend.vercel.app/api';
+        const BASE_URL = 'https://extrain-web-server.vercel.app/api';
         const token = localStorage.getItem('token');
 
         try {

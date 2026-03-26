@@ -3,8 +3,8 @@ import AboutContent from "./AboutContent";
 
 export const metadata = {
   title: "About Us | Extrain Web - Digital Architects",
-  description: "Extrain Web is a leading digital agency specializing in custom web development, premium templates, and software solutions. Meet our founder Zayed Uddin and discover our mission.",
-  keywords: "about extrain web, digital agency Bangladesh, Zayed Uddin, web development team, mission and vision, premium web solutions",
+  description: "Extrain Web is a leading digital agency in Bangladesh specializing in custom web development, premium templates, IELTS software, and business software solutions. Discover our mission and services.",
+  keywords: "about extrain web, digital agency Bangladesh, web development team, mission and vision, premium web solutions, software development company Dhaka",
   alternates: {
     canonical: "https://extrainweb.com/about",
   },
@@ -39,11 +39,15 @@ export default function AboutPage() {
               "alternateName": "Extra in Web",
               "url": "https://extrainweb.com",
               "logo": "https://extrainweb.com/images/logo.png",
-              "founder": {
-                "@type": "Person",
-                "name": "Zayed Uddin"
-              },
-              "description": "Leading website development company in Bangladesh specializing in custom web development, premium templates, and software solutions."
+              "foundingDate": "2019",
+              "description": "Leading website and software development company in Bangladesh specializing in custom web development, premium templates, IELTS software, and business solutions.",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Road - 11, DIT Project, Marul Badda, Badda",
+                "addressLocality": "Dhaka",
+                "postalCode": "1214",
+                "addressCountry": "BD"
+              }
             }
           })
         }}

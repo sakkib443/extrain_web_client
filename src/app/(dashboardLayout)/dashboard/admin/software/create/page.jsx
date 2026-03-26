@@ -96,7 +96,7 @@ export default function CreateSoftwarePage() {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const BASE_URL = 'https://motionboss-backend.vercel.app/api';
+            const BASE_URL = 'https://extrain-web-server.vercel.app/api';
             try {
                 const res = await fetch(`${BASE_URL}/categories?type=software`);
                 const data = await res.json();
@@ -109,7 +109,7 @@ export default function CreateSoftwarePage() {
     // Fetch existing software data if in edit mode
     useEffect(() => {
         if (isEditMode && editId) {
-            const BASE_URL = 'https://motionboss-backend.vercel.app/api';
+            const BASE_URL = 'https://extrain-web-server.vercel.app/api';
             const token = localStorage.getItem('token');
 
             const fetchSoftware = async () => {
@@ -163,7 +163,7 @@ export default function CreateSoftwarePage() {
 
     const onSubmit = async (values) => {
         setLoading(true);
-        const BASE_URL = 'https://motionboss-backend.vercel.app/api';
+        const BASE_URL = 'https://extrain-web-server.vercel.app/api';
         const token = localStorage.getItem('token');
         const user = JSON.parse(localStorage.getItem('user') || '{}');
 

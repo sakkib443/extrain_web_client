@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { LuSave, LuPlus, LuTrash2, LuRefreshCw, LuEye, LuImage, LuType, LuList, LuChartBar } from 'react-icons/lu';
 import { useTheme } from '@/providers/ThemeProvider';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://motionboss-backend.vercel.app/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://extrain-web-server.vercel.app/api';
 
 const HeroDesignPage = () => {
     const { isDark } = useTheme();

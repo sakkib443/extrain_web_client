@@ -24,8 +24,8 @@ export default function SettingsPage() {
 
     const [saving, setSaving] = useState(false);
     const [settings, setSettings] = useState({
-        siteName: 'MotionBoss',
-        siteEmail: 'admin@motionboss.com',
+        siteName: 'Extrain Web',
+        siteEmail: 'info.extrainweb@gmail.com',
         currency: 'BDT',
         currencySymbol: '৳',
         emailNotifications: true,

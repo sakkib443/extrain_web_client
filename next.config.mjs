@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "api.ejobsit.com",
+        hostname: "extrain-web-server.vercel.app",
       },
       {
         protocol: "https",

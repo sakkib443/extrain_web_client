@@ -161,7 +161,7 @@ const DashboardHeader = () => {
                         {user?.firstName} {user?.lastName}
                       </p>
                       <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                        {user?.email || 'admin@motionboss.com'}
+                        {user?.email || 'admin@extrainweb.com'}
                       </p>
                     </div>
                   </div>

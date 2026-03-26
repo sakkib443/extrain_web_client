@@ -1,6 +1,6 @@
 export const metadata = {
     title: "Checkout",
-    description: "Complete your purchase at ejobs it.",
+    description: "Complete your purchase at Extrain Web.",
 };
 
 export default function CheckoutLayout({ children }) {

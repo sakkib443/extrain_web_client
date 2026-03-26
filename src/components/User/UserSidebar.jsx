@@ -324,7 +324,7 @@ const UserSidebar = () => {
                         </div>
                         <div className="overflow-hidden">
                             <p className={`text-sm font-bold truncate ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{user?.firstName || 'Student'}</p>
-                            <p className="text-[10px] text-slate-500 truncate">{user?.email || 'student@motionboss.com'}</p>
+                            <p className="text-[10px] text-slate-500 truncate">{user?.email || 'user@extrainweb.com'}</p>
                         </div>
                     </div>
                     <button

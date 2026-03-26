@@ -7,7 +7,7 @@ import { LuMail, LuPhone, LuMapPin, LuSend, LuClock, LuArrowRight, LuMessageCirc
 import { FaFacebookF, FaYoutube, FaLinkedinIn, FaWhatsapp, FaInstagram } from "react-icons/fa";
 import { useLanguage } from "@/context/LanguageContext";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://motionboss-backend.vercel.app/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://extrain-web-server.vercel.app/api';
 
 export default function ContactContent() {
     const { t, language } = useLanguage();

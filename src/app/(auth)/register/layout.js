@@ -1,6 +1,6 @@
 export const metadata = {
     title: "Register",
-    description: "Create your ejobs it account.",
+    description: "Create your Extrain Web account.",
 };
 
 export default function RegisterLayout({ children }) {

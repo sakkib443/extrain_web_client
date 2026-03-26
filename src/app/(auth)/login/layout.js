@@ -1,6 +1,6 @@
 export const metadata = {
     title: "Login",
-    description: "Login to your ejobs it account.",
+    description: "Login to your Extrain Web account.",
 };
 
 export default function LoginLayout({ children }) {

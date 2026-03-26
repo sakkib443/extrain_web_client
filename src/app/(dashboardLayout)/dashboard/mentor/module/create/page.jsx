@@ -20,7 +20,7 @@ export default function CreateModulePage() {
         isPublished: true,
     });
 
-    const BASE_URL = 'https://motionboss-backend.vercel.app/api';
+    const BASE_URL = 'https://extrain-web-server.vercel.app/api';
 
     useEffect(() => {
         const fetchCourses = async () => {

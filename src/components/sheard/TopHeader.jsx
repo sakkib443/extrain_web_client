@@ -31,7 +31,7 @@ const TopHeader = () => {
 
     const fetchTopCoupon = async () => {
       try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL || 'https://motionboss-backend.vercel.app/api'}/coupons/top-header`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL || 'https://extrain-web-server.vercel.app/api'}/coupons/top-header`;
         const res = await fetch(url);
         const data = await res.json();
         if (data.success && data.data) {

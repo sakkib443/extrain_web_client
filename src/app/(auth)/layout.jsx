@@ -3,8 +3,8 @@ import Navbar from "@/components/sheard/Navbar";
 import TopHeader from "@/components/sheard/TopHeader";
 
 export const metadata = {
-  title: "Authentication | Bd Calling Academy",
-  description: "Login or Register to access your Bd Calling Academy account.",
+  title: "Authentication | Extrain Web",
+  description: "Login or Register to access your Extrain Web account.",
 };
 
 export default function AuthLayout({ children }) {

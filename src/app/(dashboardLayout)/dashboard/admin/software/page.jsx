@@ -33,7 +33,7 @@ const SoftwarePage = () => {
     const router = useRouter();
 
     const fetchSoftware = async () => {
-        const BASE_URL = 'https://motionboss-backend.vercel.app/api';
+        const BASE_URL = 'https://extrain-web-server.vercel.app/api';
         const token = localStorage.getItem('token');
         try {
             setLoading(true);
@@ -55,7 +55,7 @@ const SoftwarePage = () => {
 
     const handleDelete = async (id) => {
         if (!confirm("Are you sure you want to delete this software?")) return;
-        const BASE_URL = 'https://motionboss-backend.vercel.app/api';
+        const BASE_URL = 'https://extrain-web-server.vercel.app/api';
         const token = localStorage.getItem('token');
         try {
             const res = await fetch(`${BASE_URL}/software/admin/${id}`, {

@@ -1,4 +1,4 @@
-# 🎓 BD Calling Academy - E-Learning Platform
+# 🌐 Extrain Web - Website & Software Development Platform
 
 ![Project Banner](https://bac-next.vercel.app/images/logo.png)
 

@@ -17,7 +17,7 @@ import {
 } from 'react-icons/fi';
 import { useTheme } from '@/providers/ThemeProvider';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://motionboss-backend.vercel.app/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://extrain-web-server.vercel.app/api';
 
 // Icon mapping
 const iconMap = {

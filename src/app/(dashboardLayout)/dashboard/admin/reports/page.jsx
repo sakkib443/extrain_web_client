@@ -136,7 +136,7 @@ const ReportsPage = () => {
             doc.setTextColor(79, 70, 229);
             doc.setFontSize(12);
             doc.setFont('helvetica', 'bold');
-            doc.text('eJobs IT', 35, 25, { align: 'center' });
+            doc.text('Extrain Web', 35, 25, { align: 'center' });
 
             // Title
             doc.setTextColor(255, 255, 255);
@@ -440,7 +440,7 @@ const ReportsPage = () => {
                 doc.rect(0, doc.internal.pageSize.getHeight() - 15, pageWidth, 15, 'F');
                 doc.setTextColor(100, 116, 139);
                 doc.setFontSize(8);
-                doc.text(`eJobs IT Platform - Confidential Business Report`, 15, doc.internal.pageSize.getHeight() - 6);
+                doc.text(`Extrain Web Platform - Confidential Business Report`, 15, doc.internal.pageSize.getHeight() - 6);
                 doc.text(`Page ${i} of ${pageCount}`, pageWidth - 15, doc.internal.pageSize.getHeight() - 6, { align: 'right' });
             }
 
