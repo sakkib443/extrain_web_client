@@ -182,38 +182,76 @@ export default function AboutContent() {
             {/* ==================== WHAT WE PROVIDE ==================== */}
             <WhatWeProvide />
 
-            {/* ==================== FOUNDER SECTION ==================== */}
+            {/* ==================== WHY CHOOSE US SECTION ==================== */}
             <section className="py-24 bg-gray-50 dark:bg-[#111] overflow-hidden">
                 <div className="container mx-auto px-6 lg:px-12">
-                    <div className="flex flex-col lg:flex-row items-center gap-16">
-                        <div className="relative w-full lg:w-1/2 aspect-[4/5] lg:aspect-square">
-                            <div className="absolute inset-0 bg-[#FD9A00] rounded-sm transform rotate-3" />
-                            <div className="absolute inset-0 bg-gray-900 rounded-sm overflow-hidden transform -rotate-2 hover:rotate-0 transition-transform duration-500 grayscale hover:grayscale-0">
+                    <div className="grid lg:grid-cols-2 gap-16 items-center">
+                        {/* Left - Visual */}
+                        <div className="relative">
+                            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden">
                                 <img
-                                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop"
-                                    alt="Zayed Uddin - Founder and CEO of Extrain Web"
+                                    src="https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=2070&auto=format&fit=crop"
+                                    alt="Extrain Web professional software development team working on projects"
                                     className="w-full h-full object-cover"
                                 />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                <div className="absolute bottom-8 left-8 right-8">
+                                    <div className="grid grid-cols-3 gap-4">
+                                        {[
+                                            { num: "50+", label: isBN ? "সন্তুষ্ট ক্লায়েন্ট" : "Happy Clients" },
+                                            { num: "100+", label: isBN ? "সম্পন্ন প্রজেক্ট" : "Projects Done" },
+                                            { num: "5+", label: isBN ? "বছরের অভিজ্ঞতা" : "Years Experience" },
+                                        ].map((stat, idx) => (
+                                            <div key={idx} className="text-center bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                                                <span className="text-3xl font-black font-teko text-[#FD9A00] block">{stat.num}</span>
+                                                <span className="text-xs text-white/80 font-medium">{stat.label}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="w-full lg:w-1/2">
-                            <SectionLabel text="THE VISIONARY" />
-                            <h2 className="text-4xl lg:text-6xl font-black uppercase font-teko text-gray-900 dark:text-white mb-6">
-                                ZAYED UDDIN
+                        {/* Right - Content */}
+                        <div>
+                            <SectionLabel text={isBN ? "কেন আমরা" : "WHY CHOOSE US"} />
+                            <h2 className="text-4xl lg:text-6xl font-black uppercase font-teko leading-[0.9] text-gray-900 dark:text-white mb-6">
+                                {isBN ? (
+                                    <>আমরা শুধু কোড <span className="text-[#FD9A00]">লিখি না,</span><br />অভিজ্ঞতা তৈরি করি</>
+                                ) : (
+                                    <>WE DON'T JUST <span className="text-[#FD9A00]">CODE,</span><br />WE CRAFT EXPERIENCES</>
+                                )}
                             </h2>
-                            <h3 className="text-xl text-[#FD9A00] font-bold tracking-widest uppercase mb-8">Founder & CEO</h3>
 
-                            <blockquote className="text-2xl font-light italic text-gray-600 dark:text-gray-300 mb-8 border-l-4 border-[#FD9A00] pl-6 py-2">
-                                "We don't just write code or design interfaces. We craft experiences that define brands. Excellence is not an act, but a habit."
-                            </blockquote>
+                            <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
+                                {isBN
+                                    ? "Extrain Web বাংলাদেশের একটি শীর্ষস্থানীয় ওয়েব ও সফটওয়্যার ডেভেলপমেন্ট কোম্পানি। আমরা আধুনিক প্রযুক্তি এবং সৃজনশীল ডিজাইনের সমন্বয়ে ব্যবসায়িক সমস্যার ডিজিটাল সমাধান তৈরি করি।"
+                                    : "Extrain Web is a leading web and software development company in Bangladesh. We combine cutting-edge technology with creative design to build digital solutions that solve real business problems."}
+                            </p>
+
+                            <div className="space-y-4 mb-8">
+                                {[
+                                    { icon: FiCheck, text: isBN ? "কাস্টম ওয়েবসাইট ও সফটওয়্যার ডেভেলপমেন্ট" : "Custom Website & Software Development" },
+                                    { icon: FiCheck, text: isBN ? "IELTS, LMS ও শিক্ষা প্রতিষ্ঠানের জন্য সফটওয়্যার" : "IELTS, LMS & Educational Software Solutions" },
+                                    { icon: FiCheck, text: isBN ? "রেডিমেড টেমপ্লেট ও স্ক্রিপ্ট মার্কেটপ্লেস" : "Ready-made Templates & Scripts Marketplace" },
+                                    { icon: FiCheck, text: isBN ? "২৪/৭ সাপোর্ট ও মেইনটেন্যান্স সেবা" : "24/7 Customer Support & Maintenance" },
+                                    { icon: FiCheck, text: isBN ? "আধুনিক UI/UX ডিজাইন ও ব্র্যান্ডিং" : "Modern UI/UX Design & Branding" },
+                                ].map((item, idx) => (
+                                    <div key={idx} className="flex items-center gap-3">
+                                        <div className="w-6 h-6 rounded-full bg-[#FD9A00]/10 flex items-center justify-center flex-shrink-0">
+                                            <item.icon className="text-[#FD9A00]" size={14} />
+                                        </div>
+                                        <span className="text-gray-700 dark:text-gray-300 font-medium">{item.text}</span>
+                                    </div>
+                                ))}
+                            </div>
 
                             <div className="flex gap-4">
-                                <Link href="/contact" className="px-8 py-3 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-wider font-teko text-xl hover:bg-[#FD9A00] hover:text-black transition-colors">
-                                    Contact Me
+                                <Link href="/contact" className="px-8 py-3 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold font-teko uppercase text-xl rounded-none transition-all shadow-lg shadow-[#FD9A00]/20">
+                                    {isBN ? "আমাদের সাথে কথা বলুন" : "Talk to Us"}
                                 </Link>
-                                <Link href="/portfolio" className="px-8 py-3 border border-black dark:border-white text-black dark:text-white font-bold uppercase tracking-wider font-teko text-xl hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">
-                                    View Portfolio
+                                <Link href="/website" className="px-8 py-3 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 hover:border-[#FD9A00] text-gray-900 dark:text-white font-bold font-teko uppercase text-xl rounded-none transition-all">
+                                    {isBN ? "আমাদের কাজ দেখুন" : "See Our Work"}
                                 </Link>
                             </div>
                         </div>
