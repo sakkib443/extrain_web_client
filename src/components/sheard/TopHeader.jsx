@@ -57,21 +57,21 @@ const TopHeader = () => {
           {/* Left - Contact Info */}
           <div className="hidden lg:flex items-center gap-4 text-[13px]">
             <a
-              href="mailto:info@extrainweb.com"
+              href="mailto:info.extrainweb@gmail.com"
               className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
             >
               <LuMail className="w-3.5 h-3.5" />
-              <span>info@extrainweb.com</span>
+              <span>info.extrainweb@gmail.com</span>
             </a>
 
             <span className="text-gray-700">|</span>
 
             <a
-              href="tel:+8801753924093"
+              href="tel:+8801711946614"
               className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
             >
               <LuPhone className="w-3.5 h-3.5" />
-              <span>+880 1753-924093</span>
+              <span>+880 1711-946614</span>
             </a>
           </div>
 
@@ -98,7 +98,7 @@ const TopHeader = () => {
               { Icon: FaFacebookF, href: "https://facebook.com/extrainweb" },
               { Icon: FaLinkedinIn, href: "https://linkedin.com/company/extrainweb" },
               { Icon: FaYoutube, href: "https://youtube.com/@extrainweb" },
-              { Icon: FaWhatsapp, href: "https://wa.me/8801753924093" },
+              { Icon: FaWhatsapp, href: "https://wa.me/8801711946614" },
             ].map(({ Icon, href }, i) => (
               <a
                 key={i}

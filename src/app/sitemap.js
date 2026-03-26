@@ -42,41 +42,29 @@ export default async function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.7,
     },
+    {
+      url: `${baseUrl}/ielts-software`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
   ];
 
-  // TODO: Dynamic pages - Websites, Software থেকে fetch করতে হবে
-  // যখন API ready হবে তখন এগুলো uncomment করবেন:
-
-  /*
+  // Dynamic pages - Blog posts
   try {
-    // Fetch all websites
-    const websitesRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/websites`);
-    const websites = await websitesRes.json();
+    const blogsRes = await fetch(`https://extrain-web-server.vercel.app/api/blogs?status=published&limit=100`, { cache: 'no-store' });
+    const blogsData = await blogsRes.json();
     
-    const websitePages = websites.data?.map((website) => ({
-      url: `${baseUrl}/website/${website._id}`,
-      lastModified: new Date(website.updatedAt),
+    const blogPages = (blogsData.data || []).map((blog) => ({
+      url: `${baseUrl}/blog/${blog.slug}`,
+      lastModified: new Date(blog.updatedAt || blog.createdAt),
       changeFrequency: 'weekly',
-      priority: 0.8,
-    })) || [];
- 
-    // Fetch all software
-    const softwareRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/software`);
-    const software = await softwareRes.json();
-    
-    const softwarePages = software.data?.map((item) => ({
-      url: `${baseUrl}/software/${item._id}`,
-      lastModified: new Date(item.updatedAt),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    })) || [];
- 
-    return [...staticPages, ...websitePages, ...softwarePages];
+      priority: 0.7,
+    }));
+
+    return [...staticPages, ...blogPages];
   } catch (error) {
-    console.error('Error generating sitemap:', error);
+    console.error('Error generating dynamic sitemap:', error);
     return staticPages;
   }
-  */
-
-  return staticPages;
 }

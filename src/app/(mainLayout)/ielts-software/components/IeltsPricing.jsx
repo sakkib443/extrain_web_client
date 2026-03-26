@@ -130,7 +130,7 @@ const IeltsPricing = () => {
     };
 
     const handleContact = () => {
-        window.open('https://wa.me/8801753924093', '_blank');
+        window.open('https://wa.me/8801711946614', '_blank');
     };
 
     return (
@@ -338,12 +338,12 @@ const IeltsPricing = () => {
                                 {language === 'bn' ? 'আমাদের সাথে কথা বলুন, ফ্রি ডেমো পান!' : 'Talk to us for a free demo of the software!'}
                             </p>
                             <p className="text-lg font-bold text-[#FD9A00] mt-1">
-                                +880 1753-924093
+                                +880 1711-946614
                             </p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-3">
                             <a
-                                href="https://wa.me/8801753924093"
+                                href="https://wa.me/8801711946614"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={`flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition-colors ${bengaliClass}`}
@@ -352,7 +352,7 @@ const IeltsPricing = () => {
                                 {language === 'bn' ? 'WhatsApp' : 'WhatsApp'}
                             </a>
                             <a
-                                href="tel:+8801753924093"
+                                href="tel:+8801711946614"
                                 className={`flex items-center gap-2 px-6 py-3 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold rounded-xl transition-colors ${bengaliClass}`}
                             >
                                 <LuPhone size={20} />

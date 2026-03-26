@@ -23,10 +23,10 @@ const ContactDesignPage = () => {
             subtitleBn: 'কোনো প্রশ্ন আছে? আমাদের মেসেজ পাঠান।'
         },
         contactInfo: {
-            email: 'info@Extrain Web.com',
-            phone: '+88 01753924093',
-            address: 'Daisy Garden, House 14 (Level-5), Block A, Banasree, Dhaka',
-            addressBn: 'ডেইজি গার্ডেন, বাড়ি ১৪ (লেভেল-৫), ব্লক এ, বনশ্রী, ঢাকা',
+            email: 'info.extrainweb@gmail.com',
+            phone: '+88 01711946614',
+            address: 'Road - 11, DIT Project, Marul Badda, Badda, Dhaka -1214, Bangladesh',
+            addressBn: 'রোড - ১১, ডিআইটি প্রজেক্ট, মারুল বাড্ডা, বাড্ডা, ঢাকা -১২১৪, বাংলাদেশ',
             officeHours: 'Sat - Thu: 10:00 AM - 6:00 PM',
             officeHoursBn: 'শনি - বৃহস্পতি: সকাল ১০টা - সন্ধ্যা ৬টা'
         },
@@ -34,7 +34,7 @@ const ContactDesignPage = () => {
             facebook: 'https://www.facebook.com/Extrain Web',
             youtube: 'https://www.youtube.com/@Extrain Web',
             linkedin: 'https://www.linkedin.com/company/Extrain Web',
-            whatsapp: 'https://wa.me/8801753924093',
+            whatsapp: 'https://wa.me/8801711946614',
             instagram: 'https://www.instagram.com/Extrain Web/'
         },
         whatsappSection: {

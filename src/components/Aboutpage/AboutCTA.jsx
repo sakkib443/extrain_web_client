@@ -71,19 +71,19 @@ const AboutCTA = () => {
                             {[
                                 {
                                     icon: LuMail,
-                                    text: 'hello@motionboss.net',
+                                    text: 'info.extrainweb@gmail.com',
                                     label: 'SUPPORT EMAIL',
-                                    action: 'mailto:hello@motionboss.net'
+                                    action: 'mailto:info.extrainweb@gmail.com'
                                 },
                                 {
                                     icon: LuPhone,
-                                    text: '+880 1753-924093',
+                                    text: '+880 1711-946614',
                                     label: 'HELPLINE',
-                                    action: 'tel:+8801753924093'
+                                    action: 'tel:+8801711946614'
                                 },
                                 {
                                     icon: LuMapPin,
-                                    text: 'Dhaka, Bangladesh',
+                                    text: 'Marul Badda, Badda, Dhaka -1214, Bangladesh',
                                     label: 'HEADQUARTERS',
                                     action: '#'
                                 }

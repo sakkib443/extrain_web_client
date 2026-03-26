@@ -195,7 +195,7 @@ const Footer = () => {
                   </div>
                   <div>
                     <p className={`text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ${bengaliClass}`}>{t("footer.phone") || "Phone"}</p>
-                    <a href="tel:+8801753924093" className="text-gray-800 dark:text-white font-teko font-bold text-lg hover:text-[#FD9A00] transition-colors">+880 1753-924093</a>
+                    <a href="tel:+8801711946614" className="text-gray-800 dark:text-white font-teko font-bold text-lg hover:text-[#FD9A00] transition-colors">+880 1711-946614</a>
                   </div>
                 </div>
               </li>
@@ -206,7 +206,7 @@ const Footer = () => {
                   </div>
                   <div>
                     <p className={`text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ${bengaliClass}`}>{t("footer.email") || "Email"}</p>
-                    <a href="mailto:info@Extrain Web.com" className="text-gray-700 dark:text-gray-300 text-sm font-medium hover:text-[#FD9A00] transition-colors">info@Extrain Web.com</a>
+                    <a href="mailto:info.extrainweb@gmail.com" className="text-gray-700 dark:text-gray-300 text-sm font-medium hover:text-[#FD9A00] transition-colors">info.extrainweb@gmail.com</a>
                   </div>
                 </div>
               </li>
@@ -218,7 +218,7 @@ const Footer = () => {
                   <div>
                     <p className={`text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ${bengaliClass}`}>{t("footer.address") || "Address"}</p>
                     <p className={`text-gray-700 dark:text-gray-300 text-sm leading-relaxed ${bengaliClass}`}>
-                      {t("footer.addressValue") || "Daisy Garden, House 14, Block A, Banasree, Dhaka-1"}
+                      {t("footer.addressValue") || "Road - 11, DIT Project, Marul Badda, Badda, Dhaka -1214"}
                     </p>
                   </div>
                 </div>

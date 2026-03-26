@@ -5,7 +5,7 @@ import { generateMetadata as seoGenerateMetadata, commonKeywords } from "@/lib/s
 export async function generateMetadata() {
   return seoGenerateMetadata({
     title: "Contact Us | Extrain Web - Top Website Development Agency",
-    description: "Get in touch with Extrain Web (Extra in Web) for custom website development, ready-made templates, and business software in Bangladesh. We are located in Banasree, Dhaka.",
+    description: "Get in touch with Extrain Web (Extra in Web) for custom website development, ready-made templates, and business software in Bangladesh. We are located in Marul Badda, Badda, Dhaka.",
     keywords: [
       ...commonKeywords.brand,
       "contact extrain web",
@@ -30,7 +30,7 @@ export default function ContactPage() {
       "name": "Extrain Web",
       "contactPoint": {
         "@type": "ContactPoint",
-        "telephone": "+8801753924093",
+        "telephone": "+8801711946614",
         "contactType": "customer service",
         "areaServed": "BD",
         "availableLanguage": ["English", "Bengali"]

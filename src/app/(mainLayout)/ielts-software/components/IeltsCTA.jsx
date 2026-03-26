@@ -115,7 +115,7 @@ const IeltsCTA = () => {
                             <LuArrowRight className="group-hover:translate-x-1 transition-transform" />
                         </motion.button>
                         <a
-                            href="https://wa.me/8801753924093"
+                            href="https://wa.me/8801711946614"
                             target="_blank"
                             rel="noopener noreferrer"
                             className={`group flex items-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-bold rounded-xl border border-white/20 hover:bg-white/20 transition-all ${bengaliClass}`}
@@ -134,11 +134,11 @@ const IeltsCTA = () => {
                         className="flex flex-wrap items-center justify-center gap-6"
                     >
                         <a
-                            href="tel:+8801753924093"
+                            href="tel:+8801711946614"
                             className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
                         >
                             <LuPhone size={18} />
-                            <span>+880 1753-924093</span>
+                            <span>+880 1711-946614</span>
                         </a>
                         <span className="text-gray-600">|</span>
                         <a
@@ -152,11 +152,11 @@ const IeltsCTA = () => {
                         </a>
                         <span className="text-gray-600">|</span>
                         <a
-                            href="mailto:sakkib0081@gmail.com"
+                            href="mailto:info.extrainweb@gmail.com"
                             className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
                         >
                             <LuMessageCircle size={18} />
-                            <span>sakkib0081@gmail.com</span>
+                            <span>info.extrainweb@gmail.com</span>
                         </a>
                     </motion.div>
                 </div>

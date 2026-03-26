@@ -180,13 +180,16 @@ export function generateOrganizationSchema() {
         slogan: 'Your Digital Success Partner',
         address: {
             '@type': 'PostalAddress',
+            streetAddress: 'Road - 11, DIT Project, Marul Badda, Badda',
+            addressLocality: 'Dhaka',
+            postalCode: '1214',
             addressCountry: 'BD',
-            addressLocality: 'Dhaka', // আপনার location দিয়ে update করবেন
         },
         contactPoint: {
             '@type': 'ContactPoint',
             contactType: 'Customer Service',
-            email: 'info@extrainweb.com', // আপনার email দিয়ে update করবেন
+            telephone: '+8801711946614',
+            email: 'info.extrainweb@gmail.com',
             availableLanguage: ['English', 'Bengali'],
         },
         sameAs: [

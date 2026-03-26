@@ -36,10 +36,10 @@ export default function ContactContent() {
             subtitleBn: 'কোনো প্রশ্ন আছে? আমাদের মেসেজ পাঠান, আমরা যত তাড়াতাড়ি সম্ভব উত্তর দেব।'
         },
         contactInfo: {
-            email: 'info@Extrain Web.com',
-            phone: '+88 01753924093',
-            address: 'Daisy Garden, House 14 (Level-5), Block A, Banasree, Dhaka',
-            addressBn: 'ডেইজি গার্ডেন, বাড়ি ১৪ (লেভেল-৫), ব্লক এ, বনশ্রী, ঢাকা',
+            email: 'info.extrainweb@gmail.com',
+            phone: '+88 01711946614',
+            address: 'Road - 11, DIT Project, Marul Badda, Badda, Dhaka -1214, Bangladesh',
+            addressBn: 'রোড - ১১, ডিআইটি প্রজেক্ট, মারুল বাড্ডা, বাড্ডা, ঢাকা -১২১৪, বাংলাদেশ',
             officeHours: 'Sat - Thu: 10:00 AM - 6:00 PM',
             officeHoursBn: 'শনি - বৃহস্পতি: সকাল ১০টা - সন্ধ্যা ৬টা'
         },
@@ -47,7 +47,7 @@ export default function ContactContent() {
             facebook: 'https://www.facebook.com/Extrain Web',
             youtube: 'https://www.youtube.com/@Extrain Web',
             linkedin: 'https://www.linkedin.com/company/Extrain Web',
-            whatsapp: 'https://wa.me/8801753924093',
+            whatsapp: 'https://wa.me/8801711946614',
             instagram: 'https://www.instagram.com/Extrain Web/'
         },
         whatsappSection: {
@@ -58,7 +58,7 @@ export default function ContactContent() {
             buttonText: 'Chat on WhatsApp',
             buttonTextBn: 'হোয়াটসঅ্যাপে চ্যাট করুন'
         },
-        mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.8986834879085!2d90.41723!3d23.7656976!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c754583dd209%3A0xdd0c5fcc7d2d3836!2sDaisy%20Garden!5e0!3m2!1sen!2sbd!4v1704532086149!5m2!1sen!2sbd'
+        mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.5!2d90.4261!3d23.7808!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7d9c3b3b3b3%3A0x0!2sMarul%20Badda%2C%20Badda%2C%20Dhaka!5e0!3m2!1sen!2sbd'
     });
 
     // Fetch dynamic content
