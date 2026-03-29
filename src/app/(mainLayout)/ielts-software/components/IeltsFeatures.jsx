@@ -1,33 +1,24 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 import {
-    LuHighlighter,
-    LuPencilLine,
-    LuSun,
-    LuType,
-    LuTimer,
     LuMonitor,
     LuShield,
-    LuUsers,
-    LuChartBar,
-    LuBrain,
-    LuClipboardCheck,
-    LuUserCog,
     LuGraduationCap,
-    LuBookOpen,
-    LuHistory,
-    LuTrendingUp,
-    LuRefreshCw,
-    LuHeadphones,
+    LuZap,
     LuBuilding2,
-    LuCheck
+    LuCheck,
+    LuChevronRight,
+    LuSparkles
 } from "react-icons/lu";
+import styles from "./IeltsFeatures.module.css";
 
 const IeltsFeatures = () => {
     const { language } = useLanguage();
     const bengaliClass = language === "bn" ? "hind-siliguri" : "";
+    const [activeCard, setActiveCard] = useState(null);
 
     const featureCategories = [
         {
@@ -36,141 +27,212 @@ const IeltsFeatures = () => {
             icon: LuMonitor,
             color: "#FD9A00",
             features: [
-                { icon: LuHighlighter, title: language === 'bn' ? "টেক্সট হাইলাইট" : "Text Highlighting" },
-                { icon: LuPencilLine, title: language === 'bn' ? "নোট নেওয়া" : "Take Notes" },
-                { icon: LuSun, title: language === 'bn' ? "Light/Dark Mode" : "Light/Dark Mode" },
-                { icon: LuType, title: language === 'bn' ? "ফন্ট সাইজ কন্ট্রোল" : "Font Size Control" },
-                { icon: LuTimer, title: language === 'bn' ? "রিয়েল টাইমার" : "Real Timer System" },
-                { icon: LuMonitor, title: language === 'bn' ? "হুবহু BC লেআউট" : "Exact BC Layout" },
+                language === 'bn' ? "টেক্সট হাইলাইটিং ও নোট নেওয়া" : "Text Highlighting & Take Notes",
+                language === 'bn' ? "রিয়েল টাইমার ও অটো সাবমিট" : "Real Timer & Auto Submit",
+                language === 'bn' ? "হুবহু BC লেআউট, স্প্লিট-স্ক্রিন ভিউ" : "Exact BC Layout, Split-Screen View",
+                language === 'bn' ? "ফুলস্ক্রিন এক্সাম মোড" : "Fullscreen Exam Mode",
+                language === 'bn' ? "অ্যান্টি-চিটিং (ট্যাব সুইচ, কপি/পেস্ট ব্লক)" : "Anti-Cheating (Tab Switch, Copy/Paste Block)",
+                language === 'bn' ? "লিসেনিং এর জন্য অডিও প্লেয়ার" : "Audio Player for Listening",
+                language === 'bn' ? "রাইটিং এর জন্য ওয়ার্ড কাউন্টার" : "Word Counter for Writing",
+                language === 'bn' ? "প্রশ্ন নেভিগেশন ও সেকশন প্রগ্রেস" : "Question Navigation & Section Progress",
+                language === 'bn' ? "ডেমো মোড (কেনার আগে ট্রাই করুন)" : "Demo Mode (Try Before Buy)",
+                language === 'bn' ? "মাল্টি-সেট এক্সাম সাপোর্ট" : "Multi-Set Exam Support",
             ]
         },
         {
-            title: language === 'bn' ? "Admin Panel" : "Admin Panel",
+            title: language === 'bn' ? "অ্যাডমিন প্যানেল" : "Admin Panel",
             subtitle: language === 'bn' ? "ইনস্টিটিউট ম্যানেজমেন্ট" : "Institute Management",
             icon: LuShield,
             color: "#C4EE18",
             features: [
-                { icon: LuChartBar, title: language === 'bn' ? "সব রেজাল্ট দেখুন" : "View All Results" },
-                { icon: LuClipboardCheck, title: language === 'bn' ? "অটো মার্কিং" : "Auto Marking" },
-                { icon: LuBrain, title: language === 'bn' ? "AI Speaking Check" : "AI Speaking Check" },
-                { icon: LuUserCog, title: language === 'bn' ? "স্টুডেন্ট ম্যানেজমেন্ট" : "Student Management" },
-                { icon: LuTrendingUp, title: language === 'bn' ? "Progress Reports" : "Progress Reports" },
-                { icon: LuUsers, title: language === 'bn' ? "ব্যাচ ম্যানেজমেন্ট" : "Batch Management" },
+                language === 'bn' ? "সব রেজাল্ট দেখুন ও স্কোর পাবলিশ" : "View All Results & Publish Scores",
+                language === 'bn' ? "স্টুডেন্ট ম্যানেজমেন্ট ও এক্সাম ID তৈরি" : "Student Management & Exam ID Creation",
+                language === 'bn' ? "লিসেনিং, রিডিং, রাইটিং ও স্পিকিং সেট ক্রিয়েটর" : "Listening, Reading, Writing & Speaking Set Creator",
+                language === 'bn' ? "মক প্যাকেজ ও বান্ডেল প্রাইসিং ম্যানেজমেন্ট" : "Mock Package & Bundle Pricing Management",
+                language === 'bn' ? "কুপন কোড ম্যানেজমেন্ট" : "Coupon Code Management",
+                language === 'bn' ? "রেভিনিউ অ্যানালিটিক্স ও মাসিক চার্ট" : "Revenue Analytics & Monthly Charts",
+                language === 'bn' ? "রিপোর্ট এক্সপোর্ট (স্টুডেন্ট, পার্চেজ, রেজাল্ট)" : "Reports Export (Students, Purchases, Results)",
+                language === 'bn' ? "পেমেন্ট চ্যানেল ব্রেকডাউন (বিকাশ, নগদ, ব্যাংক)" : "Payment Channel Breakdown (bKash, Nagad, Bank)",
+                language === 'bn' ? "রাইটিং এ এক্সামিনারের মন্তব্য" : "Examiner Remarks on Writing",
             ]
         },
         {
-            title: language === 'bn' ? "Student Panel" : "Student Panel",
+            title: language === 'bn' ? "স্টুডেন্ট প্যানেল" : "Student Panel",
             subtitle: language === 'bn' ? "স্টুডেন্টদের জন্য" : "For Students",
             icon: LuGraduationCap,
             color: "#3B82F6",
             features: [
-                { icon: LuBookOpen, title: language === 'bn' ? "উত্তর ও ব্যাখ্যা" : "Answers & Explanations" },
-                { icon: LuHeadphones, title: language === 'bn' ? "সব মডিউল প্র্যাক্টিস" : "All Module Practice" },
-                { icon: LuHistory, title: language === 'bn' ? "রেজাল্ট হিস্ট্রি" : "Result History" },
-                { icon: LuTrendingUp, title: language === 'bn' ? "Performance Analytics" : "Performance Analytics" },
-                { icon: LuRefreshCw, title: language === 'bn' ? "আনলিমিটেড Retakes" : "Unlimited Retakes" },
-                { icon: LuChartBar, title: language === 'bn' ? "Band Score Calculator" : "Band Score Calculator" },
+                language === 'bn' ? "সব মডিউল প্র্যাক্টিস (লিসেনিং, রিডিং, রাইটিং)" : "All Module Practice (Listening, Reading, Writing)",
+                language === 'bn' ? "রেজাল্ট হিস্ট্রি ও বিস্তারিত স্কোর ব্রেকডাউন" : "Result History & Detailed Score Breakdown",
+                language === 'bn' ? "পারফরম্যান্স অ্যানালিটিক্স ও ব্যান্ড স্কোর চার্ট" : "Performance Analytics & Band Score Charts",
+                language === 'bn' ? "PDF স্কোর রিপোর্ট ও ইনভয়েস ডাউনলোড" : "PDF Score Report & Invoice Download",
+                language === 'bn' ? "আনসার রিভিউ ও লিসেনিং ট্রান্সক্রিপ্ট" : "Answer Review & Listening Transcript",
+                language === 'bn' ? "ফ্রি মক টেস্ট ক্লেইম" : "Free Mock Test Claim",
+                language === 'bn' ? "মক টেস্ট কিনুন ও কুপন ব্যবহার করুন" : "Purchase Mock Tests & Apply Coupon",
+                language === 'bn' ? "গুগল লগইন ও পাসওয়ার্ড ভুলে গেছেন (OTP)" : "Google Login & Forgot Password (OTP)",
+            ]
+        },
+        {
+            title: language === 'bn' ? "অটোমেশন ও স্মার্ট ফিচার" : "Automation & Smart Features",
+            subtitle: language === 'bn' ? "বিল্ট-ইন ইন্টেলিজেন্স" : "Built-in Intelligence",
+            icon: LuZap,
+            color: "#A855F7",
+            features: [
+                language === 'bn' ? "অটো মার্কিং (লিসেনিং ও রিডিং ইনস্ট্যান্ট গ্রেডিং)" : "Auto Marking (Listening & Reading Instant Grading)",
+                language === 'bn' ? "অটো এক্সাম ID জেনারেশন ও স্টুডেন্ট রেকর্ড তৈরি" : "Auto Exam ID Generation & Student Record Creation",
+                language === 'bn' ? "অটো ইমেইল নোটিফিকেশন (Welcome, Purchase, Result, OTP)" : "Auto Email Notifications (Welcome, Purchase, Result, OTP)",
+                language === 'bn' ? "চিটিং করলে অটো এক্সাম টার্মিনেশন" : "Auto Exam Termination on Cheating",
+                language === 'bn' ? "অটো টাইমার ও অটো সাবমিট" : "Auto Timer & Auto Submit",
+                language === 'bn' ? "পেমেন্ট ইন্টিগ্রেশন (বিকাশ, নগদ, ব্যাংক)" : "Payment Integration (bKash, Nagad, Bank)",
+                language === 'bn' ? "কুপন ভ্যালিডেশন ও ডিসকাউন্ট ক্যালকুলেশন" : "Coupon Validation & Discount Calculation",
+                language === 'bn' ? "Google OAuth ও JWT অথেন্টিকেশন" : "Google OAuth & JWT Authentication",
+                language === 'bn' ? "৫টি প্রিমিয়াম ব্র্যান্ডেড ইমেইল টেমপ্লেট" : "5 Premium Branded Email Templates",
             ]
         }
     ];
 
+    const totalFeatures = featureCategories.reduce((acc, cat) => acc + cat.features.length, 0);
+
     return (
-        <section className="py-20 lg:py-28 bg-white dark:bg-[#0A0A0A]">
-            <div className="container mx-auto px-4 lg:px-6">
+        <section className={styles.section}>
+            <div className={styles.container}>
+                {/* Background Decorations */}
+                <div className={`${styles.bgOrb} ${styles.bgOrb1}`} />
+                <div className={`${styles.bgOrb} ${styles.bgOrb2}`} />
+                <div className={`${styles.bgOrb} ${styles.bgOrb3}`} />
+
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center max-w-3xl mx-auto mb-14"
+                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    className={styles.header}
                 >
-                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FD9A00]/10 text-[#FD9A00] text-sm font-semibold mb-4">
-                        <LuBuilding2 size={16} />
+                    <motion.span
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                        className={styles.badge}
+                    >
+                        <LuBuilding2 size={15} />
                         {language === 'bn' ? 'কোচিং সেন্টারের জন্য সম্পূর্ণ সমাধান' : 'Complete Solution for Coaching Centers'}
-                    </span>
-                    <h2 className={`text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-6 ${bengaliClass}`}>
+                    </motion.span>
+
+                    <h2 className={`${styles.title} ${bengaliClass}`}>
                         {language === 'bn' ? (
                             <>
                                 আমাদের সফটওয়্যারে যা যা{" "}
-                                <span className="text-[#FD9A00]">আছে</span>
+                                <span className={styles.titleHighlight}>আছে</span>
                             </>
                         ) : (
                             <>
                                 Everything In Our{" "}
-                                <span className="text-[#FD9A00]">Software</span>
+                                <span className={styles.titleHighlight}>Software</span>
                             </>
                         )}
                     </h2>
-                    <p className={`text-lg text-gray-600 dark:text-gray-400 ${bengaliClass}`}>
+
+                    <p className={`${styles.subtitle} ${bengaliClass}`}>
                         {language === 'bn'
-                            ? 'British Council এর এক্সাম ইন্টারফেস, Admin Panel এবং Student Dashboard - সব একসাথে।'
-                            : 'British Council exam interface, Admin Panel and Student Dashboard - all in one package.'}
+                            ? 'British Council এর এক্সাম ইন্টারফেস, Admin Panel, Student Dashboard এবং স্মার্ট অটোমেশন — সব একসাথে।'
+                            : 'British Council exam interface, Admin Panel, Student Dashboard and Smart Automation — all in one package.'}
                     </p>
+
+                    {/* Stats Row */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                        className={styles.stats}
+                    >
+                        <div className={styles.stat}>
+                            <span className={styles.statNumber}>{totalFeatures}+</span>
+                            <span className={`${styles.statLabel} ${bengaliClass}`}>
+                                {language === 'bn' ? 'ফিচারস' : 'Features'}
+                            </span>
+                        </div>
+                        <div className={styles.statDivider} />
+                        <div className={styles.stat}>
+                            <span className={styles.statNumber}>4</span>
+                            <span className={`${styles.statLabel} ${bengaliClass}`}>
+                                {language === 'bn' ? 'মডিউল' : 'Modules'}
+                            </span>
+                        </div>
+                        <div className={styles.statDivider} />
+                        <div className={styles.stat}>
+                            <span className={styles.statNumber}>100%</span>
+                            <span className={`${styles.statLabel} ${bengaliClass}`}>
+                                {language === 'bn' ? 'অটোমেটেড' : 'Automated'}
+                            </span>
+                        </div>
+                    </motion.div>
                 </motion.div>
 
-                {/* 3 Column Feature Cards */}
-                <div className="grid md:grid-cols-3 gap-6">
+                {/* Feature Cards Grid - 2x2 */}
+                <div className={styles.grid}>
                     {featureCategories.map((category, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, y: 30 }}
+                            initial={{ opacity: 0, y: 40 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="relative bg-gray-50 dark:bg-[#111] rounded-3xl overflow-hidden border border-gray-100 dark:border-white/5"
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                            className={styles.card}
+                            onMouseEnter={() => setActiveCard(index)}
+                            onMouseLeave={() => setActiveCard(null)}
+                            style={{
+                                '--card-color': category.color,
+                                '--card-glow': `${category.color}20`,
+                            }}
                         >
-                            {/* Card Header */}
-                            <div 
-                                className="p-6 pb-5"
-                                style={{ 
-                                    background: `linear-gradient(135deg, ${category.color}12 0%, transparent 100%)`
-                                }}
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div 
-                                        className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shrink-0"
-                                        style={{ backgroundColor: category.color }}
-                                    >
-                                        <category.icon size={24} />
+                            {/* Gradient border overlay */}
+                            <div className={styles.cardBorder} />
+
+                            {/* Card Content */}
+                            <div className={styles.cardInner}>
+                                {/* Card Header */}
+                                <div className={styles.cardHeader}>
+                                    <div className={styles.iconWrap}>
+                                        <div className={styles.iconGlow} />
+                                        <div className={styles.icon}>
+                                            <category.icon size={22} />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 className={`text-xl font-bold text-gray-900 dark:text-white ${bengaliClass}`}>
+                                    <div className={styles.cardTitles}>
+                                        <h3 className={`${styles.cardTitle} ${bengaliClass}`}>
                                             {category.title}
                                         </h3>
-                                        <p className={`text-sm text-gray-500 dark:text-gray-400 ${bengaliClass}`}>
+                                        <p className={`${styles.cardSubtitle} ${bengaliClass}`}>
                                             {category.subtitle}
                                         </p>
                                     </div>
+                                    <div className={styles.cardCount}>
+                                        {category.features.length}
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Divider */}
-                            <div className="h-px bg-gray-200 dark:bg-white/5 mx-6" />
+                                {/* Divider */}
+                                <div className={styles.cardDivider} />
 
-                            {/* Features List */}
-                            <div className="p-6 pt-5">
-                                <ul className="space-y-3.5">
+                                {/* Features List */}
+                                <ul className={styles.featureList}>
                                     {category.features.map((feature, fIndex) => (
                                         <motion.li
                                             key={fIndex}
-                                            initial={{ opacity: 0, x: -10 }}
+                                            initial={{ opacity: 0, x: -12 }}
                                             whileInView={{ opacity: 1, x: 0 }}
                                             viewport={{ once: true }}
-                                            transition={{ duration: 0.3, delay: 0.2 + fIndex * 0.05 }}
-                                            className="flex items-center gap-3"
+                                            transition={{ duration: 0.35, delay: 0.15 + fIndex * 0.04 }}
+                                            className={styles.featureItem}
                                         >
-                                            <div 
-                                                className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
-                                                style={{ 
-                                                    backgroundColor: `${category.color}15`,
-                                                    color: category.color
-                                                }}
-                                            >
-                                                <LuCheck size={14} strokeWidth={3} />
+                                            <div className={styles.featureCheck}>
+                                                <LuCheck size={12} strokeWidth={3} />
                                             </div>
-                                            <span className={`text-sm font-medium text-gray-700 dark:text-gray-300 ${bengaliClass}`}>
-                                                {feature.title}
+                                            <span className={`${styles.featureText} ${bengaliClass}`}>
+                                                {feature}
                                             </span>
                                         </motion.li>
                                     ))}
@@ -186,27 +248,28 @@ const IeltsFeatures = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.3 }}
-                    className="mt-14 text-center"
+                    className={styles.cta}
                 >
-                    <div className="inline-flex flex-col sm:flex-row items-center gap-4 p-5 rounded-2xl bg-gray-50 dark:bg-[#111] border border-gray-100 dark:border-white/5">
-                        <div className="flex items-center gap-3">
-                            <div className="w-11 h-11 rounded-xl bg-[#FD9A00] flex items-center justify-center text-white">
-                                <LuBuilding2 size={22} />
+                    <div className={styles.ctaInner}>
+                        <div className={styles.ctaContent}>
+                            <div className={styles.ctaIcon}>
+                                <LuSparkles size={22} />
                             </div>
-                            <div className="text-left">
-                                <p className={`font-bold text-gray-900 dark:text-white text-sm ${bengaliClass}`}>
-                                    {language === 'bn' ? 'আপনার ব্র্যান্ডিং যোগ করুন' : 'Add Your Branding'}
+                            <div>
+                                <p className={`${styles.ctaTitle} ${bengaliClass}`}>
+                                    {language === 'bn' ? 'আপনার ব্র্যান্ডিং সহ কাস্টমাইজ করুন' : 'Customize With Your Branding'}
                                 </p>
-                                <p className={`text-xs text-gray-500 dark:text-gray-400 ${bengaliClass}`}>
-                                    {language === 'bn' ? 'লোগো, কালার কাস্টমাইজ' : 'Logo, colors customization'}
+                                <p className={`${styles.ctaDesc} ${bengaliClass}`}>
+                                    {language === 'bn' ? 'লোগো, কালার, ডোমেইন — সবকিছু আপনার মতো করে' : 'Logo, colors, domain — everything tailored to you'}
                                 </p>
                             </div>
                         </div>
                         <a
                             href="#pricing"
-                            className={`px-5 py-2.5 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold text-sm rounded-xl transition-colors ${bengaliClass}`}
+                            className={`${styles.ctaBtn} ${bengaliClass}`}
                         >
                             {language === 'bn' ? 'প্রাইসিং দেখুন' : 'View Pricing'}
+                            <LuChevronRight size={16} />
                         </a>
                     </div>
                 </motion.div>
