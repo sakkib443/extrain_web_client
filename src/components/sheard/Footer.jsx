@@ -2,32 +2,15 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FaFacebook, FaLinkedin, FaYoutube, FaInstagram } from "react-icons/fa";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
-import { LuSend, LuArrowUpRight, LuHeart, LuArrowUp } from "react-icons/lu";
+import { LuSend, LuArrowUpRight, LuHeart } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
-  const [showScroll, setShowScroll] = useState(false);
   const { t, language } = useLanguage();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setShowScroll(true);
-      } else {
-        setShowScroll(false);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   // Apply Bengali font class when language is Bengali
   const bengaliClass = language === "bn" ? "hind-siliguri" : "";
@@ -243,14 +226,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      {/* Scroll To Top Button */}
-      <button
-        onClick={scrollToTop}
-        className={`fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-[#FD9A00] hover:bg-[#e68a00] text-white flex items-center justify-center shadow-lg shadow-[#FD9A00]/30 hover:shadow-[#FD9A00]/50 transition-all duration-300 hover:scale-110 ${showScroll ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}`}
-        aria-label="Scroll to top"
-      >
-        <LuArrowUp size={24} />
-      </button>
     </footer>
   );
 };

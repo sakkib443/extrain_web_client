@@ -9,7 +9,8 @@ import {
   LuBookOpenCheck, LuChevronDown, LuLogOut,
   LuLayoutDashboard, LuShoppingCart, LuSearch,
   LuSparkles, LuUser, LuArrowRight, LuSun, LuMoon, LuChevronRight,
-  LuCode, LuGlobe, LuBookOpen, LuLayers, LuPalette, LuCpu, LuDatabase, LuSmartphone
+  LuCode, LuGlobe, LuBookOpen, LuLayers, LuPalette, LuCpu, LuDatabase, LuSmartphone,
+  LuShoppingBag, LuGraduationCap, LuBriefcase, LuNewspaper, LuUtensils, LuBuilding2, LuStethoscope
 } from "react-icons/lu";
 import { HiOutlineSparkles, HiOutlineUserCircle } from "react-icons/hi2";
 import { useSelector } from "react-redux";
@@ -31,176 +32,50 @@ const categoryIcons = {
 };
 
 // Category Mega Menu Component
+// Same 8 website categories as the home "Browse by Category" section.
+const NAV_CATEGORIES = [
+  { slug: "ecommerce", icon: LuShoppingBag, en: "E-Commerce", bn: "ই-কমার্স", subEn: "Online Stores & Shops", subBn: "অনলাইন স্টোর ও শপ" },
+  { slug: "learning-management", icon: LuGraduationCap, en: "Learning Management", bn: "লার্নিং ম্যানেজমেন্ট", subEn: "Education & Courses", subBn: "শিক্ষা ও কোর্স" },
+  { slug: "business", icon: LuBriefcase, en: "Business", bn: "বিজনেস", subEn: "Corporate & Agency", subBn: "কর্পোরেট ও এজেন্সি" },
+  { slug: "portfolio", icon: LuLayoutDashboard, en: "Portfolio", bn: "পোর্টফোলিও", subEn: "Personal & Creative", subBn: "পার্সোনাল ও ক্রিয়েটিভ" },
+  { slug: "blog", icon: LuNewspaper, en: "Blog & News", bn: "ব্লগ ও নিউজ", subEn: "Blog & Magazine", subBn: "ব্লগ ও ম্যাগাজিন" },
+  { slug: "restaurant", icon: LuUtensils, en: "Restaurant", bn: "রেস্টুরেন্ট", subEn: "Food & Cafe", subBn: "ফুড ও ক্যাফে" },
+  { slug: "real-estate", icon: LuBuilding2, en: "Real Estate", bn: "রিয়েল এস্টেট", subEn: "Property & Listing", subBn: "প্রপার্টি ও লিস্টিং" },
+  { slug: "healthcare", icon: LuStethoscope, en: "Healthcare", bn: "হেলথকেয়ার", subEn: "Medical & Clinic", subBn: "মেডিকেল ও ক্লিনিক" },
+];
+
+// Category Mega Menu Component — links to /category/<slug> landing pages.
 const CategoryMegaMenu = ({ closeMobileMenu, language, bengaliClass }) => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [activeParent, setActiveParent] = useState(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/categories`);
-        const data = await res.json();
-        if (data.success) {
-          // Organize categories into parent and child structure
-          const allCategories = data.data || [];
-          // Software marketplace temporarily hidden — exclude software-type categories from the menu.
-          const parentCategories = allCategories.filter(cat => !cat.parentCategory && cat.type !== 'software');
-          const organized = parentCategories.map(parent => ({
-            ...parent,
-            children: allCategories.filter(cat =>
-              cat.parentCategory &&
-              (cat.parentCategory._id === parent._id || cat.parentCategory === parent._id)
-            )
-          }));
-          setCategories(organized);
-          if (organized.length > 0) {
-            setActiveParent(organized[0]._id);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCategories();
-  }, []);
-
-  const handleCategoryClick = (slug, type) => {
-    closeMobileMenu();
-    if (type === 'website') {
-      router.push(`/website?category=${slug}`);
-    } else if (type === 'software') {
-      router.push(`/software?category=${slug}`);
-    } else {
-      router.push(`/website?category=${slug}`);
-    }
-  };
-
-  const getIcon = (slug) => {
-    const IconComponent = categoryIcons[slug] || categoryIcons['default'];
-    return IconComponent;
-  };
-
-  if (loading) {
-    return (
-      <div className="p-8 flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-rose-600/30 border-t-rose-600 rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  if (categories.length === 0) {
-    return (
-      <div className="p-8 text-center text-gray-500">
-        <p className={bengaliClass}>{language === 'bn' ? 'কোনো ক্যাটাগরি পাওয়া যায়নি' : 'No categories found'}</p>
-      </div>
-    );
-  }
-
-  const activeCategory = categories.find(cat => cat._id === activeParent);
-
+  const isBn = language === "bn";
   return (
-    <div className="flex h-[380px]">
-      {/* Left Side - Parent Categories */}
-      <div className="w-[240px] bg-gray-50/50 dark:bg-black/20 p-4 border-r border-gray-100 dark:border-white/5 flex flex-col gap-2">
-        <p className="text-[12px] font-bold font-teko uppercase tracking-widest text-[#FD9A00] mb-2 px-2">
-          {language === 'bn' ? 'ক্যাটাগরি' : 'Categories'}
-        </p>
-        <div className="space-y-1 overflow-y-auto custom-scrollbar pr-1">
-          {categories.map((category) => {
-            const Icon = getIcon(category.slug);
-            const isActive = activeParent === category._id;
-            return (
-              <button
-                key={category._id}
-                onMouseEnter={() => setActiveParent(category._id)}
-                onClick={() => handleCategoryClick(category.slug, category.type)}
-                className={`w-full flex items-center justify-between gap-3 px-3 py-3 rounded-xl transition-all duration-300 group ${isActive
-                  ? 'bg-white dark:bg-[#1E293B] shadow-lg shadow-black/5 dark:shadow-black/20 border border-gray-100 dark:border-white/5'
-                  : 'hover:bg-white/60 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 border border-transparent'
-                  }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 ${isActive
-                    ? 'bg-gradient-to-br from-[#FD9A00] to-[#FF8A00] text-white shadow-md shadow-[#FD9A00]/30 scale-110'
-                    : 'bg-gray-100 dark:bg-white/10 text-gray-400 dark:text-gray-500 group-hover:bg-[#FD9A00]/10 group-hover:text-[#FD9A00]'
-                    }`}>
-                    <Icon size={18} />
-                  </div>
-                  <span className={`text-[15px] font-bold font-teko uppercase tracking-wide transition-colors ${isActive ? 'text-gray-900 dark:text-white' : 'group-hover:text-gray-900 dark:group-hover:text-white'} ${bengaliClass}`}>
-                    {language === 'bn' && category.nameBn ? category.nameBn : category.name}
-                  </span>
-                </div>
-                {isActive && (
-                  <motion.div layoutId="active-indicator" className="text-[#FD9A00]">
-                    <LuChevronRight size={16} />
-                  </motion.div>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Right Side - Child Categories */}
-      <div className="flex-1 p-6 bg-white dark:bg-[#1E293B]/50">
-        {activeCategory && (
-          <div className="h-full flex flex-col">
-            {/* Active Parent Header */}
-            <div className="flex items-center gap-4 pb-4 mb-4 border-b border-gray-100 dark:border-white/5">
-              <div className="w-12 h-12 rounded-xl bg-gray-100 dark:bg-white/10 flex items-center justify-center text-black dark:text-white">
-                {(() => {
-                  const Icon = getIcon(activeCategory.slug);
-                  return <Icon size={24} />;
-                })()}
+    <div className="p-4">
+      <p className={`text-[12px] font-bold font-teko uppercase tracking-widest text-[#FD9A00] mb-3 px-2 ${bengaliClass}`}>
+        {isBn ? "ক্যাটাগরি" : "Categories"}
+      </p>
+      <div className="grid grid-cols-2 gap-1.5">
+        {NAV_CATEGORIES.map((cat) => {
+          const Icon = cat.icon;
+          return (
+            <Link
+              key={cat.slug}
+              href={`/category/${cat.slug}`}
+              onClick={closeMobileMenu}
+              className="flex items-center gap-3 p-2.5 rounded-xl border border-transparent hover:bg-gray-50 dark:hover:bg-white/5 hover:border-gray-100 dark:hover:border-white/10 transition-all duration-200 group"
+            >
+              <div className="w-10 h-10 shrink-0 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400 flex items-center justify-center group-hover:bg-[#C4EE18] group-hover:text-black transition-all duration-300">
+                <Icon size={18} />
               </div>
-              <div>
-                <h4 className={`text-3xl font-bold font-teko uppercase text-gray-900 dark:text-white leading-none ${bengaliClass}`}>
-                  {language === 'bn' && activeCategory.nameBn ? activeCategory.nameBn : activeCategory.name}
-                </h4>
-                <p className={`text-sm font-medium text-gray-400 uppercase tracking-wider ${bengaliClass}`}>
-                  {activeCategory.children?.length || 0} {language === 'bn' ? 'টি সাব-ক্যাটাগরি' : 'Subcategories'}
+              <div className="min-w-0">
+                <p className={`text-[15px] font-bold font-teko uppercase tracking-wide text-gray-800 dark:text-white leading-none mb-0.5 truncate ${bengaliClass}`}>
+                  {isBn ? cat.bn : cat.en}
+                </p>
+                <p className={`text-[11px] text-gray-400 dark:text-gray-500 truncate ${bengaliClass}`}>
+                  {isBn ? cat.subBn : cat.subEn}
                 </p>
               </div>
-            </div>
-
-            {/* Child Categories Grid */}
-            {activeCategory.children && activeCategory.children.length > 0 ? (
-              <div className="grid grid-cols-2 gap-x-8 gap-y-2 content-start overflow-y-auto custom-scrollbar pr-2">
-                {activeCategory.children.map((child) => (
-                  <button
-                    key={child._id}
-                    onClick={() => handleCategoryClick(child.slug, child.type)}
-                    className="flex items-center gap-3 py-2 text-left group transition-all duration-200"
-                  >
-                    <div className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-[#FD9A00] transition-colors"></div>
-                    <span className={`text-[17px] font-medium font-teko uppercase text-gray-600 dark:text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors ${bengaliClass}`}>
-                      {language === 'bn' && child.nameBn ? child.nameBn : child.name}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <div className="flex-1 flex flex-col items-center justify-center text-center opacity-60">
-                <div className="w-20 h-20 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center mb-4">
-                  <LuLayers className="text-gray-300 dark:text-gray-600" size={32} />
-                </div>
-                <p className={`text-base font-medium text-gray-400 ${bengaliClass}`}>
-                  {language === 'bn' ? 'এই ক্যাটাগরিতে কোনো সাব-ক্যাটাগরি নেই' : 'No subcategories found in this section'}
-                </p>
-                <button
-                  onClick={() => handleCategoryClick(activeCategory.slug, activeCategory.type)}
-                  className={`mt-6 px-6 py-2 rounded-full bg-[#FD9A00]/10 text-[#FD9A00] hover:bg-[#FD9A00] hover:text-white font-teko font-bold uppercase transition-all ${bengaliClass}`}
-                >
-                  {language === 'bn' ? 'সব দেখুন' : 'View All Items'}
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

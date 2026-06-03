@@ -6,6 +6,7 @@ import TopHeader from '@/components/sheard/TopHeader';
 import Preloader from '@/components/sheard/Preloader';
 import React from 'react';
 import WhatsAppButton from '@/components/sheard/WhatsAppButton';
+import ChatBot from '@/components/sheard/ChatBot';
 
 const MainLayout = ({ children }) => {
     return (
@@ -18,6 +19,7 @@ const MainLayout = ({ children }) => {
                 <Footer />
 
                 <WhatsAppButton />
+                <ChatBot />
             </div>
         </>
     );
