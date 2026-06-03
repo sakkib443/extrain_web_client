@@ -512,7 +512,7 @@ const Navbar = () => {
                 <Link
                   key={href}
                   href={href}
-                  className={`relative px-4 py-2 text-[18px] font-teko uppercase tracking-wide transition-all duration-300 group ${pathname === href
+                  className={`relative px-3 py-2 text-[18px] font-teko uppercase tracking-wide whitespace-nowrap transition-all duration-300 group ${pathname === href
                     ? "text-[#FD9A00] font-medium"
                     : "text-gray-600 dark:text-gray-300 hover:text-[#FD9A00] font-medium"
                     } ${language === 'bn' ? 'hind-siliguri text-base font-normal tracking-normal' : ''}`}

@@ -78,20 +78,21 @@ const DigitalProducts = () => {
 
                 {/* Header Section */}
                 {/* Left-Aligned Modern Header */}
-                <div className="text-left mb-8 px-2">
-                    <div className="flex items-center gap-3 mb-6">
+                <div className="flex flex-col items-center text-center mb-8 px-2">
+                    <div className="flex items-center justify-center gap-3 mb-6">
                         <div className="w-10 h-[2px] bg-[#C4EE18]" />
                         <span className={`text-[10px] font-black text-[#C4EE18] uppercase tracking-[0.4em] ${bengaliClass}`}>
                             {language === 'bn' ? 'আওয়ার কালেকশন' : 'Our Collection'}
                         </span>
+                        <div className="w-10 h-[2px] bg-[#C4EE18]" />
                     </div>
 
-                    <h2 className={`text-5xl lg:text-7xl font-black text-gray-950 dark:text-white mb-2 uppercase leading-[0.85] tracking-tighter max-w-3xl font-teko ${bengaliClass}`}>
-                        {language === 'bn' ? 'পছন্দের' : 'Premium'} <br />
+                    <h2 className={`text-4xl lg:text-5xl font-black text-gray-950 dark:text-white mb-2 uppercase leading-[0.85] tracking-tighter max-w-3xl font-teko ${bengaliClass}`}>
+                        {language === 'bn' ? 'পছন্দের' : 'Premium'}{' '}
                         <span className="text-[#C4EE18]">{language === 'bn' ? 'ডিজিটাল প্রোডাক্টস' : 'Digital Products'}</span>
                     </h2>
 
-                    <div className="w-20 h-1 bg-gray-100 dark:bg-white/10 mb-4" />
+                    <div className="w-20 h-1 bg-gray-100 dark:bg-white/10 mb-2" />
 
                     <p className={`text-gray-500 dark:text-gray-400 text-sm lg:text-base max-w-2xl leading-relaxed ${bengaliClass}`}>
                         {language === 'bn'

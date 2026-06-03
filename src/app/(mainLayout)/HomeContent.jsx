@@ -57,8 +57,8 @@ export default function HomeContent() {
                     <HomeCategory />
                     <DigitalProducts />
                     <MissionSection />
-                    <CompanyLogos />
                     <WhatWeProvide />
+                    <CompanyLogos />
                     <TestimonialSection />
                 </section>
             </main>
