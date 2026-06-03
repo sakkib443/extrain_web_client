@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearCart } from '@/redux/cartSlice';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { LuShieldCheck, LuPackage, LuCreditCard, LuChevronLeft, LuBadgeCheck, LuSmartphone, LuLoader, LuArrowRight, LuTag, LuCheck, LuX, LuZap, LuCreditCard as LuCreditCardIcon } from 'react-icons/lu';
 import { useLanguage } from '@/context/LanguageContext';
 import toast from 'react-hot-toast';
@@ -12,15 +12,13 @@ import { API_BASE_URL } from '@/config/api';
 
 const CheckoutContent = () => {
     const { items: cartItems, totalAmount: cartTotal } = useSelector((state) => state.cart || { items: [], totalAmount: 0 });
-    const searchParams = useSearchParams();
-    const courseId = searchParams.get('courseId');
     const dispatch = useDispatch();
     const router = useRouter();
     const { language } = useLanguage();
 
     const [isSuccess, setIsSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [pageLoading, setPageLoading] = useState(!!courseId);
+    const [pageLoading, setPageLoading] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('manual');
     const [checkoutItems, setCheckoutItems] = useState([]);
     const [totalValue, setTotalValue] = useState(0);
@@ -50,62 +48,32 @@ const CheckoutContent = () => {
         const token = localStorage.getItem('token');
         if (!token) {
             toast.error("Please login to proceed");
-            router.push(`/login?redirect=/checkout${courseId ? `?courseId=${courseId}` : ''}`);
+            router.push('/login?redirect=/checkout');
         }
-    }, [router, courseId]);
+    }, [router]);
 
-    // Handle single course or cart items
+    // Build checkout from cart items
     useEffect(() => {
-        if (courseId) {
-            setPageLoading(true);
-            const fetchCourse = async () => {
-                try {
-                    const res = await fetch(`${API_BASE_URL}/courses/${courseId}`);
-                    const result = await res.json();
-                    if (res.ok && result.data) {
-                        const course = result.data;
-                        const item = {
-                            id: course._id || course.id,
-                            title: course.title,
-                            type: 'course',
-                            price: course.discountPrice || course.price || 0,
-                            image: course.thumbnail || course.image
-                        };
-                        setCheckoutItems([item]);
-                        setTotalValue(item.price);
-                    } else {
-                        toast.error("Failed to load course");
-                        router.push('/website');
-                    }
-                } catch (error) {
-                    console.error("Error:", error);
-                } finally {
-                    setPageLoading(false);
-                }
-            };
-            fetchCourse();
+        setCheckoutItems(cartItems);
+        setTotalValue(cartTotal);
+
+        // Check for bookable items
+        const bookableItem = cartItems.find(item => {
+            const isBookable = item.isBookingAllowed === true || item.isBookingAllowed === 'true';
+            const hasAmount = Number(item.bookingAmount) > 0;
+            return isBookable && hasAmount;
+        });
+
+        if (bookableItem) {
+            const amount = Number(bookableItem.bookingAmount);
+            setBookingAmount(amount);
         } else {
-            setCheckoutItems(cartItems);
-            setTotalValue(cartTotal);
-
-            // Check for bookable items
-            const bookableItem = cartItems.find(item => {
-                const isBookable = item.isBookingAllowed === true || item.isBookingAllowed === 'true';
-                const hasAmount = Number(item.bookingAmount) > 0;
-                return isBookable && hasAmount;
-            });
-
-            if (bookableItem) {
-                const amount = Number(bookableItem.bookingAmount);
-                setBookingAmount(amount);
-            } else {
-                setBookingAmount(0);
-                setIsBooking(false);
-            }
-
-            setPageLoading(false);
+            setBookingAmount(0);
+            setIsBooking(false);
         }
-    }, [courseId, cartItems, cartTotal, router]);
+
+        setPageLoading(false);
+    }, [cartItems, cartTotal, router]);
 
     const totalValueAfterDiscount = totalValue - discountAmount;
 
@@ -308,17 +276,12 @@ const CheckoutContent = () => {
                 if (!executeRes.ok) throw new Error('Payment execution failed');
             }
 
-            toast.success('Payment successful! 🎉');
+            toast.success('Order placed successfully! 🎉');
             setIsSuccess(true);
-            if (!courseId) dispatch(clearCart());
+            dispatch(clearCart());
 
-            // Redirect based on product type
-            const productType = checkoutItems[0]?.type || 'course';
-            let redirectUrl = '/dashboard/user/courses';
-            if (productType === 'website') redirectUrl = '/dashboard/user/assets/websites';
-            else if (productType === 'software') redirectUrl = '/dashboard/user/assets/softwares';
-
-            setTimeout(() => router.push(redirectUrl), 2500);
+            // Products are delivered manually by admin — send the buyer to their order history.
+            setTimeout(() => router.push('/dashboard/user/purchases'), 2500);
 
         } catch (error) {
             toast.error(error.message || 'Payment failed');
@@ -338,20 +301,10 @@ const CheckoutContent = () => {
         );
     }
 
-    // Get redirect URL based on product type
-    const getRedirectUrl = () => {
-        const productType = checkoutItems[0]?.type || 'course';
-        if (productType === 'website') return '/dashboard/user/assets/websites';
-        if (productType === 'software') return '/dashboard/user/assets/softwares';
-        return '/dashboard/user/courses';
-    };
+    // Products are delivered manually by admin — buyers track everything in Purchase History.
+    const getRedirectUrl = () => '/dashboard/user/purchases';
 
-    const getButtonLabel = () => {
-        const productType = checkoutItems[0]?.type || 'course';
-        if (productType === 'website') return 'Go to My Websites';
-        if (productType === 'software') return 'Go to My Softwares';
-        return 'Go to My Courses';
-    };
+    const getButtonLabel = () => 'Go to Purchase History';
 
     if (isSuccess) {
         return (
@@ -363,9 +316,9 @@ const CheckoutContent = () => {
                 >
                     <LuBadgeCheck className="text-emerald-500 text-4xl" />
                 </motion.div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-3">Payment Successful!</h1>
+                <h1 className="text-2xl font-bold text-gray-900 mb-3">Order Placed Successfully!</h1>
                 <p className="text-gray-500 text-sm text-center max-w-sm mb-6">
-                    Thank you for your purchase. Access your content in the dashboard.
+                    Thank you for your purchase. Our team will verify your payment and deliver your product shortly via email/WhatsApp. You can track your order anytime in Purchase History.
                 </p>
                 <button
                     onClick={() => router.push(getRedirectUrl())}

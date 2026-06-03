@@ -35,7 +35,6 @@ const Footer = () => {
   const quickLinks = [
     { to: "/", label: language === "bn" ? "হোম" : "Home" },
     { to: "/website", label: language === "bn" ? "টেমপ্লেট" : "Templates" },
-    { to: "/software", label: language === "bn" ? "সফটওয়্যার" : "Software" },
     { to: "/blog", label: language === "bn" ? "ব্লগ" : "Blog" },
     { to: "/about", label: language === "bn" ? "আমাদের সম্পর্কে" : "About Us" },
     { to: "/contact", label: language === "bn" ? "যোগাযোগ" : "Contact" },
@@ -43,10 +42,8 @@ const Footer = () => {
 
   const categories = [
     { label: language === "bn" ? "ওয়েবসাইট টেমপ্লেট" : "Website Templates", path: "/website" },
-    { label: language === "bn" ? "সফটওয়্যার সল্যুশন" : "Software Solutions", path: "/software" },
     { label: language === "bn" ? "ওয়ার্ডপ্রেস থিম" : "WordPress Themes", path: "/website?category=wordpress" },
-    { label: language === "bn" ? "ই-কমার্স সল্যুশন" : "eCommerce", path: "/software?category=ecommerce" },
-    { label: language === "bn" ? "মোবাইল অ্যাপ" : "Mobile Apps", path: "/software?category=app" },
+    { label: language === "bn" ? "ই-কমার্স সল্যুশন" : "eCommerce", path: "/website?category=ecommerce" },
     { label: language === "bn" ? "ইউআই/ইউএক্স ডিজাইন" : "UI/UX Design", path: "/website?category=uiux" },
   ];
 

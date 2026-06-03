@@ -440,12 +440,9 @@ export default function UserPurchasesPage() {
                                                                 ৳{item.price?.toLocaleString()}
                                                             </p>
                                                             {order.paymentStatus === 'completed' && (
-                                                                <Link
-                                                                    href={`/dashboard/user/${item.productType === 'course' ? 'courses' : 'assets/' + (item.productType === 'software' ? 'softwares' : 'websites')}`}
-                                                                    className="text-[10px] font-bold text-[#FD9A00] hover:underline"
-                                                                >
-                                                                    Access →
-                                                                </Link>
+                                                                <span className="text-[10px] font-medium text-slate-400">
+                                                                    Delivered via email/WhatsApp
+                                                                </span>
                                                             )}
                                                         </div>
                                                     </div>

@@ -114,17 +114,6 @@ const DigitalProducts = () => {
                             <LuGlobe className="w-4 h-4" />
                             <span className={bengaliClass}>{language === 'bn' ? 'ওয়েবসাইট' : 'Websites'}</span>
                         </button>
-
-                        <button
-                            onClick={() => setActiveType('software')}
-                            className={`flex items-center gap-2 px-5 py-2.5 rounded-md text-[13px] font-medium transition-all duration-300 ${activeType === 'software'
-                                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
-                                : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
-                                }`}
-                        >
-                            <LuCode className="w-4 h-4" />
-                            <span className={bengaliClass}>{language === 'bn' ? 'সফটওয়্যার' : 'Software'}</span>
-                        </button>
                     </div>
 
                     {/* Vertical Divider for Desktop */}
@@ -194,7 +183,7 @@ const DigitalProducts = () => {
                 {/* Professional Left-Aligned Footer Link */}
                 <div className="text-left px-2">
                     <Link
-                        href={activeType === 'website' ? '/website' : '/software'}
+                        href="/website"
                         className="inline-flex items-center gap-4 px-8 py-4 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium rounded-md border border-slate-200 dark:border-slate-800 hover:border-[#C4EE18] transition-all duration-300 group shadow-sm font-poppins"
                     >
                         <span className={bengaliClass}>

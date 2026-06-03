@@ -1,54 +1,86 @@
 "use client";
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { LuCode, LuGlobe, LuPuzzle, LuComponent, LuArrowRight } from 'react-icons/lu';
-import { API_BASE_URL } from '@/config/api';
+import { motion } from 'framer-motion';
+import {
+    LuArrowRight, LuShoppingBag, LuGraduationCap, LuBriefcase,
+    LuLayoutDashboard, LuNewspaper, LuUtensils, LuBuilding2, LuStethoscope
+} from 'react-icons/lu';
 
 const HomeCategory = () => {
-    const [stats, setStats] = useState(null);
     const { language } = useLanguage();
-    const bengaliClass = language === "bn" ? "hind-siliguri" : "";
+    const isBn = language === 'bn';
+    const bengaliClass = isBn ? "hind-siliguri" : "";
 
-    useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const res = await fetch(`${API_BASE_URL}/stats/dashboard`);
-                const data = await res.json();
-                if (data.success && data.data) {
-                    setStats(data.data);
-                }
-            } catch (error) {
-                console.error('Error fetching stats:', error);
-            }
-        };
-        fetchStats();
-    }, []);
-
-    const getCategoryCount = (id) => {
-        if (!stats?.breakdown) return '0';
-        switch (id) {
-            case 'courses': return stats.breakdown.courses || 0;
-            case 'software': return stats.breakdown.software || 0;
-            case 'websites': return stats.breakdown.websites || 0;
-            case 'tools': return stats.breakdown.software || 0;
-            default: return 0;
-        }
-    };
-
+    // 8 website template categories. Each links to the website listing filtered by category.
+    // `gradient` / `accent` color literals are kept full so Tailwind JIT picks them up.
     const categories = [
-        { id: 'websites', icon: LuGlobe, title: language === 'bn' ? 'ওয়েবসাইট' : 'Websites', subtitle: language === 'bn' ? 'প্রিমিয়াম টেমপ্লেট' : 'Premium Templates', itemLabel: language === 'bn' ? 'টেমপ্লেট' : 'Templates', color: 'teal', href: '/website' },
-        { id: 'software', icon: LuCode, title: language === 'bn' ? 'সফটওয়্যার' : 'Software', subtitle: language === 'bn' ? 'প্রিমিয়াম স্ক্রিপ্ট' : 'Premium Scripts', itemLabel: language === 'bn' ? 'স্ক্রিপ্ট' : 'Scripts', color: 'orange', href: '/software' },
-        { id: 'extensions', icon: LuPuzzle, title: language === 'bn' ? 'এক্সটেনশন' : 'Extensions', subtitle: language === 'bn' ? 'ব্রাউজার এক্সটেনশন' : 'Browser Extensions', itemLabel: language === 'bn' ? 'আইটেম' : 'Items', color: 'teal', href: '/extensions' },
-        { id: 'plugins', icon: LuComponent, title: language === 'bn' ? 'প্লাগইনস' : 'Plugins', subtitle: language === 'bn' ? 'প্রিমিয়াম প্লাগইন' : 'Premium Plugins', itemLabel: language === 'bn' ? 'প্লাগইন' : 'Plugins', color: 'orange', href: '/plugins' }
+        {
+            id: 'ecommerce', icon: LuShoppingBag,
+            title: 'E-Commerce', titleBn: 'ই-কমার্স',
+            subtitle: 'Online Stores & Shops', subtitleBn: 'অনলাইন স্টোর ও শপ',
+            href: '/website?category=ecommerce',
+            gradient: 'from-rose-500 to-pink-600', accent: 'text-rose-500', shadow: 'group-hover:shadow-rose-500/25',
+        },
+        {
+            id: 'lms', icon: LuGraduationCap,
+            title: 'Learning Management', titleBn: 'লার্নিং ম্যানেজমেন্ট',
+            subtitle: 'Education & Courses', subtitleBn: 'শিক্ষা ও কোর্স',
+            href: '/website?category=learning-management',
+            gradient: 'from-indigo-500 to-violet-600', accent: 'text-indigo-500', shadow: 'group-hover:shadow-indigo-500/25',
+        },
+        {
+            id: 'business', icon: LuBriefcase,
+            title: 'Business', titleBn: 'বিজনেস',
+            subtitle: 'Corporate & Agency', subtitleBn: 'কর্পোরেট ও এজেন্সি',
+            href: '/website?category=business',
+            gradient: 'from-blue-500 to-cyan-600', accent: 'text-blue-500', shadow: 'group-hover:shadow-blue-500/25',
+        },
+        {
+            id: 'portfolio', icon: LuLayoutDashboard,
+            title: 'Portfolio', titleBn: 'পোর্টফোলিও',
+            subtitle: 'Personal & Creative', subtitleBn: 'পার্সোনাল ও ক্রিয়েটিভ',
+            href: '/website?category=portfolio',
+            gradient: 'from-amber-500 to-orange-600', accent: 'text-amber-500', shadow: 'group-hover:shadow-amber-500/25',
+        },
+        {
+            id: 'blog', icon: LuNewspaper,
+            title: 'Blog & News', titleBn: 'ব্লগ ও নিউজ',
+            subtitle: 'Blog & Magazine', subtitleBn: 'ব্লগ ও ম্যাগাজিন',
+            href: '/website?category=blog',
+            gradient: 'from-emerald-500 to-teal-600', accent: 'text-emerald-500', shadow: 'group-hover:shadow-emerald-500/25',
+        },
+        {
+            id: 'restaurant', icon: LuUtensils,
+            title: 'Restaurant', titleBn: 'রেস্টুরেন্ট',
+            subtitle: 'Food & Cafe', subtitleBn: 'ফুড ও ক্যাফে',
+            href: '/website?category=restaurant',
+            gradient: 'from-orange-500 to-red-600', accent: 'text-orange-500', shadow: 'group-hover:shadow-orange-500/25',
+        },
+        {
+            id: 'real-estate', icon: LuBuilding2,
+            title: 'Real Estate', titleBn: 'রিয়েল এস্টেট',
+            subtitle: 'Property & Listing', subtitleBn: 'প্রপার্টি ও লিস্টিং',
+            href: '/website?category=real-estate',
+            gradient: 'from-sky-500 to-blue-600', accent: 'text-sky-500', shadow: 'group-hover:shadow-sky-500/25',
+        },
+        {
+            id: 'healthcare', icon: LuStethoscope,
+            title: 'Healthcare', titleBn: 'হেলথকেয়ার',
+            subtitle: 'Medical & Clinic', subtitleBn: 'মেডিকেল ও ক্লিনিক',
+            href: '/website?category=healthcare',
+            gradient: 'from-fuchsia-500 to-purple-600', accent: 'text-fuchsia-500', shadow: 'group-hover:shadow-fuchsia-500/25',
+        },
     ];
 
-    const getColorClasses = (color) => {
-        if (color === 'teal') {
-            return { gradient: 'from-[#FD9A00] to-[#2dd4bf]', light: 'bg-[#FD9A00]/5', text: 'text-[#FD9A00]', border: 'border-[#FD9A00]/15', shadow: 'shadow-[#FD9A00]/10' };
-        }
-        return { gradient: 'from-[#FD9A00] to-[#fb923c]', light: 'bg-[#FD9A00]/5', text: 'text-[#FD9A00]', border: 'border-[#FD9A00]/15', shadow: 'shadow-[#FD9A00]/10' };
+    const cardVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: (i) => ({
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.5, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] },
+        }),
     };
 
     return (
@@ -80,78 +112,83 @@ const HomeCategory = () => {
 
             <div className='container mx-auto px-4 lg:px-16 relative z-10'>
                 {/* Section Header */}
-                {/* Left-Aligned Modern Header */}
                 <div className="text-left mb-10 px-2">
                     <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-[2px] bg-[#C4EE18]" />
                         <span className={`text-[10px] font-black text-[#C4EE18] uppercase tracking-[0.4em] ${bengaliClass}`}>
-                            {language === 'bn' ? 'আমাদের প্রোডাক্ট' : 'Our Products'}
+                            {isBn ? 'আমাদের প্রোডাক্ট' : 'Our Products'}
                         </span>
                     </div>
 
                     <h2 className={`text-5xl lg:text-7xl font-black text-gray-950 dark:text-white mb-2 uppercase leading-[0.85] tracking-tighter max-w-3xl font-teko ${bengaliClass}`}>
-                        {language === 'bn' ? <>ক্যাটাগরি <br /><span className="text-[#C4EE18]">অনুয়ায়ী</span> খুঁজুন</> : <>Browse by <br /><span className="text-[#C4EE18]">Category</span></>}
+                        {isBn ? <>ক্যাটাগরি <br /><span className="text-[#C4EE18]">অনুযায়ী খুঁজুন</span></> : <>Browse <br /><span className="text-[#C4EE18]">by Category</span></>}
                     </h2>
 
                     <div className="w-20 h-1 bg-gray-100 dark:bg-white/10 mb-4" />
 
                     <p className={`text-gray-500 dark:text-gray-400 text-sm lg:text-base max-w-2xl leading-relaxed ${bengaliClass}`}>
-                        {language === 'bn'
-                            ? 'আমাদের বিভিন্ন ক্যাটাগরি থেকে আপনার প্রয়োজনীয় প্রোডাক্ট খুঁজে নিন। কোর্স, সফটওয়্যার, ওয়েবসাইট টেমপ্লেট এবং প্রোডাক্টিভিটি টুলস - সবই এক জায়গায়।'
-                            : 'Explore our diverse categories to find exactly what you need. Courses, software, website templates, and productivity tools - all in one place.'}
+                        {isBn
+                            ? 'আপনার প্রজেক্টের জন্য পারফেক্ট ওয়েবসাইট টেমপ্লেট খুঁজে নিন — ই-কমার্স, লার্নিং ম্যানেজমেন্ট, বিজনেস থেকে পোর্টফোলিও, ব্লগ এবং আরও অনেক ক্যাটাগরি এক জায়গায়।'
+                            : 'Find the perfect website template for your project — from e-commerce and learning management to business, portfolio, blog and more, all in one place.'}
                     </p>
                 </div>
 
-                {/* Categories Grid - 4 Columns */}
-                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
+                {/* Categories Grid - 8 website categories */}
+                <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6'>
                     {categories.map((cat, index) => {
                         const Icon = cat.icon;
-                        const count = getCategoryCount(cat.id);
 
                         return (
-                            <div key={cat.id}>
+                            <motion.div
+                                key={cat.id}
+                                custom={index}
+                                variants={cardVariants}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, amount: 0.2 }}
+                            >
                                 <Link
                                     href={cat.href}
-                                    className="group relative bg-white dark:bg-[#0d0d0d] rounded-md p-6 border border-gray-100 dark:border-white/5 transition-all duration-500 hover:border-[#C4EE18]/40 hover:shadow-2xl hover:shadow-[#C4EE18]/5 block overflow-hidden"
+                                    className={`group relative bg-white dark:bg-[#0d0d0d] rounded-xl p-5 sm:p-6 border border-gray-100 dark:border-white/5 transition-all duration-500 hover:-translate-y-1.5 hover:border-transparent hover:shadow-2xl ${cat.shadow} block overflow-hidden h-full`}
                                 >
                                     {/* Number Indicator */}
-                                    <div className="absolute top-4 right-6 text-4xl font-black text-slate-50 dark:text-white/5 group-hover:text-[#C4EE18]/10 transition-colors pointer-events-none font-teko">
+                                    <div className="absolute top-3 right-4 text-4xl font-black text-slate-50 dark:text-white/[0.04] transition-colors pointer-events-none font-teko select-none">
                                         0{index + 1}
                                     </div>
 
                                     <div className="relative z-10">
-                                        {/* Icon Box */}
-                                        <div className="mb-6">
-                                            <div className="w-12 h-12 bg-slate-50 dark:bg-white/5 rounded-md flex items-center justify-center transition-all duration-500 group-hover:bg-[#C4EE18] group-hover:scale-110">
-                                                <Icon size={22} className="text-gray-700 dark:text-gray-400 group-hover:text-black transition-colors" />
+                                        {/* Animated Icon Box */}
+                                        <div className="mb-5">
+                                            <div className={`w-14 h-14 bg-slate-50 dark:bg-white/5 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-[8deg] group-hover:shadow-lg group-hover:bg-gradient-to-br ${cat.gradient}`}>
+                                                <Icon size={26} className={`${cat.accent} group-hover:text-white transition-all duration-500 group-hover:-rotate-[8deg]`} />
                                             </div>
                                         </div>
 
                                         {/* Text Content */}
                                         <div className="mb-4">
-                                            <h3 className={`text-2xl font-black text-gray-950 dark:text-white mb-1 uppercase tracking-tight font-teko leading-tight ${bengaliClass}`}>
-                                                {cat.title}
+                                            <h3 className={`text-lg sm:text-xl font-black text-gray-950 dark:text-white mb-1 uppercase tracking-tight font-teko leading-tight ${bengaliClass}`}>
+                                                {isBn ? cat.titleBn : cat.title}
                                             </h3>
-                                            <p className={`text-xs text-gray-500 dark:text-gray-400 font-poppins ${bengaliClass}`}>
-                                                {cat.subtitle}
+                                            <p className={`text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 font-poppins ${bengaliClass}`}>
+                                                {isBn ? cat.subtitleBn : cat.subtitle}
                                             </p>
                                         </div>
 
-                                        {/* Bottom Info */}
+                                        {/* Bottom CTA */}
                                         <div className="flex items-center justify-between pt-4 border-t border-gray-50 dark:border-white/5">
-                                            <span className={`text-xs font-bold text-gray-400 group-hover:text-gray-950 dark:group-hover:text-[#C4EE18] transition-colors font-poppins uppercase tracking-wider ${bengaliClass}`}>
-                                                {count}+ {cat.itemLabel}
+                                            <span className={`text-[11px] font-bold ${cat.accent} uppercase tracking-wider font-poppins ${bengaliClass}`}>
+                                                {isBn ? 'টেমপ্লেট দেখুন' : 'View Templates'}
                                             </span>
-                                            <div className="w-8 h-8 rounded bg-slate-50 dark:bg-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:bg-[#C4EE18] transition-all duration-500 -translate-x-4 group-hover:translate-x-0">
-                                                <LuArrowRight size={16} className="text-black" />
+                                            <div className={`w-7 h-7 rounded-lg bg-slate-50 dark:bg-white/5 flex items-center justify-center opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:bg-gradient-to-br ${cat.gradient} transition-all duration-500`}>
+                                                <LuArrowRight size={14} className="text-white" />
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Subtle Hover Reveal line */}
-                                    <div className="absolute bottom-0 left-0 w-0 h-1 bg-[#C4EE18] group-hover:w-full transition-all duration-700" />
+                                    {/* Hover reveal line */}
+                                    <div className={`absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r ${cat.gradient} group-hover:w-full transition-all duration-700`} />
                                 </Link>
-                            </div>
+                            </motion.div>
                         );
                     })}
                 </div>

@@ -121,16 +121,7 @@ export default function UserDashboard() {
                                 </div>
                                 <div className="w-px h-12 bg-slate-200 dark:bg-slate-800 my-auto"></div>
                                 <div className="flex gap-6">
-                                    <Link href="/dashboard/user/assets/softwares" className="flex items-center gap-3 group/item">
-                                        <div className="w-10 h-10 rounded-md bg-orange-500/10 flex items-center justify-center text-orange-500 group-hover/item:scale-110 transition-transform">
-                                            <FiCode size={20} />
-                                        </div>
-                                        <div>
-                                            <p className={`text-lg font-normal ${isDark ? 'text-white' : 'text-slate-800'}`}>{softwareCount}</p>
-                                            <p className="text-[10px] font-normal text-slate-400 uppercase">Software</p>
-                                        </div>
-                                    </Link>
-                                    <Link href="/dashboard/user/assets/websites" className="flex items-center gap-3 group/item">
+                                    <Link href="/dashboard/user/purchases" className="flex items-center gap-3 group/item">
                                         <div className="w-10 h-10 rounded-md bg-teal-500/10 flex items-center justify-center text-teal-500 group-hover/item:scale-110 transition-transform">
                                             <FiGlobe size={20} />
                                         </div>
@@ -145,16 +136,10 @@ export default function UserDashboard() {
 
                         <div className="hidden md:flex flex-col gap-2">
                             <Link
-                                href="/dashboard/user/assets/websites"
+                                href="/dashboard/user/purchases"
                                 className="px-6 py-3 bg-gradient-to-r from-[#FD9A00] to-[#2dd4bf] text-white rounded-md font-normal text-sm shadow-md hover:scale-[1.02] transition-all block text-center"
                             >
-                                View My Websites
-                            </Link>
-                            <Link
-                                href="/dashboard/user/assets/softwares"
-                                className="px-6 py-3 bg-slate-900 dark:bg-white dark:text-slate-900 text-white rounded-md font-normal text-sm shadow-md hover:scale-[1.02] transition-all block text-center"
-                            >
-                                View My Software
+                                View Purchase History
                             </Link>
                         </div>
                     </div>
@@ -277,8 +262,6 @@ export default function UserDashboard() {
                         <p className="px-4 py-3 text-[10px] font-normal text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 mb-2">Quick Access</p>
                         <div className="space-y-0.5">
                             {[
-                                { label: 'My Websites', href: '/dashboard/user/assets/websites', icon: FiGlobe },
-                                { label: 'My Software', href: '/dashboard/user/assets/softwares', icon: FiCode },
                                 { label: 'Order History', href: '/dashboard/user/purchases', icon: FiShoppingBag },
                                 { label: 'Support Tickets', href: '/dashboard/user/support', icon: FiMessageSquare }
                             ].map((item, i) => (

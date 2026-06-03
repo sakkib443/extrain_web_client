@@ -45,7 +45,8 @@ const CategoryMegaMenu = ({ closeMobileMenu, language, bengaliClass }) => {
         if (data.success) {
           // Organize categories into parent and child structure
           const allCategories = data.data || [];
-          const parentCategories = allCategories.filter(cat => !cat.parentCategory);
+          // Software marketplace temporarily hidden — exclude software-type categories from the menu.
+          const parentCategories = allCategories.filter(cat => !cat.parentCategory && cat.type !== 'software');
           const organized = parentCategories.map(parent => ({
             ...parent,
             children: allCategories.filter(cat =>

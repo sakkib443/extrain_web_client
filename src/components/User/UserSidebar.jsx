@@ -32,7 +32,6 @@ import {
 import { useTheme } from '@/providers/ThemeProvider';
 
 import { fetchMyOrders } from '@/redux/orderSlice';
-import { fetchMyDownloads } from '@/redux/downloadSlice';
 
 const UserSidebar = () => {
     const [isOpen, setIsOpen] = useState(true);
@@ -44,7 +43,6 @@ const UserSidebar = () => {
 
     // Redux State (enrollment module removed)
     const { orders } = useSelector((state) => state.order);
-    const { downloads } = useSelector((state) => state.download);
 
     useEffect(() => {
         const userData = localStorage.getItem('user');
@@ -56,7 +54,6 @@ const UserSidebar = () => {
 
         // Fetch dynamic data (enrollment module removed)
         dispatch(fetchMyOrders());
-        dispatch(fetchMyDownloads());
     }, [dispatch]);
 
     // Exact match for active state (following Admin Dashboard style)
@@ -90,16 +87,6 @@ const UserSidebar = () => {
             href: '/dashboard/user',
             icon: FiHome,
             gradient: 'from-indigo-500 to-purple-500'
-        },
-        {
-            title: 'Digital Assets',
-            icon: FiDownload,
-            gradient: 'from-[#FD9A00] to-[#2dd4bf]',
-            submenu: [
-                { title: 'All Assets', href: '/dashboard/user/downloads', icon: FiDownload, count: downloads?.length },
-                { title: 'Softwares', href: '/dashboard/user/assets/softwares', icon: FiCode },
-                { title: 'Websites', href: '/dashboard/user/assets/websites', icon: FiGlobe },
-            ],
         },
         {
             title: 'Purchase History',
