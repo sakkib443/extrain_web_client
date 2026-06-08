@@ -138,7 +138,7 @@ const IeltsHero = () => {
                                 <LuArrowRight className="group-hover:translate-x-1 transition-transform" />
                             </motion.button>
                             <motion.a
-                                href="https://bestieltsbd.vercel.app/"
+                                href="https://bestieltsbd.com/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 whileHover={{ scale: 1.02 }}

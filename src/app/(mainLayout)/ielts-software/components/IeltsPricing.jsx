@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 import { useRouter } from "next/navigation";
@@ -17,7 +16,6 @@ import {
     LuShield,
     LuBrain,
     LuHeadphones,
-    LuRepeat
 } from "react-icons/lu";
 import { FaWhatsapp } from "react-icons/fa";
 
@@ -25,14 +23,14 @@ const IeltsPricing = () => {
     const { language } = useLanguage();
     const bengaliClass = language === "bn" ? "hind-siliguri" : "";
     const router = useRouter();
-    const [pricingMode, setPricingMode] = useState('onetime'); // 'onetime' or 'subscription'
 
     const packages = [
         {
             id: "starter",
             name: language === 'bn' ? "স্টার্টার" : "Starter",
             subtitle: language === 'bn' ? "ছোট কোচিং সেন্টারের জন্য" : "For Small Coaching Centers",
-            oneTimePrice: 42999,
+            oneTimePrice: 12500,
+            originalPrice: 25000,
             setupPrice: 10000,
             monthlyPrice: 1000,
             icon: LuBuilding,
@@ -40,11 +38,11 @@ const IeltsPricing = () => {
             popular: false,
             studentLimit: "Unlimited",
             features: [
-                { text: language === 'bn' ? "৪টি মডিউল (L/R/W/S)" : "4 Modules (L/R/W/S)", included: true, highlight: true },
+                { text: language === 'bn' ? "৩টি মডিউল (L/R/W)" : "3 Modules (L/R/W)", included: true, highlight: true },
                 { text: language === 'bn' ? "Unlimited Mock Question Upload" : "Unlimited Mock Question Upload", included: true, highlight: true },
                 { text: language === 'bn' ? "Admin Dashboard" : "Admin Dashboard", included: true },
                 { text: language === 'bn' ? "Listening & Reading - Auto Marking" : "Listening & Reading - Auto Marking", included: true },
-                { text: language === 'bn' ? "Writing & Speaking - Trainer Review" : "Writing & Speaking - Trainer Review", included: true },
+                { text: language === 'bn' ? "Writing - Trainer Review" : "Writing - Trainer Review", included: true },
                 { text: language === 'bn' ? "Student Dashboard" : "Student Dashboard", included: true },
                 { text: language === 'bn' ? "Student Marking View" : "Student Marking View", included: true },
                 { text: language === 'bn' ? "AI Auto Marking (All)" : "AI Auto Marking (All)", included: false },
@@ -56,7 +54,8 @@ const IeltsPricing = () => {
             id: "professional",
             name: language === 'bn' ? "প্রফেশনাল" : "Professional",
             subtitle: language === 'bn' ? "AI সহ সম্পূর্ণ সমাধান" : "Complete AI Solution",
-            oneTimePrice: 80000,
+            oneTimePrice: 25000,
+            originalPrice: 60000,
             setupPrice: 10000,
             monthlyPrice: 2000,
             icon: LuBuilding2,
@@ -64,9 +63,9 @@ const IeltsPricing = () => {
             popular: true,
             studentLimit: "Unlimited",
             features: [
-                { text: language === 'bn' ? "৪টি মডিউল (L/R/W/S)" : "4 Modules (L/R/W/S)", included: true, highlight: true },
+                { text: language === 'bn' ? "৩টি মডিউল (L/R/W)" : "3 Modules (L/R/W)", included: true, highlight: true },
                 { text: language === 'bn' ? "Unlimited Question Upload" : "Unlimited Question Upload", included: true },
-                { text: language === 'bn' ? "AI Auto Marking (সব ৪টি)" : "AI Auto Marking (All 4)", included: true, highlight: true },
+                { text: language === 'bn' ? "AI Auto Marking (L/R/W)" : "AI Auto Marking (L/R/W)", included: true, highlight: true },
                 { text: language === 'bn' ? "Admin Dashboard + Review" : "Admin Dashboard + Review", included: true },
                 { text: language === 'bn' ? "Student Dashboard + Answer Sheet" : "Student Dashboard + Answer Sheet", included: true },
                 { text: language === 'bn' ? "Class Practice System" : "Class Practice System", included: true },
@@ -80,7 +79,7 @@ const IeltsPricing = () => {
             id: "enterprise",
             name: language === 'bn' ? "এন্টারপ্রাইজ" : "Enterprise",
             subtitle: language === 'bn' ? "প্রিমিয়াম বিজনেস সমাধান" : "Premium Business Solution",
-            oneTimePrice: 250000,
+            oneTimePrice: 120000,
             setupPrice: 20000,
             monthlyPrice: 4000,
             icon: LuGraduationCap,
@@ -168,30 +167,6 @@ const IeltsPricing = () => {
                             : 'Choose a plan based on your needs. All plans include Admin Dashboard.'}
                     </p>
 
-                    {/* Pricing Toggle */}
-                    <div className="mt-8 inline-flex items-center p-1.5 bg-gray-100 dark:bg-white/5 rounded-xl">
-                        <button
-                            onClick={() => setPricingMode('onetime')}
-                            className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 ${bengaliClass} ${
-                                pricingMode === 'onetime'
-                                    ? 'bg-white dark:bg-[#111] text-gray-900 dark:text-white shadow-md'
-                                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-                            }`}
-                        >
-                            {language === 'bn' ? 'এককালীন' : 'One-time'}
-                        </button>
-                        <button
-                            onClick={() => setPricingMode('subscription')}
-                            className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${bengaliClass} ${
-                                pricingMode === 'subscription'
-                                    ? 'bg-white dark:bg-[#111] text-gray-900 dark:text-white shadow-md'
-                                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-                            }`}
-                        >
-                            <LuRepeat size={14} />
-                            {language === 'bn' ? 'সাবস্ক্রিপশন' : 'Subscription'}
-                        </button>
-                    </div>
                 </motion.div>
 
                 {/* Pricing Cards */}
@@ -231,22 +206,18 @@ const IeltsPricing = () => {
 
                                     {/* Price */}
                                     <div className="mb-8">
-                                        {pricingMode === 'onetime' ? (
-                                            <div className="flex items-baseline gap-2">
-                                                <span className="text-4xl font-black text-gray-900 dark:text-white">৳{pkg.oneTimePrice.toLocaleString()}</span>
-                                                <span className="text-lg text-gray-400">{language === 'bn' ? '/এককালীন' : '/one-time'}</span>
-                                            </div>
-                                        ) : (
-                                            <div className="space-y-2">
-                                                <div className="flex items-baseline gap-2">
-                                                    <span className="text-3xl font-black text-gray-900 dark:text-white">৳{pkg.monthlyPrice.toLocaleString()}</span>
-                                                    <span className="text-base text-gray-400">{language === 'bn' ? '/মাস' : '/month'}</span>
-                                                </div>
-                                                <p className={`text-sm text-gray-500 dark:text-gray-400 ${bengaliClass}`}>
-                                                    + ৳{pkg.setupPrice.toLocaleString()} {language === 'bn' ? 'সেটআপ ফি (এককালীন)' : 'setup fee (one-time)'}
-                                                </p>
+                                        {pkg.originalPrice && (
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <span className="text-xl text-gray-400 line-through">৳{pkg.originalPrice.toLocaleString()}</span>
+                                                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-500/20 text-red-500">
+                                                    {Math.round((1 - pkg.oneTimePrice / pkg.originalPrice) * 100)}% OFF
+                                                </span>
                                             </div>
                                         )}
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-4xl font-black text-gray-900 dark:text-white">৳{pkg.oneTimePrice.toLocaleString()}</span>
+                                            <span className="text-lg text-gray-400">{language === 'bn' ? '/এককালীন' : '/one-time'}</span>
+                                        </div>
                                     </div>
 
                                     {/* Features */}
