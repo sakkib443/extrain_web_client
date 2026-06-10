@@ -37,7 +37,7 @@ const IeltsHero = () => {
             <div className="absolute top-0 right-0 w-[38rem] h-[38rem] bg-[#FD9A00]/10 dark:bg-[#FD9A00]/[0.07] rounded-full blur-[120px] -translate-y-1/3 translate-x-1/4 pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-[32rem] h-[32rem] bg-[#C4EE18]/10 dark:bg-[#C4EE18]/[0.06] rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-20 pt-10 pb-20 lg:pt-14 lg:pb-24 relative z-10">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-20 pt-16 pb-20 lg:pt-24 lg:pb-24 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
                     {/* ============ LEFT CONTENT ============ */}
                     <motion.div
