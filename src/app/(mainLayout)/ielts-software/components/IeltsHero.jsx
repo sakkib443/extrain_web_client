@@ -38,7 +38,7 @@ const IeltsHero = () => {
             <div className="absolute bottom-0 left-0 w-[32rem] h-[32rem] bg-[#C4EE18]/10 dark:bg-[#C4EE18]/[0.06] rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-20 pt-16 pb-20 lg:pt-24 lg:pb-24 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+                <div className="grid lg:grid-cols-2 gap-10 lg:gap-8 items-center">
                     {/* ============ LEFT CONTENT ============ */}
                     <motion.div
                         initial={{ opacity: 0, y: 24 }}
@@ -160,9 +160,9 @@ const IeltsHero = () => {
                         initial={{ opacity: 0, scale: 0.96 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-                        className="relative flex justify-center lg:justify-end"
+                        className="relative flex justify-center"
                     >
-                        <div className="relative w-full" style={{ maxWidth: "430px" }}>
+                        <div className="relative w-full" style={{ maxWidth: "470px" }}>
                             {/* Static glow halo behind image */}
                             <div className="absolute -inset-6 bg-gradient-to-tr from-[#FD9A00]/25 via-transparent to-[#C4EE18]/25 rounded-[2.5rem] blur-3xl pointer-events-none" />
 
