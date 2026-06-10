@@ -74,7 +74,7 @@ const IeltsHowItWorks = () => {
 
     return (
         <section className="py-20 lg:py-28 bg-gray-50 dark:bg-[#111]">
-            <div className="container mx-auto px-4 lg:px-6">
+            <div className="container mx-auto px-10 lg:px-20">
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -112,7 +112,7 @@ const IeltsHowItWorks = () => {
                     {/* Connection Line - Desktop */}
                     <div className="hidden lg:block absolute top-24 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-[#FD9A00] via-[#C4EE18] to-[#FD9A00] opacity-30"></div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                         {steps.map((step, index) => {
                             const colors = colorClasses[step.color];
                             return (

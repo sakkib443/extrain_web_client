@@ -43,7 +43,7 @@ const IeltsCTA = () => {
                 className="absolute bottom-20 right-10 w-64 h-64 bg-[#C4EE18]/20 rounded-full blur-3xl"
             />
 
-            <div className="container mx-auto px-4 lg:px-6 relative z-10">
+            <div className="container mx-auto px-10 lg:px-20 relative z-10">
                 <div className="max-w-4xl mx-auto text-center">
                     {/* Badge */}
                     <motion.div

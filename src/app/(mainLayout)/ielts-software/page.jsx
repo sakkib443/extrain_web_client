@@ -12,8 +12,8 @@ export default function IeltsSoftwarePage() {
             {/* Hero Section */}
             <IeltsHero />
 
-            {/* Key Features */}
-            <IeltsFeatures />
+            {/* Key Features — hidden temporarily */}
+            {/* <IeltsFeatures /> */}
 
             {/* How It Works */}
             <IeltsHowItWorks />
