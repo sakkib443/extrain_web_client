@@ -120,66 +120,73 @@ export default function CategoryView({ slug }) {
 
                     <div className="max-w-5xl mx-auto">
 
-                        {/* Tab bar */}
-                        <div className="flex gap-2 p-1.5 bg-gray-100 dark:bg-white/[0.05] rounded-2xl mb-6">
+                        {/* Tab bar — underline style */}
+                        <div className="flex border-b-2 border-gray-100 dark:border-white/[0.07] mb-0">
                             {cat.pricing.map((p, i) => (
                                 <button
                                     key={i}
                                     onClick={() => setActiveTab(i)}
-                                    className={`relative flex-1 flex flex-col items-center py-3 px-2 rounded-xl transition-all duration-300 ${
-                                        activeTab === i
-                                            ? "bg-white dark:bg-[#1e1e1e] shadow-lg"
-                                            : "hover:bg-white/60 dark:hover:bg-white/[0.04]"
+                                    className={`relative flex-1 flex flex-col items-center pt-2 pb-4 px-2 transition-all duration-200 ${
+                                        activeTab === i ? "" : "hover:bg-gray-50 dark:hover:bg-white/[0.02]"
                                     }`}
                                 >
                                     {p.popular && (
-                                        <span className={`absolute -top-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-[#FD9A00] text-white text-[9px] font-black uppercase tracking-wider whitespace-nowrap ${bn}`}>
+                                        <span className={`mb-1 px-2.5 py-0.5 rounded-full bg-[#FD9A00]/15 text-[#FD9A00] text-[9px] font-black uppercase tracking-wider ${bn}`}>
                                             {t("Popular", "জনপ্রিয়")}
                                         </span>
                                     )}
-                                    <span className={`text-xs font-black uppercase font-teko tracking-widest ${activeTab === i ? "text-[#FD9A00]" : "text-gray-400 dark:text-gray-500"} ${bn}`}>
+                                    {!p.popular && <span className="mb-1 h-4" />}
+                                    <span className={`text-[11px] font-black uppercase font-teko tracking-widest ${activeTab === i ? "text-[#FD9A00]" : "text-gray-400 dark:text-gray-500"} ${bn}`}>
                                         {isBn ? p.nameBn : p.name}
                                     </span>
-                                    <span className={`text-xl font-black font-teko leading-tight ${activeTab === i ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-500"}`}>
+                                    <span className={`text-2xl font-black font-teko leading-tight ${activeTab === i ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-500"}`}>
                                         ৳{p.price.toLocaleString()}
                                     </span>
+                                    {/* Active underline */}
+                                    <span className={`absolute bottom-[-2px] left-0 right-0 h-[3px] rounded-full transition-all duration-200 ${activeTab === i ? "bg-[#FD9A00]" : "bg-transparent"}`} />
                                 </button>
                             ))}
                         </div>
 
-                        {/* Active plan panel */}
+                        {/* Plan panels */}
                         {cat.pricing.map((plan, i) => (
                             <div
                                 key={i}
-                                className={`bg-white dark:bg-[#141414] rounded-2xl border border-gray-100 dark:border-white/[0.06] overflow-hidden transition-all duration-300 ${activeTab === i ? "block" : "hidden"}`}
+                                className={`rounded-b-2xl border-x border-b border-gray-100 dark:border-white/[0.07] overflow-hidden ${activeTab === i ? "flex flex-col lg:flex-row" : "hidden"}`}
                             >
-                                {/* Plan header */}
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-5 border-b border-gray-100 dark:border-white/[0.06] bg-gray-50/70 dark:bg-white/[0.02]">
-                                    <div>
-                                        <div className="flex items-baseline gap-2">
-                                            <span className="text-4xl font-black font-teko text-gray-900 dark:text-white">
-                                                ৳{plan.price.toLocaleString()}
-                                            </span>
-                                            <span className={`text-sm text-gray-400 ${bn}`}>{t("/ project", "/ প্রজেক্ট")}</span>
-                                        </div>
-                                        <p className={`text-sm text-gray-500 dark:text-gray-400 mt-0.5 ${bn}`}>
-                                            {isBn ? plan.summaryBn : plan.summary}
-                                        </p>
+                                {/* Left — plan info */}
+                                <div className="lg:w-64 shrink-0 flex flex-col p-7 bg-gradient-to-br from-[#FD9A00]/[0.07] via-[#FD9A00]/[0.03] to-transparent dark:from-[#FD9A00]/[0.1] dark:to-transparent border-b lg:border-b-0 lg:border-r border-gray-100 dark:border-white/[0.07]">
+                                    {plan.popular && (
+                                        <span className={`self-start mb-4 px-3 py-1 rounded-full bg-[#FD9A00] text-white text-[10px] font-black uppercase tracking-widest shadow-sm ${bn}`}>
+                                            {t("Most Popular", "সবচেয়ে জনপ্রিয়")}
+                                        </span>
+                                    )}
+                                    <h3 className={`text-2xl font-black uppercase font-teko tracking-wide text-gray-900 dark:text-white mb-1 ${bn}`}>
+                                        {isBn ? plan.nameBn : plan.name}
+                                    </h3>
+                                    <p className={`text-xs text-gray-500 dark:text-gray-400 mb-6 leading-relaxed ${bn}`}>
+                                        {isBn ? plan.summaryBn : plan.summary}
+                                    </p>
+                                    <div className="mb-1">
+                                        <span className="text-5xl font-black font-teko text-gray-900 dark:text-white leading-none">
+                                            ৳{plan.price.toLocaleString()}
+                                        </span>
                                     </div>
+                                    <span className={`text-xs text-gray-400 mb-8 ${bn}`}>{t("one-time payment", "ওয়ান-টাইম পেমেন্ট")}</span>
                                     <Link
                                         href="/contact"
-                                        className={`inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold text-sm shadow-lg shadow-[#FD9A00]/20 transition-all hover:-translate-y-0.5 whitespace-nowrap ${bn}`}
+                                        className={`mt-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold text-sm shadow-lg shadow-[#FD9A00]/25 transition-all hover:-translate-y-0.5 ${bn}`}
                                     >
-                                        {t("Order Now", "অর্ডার করুন")} <LuArrowRight size={15} />
+                                        {t("Get Started", "শুরু করুন")} <LuArrowRight size={15} />
                                     </Link>
                                 </div>
 
-                                {/* Features grid */}
-                                <div className="p-6">
+                                {/* Right — features */}
+                                <div className="flex-1 p-6 bg-white dark:bg-[#141414]">
                                     {plan.featuresRich ? (
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             {plan.featuresRich.map((f, j) => (
-                                                <div key={j} className="flex items-start gap-3 p-4 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.05] hover:border-[#FD9A00]/30 transition-colors">
+                                                <div key={j} className="flex items-start gap-3 p-4 rounded-xl bg-gray-50 dark:bg-white/[0.03] border-l-[3px] border-[#FD9A00]/30 hover:border-[#FD9A00] hover:bg-[#FD9A00]/[0.03] transition-all duration-200">
                                                     <span className="mt-0.5 w-5 h-5 rounded-full bg-[#FD9A00]/15 text-[#FD9A00] flex items-center justify-center shrink-0">
                                                         <LuCheck size={11} strokeWidth={3} />
                                                     </span>
@@ -195,9 +202,9 @@ export default function CategoryView({ slug }) {
                                             ))}
                                         </div>
                                     ) : (
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                                             {(isBn ? plan.featuresBn : plan.features).map((f, j) => (
-                                                <div key={j} className="flex items-center gap-2.5 p-3 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.05]">
+                                                <div key={j} className="flex items-center gap-3 p-3.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border-l-[3px] border-[#FD9A00]/30 hover:border-[#FD9A00] transition-colors">
                                                     <span className="w-4 h-4 rounded-full bg-[#FD9A00]/15 text-[#FD9A00] flex items-center justify-center shrink-0">
                                                         <LuCheck size={10} strokeWidth={3} />
                                                     </span>
