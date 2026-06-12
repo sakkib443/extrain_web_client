@@ -24,7 +24,7 @@ export const CATEGORIES = {
         ],
         pricing: [
             {
-                name: "Basic", nameBn: "বেসিক", price: 12500,
+                name: "Basic", nameBn: "বেসিক", price: 12500, originalPrice: 25000,
                 summary: "Complete e-commerce solution", summaryBn: "সম্পূর্ণ ই-কমার্স সমাধান",
                 features: [], featuresBn: [],
                 featuresRich: [
@@ -104,7 +104,7 @@ export const CATEGORIES = {
                 popular: false,
             },
             {
-                name: "Standard", nameBn: "স্ট্যান্ডার্ড", price: 30000,
+                name: "Standard", nameBn: "স্ট্যান্ডার্ড", price: 30000, originalPrice: 60000,
                 summary: "For growing online businesses", summaryBn: "বাড়ন্ত অনলাইন ব্যবসার জন্য",
                 features: [], featuresBn: [],
                 featuresRich: [
@@ -202,7 +202,7 @@ export const CATEGORIES = {
                 popular: true,
             },
             {
-                name: "Premium", nameBn: "প্রিমিয়াম", price: 60000,
+                name: "Premium", nameBn: "প্রিমিয়াম", price: 80000,
                 summary: "Enterprise-grade complete solution", summaryBn: "এন্টারপ্রাইজ-গ্রেড সম্পূর্ণ সমাধান",
                 features: [], featuresBn: [],
                 dominoChain: {

@@ -139,6 +139,11 @@ export default function CategoryView({ slug }) {
                                     <span className={`text-[11px] font-black uppercase font-teko tracking-widest ${activeTab === i ? "text-[#FD9A00]" : "text-gray-400 dark:text-gray-500"} ${bn}`}>
                                         {isBn ? p.nameBn : p.name}
                                     </span>
+                                    {p.originalPrice && (
+                                        <span className="text-xs text-gray-400 line-through font-teko leading-none">
+                                            ৳{p.originalPrice.toLocaleString()}
+                                        </span>
+                                    )}
                                     <span className={`text-2xl font-black font-teko leading-tight ${activeTab === i ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-500"}`}>
                                         ৳{p.price.toLocaleString()}
                                     </span>
@@ -168,6 +173,16 @@ export default function CategoryView({ slug }) {
                                         {isBn ? plan.summaryBn : plan.summary}
                                     </p>
                                     <div className="mb-1">
+                                        {plan.originalPrice && (
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <span className="text-lg text-gray-400 line-through font-teko">
+                                                    ৳{plan.originalPrice.toLocaleString()}
+                                                </span>
+                                                <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-500/20 text-red-500">
+                                                    {Math.round((1 - plan.price / plan.originalPrice) * 100)}% OFF
+                                                </span>
+                                            </div>
+                                        )}
                                         <span className="text-5xl font-black font-teko text-gray-900 dark:text-white leading-none">
                                             ৳{plan.price.toLocaleString()}
                                         </span>
