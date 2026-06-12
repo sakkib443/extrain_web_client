@@ -161,7 +161,7 @@ const ProductCard = ({ product, type, view = "grid" }) => {
     // Grid View Rendering
     return (
         <div className="group w-full h-full flex flex-col">
-            <div className={`relative h-full bg-white dark:bg-[#0d0d0d] rounded-xl border border-gray-100 dark:border-white/10 overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col`}>
+            <div className={`relative h-full bg-white dark:bg-[#0d0d0d] rounded-xl border border-gray-100 dark:border-white/10 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col`}>
 
                 {/* Image Section */}
                 <div className="relative h-48 w-full overflow-hidden shrink-0">
