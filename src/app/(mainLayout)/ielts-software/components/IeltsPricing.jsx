@@ -21,6 +21,7 @@ import {
     LuZap,
     LuChevronDown,
     LuPlay,
+    LuVideo,
 } from "react-icons/lu";
 import { FaWhatsapp } from "react-icons/fa";
 
@@ -29,6 +30,7 @@ const IeltsPricing = () => {
     const bengaliClass = language === "bn" ? "hind-siliguri" : "";
     const router = useRouter();
     const [expandedPackage, setExpandedPackage] = useState(null);
+    const [featureVideoOpen, setFeatureVideoOpen] = useState(false);
 
     const allFeatureCategories = [
         {
@@ -94,6 +96,7 @@ const IeltsPricing = () => {
         {
             id: "starter",
             demoLink: "https://bestieltsbd.vercel.app/",
+            featureVideoUrl: "https://drive.google.com/file/d/1H2eCp2g0CI54kq3Ov72E8otdmwZ0u8wu/preview",
             name: language === 'bn' ? "স্টার্টার" : "Starter",
             subtitle: language === 'bn' ? "ছোট কোচিং সেন্টারের জন্য" : "For Small Coaching Centers",
             oneTimePrice: 12500,
@@ -228,6 +231,7 @@ const IeltsPricing = () => {
     };
 
     return (
+        <>
         <section id="pricing" className="py-16 lg:py-20 bg-gray-50 dark:bg-[#0A0A0A]">
             <div className="container mx-auto px-10 lg:px-20">
                 {/* Section Header */}
@@ -422,6 +426,17 @@ const IeltsPricing = () => {
                                                 {language === 'bn' ? 'লাইভ ডেমো দেখুন' : 'Live Demo'}
                                             </motion.a>
                                         )}
+                                        {pkg.featureVideoUrl && (
+                                            <motion.button
+                                                onClick={() => setFeatureVideoOpen(true)}
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.98 }}
+                                                className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 font-bold transition-all duration-300 hover:bg-gray-100 dark:hover:bg-white/10 ${bengaliClass}`}
+                                            >
+                                                <LuVideo size={18} />
+                                                {language === 'bn' ? 'ফিচার ভিডিও দেখুন' : 'Feature Video'}
+                                            </motion.button>
+                                        )}
                                     </div>
                                 </div>
                             </motion.div>
@@ -474,6 +489,51 @@ const IeltsPricing = () => {
                 </motion.div>
             </div>
         </section>
+
+        {/* Feature Video Modal */}
+        <AnimatePresence>
+            {featureVideoOpen && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                    onClick={() => setFeatureVideoOpen(false)}
+                >
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.25 }}
+                        className="relative w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex items-center justify-between px-5 py-3 bg-[#111]">
+                            <span className={`text-white font-bold text-sm flex items-center gap-2 ${bengaliClass}`}>
+                                <LuVideo size={16} className="text-[#FD9A00]" />
+                                {language === 'bn' ? 'ফিচার ভিডিও' : 'Feature Video'}
+                            </span>
+                            <button
+                                onClick={() => setFeatureVideoOpen(false)}
+                                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+                            >
+                                <LuX size={16} />
+                            </button>
+                        </div>
+                        <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+                            <iframe
+                                src="https://drive.google.com/file/d/1H2eCp2g0CI54kq3Ov72E8otdmwZ0u8wu/preview"
+                                className="absolute inset-0 w-full h-full"
+                                allow="autoplay"
+                                allowFullScreen
+                            />
+                        </div>
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
+        </>
     );
 };
 
