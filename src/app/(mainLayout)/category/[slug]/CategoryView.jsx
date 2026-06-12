@@ -142,18 +142,38 @@ export default function CategoryView({ slug }) {
                                     <span className={`text-xs ml-1 text-gray-400 ${bn}`}>{t("/ project", "/ প্রজেক্ট")}</span>
                                 </div>
 
-                                <ul className="space-y-3 mb-8 flex-1">
-                                    {(isBn ? plan.featuresBn : plan.features).map((f, j) => (
-                                        <li key={j} className="flex items-start gap-2.5">
-                                            <span className={`mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${plan.popular ? "bg-[#C4EE18] text-black" : "bg-[#FD9A00]/15 text-[#FD9A00]"}`}>
-                                                <LuCheck size={11} strokeWidth={3} />
-                                            </span>
-                                            <span className={`text-sm ${plan.popular ? "text-gray-200" : "text-gray-600 dark:text-gray-300"} ${bn}`}>
-                                                {f}
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
+                                {plan.featuresRich ? (
+                                    <div className="space-y-2 mb-8 flex-1">
+                                        {plan.featuresRich.map((f, j) => (
+                                            <div key={j} className={`flex items-start gap-3 p-3 rounded-xl ${plan.popular ? "bg-white/[0.05]" : "bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.05]"}`}>
+                                                <span className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${plan.popular ? "bg-[#C4EE18] text-black" : "bg-[#FD9A00]/15 text-[#FD9A00]"}`}>
+                                                    <LuCheck size={11} strokeWidth={3} />
+                                                </span>
+                                                <div>
+                                                    <p className={`text-sm font-bold leading-snug ${plan.popular ? "text-white" : "text-gray-800 dark:text-gray-100"} ${bn}`}>
+                                                        {isBn ? f.titleBn : f.title}
+                                                    </p>
+                                                    <p className={`text-xs mt-0.5 leading-snug ${plan.popular ? "text-gray-400" : "text-gray-500 dark:text-gray-400"} ${bn}`}>
+                                                        {isBn ? f.descBn : f.desc}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <ul className="space-y-3 mb-8 flex-1">
+                                        {(isBn ? plan.featuresBn : plan.features).map((f, j) => (
+                                            <li key={j} className="flex items-start gap-2.5">
+                                                <span className={`mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${plan.popular ? "bg-[#C4EE18] text-black" : "bg-[#FD9A00]/15 text-[#FD9A00]"}`}>
+                                                    <LuCheck size={11} strokeWidth={3} />
+                                                </span>
+                                                <span className={`text-sm ${plan.popular ? "text-gray-200" : "text-gray-600 dark:text-gray-300"} ${bn}`}>
+                                                    {f}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
 
                                 <Link
                                     href="/contact"
