@@ -183,6 +183,31 @@ export default function CategoryView({ slug }) {
 
                                 {/* Right — features */}
                                 <div className="flex-1 p-6 bg-white dark:bg-[#141414]">
+
+                                    {/* Domino Chain strip */}
+                                    {plan.dominoChain && (
+                                        <div className="mb-5 p-4 rounded-2xl bg-gradient-to-r from-[#FD9A00]/10 via-[#FD9A00]/5 to-[#C4EE18]/10 border border-[#FD9A00]/20">
+                                            <p className={`text-[10px] font-black uppercase tracking-[0.2em] text-[#FD9A00] mb-2 ${bn}`}>
+                                                ⚡ {isBn ? plan.dominoChain.labelBn : plan.dominoChain.label}
+                                            </p>
+                                            <div className="flex flex-wrap items-center gap-1.5">
+                                                {(isBn ? plan.dominoChain.stepsBn : plan.dominoChain.steps).map((step, si) => (
+                                                    <span key={si} className="flex items-center gap-1.5">
+                                                        <span className={`px-2.5 py-1 rounded-lg bg-white dark:bg-[#1a1a1a] border border-[#FD9A00]/30 text-xs font-bold text-gray-700 dark:text-gray-200 shadow-sm ${bn}`}>
+                                                            {step}
+                                                        </span>
+                                                        {si < (isBn ? plan.dominoChain.stepsBn : plan.dominoChain.steps).length - 1 && (
+                                                            <span className="text-[#FD9A00] text-sm font-black">→</span>
+                                                        )}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            <p className={`text-xs text-gray-500 dark:text-gray-400 mt-2 ${bn}`}>
+                                                {isBn ? plan.dominoChain.descBn : plan.dominoChain.desc}
+                                            </p>
+                                        </div>
+                                    )}
+
                                     {plan.featuresRich ? (
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             {plan.featuresRich.map((f, j) => (
