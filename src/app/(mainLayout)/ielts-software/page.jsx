@@ -15,11 +15,11 @@ export default function IeltsSoftwarePage() {
             {/* Key Features — hidden temporarily */}
             {/* <IeltsFeatures /> */}
 
-            {/* How It Works */}
-            <IeltsHowItWorks />
-
             {/* Pricing Packages */}
             <IeltsPricing />
+
+            {/* How It Works */}
+            <IeltsHowItWorks />
 
             {/* Final CTA */}
             <IeltsCTA />
