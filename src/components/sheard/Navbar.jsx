@@ -358,7 +358,7 @@ const Navbar = () => {
             {/* Left: Logo & Categories */}
             <div className="flex items-center gap-8 xl:gap-12">
               <Link href="/" className="relative flex-shrink-0 group">
-                <h2 className={`font-black font-teko uppercase text-black dark:text-white leading-none transition-all duration-300 tracking-tight ${isSticky ? "text-3xl" : "text-4xl"}`}>
+                <h2 className={`font-black font-teko uppercase text-black dark:text-white leading-none transition-all duration-300 tracking-tight ${isSticky ? "text-2xl lg:text-3xl" : "text-2xl lg:text-4xl"}`}>
                   EXTRAIN <span className="text-[#FD9A00]">WEB</span>
                   <span className="text-[#FD9A00]">.</span>
                 </h2>

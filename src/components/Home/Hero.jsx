@@ -25,8 +25,8 @@ const Hero = () => {
     const isBn = language === 'bn';
     const bengaliClass = isBn ? "hind-siliguri" : "";
 
-    const [softwareCount, setSoftwareCount] = useState(0);
-    const [websiteCount, setWebsiteCount] = useState(0);
+    const [softwareCount, setSoftwareCount] = useState(3);
+    const [websiteCount, setWebsiteCount] = useState(35);
 
     useEffect(() => {
         const fetchCounts = async () => {
@@ -37,8 +37,10 @@ const Hero = () => {
                 ]);
                 const softData = await softRes.json();
                 const webData = await webRes.json();
-                setSoftwareCount(softData.meta?.total || (Array.isArray(softData.data) ? softData.data.length : 0));
-                setWebsiteCount(webData.meta?.total || (Array.isArray(webData.data) ? webData.data.length : 0));
+                const softNum = softData.meta?.total || (Array.isArray(softData.data) ? softData.data.length : 0);
+                const webNum = webData.meta?.total || (Array.isArray(webData.data) ? webData.data.length : 0);
+                if (softNum > 0) setSoftwareCount(softNum);
+                if (webNum > 0) setWebsiteCount(webNum);
             } catch (error) {
                 console.error('Error fetching counts:', error);
             }
@@ -82,7 +84,7 @@ const Hero = () => {
     };
 
     return (
-        <section className="relative min-h-[90vh] flex flex-col pt-24 lg:pt-32 pb-12 overflow-hidden bg-white dark:bg-[#0A0A0A]">
+        <section className="relative lg:min-h-[90vh] flex flex-col pt-24 lg:pt-32 pb-0 lg:pb-12 overflow-hidden bg-white dark:bg-[#0A0A0A]">
             {/* Background Grid Pattern */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]"
                 style={{ backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
@@ -210,7 +212,7 @@ const Hero = () => {
                                 </motion.div>
 
                                 <motion.h1
-                                    className={`text-5xl lg:text-[85px] font-black text-gray-950 dark:text-white uppercase font-teko leading-[0.95] tracking-tight cursor-default ${bengaliClass}`}
+                                    className={`text-4xl sm:text-5xl lg:text-[85px] font-black text-gray-950 dark:text-white uppercase font-teko leading-[0.95] tracking-tight cursor-default ${bengaliClass}`}
                                     whileHover={{ scale: 1.02, x: 5 }}
                                     transition={{ type: "spring", stiffness: 300 }}
                                 >
@@ -231,9 +233,9 @@ const Hero = () => {
                             </div>
 
                             {/* Row 2: SOFTWARE + Arrow + SOLUTION */}
-                            <motion.div variants={itemVariants} className="flex items-center gap-4 lg:gap-6 ml-0 lg:ml-48 mb-2 lg:mb-4">
+                            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-2 lg:gap-6 ml-0 lg:ml-48 mb-2 lg:mb-4">
                                 <motion.h1
-                                    className={`text-5xl lg:text-[85px] font-black uppercase font-teko leading-[0.95] tracking-tight cursor-default ${bengaliClass}`}
+                                    className={`text-4xl sm:text-5xl lg:text-[85px] font-black uppercase font-teko leading-[0.95] tracking-tight cursor-default ${bengaliClass}`}
                                     style={{ color: '#FD9A00' }}
                                     whileHover={{ scale: 1.05, textShadow: "0 0 20px rgba(253, 154, 0, 0.5)" }}
                                     transition={{ type: "spring", stiffness: 300 }}
@@ -242,7 +244,7 @@ const Hero = () => {
                                 </motion.h1>
 
                                 <motion.div
-                                    className="h-10 lg:h-14 px-5 lg:px-8 bg-[#C4EE18] rounded-full flex items-center justify-center shadow-lg cursor-pointer"
+                                    className="h-10 lg:h-14 px-3 lg:px-8 bg-[#C4EE18] rounded-full flex items-center justify-center shadow-lg cursor-pointer"
                                     whileHover={{ scale: 1.15, boxShadow: "0 10px 30px rgba(196, 238, 24, 0.4)" }}
                                     whileTap={{ scale: 0.95 }}
                                     transition={{ type: "spring", stiffness: 400 }}
@@ -258,7 +260,7 @@ const Hero = () => {
                                 </motion.div>
 
                                 <motion.h1
-                                    className={`text-5xl lg:text-[85px] font-black text-gray-950 dark:text-white uppercase font-teko leading-[0.95] tracking-tight cursor-default ${bengaliClass}`}
+                                    className={`text-4xl sm:text-5xl lg:text-[85px] font-black text-gray-950 dark:text-white uppercase font-teko leading-[0.95] tracking-tight cursor-default ${bengaliClass}`}
                                     whileHover={{ scale: 1.05 }}
                                     transition={{ type: "spring", stiffness: 300 }}
                                 >
@@ -267,15 +269,15 @@ const Hero = () => {
                             </motion.div>
 
                             {/* Row 3: SOLUTIONS. + Shape */}
-                            <motion.div variants={itemVariants} className="flex items-center gap-6 ml-0 lg:ml-30 mb-12 relative">
+                            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-3 lg:gap-6 ml-0 lg:ml-30 mb-12 relative">
                                 <motion.span
-                                    className={`absolute -top-1 -left-12 lg:-left-16 text-2xl lg:text-4xl text-[#FD9A00] font-normal lowercase tracking-wide z-10 caveat cursor-default ${bengaliClass}`}
+                                    className={`lg:absolute lg:-top-1 lg:-left-16 text-2xl lg:text-4xl text-[#FD9A00] font-normal lowercase tracking-wide z-10 caveat cursor-default ${bengaliClass}`}
                                     whileHover={{ scale: 1.2, rotate: -5 }}
                                 >
                                     {isBn ? "সাথে" : "with"}
                                 </motion.span>
                                 <motion.h1
-                                    className={`text-5xl lg:text-[85px] font-black text-gray-950 dark:text-white uppercase font-teko leading-[0.95] tracking-tight cursor-default ${bengaliClass}`}
+                                    className={`text-4xl sm:text-5xl lg:text-[85px] font-black text-gray-950 dark:text-white uppercase font-teko leading-[0.95] tracking-tight cursor-default ${bengaliClass}`}
                                     whileHover={{ scale: 1.02, x: 5 }}
                                     transition={{ type: "spring", stiffness: 300 }}
                                 >
@@ -331,54 +333,57 @@ const Hero = () => {
                     </div>
 
                     {/* Right Card Panel */}
-                    <Link href="/websites" className="block w-full lg:w-[360px]">
-                        <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            whileHover={{ scale: 1.05, translateY: -5 }}
-                            transition={{ delay: 0.5, duration: 0.8 }}
-                            className="bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-white/5 rounded-md p-8 lg:mt-40 shadow-xl cursor-pointer overflow-hidden group"
-                        >
-                            <div className="flex items-center gap-4 mb-14">
-                                <div className="w-12 h-12 bg-black dark:bg-white rounded-full flex items-center justify-center text-white dark:text-black font-black text-xl">
-                                    E.
-                                </div>
-                                <div className="w-12 h-12 bg-[#C4EE18] rounded-full flex items-center justify-center text-black shadow-inner transition-transform group-hover:rotate-45">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                                        <path d="M7 17l10-10M17 17V7H7" />
-                                    </svg>
-                                </div>
+                    <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.5, duration: 0.8 }}
+                        className="w-full lg:w-[360px] bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-white/5 rounded-xl lg:rounded-md p-5 lg:p-8 lg:mt-40 shadow-md lg:shadow-xl overflow-hidden group"
+                    >
+                        <div className="flex items-center gap-3 lg:gap-4 mb-6 lg:mb-14">
+                            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-black dark:bg-white rounded-full flex items-center justify-center text-white dark:text-black font-black text-lg lg:text-xl">
+                                E.
                             </div>
-
-                            <h3 className={`text-xl font-black text-gray-900 dark:text-white mb-2 uppercase font-teko ${bengaliClass}`}>
-                                {isBn ? "এক্সট্রেন প্রোভাইডার" : "Extrain Provider"}
-                            </h3>
-                            <p className={`text-[12px] text-gray-500 leading-relaxed mb-6 ${bengaliClass}`}>
-                                {isBn ? "২০১৯ থেকে আপনার বিশ্বস্ত ডিজিটাল পার্টনার।" : "Helping businesses scale with expert solutions since 2019."}
-                            </p>
-
-                            {/* Project Info Stats */}
-                            <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray-100 dark:border-white/10">
-                                <div className="p-3 bg-white dark:bg-black/40 rounded-md border border-gray-100 dark:border-white/5 shadow-sm">
-                                    <h4 className="text-xl font-black text-gray-900 dark:text-white font-teko leading-none">{websiteCount}+</h4>
-                                    <p className="text-[9px] text-gray-500 uppercase font-bold tracking-wider mt-1">
-                                        {isBn ? "ওয়েবসাইট" : "Websites"}
-                                    </p>
-                                </div>
-                                <div className="p-3 bg-white dark:bg-black/40 rounded-md border border-gray-100 dark:border-white/5 shadow-sm">
-                                    <h4 className="text-xl font-black text-gray-900 dark:text-white font-teko leading-none">{softwareCount}+</h4>
-                                    <p className="text-[9px] text-gray-500 uppercase font-bold tracking-wider mt-1">
-                                        {isBn ? "সফটওয়্যার" : "Software"}
-                                    </p>
-                                </div>
+                            <div className="w-10 h-10 lg:w-12 lg:h-12 bg-[#C4EE18] rounded-full flex items-center justify-center text-black shadow-inner transition-transform group-hover:rotate-45">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                                    <path d="M7 17l10-10M17 17V7H7" />
+                                </svg>
                             </div>
-                        </motion.div>
-                    </Link>
+                        </div>
+
+                        <h3 className={`text-lg lg:text-xl font-black text-gray-900 dark:text-white mb-1.5 uppercase font-teko ${bengaliClass}`}>
+                            {isBn ? "এক্সট্রেন প্রোভাইডার" : "Extrain Provider"}
+                        </h3>
+                        <p className={`text-[11px] lg:text-[12px] text-gray-500 leading-relaxed mb-4 lg:mb-6 ${bengaliClass}`}>
+                            {isBn ? "২০১৯ থেকে আপনার বিশ্বস্ত ডিজিটাল পার্টনার।" : "Helping businesses scale with expert solutions since 2019."}
+                        </p>
+
+                        {/* Project Info Stats — each box links to its own page */}
+                        <div className="grid grid-cols-2 gap-3 pt-3 lg:pt-4 border-t border-gray-100 dark:border-white/10">
+                            <Link
+                                href="/website"
+                                className="p-3 bg-white dark:bg-black/40 rounded-md border border-gray-100 dark:border-white/5 shadow-sm hover:border-[#FD9A00] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+                            >
+                                <h4 className="text-lg lg:text-xl font-black text-gray-900 dark:text-white font-teko leading-none">{websiteCount}+</h4>
+                                <p className={`text-[9px] text-gray-500 uppercase font-bold tracking-wider mt-1 ${bengaliClass}`}>
+                                    {isBn ? "ওয়েবসাইট" : "Websites"}
+                                </p>
+                            </Link>
+                            <Link
+                                href="/ielts-software"
+                                className="p-3 bg-white dark:bg-black/40 rounded-md border border-gray-100 dark:border-white/5 shadow-sm hover:border-[#FD9A00] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+                            >
+                                <h4 className="text-lg lg:text-xl font-black text-gray-900 dark:text-white font-teko leading-none">{softwareCount}+</h4>
+                                <p className={`text-[9px] text-gray-500 uppercase font-bold tracking-wider mt-1 ${bengaliClass}`}>
+                                    {isBn ? "সফটওয়্যার" : "Software"}
+                                </p>
+                            </Link>
+                        </div>
+                    </motion.div>
                 </div>
             </div>
 
             {/* Infinite Text Marquee (Ticker) - As requested */}
-            <div className="absolute bottom-4 lg:bottom-8 left-0 w-full bg-[#C4EE18] py-3 lg:py-5 overflow-hidden border-t-2 border-black/5">
+            <div className="relative mt-10 lg:mt-0 lg:absolute lg:bottom-8 lg:left-0 w-full bg-[#C4EE18] py-3 lg:py-5 overflow-hidden border-t-2 border-black/5">
                 <motion.div
                     className="flex whitespace-nowrap items-center"
                     animate={{ x: [0, "-50%"] }}
