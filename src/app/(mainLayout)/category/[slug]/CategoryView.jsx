@@ -66,31 +66,6 @@ export default function CategoryView({ slug }) {
                         </div>
                         <CategoryHeroVisual />
                     </div>
-
-                    {/* What's included */}
-                    <div className="mt-12">
-                        <h2 className={`text-sm font-black uppercase tracking-[0.3em] text-gray-400 mb-8 ${bn}`}>
-                            {t("What's Included", "যা যা থাকছে")}
-                        </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {cat.services.map((s, i) => (
-                                <div
-                                    key={i}
-                                    className="group p-6 rounded-xl bg-gray-50/70 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5 hover:border-[#FD9A00]/40 hover:shadow-lg hover:shadow-[#FD9A00]/5 transition-all duration-300"
-                                >
-                                    <div className="w-9 h-9 rounded-md bg-[#FD9A00]/10 text-[#FD9A00] flex items-center justify-center font-black font-teko text-lg mb-4 group-hover:bg-[#FD9A00] group-hover:text-white transition-colors">
-                                        {String(i + 1).padStart(2, "0")}
-                                    </div>
-                                    <h3 className={`text-base font-bold text-gray-800 dark:text-gray-100 mb-1.5 ${bn}`}>
-                                        {isBn ? s.titleBn : s.title}
-                                    </h3>
-                                    <p className={`text-sm text-gray-500 dark:text-gray-400 leading-relaxed ${bn}`}>
-                                        {isBn ? s.descBn : s.desc}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
                 </div>
             </section>
 
