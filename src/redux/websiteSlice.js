@@ -4,7 +4,7 @@ import { API_BASE_URL } from "@/config/api";
 export const fetchWebsites = createAsyncThunk(
     "websites/fetchWebsites",
     async () => {
-        const response = await fetch(`${API_BASE_URL}/websites`, {
+        const response = await fetch(`${API_BASE_URL}/websites?limit=100`, {
             cache: "no-store",
         });
         if (!response.ok) throw new Error("Failed to fetch websites");

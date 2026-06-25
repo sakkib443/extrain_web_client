@@ -29,7 +29,7 @@ export default async function WebsitePage() {
     let websites = [];
 
     try {
-        const response = await fetch("https://extrain-web-server.vercel.app/api/websites", {
+        const response = await fetch("https://extrain-web-server.vercel.app/api/websites?limit=100", {
             cache: "no-store",
         });
         const result = await response.json();
