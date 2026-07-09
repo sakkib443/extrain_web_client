@@ -67,10 +67,10 @@ const DigitalProducts = () => {
         <section className="py-24 bg-[#FAFAFA] dark:bg-[#0A0A0A] relative overflow-hidden">
             {/* Background Texture - Elite Grid */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-[#C4EE18]/5 to-transparent rounded-full blur-[120px]" />
+                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-[#0CB2A9]/5 to-transparent rounded-full blur-[120px]" />
                 <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-[#90b800]/5 to-transparent rounded-full blur-[120px]" />
                 <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
-                    style={{ backgroundImage: 'linear-gradient(#C4EE18 0.5px, transparent 0.5px), linear-gradient(90deg, #C4EE18 0.5px, transparent 0.5px)', backgroundSize: '40px 40px' }}
+                    style={{ backgroundImage: 'linear-gradient(#0CB2A9 0.5px, transparent 0.5px), linear-gradient(90deg, #0CB2A9 0.5px, transparent 0.5px)', backgroundSize: '40px 40px' }}
                 />
             </div>
 
@@ -80,16 +80,16 @@ const DigitalProducts = () => {
                 {/* Left-Aligned Modern Header */}
                 <div className="flex flex-col items-center text-center mb-8 px-2">
                     <div className="flex items-center justify-center gap-3 mb-6">
-                        <div className="w-10 h-[2px] bg-[#C4EE18]" />
-                        <span className={`text-[10px] font-black text-[#C4EE18] uppercase tracking-[0.4em] ${bengaliClass}`}>
+                        <div className="w-10 h-[2px] bg-[#0CB2A9]" />
+                        <span className={`text-[10px] font-black text-[#0CB2A9] uppercase tracking-[0.4em] ${bengaliClass}`}>
                             {language === 'bn' ? 'আওয়ার কালেকশন' : 'Our Collection'}
                         </span>
-                        <div className="w-10 h-[2px] bg-[#C4EE18]" />
+                        <div className="w-10 h-[2px] bg-[#0CB2A9]" />
                     </div>
 
-                    <h2 className={`text-4xl lg:text-5xl font-black text-gray-950 dark:text-white mb-2 uppercase leading-[0.85] tracking-tighter max-w-3xl font-teko ${bengaliClass}`}>
+                    <h2 className={`text-4xl lg:text-5xl font-black text-gray-950 dark:text-white mb-2 uppercase leading-[0.85] tracking-tighter max-w-3xl font-poppins ${bengaliClass}`}>
                         {language === 'bn' ? 'পছন্দের' : 'Premium'}{' '}
-                        <span className="text-[#C4EE18]">{language === 'bn' ? 'ডিজিটাল প্রোডাক্টস' : 'Digital Products'}</span>
+                        <span className="text-[#0CB2A9]">{language === 'bn' ? 'ডিজিটাল প্রোডাক্টস' : 'Digital Products'}</span>
                     </h2>
 
                     <div className="w-20 h-1 bg-gray-100 dark:bg-white/10 mb-2" />
@@ -126,8 +126,8 @@ const DigitalProducts = () => {
                             <button
                                 onClick={() => setSelectedSubCategory('all')}
                                 className={`px-4 py-2.5 rounded-md text-[13px] font-medium border transition-all duration-300 ${selectedSubCategory === 'all'
-                                    ? 'bg-[#C4EE18] text-black border-[#C4EE18] shadow-lg shadow-[#C4EE18]/20'
-                                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 hover:border-[#C4EE18] hover:text-[#C4EE18]'
+                                    ? 'bg-[#0CB2A9] text-black border-[#0CB2A9] shadow-lg shadow-[#0CB2A9]/20'
+                                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 hover:border-[#0CB2A9] hover:text-[#0CB2A9]'
                                     }`}
                             >
                                 {language === 'bn' ? 'সবগুলো' : 'All Items'}
@@ -137,8 +137,8 @@ const DigitalProducts = () => {
                                     key={sub._id}
                                     onClick={() => setSelectedSubCategory(sub._id)}
                                     className={`px-4 py-2.5 rounded-md text-[13px] font-medium border transition-all duration-300 ${selectedSubCategory === sub._id
-                                        ? 'bg-[#C4EE18] text-black border-[#C4EE18] shadow-lg shadow-[#C4EE18]/20'
-                                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 hover:border-[#C4EE18] hover:text-[#C4EE18]'
+                                        ? 'bg-[#0CB2A9] text-black border-[#0CB2A9] shadow-lg shadow-[#0CB2A9]/20'
+                                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 hover:border-[#0CB2A9] hover:text-[#0CB2A9]'
                                         }`}
                                 >
                                     <span className={bengaliClass}>{sub.name}</span>
@@ -185,12 +185,12 @@ const DigitalProducts = () => {
                 <div className="text-left px-2">
                     <Link
                         href="/website"
-                        className="inline-flex items-center gap-4 px-8 py-4 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium rounded-md border border-slate-200 dark:border-slate-800 hover:border-[#C4EE18] transition-all duration-300 group shadow-sm font-poppins"
+                        className="inline-flex items-center gap-4 px-8 py-4 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium rounded-md border border-slate-200 dark:border-slate-800 hover:border-[#0CB2A9] transition-all duration-300 group shadow-sm font-poppins"
                     >
                         <span className={bengaliClass}>
                             {language === 'bn' ? 'সবগুলো প্রোডাক্ট দেখুন' : 'Explore Full Collection'}
                         </span>
-                        <div className="w-8 h-8 rounded bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-[#C4EE18] group-hover:text-black transition-all duration-300">
+                        <div className="w-8 h-8 rounded bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-[#0CB2A9] group-hover:text-black transition-all duration-300">
                             <LuArrowRight className="w-4 h-4" />
                         </div>
                     </Link>

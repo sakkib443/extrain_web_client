@@ -94,20 +94,20 @@ const TestimonialSection = () => {
         <section className="py-24 bg-white dark:bg-[#0A0A0A] overflow-hidden relative border-t border-gray-100 dark:border-white/5">
             {/* Subtle Grid Background */}
             <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
-                style={{ backgroundImage: 'linear-gradient(#C4EE18 0.5px, transparent 0.5px), linear-gradient(90deg, #C4EE18 0.5px, transparent 0.5px)', backgroundSize: '30px 30px' }}
+                style={{ backgroundImage: 'linear-gradient(#0CB2A9 0.5px, transparent 0.5px), linear-gradient(90deg, #0CB2A9 0.5px, transparent 0.5px)', backgroundSize: '30px 30px' }}
             />
 
             <div className="container mx-auto px-6 lg:px-12 relative z-10">
                 {/* Section Header */}
                 <div className="mb-16 text-center max-w-3xl mx-auto">
-                    <span className={`inline-block py-1 px-3 rounded-full bg-[#C4EE18]/10 text-[#C4EE18] text-[10px] font-bold uppercase tracking-[0.2em] mb-4 border border-[#C4EE18]/20 ${bengaliClass}`}>
+                    <span className={`inline-block py-1 px-3 rounded-full bg-[#0CB2A9]/10 text-[#0CB2A9] text-[10px] font-bold uppercase tracking-[0.2em] mb-4 border border-[#0CB2A9]/20 ${bengaliClass}`}>
                         {language === 'bn' ? 'গ্রাহকদের মতামত' : 'Client Feedback'}
                     </span>
                     <h2 className={`text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white capitalize leading-tight mb-4 ${bengaliClass}`}>
                         {isBn ? (
-                            <>আস্থা রাখছে <span className="text-[#C4EE18]">শত শত</span> ব্যবসা</>
+                            <>আস্থা রাখছে <span className="text-[#0CB2A9]">শত শত</span> ব্যবসা</>
                         ) : (
-                            <>Trusted by <span className="text-[#C4EE18]">Businesses</span> Worldwide</>
+                            <>Trusted by <span className="text-[#0CB2A9]">Businesses</span> Worldwide</>
                         )}
                     </h2>
                     <p className={`text-gray-500 dark:text-gray-400 text-sm lg:text-base ${bengaliClass}`}>
@@ -140,18 +140,18 @@ const TestimonialSection = () => {
                                         whileHover={{ y: -6 }}
                                         transition={{ type: 'spring', stiffness: 280, damping: 22 }}
                                     >
-                                        <div className="h-full bg-white dark:bg-[#111] p-8 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-[#C4EE18]/50 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-[#C4EE18]/10 flex flex-col relative overflow-hidden">
-                                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#C4EE18] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+                                        <div className="h-full bg-white dark:bg-[#111] p-8 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-[#0CB2A9]/50 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-[#0CB2A9]/10 flex flex-col relative overflow-hidden">
+                                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#0CB2A9] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
 
                                             <div className="mb-6 flex items-center justify-between">
                                                 <div className="flex gap-1">
                                                     {[...Array(5)].map((_, k) => (
-                                                        <svg key={k} className="w-4 h-4 text-[#C4EE18]" fill="currentColor" viewBox="0 0 20 20">
+                                                        <svg key={k} className="w-4 h-4 text-[#0CB2A9]" fill="currentColor" viewBox="0 0 20 20">
                                                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                                         </svg>
                                                     ))}
                                                 </div>
-                                                <LuQuote className="text-gray-200 dark:text-gray-800 text-3xl group-hover:text-[#C4EE18]/20 transition-colors" />
+                                                <LuQuote className="text-gray-200 dark:text-gray-800 text-3xl group-hover:text-[#0CB2A9]/20 transition-colors" />
                                             </div>
 
                                             <p className={`text-gray-600 dark:text-gray-300 text-sm lg:text-[15px] leading-relaxed mb-8 flex-1 ${bengaliClass}`}>
@@ -182,7 +182,7 @@ const TestimonialSection = () => {
                             <button
                                 onClick={goPrev}
                                 aria-label="Previous testimonial"
-                                className="w-11 h-11 rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center hover:border-[#C4EE18] hover:text-[#C4EE18] hover:shadow-md transition-all"
+                                className="w-11 h-11 rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center hover:border-[#0CB2A9] hover:text-[#0CB2A9] hover:shadow-md transition-all"
                             >
                                 <LuChevronLeft size={20} />
                             </button>
@@ -196,7 +196,7 @@ const TestimonialSection = () => {
                                         className="relative h-2.5 rounded-full transition-all duration-300"
                                         style={{
                                             width: i === safeIndex ? 28 : 10,
-                                            backgroundColor: i === safeIndex ? '#C4EE18' : '#D1D5DB',
+                                            backgroundColor: i === safeIndex ? '#0CB2A9' : '#D1D5DB',
                                         }}
                                     />
                                 ))}
@@ -205,7 +205,7 @@ const TestimonialSection = () => {
                             <button
                                 onClick={goNext}
                                 aria-label="Next testimonial"
-                                className="w-11 h-11 rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center hover:border-[#C4EE18] hover:text-[#C4EE18] hover:shadow-md transition-all"
+                                className="w-11 h-11 rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center hover:border-[#0CB2A9] hover:text-[#0CB2A9] hover:shadow-md transition-all"
                             >
                                 <LuChevronRight size={20} />
                             </button>

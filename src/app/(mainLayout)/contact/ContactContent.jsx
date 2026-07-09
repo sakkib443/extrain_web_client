@@ -168,11 +168,11 @@ export default function ContactContent() {
                         <div className="w-20 h-20 bg-[#FD9A00]/10 rounded-full flex items-center justify-center mx-auto mb-6">
                             <LuCheck className="text-[#FD9A00] text-3xl" />
                         </div>
-                        <h3 className={`text-2xl font-black font-teko uppercase text-gray-900 dark:text-white mb-3 ${bengaliClass}`}>{t("contactPage.messageSent")}</h3>
+                        <h3 className={`text-2xl font-black font-poppins uppercase text-gray-900 dark:text-white mb-3 ${bengaliClass}`}>{t("contactPage.messageSent")}</h3>
                         <p className={`text-gray-500 dark:text-gray-400 mb-8 ${bengaliClass}`}>{t("contactPage.messageResponse")}</p>
                         <button
                             onClick={() => setMessageSent(false)}
-                            className={`px-8 py-3 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold font-teko uppercase text-xl rounded-xl transition-all shadow-lg shadow-[#FD9A00]/20 ${bengaliClass}`}
+                            className={`px-8 py-3 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold font-poppins uppercase text-xl rounded-xl transition-all shadow-lg shadow-[#FD9A00]/20 ${bengaliClass}`}
                         >
                             {t("contactPage.close")}
                         </button>
@@ -196,7 +196,7 @@ export default function ContactContent() {
                             </span>
                         </div>
 
-                        <h1 className={`text-5xl lg:text-7xl font-black text-gray-900 dark:text-white mb-6 uppercase leading-[0.85] tracking-tighter font-teko ${bengaliClass}`}>
+                        <h1 className={`text-5xl lg:text-7xl font-black text-gray-900 dark:text-white mb-6 uppercase leading-[0.85] tracking-tighter font-poppins ${bengaliClass}`}>
                             {language === "bn" ? "যোগাযোগ " : "Let's "}<span className="text-[#FD9A00]">{language === "bn" ? "করুন" : "Connect"}</span>
                         </h1>
 
@@ -211,7 +211,7 @@ export default function ContactContent() {
                                         <item.icon size={20} />
                                     </div>
                                     <div>
-                                        <h3 className={`text-sm font-bold text-gray-400 uppercase tracking-wider mb-1 font-teko ${bengaliClass}`}>{item.title}</h3>
+                                        <h3 className={`text-sm font-bold text-gray-400 uppercase tracking-wider mb-1 font-poppins ${bengaliClass}`}>{item.title}</h3>
                                         {item.link ? (
                                             <a href={item.link} className={`text-lg font-normal text-gray-900 dark:text-white hover:text-[#FD9A00] transition-colors ${bengaliClass}`}>{item.value}</a>
                                         ) : (
@@ -224,7 +224,7 @@ export default function ContactContent() {
 
                         {/* Social Links */}
                         <div className="mt-10">
-                            <h3 className={`text-xl font-black font-teko uppercase text-gray-900 dark:text-white mb-4 ${bengaliClass}`}>{t("contactPage.followUs")}</h3>
+                            <h3 className={`text-xl font-black font-poppins uppercase text-gray-900 dark:text-white mb-4 ${bengaliClass}`}>{t("contactPage.followUs")}</h3>
                             <div className="flex gap-3">
                                 {socialLinks.map((item, idx) => (
                                     <a
@@ -247,7 +247,7 @@ export default function ContactContent() {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="bg-gray-50 dark:bg-white/5 p-8 lg:p-10 rounded-3xl border border-gray-100 dark:border-white/5"
                     >
-                        <h2 className={`text-3xl font-black font-teko uppercase text-gray-900 dark:text-white mb-8 ${bengaliClass}`}>
+                        <h2 className={`text-3xl font-black font-poppins uppercase text-gray-900 dark:text-white mb-8 ${bengaliClass}`}>
                             {t("contactPage.sendMessage")}
                         </h2>
                         <form onSubmit={handleSubmit} className="space-y-5">
@@ -300,7 +300,7 @@ export default function ContactContent() {
 
                             <button
                                 type="submit"
-                                className={`w-full py-4 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold font-teko uppercase text-xl rounded-xl transition-all shadow-lg shadow-[#FD9A00]/20 flex items-center justify-center gap-2 group ${bengaliClass}`}
+                                className={`w-full py-4 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold font-poppins uppercase text-xl rounded-xl transition-all shadow-lg shadow-[#FD9A00]/20 flex items-center justify-center gap-2 group ${bengaliClass}`}
                             >
                                 <span>{t("contactPage.send")}</span>
                                 <LuSend className="group-hover:translate-x-1 transition-transform" />

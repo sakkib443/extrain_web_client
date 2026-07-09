@@ -65,10 +65,10 @@ const IeltsHowItWorks = () => {
             border: "border-[#FD9A00]/30"
         },
         secondary: {
-            bg: "bg-[#C4EE18]",
-            light: "bg-[#C4EE18]/10",
-            text: "text-[#C4EE18]",
-            border: "border-[#C4EE18]/30"
+            bg: "bg-[#0CB2A9]",
+            light: "bg-[#0CB2A9]/10",
+            text: "text-[#0CB2A9]",
+            border: "border-[#0CB2A9]/30"
         }
     };
 
@@ -83,7 +83,7 @@ const IeltsHowItWorks = () => {
                     transition={{ duration: 0.6 }}
                     className="text-center max-w-3xl mx-auto mb-16"
                 >
-                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#C4EE18]/10 text-[#C4EE18] text-sm font-semibold mb-4">
+                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#0CB2A9]/10 text-[#0CB2A9] text-sm font-semibold mb-4">
                         <LuArrowRight size={16} />
                         {language === 'bn' ? 'সহজ প্রক্রিয়া' : 'Simple Process'}
                     </span>
@@ -110,7 +110,7 @@ const IeltsHowItWorks = () => {
                 {/* Steps */}
                 <div className="relative max-w-5xl mx-auto">
                     {/* Connection Line - Desktop */}
-                    <div className="hidden lg:block absolute top-24 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-[#FD9A00] via-[#C4EE18] to-[#FD9A00] opacity-30"></div>
+                    <div className="hidden lg:block absolute top-24 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-[#FD9A00] via-[#0CB2A9] to-[#FD9A00] opacity-30"></div>
 
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                         {steps.map((step, index) => {

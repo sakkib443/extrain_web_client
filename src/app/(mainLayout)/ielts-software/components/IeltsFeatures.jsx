@@ -43,7 +43,7 @@ const IeltsFeatures = () => {
             title: language === 'bn' ? "অ্যাডমিন প্যানেল" : "Admin Panel",
             subtitle: language === 'bn' ? "ইনস্টিটিউট ম্যানেজমেন্ট" : "Institute Management",
             icon: LuShield,
-            color: "#C4EE18",
+            color: "#0CB2A9",
             features: [
                 language === 'bn' ? "সব রেজাল্ট দেখুন ও স্কোর পাবলিশ" : "View All Results & Publish Scores",
                 language === 'bn' ? "স্টুডেন্ট ম্যানেজমেন্ট ও এক্সাম ID তৈরি" : "Student Management & Exam ID Creation",

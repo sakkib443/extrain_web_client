@@ -427,7 +427,7 @@ const ChatBot = () => {
                 .ebot-fab-icon { display: flex; align-items: center; justify-content: center; }
                 .ebot-fab-pulse { position: absolute; inset: -3px; border-radius: 50%; background: #FD9A00; opacity: 0; animation: ebotPulse 2s ease-out infinite; }
                 @keyframes ebotPulse { 0% { opacity: .45; transform: scale(1); } 100% { opacity: 0; transform: scale(1.4); } }
-                .ebot-fab-badge { position: absolute; top: -2px; right: -2px; width: 20px; height: 20px; border-radius: 50%; background: #C4EE18; color: #1a1a00; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid white; animation: ebotBounce 1s ease infinite; }
+                .ebot-fab-badge { position: absolute; top: -2px; right: -2px; width: 20px; height: 20px; border-radius: 50%; background: #0CB2A9; color: #1a1a00; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid white; animation: ebotBounce 1s ease infinite; }
                 @keyframes ebotBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
                 .ebot-fab-tooltip { position: absolute; right: 68px; white-space: nowrap; background: white; color: #333; font-size: 13px; font-weight: 600; padding: 7px 13px; border-radius: 20px; box-shadow: 0 4px 16px rgba(0,0,0,.12); opacity: 0; transform: translateX(10px); transition: all .3s; pointer-events: none; }
                 .ebot-fab:hover .ebot-fab-tooltip { opacity: 1; transform: translateX(0); }
@@ -439,11 +439,11 @@ const ChatBot = () => {
                 .ebot-header { background: linear-gradient(135deg, #FD9A00, #e07f00); padding: 13px 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; flex-shrink: 0; }
                 .ebot-header-left { display: flex; align-items: center; gap: 10px; }
                 .ebot-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; color: white; position: relative; flex-shrink: 0; }
-                .ebot-online-dot { position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; background: #C4EE18; border-radius: 50%; border: 2px solid #FD9A00; }
+                .ebot-online-dot { position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; background: #0CB2A9; border-radius: 50%; border: 2px solid #FD9A00; }
                 .ebot-header-info { color: white; }
                 .ebot-header-title { font-size: 14px; font-weight: 700; margin: 0; line-height: 1.2; }
                 .ebot-header-status { font-size: 11px; margin: 2px 0 0; opacity: .92; display: flex; align-items: center; gap: 4px; }
-                .ebot-status-dot { width: 6px; height: 6px; background: #C4EE18; border-radius: 50%; display: inline-block; animation: ebotBlink 2s ease infinite; }
+                .ebot-status-dot { width: 6px; height: 6px; background: #0CB2A9; border-radius: 50%; display: inline-block; animation: ebotBlink 2s ease infinite; }
                 @keyframes ebotBlink { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
                 .ebot-header-actions { display: flex; gap: 4px; }
                 .ebot-header-btn { width: 28px; height: 28px; border: none; border-radius: 50%; background: rgba(255,255,255,.2); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; }

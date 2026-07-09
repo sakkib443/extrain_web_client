@@ -35,7 +35,7 @@ const IeltsHero = () => {
         <section className="relative flex items-center overflow-hidden bg-white dark:bg-[#0A0A0A]">
             {/* Soft static background glows — adds depth without motion */}
             <div className="absolute top-0 right-0 w-[38rem] h-[38rem] bg-[#FD9A00]/10 dark:bg-[#FD9A00]/[0.07] rounded-full blur-[120px] -translate-y-1/3 translate-x-1/4 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-[32rem] h-[32rem] bg-[#C4EE18]/10 dark:bg-[#C4EE18]/[0.06] rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[32rem] h-[32rem] bg-[#0CB2A9]/10 dark:bg-[#0CB2A9]/[0.06] rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-20 pt-16 pb-20 lg:pt-24 lg:pb-24 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-10 lg:gap-8 items-center">
@@ -60,14 +60,14 @@ const IeltsHero = () => {
 
                         {/* Heading */}
                         <h1
-                            className={`text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white leading-[1.1] mb-4 font-teko uppercase tracking-tight ${bengaliClass}`}
+                            className={`text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white leading-[1.1] mb-4 font-poppins uppercase tracking-tight ${bengaliClass}`}
                         >
                             {language === "bn" ? (
                                 <>
                                     আপনার <span className="text-[#FD9A00]">IELTS</span>{" "}
                                     <span className="relative inline-block">
                                         <span className="relative z-10">কোচিং সেন্টারের</span>
-                                        <span className="absolute bottom-1 left-0 w-full h-3 bg-[#C4EE18]/30"></span>
+                                        <span className="absolute bottom-1 left-0 w-full h-3 bg-[#0CB2A9]/30"></span>
                                     </span>
                                     <br />
                                     জন্য সম্পূর্ণ সমাধান
@@ -77,7 +77,7 @@ const IeltsHero = () => {
                                     COMPLETE <span className="text-[#FD9A00]">IELTS</span>{" "}
                                     <span className="relative inline-block">
                                         <span className="relative z-10">SOLUTION</span>
-                                        <span className="absolute bottom-1 left-0 w-full h-3 bg-[#C4EE18]/30"></span>
+                                        <span className="absolute bottom-1 left-0 w-full h-3 bg-[#0CB2A9]/30"></span>
                                     </span>
                                     <br />
                                     FOR YOUR INSTITUTE
@@ -125,7 +125,7 @@ const IeltsHero = () => {
                                 rel="noopener noreferrer"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className={`group flex items-center justify-center gap-2 px-6 py-3 text-sm bg-[#C4EE18] hover:bg-[#b3dd10] text-black font-bold rounded-xl shadow-lg shadow-[#C4EE18]/30 hover:shadow-[#C4EE18]/50 transition-all ${bengaliClass}`}
+                                className={`group flex items-center justify-center gap-2 px-6 py-3 text-sm bg-[#0CB2A9] hover:bg-[#b3dd10] text-black font-bold rounded-xl shadow-lg shadow-[#0CB2A9]/30 hover:shadow-[#0CB2A9]/50 transition-all ${bengaliClass}`}
                             >
                                 <LuPlay size={16} />
                                 {language === "bn" ? "লাইভ ডেমো" : "Live Demo"}
@@ -135,19 +135,19 @@ const IeltsHero = () => {
                         {/* Trust Badges */}
                         <div className="flex flex-wrap items-center gap-x-6 gap-y-2.5 mt-6 pt-5 border-t border-gray-200 dark:border-white/10">
                             <div className="flex items-center gap-2">
-                                <LuBuilding2 className="text-[#C4EE18]" size={18} />
+                                <LuBuilding2 className="text-[#0CB2A9]" size={18} />
                                 <span className={`text-gray-600 dark:text-gray-400 text-xs ${bengaliClass}`}>
                                     {language === "bn" ? "৫০+ কোচিং সেন্টার" : "50+ Coaching Centers"}
                                 </span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <LuUsers className="text-[#C4EE18]" size={18} />
+                                <LuUsers className="text-[#0CB2A9]" size={18} />
                                 <span className={`text-gray-600 dark:text-gray-400 text-xs ${bengaliClass}`}>
                                     {language === "bn" ? "১০,০০০+ স্টুডেন্ট" : "10,000+ Students"}
                                 </span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <LuShieldCheck className="text-[#C4EE18]" size={18} />
+                                <LuShieldCheck className="text-[#0CB2A9]" size={18} />
                                 <span className={`text-gray-600 dark:text-gray-400 text-xs ${bengaliClass}`}>
                                     {language === "bn" ? "BC মানের ইন্টারফেস" : "BC Standard Interface"}
                                 </span>
@@ -164,10 +164,10 @@ const IeltsHero = () => {
                     >
                         <div className="relative w-full" style={{ maxWidth: "470px" }}>
                             {/* Static glow halo behind image */}
-                            <div className="absolute -inset-6 bg-gradient-to-tr from-[#FD9A00]/25 via-transparent to-[#C4EE18]/25 rounded-[2.5rem] blur-3xl pointer-events-none" />
+                            <div className="absolute -inset-6 bg-gradient-to-tr from-[#FD9A00]/25 via-transparent to-[#0CB2A9]/25 rounded-[2.5rem] blur-3xl pointer-events-none" />
 
                             {/* Gradient frame */}
-                            <div className="relative rounded-3xl p-[1.5px] bg-gradient-to-br from-[#FD9A00]/50 via-gray-200/40 to-[#C4EE18]/50 dark:from-[#FD9A00]/40 dark:via-white/10 dark:to-[#C4EE18]/40 shadow-2xl shadow-black/10 dark:shadow-black/40">
+                            <div className="relative rounded-3xl p-[1.5px] bg-gradient-to-br from-[#FD9A00]/50 via-gray-200/40 to-[#0CB2A9]/50 dark:from-[#FD9A00]/40 dark:via-white/10 dark:to-[#0CB2A9]/40 shadow-2xl shadow-black/10 dark:shadow-black/40">
                                 <div className="rounded-3xl overflow-hidden bg-white dark:bg-[#111]">
                                     <Image
                                         src="/images/IELTSPOST.gif"
@@ -188,8 +188,8 @@ const IeltsHero = () => {
                                 transition={{ delay: 0.6, duration: 0.5 }}
                                 className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-white/90 dark:bg-[#161616]/90 backdrop-blur-md border border-gray-100 dark:border-white/10 shadow-xl whitespace-nowrap"
                             >
-                                <div className="w-8 h-8 rounded-lg bg-[#C4EE18]/20 flex items-center justify-center shrink-0">
-                                    <LuCircleCheck className="text-[#C4EE18]" size={18} />
+                                <div className="w-8 h-8 rounded-lg bg-[#0CB2A9]/20 flex items-center justify-center shrink-0">
+                                    <LuCircleCheck className="text-[#0CB2A9]" size={18} />
                                 </div>
                                 <div className="text-left">
                                     <p className={`text-gray-900 dark:text-white font-bold text-sm leading-tight ${bengaliClass}`}>

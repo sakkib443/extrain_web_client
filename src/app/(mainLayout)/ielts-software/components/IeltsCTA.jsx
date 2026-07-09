@@ -40,7 +40,7 @@ const IeltsCTA = () => {
             <motion.div
                 animate={{ x: [0, -30, 0], y: [0, 20, 0] }}
                 transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute bottom-20 right-10 w-64 h-64 bg-[#C4EE18]/20 rounded-full blur-3xl"
+                className="absolute bottom-20 right-10 w-64 h-64 bg-[#0CB2A9]/20 rounded-full blur-3xl"
             />
 
             <div className="container mx-auto px-10 lg:px-20 relative z-10">

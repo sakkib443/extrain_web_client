@@ -14,7 +14,7 @@ export default function CategoryHeroVisual() {
         <div className="relative hidden lg:flex items-center justify-center min-h-[440px]">
             {/* Glow blobs */}
             <div className="absolute left-6 top-8 w-72 h-72 bg-[#FD9A00]/20 rounded-full blur-3xl" />
-            <div className="absolute right-6 bottom-8 w-60 h-60 bg-[#C4EE18]/20 rounded-full blur-3xl" />
+            <div className="absolute right-6 bottom-8 w-60 h-60 bg-[#0CB2A9]/20 rounded-full blur-3xl" />
 
             {/* Main browser / store card */}
             <motion.div
@@ -30,7 +30,7 @@ export default function CategoryHeroVisual() {
                 </div>
                 {/* body */}
                 <div className="p-4 space-y-3">
-                    <div className="h-20 rounded-xl bg-gradient-to-r from-[#FD9A00] to-[#C4EE18]" />
+                    <div className="h-20 rounded-xl bg-gradient-to-r from-[#FD9A00] to-[#0CB2A9]" />
                     <div className="grid grid-cols-3 gap-2">
                         {[...Array(6)].map((_, i) => (
                             <div key={i} className="rounded-lg bg-gray-50 dark:bg-white/[0.03] p-1.5 border border-gray-100 dark:border-white/5">
@@ -57,7 +57,7 @@ export default function CategoryHeroVisual() {
                 {...float(5, 0.6)}
                 className="absolute top-10 right-0 flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white dark:bg-[#161616] border border-gray-100 dark:border-white/10 shadow-xl"
             >
-                <span className="w-8 h-8 rounded-lg bg-[#C4EE18] flex items-center justify-center">
+                <span className="w-8 h-8 rounded-lg bg-[#0CB2A9] flex items-center justify-center">
                     <LuBadgeCheck className="text-black" size={18} />
                 </span>
                 <div>

@@ -16,31 +16,31 @@ const WhatWeProvide = () => {
   ];
 
   const getColorClasses = (color) => ({
-    gradient: 'from-[#C4EE18] to-[#C4EE18]',
-    light: 'bg-[#C4EE18]/5',
-    text: 'text-[#C4EE18]',
-    border: 'border-[#C4EE18]/20'
+    gradient: 'from-[#0CB2A9] to-[#0CB2A9]',
+    light: 'bg-[#0CB2A9]/5',
+    text: 'text-[#0CB2A9]',
+    border: 'border-[#0CB2A9]/20'
   });
 
   return (
     <section className="relative py-24 overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-[10%] w-72 h-72 bg-[#C4EE18]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-[10%] w-80 h-80 bg-[#C4EE18]/5 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-[10%] w-72 h-72 bg-[#0CB2A9]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-[10%] w-80 h-80 bg-[#0CB2A9]/5 rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto px-4 lg:px-16 relative z-10">
         <div className="flex flex-col items-center text-center mb-10 px-2">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-10 h-[2px] bg-[#C4EE18]" />
-            <span className={`text-[10px] font-black text-[#C4EE18] uppercase tracking-[0.4em] ${bengaliClass}`}>
+            <div className="w-10 h-[2px] bg-[#0CB2A9]" />
+            <span className={`text-[10px] font-black text-[#0CB2A9] uppercase tracking-[0.4em] ${bengaliClass}`}>
               {t("whatWeProvide.badge")}
             </span>
-            <div className="w-10 h-[2px] bg-[#C4EE18]" />
+            <div className="w-10 h-[2px] bg-[#0CB2A9]" />
           </div>
-          <h2 className={`text-4xl lg:text-5xl font-black text-gray-950 dark:text-white mb-2 uppercase leading-[0.85] tracking-tighter max-w-3xl font-teko ${bengaliClass}`}>
+          <h2 className={`text-4xl lg:text-5xl font-black text-gray-950 dark:text-white mb-2 uppercase leading-[0.85] tracking-tighter max-w-3xl font-poppins ${bengaliClass}`}>
             {t("whatWeProvide.title1")}{' '}
-            <span className="text-[#C4EE18]">{t("whatWeProvide.title2")}</span>
+            <span className="text-[#0CB2A9]">{t("whatWeProvide.title2")}</span>
           </h2>
           <div className="w-20 h-1 bg-gray-100 dark:bg-white/10 mb-2" />
           <p className={`text-gray-500 dark:text-gray-400 text-sm lg:text-base max-w-2xl leading-relaxed ${bengaliClass}`}>
@@ -60,11 +60,11 @@ const WhatWeProvide = () => {
                       <feature.icon size={28} className={colors.text} />
                     </div>
                   </div>
-                  <h3 className={`text-2xl font-black uppercase font-teko text-gray-900 dark:text-white mb-3 flex items-center gap-2 ${bengaliClass}`}>{t(`whatWeProvide.features.${feature.titleKey}`)} <span className="text-xl">{feature.emoji}</span></h3>
+                  <h3 className={`text-2xl font-black uppercase font-poppins text-gray-900 dark:text-white mb-3 flex items-center gap-2 ${bengaliClass}`}>{t(`whatWeProvide.features.${feature.titleKey}`)} <span className="text-xl">{feature.emoji}</span></h3>
                   <p className={`text-sm text-gray-500 dark:text-gray-400 mb-6 ${bengaliClass}`}>{t(`whatWeProvide.features.${feature.descKey}`)}</p>
                   <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-white/10">
                     <span className={`text-xs font-bold text-gray-900 dark:text-white uppercase tracking-widest ${bengaliClass}`}>{t("whatWeProvide.learnMore")}</span>
-                    <div className={`w-8 h-8 rounded-lg ${colors.light} group-hover:bg-[#C4EE18] transition-colors duration-300 flex items-center justify-center`}><LuArrowRight size={16} className="text-black dark:text-white -rotate-45" /></div>
+                    <div className={`w-8 h-8 rounded-lg ${colors.light} group-hover:bg-[#0CB2A9] transition-colors duration-300 flex items-center justify-center`}><LuArrowRight size={16} className="text-black dark:text-white -rotate-45" /></div>
                   </div>
                 </div>
                 <div className={`absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r ${colors.gradient} rounded-b-2xl group-hover:w-full transition-all duration-500`} />
@@ -76,7 +76,7 @@ const WhatWeProvide = () => {
         <div className="flex justify-start px-2 mt-14">
           <Link href="/about" className={`group relative bg-white dark:bg-[#0d0d0d] rounded-md px-8 py-4 border border-gray-200 dark:border-white/10 hover:shadow-lg flex items-center gap-4 transition-all duration-300 ${bengaliClass} font-poppins`}>
             <span className="font-medium text-gray-900 dark:text-white">{t("whatWeProvide.learnMoreAboutUs")}</span>
-            <div className="w-10 h-10 rounded-md bg-[#C4EE18]/10 flex items-center justify-center group-hover:bg-[#C4EE18] transition-colors duration-300">
+            <div className="w-10 h-10 rounded-md bg-[#0CB2A9]/10 flex items-center justify-center group-hover:bg-[#0CB2A9] transition-colors duration-300">
               <LuArrowRight size={18} className="text-slate-700 dark:text-slate-300 group-hover:text-black" />
             </div>
           </Link>

@@ -1,238 +1,331 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { LuArrowRight, LuArrowUpRight, LuStar, LuZap, LuCheck } from "react-icons/lu";
+import { LuArrowRight, LuStar, LuSparkles } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
-import { API_BASE_URL } from "@/config/api";
 
 const avatars = [
     "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100",
     "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100",
     "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100",
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100",
 ];
+
+/**
+ * Interactive particle constellation.
+ * Performance-minded: capped particle count, rAF paused when the hero is
+ * off-screen or the tab is hidden, disabled for reduced-motion / touch users.
+ */
+function Constellation() {
+    const ref = useRef(null);
+
+    useEffect(() => {
+        const canvas = ref.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const canHover = window.matchMedia("(hover: hover)").matches;
+        const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+        let w = 0, h = 0, rect = null, particles = [], raf = 0;
+        let running = true, visible = true;
+        const mouse = { x: -9999, y: -9999 };
+        const LINK = 130;
+
+        const build = () => {
+            rect = canvas.getBoundingClientRect();
+            w = rect.width; h = rect.height;
+            canvas.width = Math.floor(w * DPR);
+            canvas.height = Math.floor(h * DPR);
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+            const count = Math.min(75, Math.max(22, Math.floor((w * h) / 17000)));
+            particles = Array.from({ length: count }, () => ({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                vx: (Math.random() - 0.5) * 0.35,
+                vy: (Math.random() - 0.5) * 0.35,
+                r: Math.random() * 1.5 + 0.7,
+            }));
+        };
+
+        const render = () => {
+            ctx.clearRect(0, 0, w, h);
+            const n = particles.length;
+            for (let i = 0; i < n; i++) {
+                const p = particles[i];
+                p.x += p.vx; p.y += p.vy;
+                if (p.x <= 0 || p.x >= w) p.vx *= -1;
+                if (p.y <= 0 || p.y >= h) p.vy *= -1;
+
+                for (let j = i + 1; j < n; j++) {
+                    const q = particles[j];
+                    const dx = p.x - q.x, dy = p.y - q.y;
+                    const d2 = dx * dx + dy * dy;
+                    if (d2 < LINK * LINK) {
+                        const a = (1 - Math.sqrt(d2) / LINK) * 0.2;
+                        ctx.strokeStyle = `rgba(255,255,255,${a})`;
+                        ctx.lineWidth = 0.6;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+                    }
+                }
+
+                if (mouse.x > -9998) {
+                    const mx = p.x - mouse.x, my = p.y - mouse.y;
+                    const md2 = mx * mx + my * my;
+                    if (md2 < 175 * 175) {
+                        const a = (1 - Math.sqrt(md2) / 175) * 0.55;
+                        ctx.strokeStyle = `rgba(253,154,0,${a})`;
+                        ctx.lineWidth = 0.9;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+                    }
+                }
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+                ctx.fillStyle = "rgba(12,178,169,0.85)";
+                ctx.fill();
+            }
+        };
+
+        const loop = () => {
+            render();
+            if (running && visible) raf = requestAnimationFrame(loop);
+        };
+        const start = () => {
+            if (reduce) { render(); return; }
+            cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(loop);
+        };
+
+        build();
+        start();
+
+        const onResize = () => { build(); if (reduce) render(); };
+        const onScroll = () => { rect = canvas.getBoundingClientRect(); };
+        const onMove = (e) => {
+            if (!rect) return;
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        };
+        const onLeave = () => { mouse.x = -9999; mouse.y = -9999; };
+        const onVis = () => {
+            visible = !document.hidden;
+            if (visible && running) start();
+        };
+
+        const io = new IntersectionObserver(
+            ([entry]) => {
+                running = entry.isIntersecting;
+                if (running && visible) start();
+            },
+            { threshold: 0 }
+        );
+        io.observe(canvas);
+
+        window.addEventListener("resize", onResize);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        document.addEventListener("visibilitychange", onVis);
+        if (canHover) {
+            window.addEventListener("mousemove", onMove);
+            document.addEventListener("mouseleave", onLeave);
+        }
+
+        return () => {
+            running = false;
+            cancelAnimationFrame(raf);
+            io.disconnect();
+            window.removeEventListener("resize", onResize);
+            window.removeEventListener("scroll", onScroll);
+            document.removeEventListener("visibilitychange", onVis);
+            window.removeEventListener("mousemove", onMove);
+            document.removeEventListener("mouseleave", onLeave);
+        };
+    }, []);
+
+    return <canvas ref={ref} className="absolute inset-0 h-full w-full pointer-events-none" aria-hidden="true" />;
+}
 
 const Hero = () => {
     const { language } = useLanguage();
     const isBn = language === "bn";
     const bn = isBn ? "hind-siliguri" : "";
 
-    const [softwareCount, setSoftwareCount] = useState(3);
-    const [websiteCount, setWebsiteCount] = useState(35);
+    const rotating = isBn
+        ? ["ওয়েবসাইট", "অনলাইন স্টোর", "সফটওয়্যার", "প্ল্যাটফর্ম"]
+        : ["Website", "Online Store", "Software", "Platform"];
+    const [idx, setIdx] = useState(0);
 
     useEffect(() => {
-        const fetchCounts = async () => {
-            try {
-                const [softRes, webRes] = await Promise.all([
-                    fetch(`${API_BASE_URL}/software`),
-                    fetch(`${API_BASE_URL}/websites`),
-                ]);
-                const softData = await softRes.json();
-                const webData = await webRes.json();
-                const softNum = softData.meta?.total || (Array.isArray(softData.data) ? softData.data.length : 0);
-                const webNum = webData.meta?.total || (Array.isArray(webData.data) ? webData.data.length : 0);
-                if (softNum > 0) setSoftwareCount(softNum);
-                if (webNum > 0) setWebsiteCount(webNum);
-            } catch (error) {
-                console.error("Error fetching counts:", error);
-            }
-        };
-        fetchCounts();
-    }, []);
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        const t = setInterval(() => setIdx((i) => (i + 1) % rotating.length), 2600);
+        return () => clearInterval(t);
+    }, [rotating.length]);
 
-    const totalClients = websiteCount + softwareCount;
-
-    // Staggered entrance
-    const container = {
-        hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+    const fadeUp = {
+        hidden: { opacity: 0, y: 22 },
+        show: (i = 0) => ({
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.6, delay: 0.05 + i * 0.09, ease: [0.16, 1, 0.3, 1] },
+        }),
     };
-    const item = {
-        hidden: { opacity: 0, y: 24 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
-    };
-
-    // Floating glass stat cards (desktop only)
-    const floatCards = [
-        { icon: <LuZap size={18} />, label: isBn ? "পারফরম্যান্স" : "Performance", value: "99", pos: "top-[22%] left-[5%]", delay: 0, color: "#C4EE18" },
-        { icon: <LuStar size={18} />, label: isBn ? "ক্লায়েন্ট রেটিং" : "Client Rating", value: "4.9", pos: "top-[18%] right-[6%]", delay: 0.7, color: "#FD9A00" },
-        { icon: <LuCheck size={18} />, label: isBn ? "প্রজেক্ট ডেলিভারড" : "Projects Done", value: `${totalClients}+`, pos: "bottom-[16%] right-[9%]", delay: 1.2, color: "#C4EE18" },
-    ];
 
     return (
-        <section className="relative min-h-[600px] lg:min-h-[88vh] flex items-center overflow-hidden bg-white dark:bg-[#0A0A0A] pt-6 pb-16 lg:pt-12 lg:pb-20">
-            {/* ===== Animated Aurora Background ===== */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {/* faded grid */}
-                <div
-                    className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06]"
-                    style={{
-                        backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
-                        backgroundSize: "44px 44px",
-                        maskImage: "radial-gradient(ellipse 70% 60% at 50% 45%, black 30%, transparent 78%)",
-                        WebkitMaskImage: "radial-gradient(ellipse 70% 60% at 50% 45%, black 30%, transparent 78%)",
-                    }}
-                />
-                {/* aurora blob — lime */}
-                <motion.div
-                    className="absolute -top-32 -left-24 w-[60vw] h-[60vw] max-w-[620px] max-h-[620px] rounded-full bg-[#C4EE18]/30 dark:bg-[#C4EE18]/20 blur-[120px]"
-                    animate={{ x: [0, 60, 0], y: [0, 40, 0], scale: [1, 1.15, 1] }}
-                    transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
-                />
-                {/* aurora blob — orange */}
-                <motion.div
-                    className="absolute top-[18%] -right-28 w-[55vw] h-[55vw] max-w-[600px] max-h-[600px] rounded-full bg-[#FD9A00]/25 dark:bg-[#FD9A00]/20 blur-[120px]"
-                    animate={{ x: [0, -50, 0], y: [0, 50, 0], scale: [1.1, 1, 1.1] }}
-                    transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                />
-                {/* aurora blob — soft lime bottom */}
-                <motion.div
-                    className="absolute -bottom-44 left-1/3 w-[50vw] h-[50vw] max-w-[520px] max-h-[520px] rounded-full bg-[#C4EE18]/20 blur-[120px]"
-                    animate={{ x: [0, 40, 0], scale: [1, 1.2, 1] }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                />
+        <section className="relative overflow-hidden bg-[#060B10] text-white">
+            {/* ===== Animated brand glows (pure gradients — no blur filter) ===== */}
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="hero-glow hero-glow-1 absolute -top-[20%] -left-[10%] w-[55%] h-[70%]" style={{ background: "radial-gradient(circle at center, rgba(253,154,0,0.28), transparent 60%)" }} />
+                <div className="hero-glow hero-glow-2 absolute top-[8%] -right-[14%] w-[60%] h-[80%]" style={{ background: "radial-gradient(circle at center, rgba(12,178,169,0.26), transparent 60%)" }} />
+                <div className="hero-glow hero-glow-3 absolute -bottom-[28%] left-[22%] w-[52%] h-[64%]" style={{ background: "radial-gradient(circle at center, rgba(12,178,169,0.16), transparent 60%)" }} />
             </div>
 
-            {/* ===== Floating Glass Cards (desktop) ===== */}
-            {floatCards.map((c, i) => (
-                <motion.div
-                    key={i}
-                    className={`hidden lg:flex absolute ${c.pos} z-20 items-center gap-3 px-4 py-3 rounded-2xl bg-white/70 dark:bg-white/[0.06] backdrop-blur-xl border border-white/70 dark:border-white/10 shadow-xl shadow-black/5`}
-                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                    animate={{ opacity: 1, y: [0, -12, 0], scale: 1 }}
-                    transition={{
-                        opacity: { duration: 0.6, delay: 0.8 + c.delay },
-                        scale: { duration: 0.6, delay: 0.8 + c.delay },
-                        y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: c.delay },
-                    }}
-                    whileHover={{ scale: 1.06 }}
-                >
-                    <span className="w-9 h-9 rounded-xl flex items-center justify-center text-black shrink-0" style={{ backgroundColor: c.color }}>
-                        {c.icon}
-                    </span>
-                    <div>
-                        <p className="text-lg font-black font-teko leading-none text-gray-900 dark:text-white">{c.value}</p>
-                        <p className={`text-[10px] text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-wider ${bn}`}>{c.label}</p>
-                    </div>
-                </motion.div>
-            ))}
+            {/* ===== Subtle grid, faded to the center ===== */}
+            <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                    backgroundImage:
+                        "linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px)",
+                    backgroundSize: "54px 54px",
+                    maskImage: "radial-gradient(ellipse 80% 70% at 50% 42%, black 15%, transparent 78%)",
+                    WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 42%, black 15%, transparent 78%)",
+                }}
+            />
 
-            {/* ===== Main Content ===== */}
-            <motion.div
-                variants={container}
-                initial="hidden"
-                animate="visible"
-                className="container relative z-10 mx-auto px-6 lg:px-12 max-w-4xl text-center flex flex-col items-center"
-            >
-                {/* Eyebrow badge */}
-                <motion.div
-                    variants={item}
-                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 dark:bg-white/5 backdrop-blur border border-gray-200 dark:border-white/10 shadow-sm mb-6"
-                >
-                    <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C4EE18] opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C4EE18]" />
-                    </span>
-                    <span className={`text-[11px] lg:text-xs font-bold tracking-[0.18em] text-gray-700 dark:text-gray-200 ${isBn ? "hind-siliguri" : "uppercase"}`}>
-                        {isBn ? "ওয়েব ও সফটওয়্যার এজেন্সি" : "Web & Software Agency"}
-                    </span>
-                </motion.div>
+            {/* ===== Live particle constellation ===== */}
+            <Constellation />
 
-                {/* Headline — language-aware typography */}
-                <motion.h1
-                    variants={item}
-                    className={`mb-6 text-gray-950 dark:text-white ${
-                        isBn
-                            ? "hind-siliguri font-bold leading-[1.2] text-5xl sm:text-6xl lg:text-7xl"
-                            : "font-teko uppercase font-black tracking-tight leading-[0.92] text-5xl sm:text-6xl lg:text-8xl"
-                    }`}
-                >
-                    {isBn ? (
-                        <>
-                            <span className="block">মডার্ন ওয়েবসাইট</span>
-                            <span className="block bg-gradient-to-r from-[#FD9A00] via-[#C4EE18] to-[#FD9A00] bg-clip-text text-transparent hero-shine">
-                                ও সফটওয়্যার
-                            </span>
-                        </>
-                    ) : (
-                        <>
-                            <span className="block">Modern Websites</span>
-                            <span className="block bg-gradient-to-r from-[#FD9A00] via-[#C4EE18] to-[#FD9A00] bg-clip-text text-transparent hero-shine">
-                                &amp; Software
-                            </span>
-                        </>
-                    )}
-                </motion.h1>
+            {/* ===== Vignette for depth ===== */}
+            <div
+                className="absolute inset-0 pointer-events-none"
+                style={{ background: "radial-gradient(ellipse 100% 90% at 50% 0%, transparent 45%, rgba(0,0,0,0.55))" }}
+            />
 
-                {/* Subtext */}
-                <motion.p variants={item} className={`text-gray-500 dark:text-gray-400 text-base lg:text-lg max-w-2xl leading-relaxed mb-9 ${bn}`}>
-                    {isBn
-                        ? "এক্সট্রেন ওয়েব হাই-পারফরম্যান্স ওয়েবসাইট, প্রিমিয়াম টেমপ্লেট ও কাস্টম সফটওয়্যার বানায় — দ্রুত, নিরাপদ ও SEO-রেডি, যা আপনার ব্যবসা বাড়ায়।"
-                        : "We design & develop high-performance websites, premium templates and custom software — fast, secure and SEO-ready, built to grow your business."}
-                </motion.p>
+            {/* ===== Content ===== */}
+            <div className="relative z-10 container mx-auto px-6 lg:px-10">
+                <div className="min-h-[92vh] flex flex-col items-center justify-center text-center py-24 lg:py-28">
 
-                {/* CTAs */}
-                <motion.div variants={item} className="flex flex-col sm:flex-row items-center gap-4 mb-12 w-full sm:w-auto">
-                    <Link
-                        href="/contact"
-                        className={`group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold text-sm shadow-lg shadow-[#FD9A00]/30 transition-all hover:-translate-y-0.5 ${bn}`}
+                    {/* eyebrow */}
+                    <motion.div
+                        variants={fadeUp} initial="hidden" animate="show" custom={0}
+                        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 backdrop-blur px-4 py-1.5 mb-7"
                     >
-                        {isBn ? "শুরু করুন" : "Get Started"}
-                        <LuArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                    <Link
-                        href="/website"
-                        className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white/70 dark:bg-white/5 backdrop-blur border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white font-bold text-sm hover:border-[#C4EE18] hover:shadow-md transition-all hover:-translate-y-0.5 ${bn}`}
-                    >
-                        {isBn ? "আমাদের কাজ দেখুন" : "View Our Work"}
-                        <LuArrowUpRight size={17} />
-                    </Link>
-                </motion.div>
+                        <LuSparkles className="text-[#FD9A00]" size={14} />
+                        <span className={`text-[11px] lg:text-xs font-semibold tracking-wide text-white/80 ${bn}`}>
+                            {isBn ? "ওয়েবসাইট ও সফটওয়্যার মার্কেটপ্লেস" : "Website & Software Marketplace"}
+                        </span>
+                    </motion.div>
 
-                {/* Trust row */}
-                <motion.div variants={item} className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-                    <div className="flex items-center gap-3">
-                        <div className="flex -space-x-3">
-                            {avatars.map((url, i) => (
-                                <img key={i} src={url} alt="client" className="w-9 h-9 rounded-full border-2 border-white dark:border-[#0A0A0A] object-cover" />
-                            ))}
-                            <span className="w-9 h-9 rounded-full border-2 border-white dark:border-[#0A0A0A] bg-[#C4EE18] text-black text-[10px] font-black flex items-center justify-center">
-                                {totalClients}+
+                    {/* headline with rotating word */}
+                    <motion.h1
+                        variants={fadeUp} initial="hidden" animate="show" custom={1}
+                        style={{ color: "#ffffff", fontWeight: 700 }}
+                        className={`font-poppins tracking-tight leading-[1.05] ${isBn ? "hind-siliguri text-4xl sm:text-5xl lg:text-6xl" : "text-5xl sm:text-6xl lg:text-7xl xl:text-[5.5rem]"}`}
+                    >
+                        {isBn ? "লঞ্চ করুন আপনার" : "Launch Your Next"}
+                        <span className="relative block mt-3 h-[1.3em]">
+                            <AnimatePresence>
+                                <motion.span
+                                    key={idx}
+                                    initial={{ y: 24, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: -24, opacity: 0 }}
+                                    transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                                    className="absolute inset-x-0 top-0 whitespace-nowrap bg-gradient-to-r from-[#FD9A00] via-[#FFC24D] to-[#0CB2A9] bg-clip-text text-transparent"
+                                >
+                                    {rotating[idx]}
+                                </motion.span>
+                            </AnimatePresence>
+                        </span>
+                    </motion.h1>
+
+                    {/* subtext */}
+                    <motion.p
+                        variants={fadeUp} initial="hidden" animate="show" custom={2}
+                        className={`text-white/60 text-base lg:text-lg max-w-2xl leading-relaxed mt-6 ${bn}`}
+                    >
+                        {isBn
+                            ? "প্রিমিয়াম রেডিমেড টেমপ্লেট ও সফটওয়্যার ব্রাউজ করুন — অথবা কাস্টম কিছু বানাতে আমাদের টিমকে দিন। দ্রুত, নিরাপদ ও SEO-রেডি।"
+                            : "Browse premium, ready-made templates & software — or hire our team to build something custom. Fast, secure & SEO-ready."}
+                    </motion.p>
+
+                    {/* CTAs */}
+                    <motion.div
+                        variants={fadeUp} initial="hidden" animate="show" custom={3}
+                        className="flex flex-col sm:flex-row items-center gap-4 mt-10"
+                    >
+                        <Link
+                            href="/website"
+                            className={`group inline-flex items-center justify-center gap-2 rounded-full bg-[#FD9A00] px-8 py-4 text-sm font-bold text-white shadow-[0_10px_35px_-8px_rgba(253,154,0,0.65)] hover:shadow-[0_14px_45px_-8px_rgba(253,154,0,0.85)] hover:-translate-y-0.5 transition-all ${bn}`}
+                        >
+                            {isBn ? "টেমপ্লেট ব্রাউজ করুন" : "Browse Templates"}
+                            <LuArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                        <Link
+                            href="/contact"
+                            className={`inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-bold text-white backdrop-blur hover:bg-white/10 hover:border-white/35 transition-all ${bn}`}
+                        >
+                            {isBn ? "ফ্রি কোটেশন নিন" : "Get a Free Quote"}
+                        </Link>
+                    </motion.div>
+
+                    {/* trust bar */}
+                    <motion.div
+                        variants={fadeUp} initial="hidden" animate="show" custom={4}
+                        className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mt-14"
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="flex -space-x-3">
+                                {avatars.map((url, i) => (
+                                    <img key={i} src={url} alt="Happy Extrain Web client" className="w-9 h-9 rounded-full border-2 border-[#060B10] object-cover" />
+                                ))}
+                            </div>
+                            <p className={`text-sm text-white/60 text-left ${bn}`}>
+                                {isBn ? "৫০+ ব্যবসা আমাদের ওপর ভরসা রাখে" : "Trusted by 50+ businesses"}
+                            </p>
+                        </div>
+
+                        <div className="h-6 w-px bg-white/15 hidden sm:block" />
+
+                        <div className="flex items-center gap-2">
+                            <div className="flex gap-0.5 text-[#FD9A00]">
+                                {[...Array(5)].map((_, i) => (
+                                    <LuStar key={i} size={15} className="fill-[#FD9A00]" />
+                                ))}
+                            </div>
+                            <span className={`text-sm text-white/60 ${bn}`}>
+                                <b className="text-white font-bold">4.9/5</b> {isBn ? "রেটিং" : "rating"}
                             </span>
                         </div>
-                        <p className={`text-xs text-gray-500 dark:text-gray-400 font-medium text-left ${bn}`}>
-                            {isBn ? "সন্তুষ্ট গ্রাহক" : "Happy clients"}
-                            <br />
-                            <span className="text-gray-900 dark:text-white font-bold">{isBn ? "বিশ্বজুড়ে" : "worldwide"}</span>
-                        </p>
-                    </div>
+                    </motion.div>
+                </div>
+            </div>
 
-                    <div className="h-8 w-px bg-gray-200 dark:bg-white/10 hidden sm:block" />
+            {/* ===== soft fade into the next (light) section ===== */}
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-white dark:to-[#020202] pointer-events-none" />
 
-                    <div className="flex items-center gap-2">
-                        <div className="flex gap-0.5">
-                            {[...Array(5)].map((_, i) => (
-                                <LuStar key={i} size={15} className="fill-[#FD9A00] text-[#FD9A00]" />
-                            ))}
-                        </div>
-                        <p className={`text-xs text-gray-500 dark:text-gray-400 font-medium ${bn}`}>
-                            <span className="text-gray-900 dark:text-white font-bold">4.9/5</span> {isBn ? "রেটিং" : "rating"}
-                        </p>
-                    </div>
-                </motion.div>
-            </motion.div>
-
-            {/* gradient-shine keyframes */}
-            <style jsx global>{`
-                @keyframes heroShine {
-                    to {
-                        background-position: 200% center;
-                    }
+            <style jsx>{`
+                @keyframes heroGlow1 {
+                    0%, 100% { transform: translate(0, 0) scale(1); }
+                    50% { transform: translate(9%, 11%) scale(1.14); }
                 }
-                .hero-shine {
-                    background-size: 200% auto;
-                    animation: heroShine 4s linear infinite;
+                @keyframes heroGlow2 {
+                    0%, 100% { transform: translate(0, 0) scale(1.06); }
+                    50% { transform: translate(-11%, 7%) scale(1); }
+                }
+                @keyframes heroGlow3 {
+                    0%, 100% { transform: translate(0, 0) scale(1); }
+                    50% { transform: translate(7%, -9%) scale(1.12); }
+                }
+                .hero-glow { will-change: transform; }
+                .hero-glow-1 { animation: heroGlow1 22s ease-in-out infinite; }
+                .hero-glow-2 { animation: heroGlow2 27s ease-in-out infinite; }
+                .hero-glow-3 { animation: heroGlow3 31s ease-in-out infinite; }
+                @media (prefers-reduced-motion: reduce) {
+                    .hero-glow-1, .hero-glow-2, .hero-glow-3 { animation: none; }
                 }
             `}</style>
         </section>

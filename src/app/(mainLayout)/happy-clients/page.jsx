@@ -99,7 +99,7 @@ const HappyClientsPage = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
-                className={`text-5xl lg:text-7xl font-black text-gray-950 dark:text-white mb-6 uppercase leading-[0.85] tracking-tighter font-teko ${bengaliClass}`}
+                className={`text-5xl lg:text-7xl font-black text-gray-950 dark:text-white mb-6 uppercase leading-[0.85] tracking-tighter font-poppins ${bengaliClass}`}
               >
                 {language === 'bn' ? 'আমাদের সন্তুষ্ট' : 'Our Happy '}<span className="text-[#FD9A00]">{language === 'bn' ? 'ক্লায়েন্ট' : 'Clients'}</span>
               </motion.h1>
@@ -117,7 +117,7 @@ const HappyClientsPage = () => {
                     <LuUsers className="text-gray-400 group-hover:text-[#FD9A00] transition-colors text-xl" />
                   </div>
                   <div>
-                    <p className="text-2xl font-black text-gray-900 dark:text-white font-teko leading-none mb-1">{totalClients}+</p>
+                    <p className="text-2xl font-black text-gray-900 dark:text-white font-poppins leading-none mb-1">{totalClients}+</p>
                     <p className={`text-[11px] font-bold text-gray-400 uppercase tracking-widest ${bengaliClass}`}>{language === 'bn' ? 'সন্তুষ্ট ক্লায়েন্ট' : 'Happy Clients'}</p>
                   </div>
                 </div>
@@ -129,7 +129,7 @@ const HappyClientsPage = () => {
                     <LuThumbsUp className="text-gray-400 group-hover:text-[#FD9A00] transition-colors text-xl" />
                   </div>
                   <div>
-                    <p className="text-2xl font-black text-gray-900 dark:text-white font-teko leading-none mb-1">98%</p>
+                    <p className="text-2xl font-black text-gray-900 dark:text-white font-poppins leading-none mb-1">98%</p>
                     <p className={`text-[11px] font-bold text-gray-400 uppercase tracking-widest ${bengaliClass}`}>{language === 'bn' ? 'সন্তুষ্টির হার' : 'Satisfaction'}</p>
                   </div>
                 </div>
@@ -141,7 +141,7 @@ const HappyClientsPage = () => {
                     <LuStar className="text-gray-400 group-hover:text-[#FD9A00] transition-colors text-xl" />
                   </div>
                   <div>
-                    <p className="text-2xl font-black text-gray-900 dark:text-white font-teko leading-none mb-1">{avgRating}/5</p>
+                    <p className="text-2xl font-black text-gray-900 dark:text-white font-poppins leading-none mb-1">{avgRating}/5</p>
                     <p className={`text-[11px] font-bold text-gray-400 uppercase tracking-widest ${bengaliClass}`}>{language === 'bn' ? 'রেটিং' : 'Rating'}</p>
                   </div>
                 </div>
@@ -246,7 +246,7 @@ const HappyClientsPage = () => {
 
                       {/* Content */}
                       <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <p className={`text-white font-bold font-teko text-lg uppercase mb-2 line-clamp-2 ${bengaliClass}`}>
+                        <p className={`text-white font-bold font-poppins text-lg uppercase mb-2 line-clamp-2 ${bengaliClass}`}>
                           {language === 'bn' ? (item.titleBn || item.title) : item.title}
                         </p>
                         <div className="flex items-center gap-2">
@@ -285,7 +285,7 @@ const HappyClientsPage = () => {
                   <LuHeart className="w-8 h-8 text-[#FD9A00]" />
                 </div>
                 <div>
-                  <h3 className={`text-2xl lg:text-3xl font-black font-teko uppercase text-gray-900 dark:text-white mb-2 ${bengaliClass}`}>
+                  <h3 className={`text-2xl lg:text-3xl font-black font-poppins uppercase text-gray-900 dark:text-white mb-2 ${bengaliClass}`}>
                     {language === "bn" ? "আপনিও হতে পারেন আমাদের সন্তুষ্ট ক্লায়েন্ট!" : "You Could Be Our Next Happy Client!"}
                   </h3>
                   <p className={`text-gray-500 dark:text-gray-400 text-sm ${bengaliClass}`}>
@@ -344,7 +344,7 @@ const HappyClientsPage = () => {
 
             {/* Video Info */}
             <div className="mt-4 text-left">
-              <p className={`text-white font-bold font-teko text-xl uppercase ${bengaliClass}`}>
+              <p className={`text-white font-bold font-poppins text-xl uppercase ${bengaliClass}`}>
                 {language === 'bn' ? (selectedVideo.titleBn || selectedVideo.title) : selectedVideo.title}
               </p>
               <p className="text-white/60 text-sm">

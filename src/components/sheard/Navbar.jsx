@@ -49,7 +49,7 @@ const CategoryMegaMenu = ({ closeMobileMenu, language, bengaliClass }) => {
   const isBn = language === "bn";
   return (
     <div className="p-4">
-      <p className={`text-[12px] font-bold font-teko uppercase tracking-widest text-[#FD9A00] mb-3 px-2 ${bengaliClass}`}>
+      <p className={`text-[12px] font-bold font-poppins tracking-widest text-[#FD9A00] mb-3 px-2 ${bengaliClass}`}>
         {isBn ? "ক্যাটাগরি" : "Categories"}
       </p>
       <div className="grid grid-cols-2 gap-1.5">
@@ -62,11 +62,11 @@ const CategoryMegaMenu = ({ closeMobileMenu, language, bengaliClass }) => {
               onClick={closeMobileMenu}
               className="flex items-center gap-3 p-2.5 rounded-xl border border-transparent hover:bg-gray-50 dark:hover:bg-white/5 hover:border-gray-100 dark:hover:border-white/10 transition-all duration-200 group"
             >
-              <div className="w-10 h-10 shrink-0 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400 flex items-center justify-center group-hover:bg-[#C4EE18] group-hover:text-black transition-all duration-300">
+              <div className="w-10 h-10 shrink-0 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400 flex items-center justify-center group-hover:bg-[#0CB2A9] group-hover:text-black transition-all duration-300">
                 <Icon size={18} />
               </div>
               <div className="min-w-0">
-                <p className={`text-[15px] font-bold font-teko uppercase tracking-wide text-gray-800 dark:text-white leading-none mb-0.5 truncate ${bengaliClass}`}>
+                <p className={`text-[15px] font-bold font-poppins tracking-wide text-gray-800 dark:text-white leading-none mb-0.5 truncate ${bengaliClass}`}>
                   {isBn ? cat.bn : cat.en}
                 </p>
                 <p className={`text-[11px] text-gray-400 dark:text-gray-500 truncate ${bengaliClass}`}>
@@ -216,11 +216,9 @@ const Navbar = () => {
             >
               {/* Mobile Menu Header */}
               <div className="flex items-center justify-between p-6 border-b border-gray-50">
-                <Link href="/" onClick={closeMobileMenu}>
-                  <h2 className="text-3xl font-black font-teko uppercase text-black leading-none tracking-tight">
-                    EXTRAIN <span className="text-[#FD9A00]">WEB</span>
-                    <span className="text-[#FD9A00]">.</span>
-                  </h2>
+                <Link href="/" onClick={closeMobileMenu} aria-label="Extrain Web home">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/extrain-logo.png" alt="Extrain Web" className="h-9 w-auto object-contain" />
                 </Link>
                 <button
                   onClick={closeMobileMenu}
@@ -289,17 +287,17 @@ const Navbar = () => {
                   {user ? (
                     <div className="space-y-4">
                       <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 dark:bg-black/50 border border-gray-100 dark:border-white/10">
-                        <div className="w-14 h-14 rounded-full border-2 border-[#C4EE18] overflow-hidden bg-black">
+                        <div className="w-14 h-14 rounded-full border-2 border-[#0CB2A9] overflow-hidden bg-black">
                           {user.image ? (
                             <img src={user.image} alt={`${user.name || 'User'}'s profile picture`} className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-[#C4EE18] font-bold text-xl font-teko uppercase">
+                            <div className="w-full h-full flex items-center justify-center text-[#0CB2A9] font-bold text-xl font-poppins uppercase">
                               {(user.name || user.gmail || "U").charAt(0)}
                             </div>
                           )}
                         </div>
                         <div>
-                          <p className={`font-bold text-gray-900 dark:text-white font-teko text-lg uppercase tracking-wide ${bengaliClass}`}>{user.name || user.gmail?.split('@')[0]}</p>
+                          <p className={`font-bold text-gray-900 dark:text-white font-poppins text-lg uppercase tracking-wide ${bengaliClass}`}>{user.name || user.gmail?.split('@')[0]}</p>
                           <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">{user.role || 'Member'}</p>
                         </div>
                       </div>
@@ -307,17 +305,17 @@ const Navbar = () => {
                         <Link
                           href={user.role === 'admin' ? "/dashboard/admin" : user.role === 'mentor' ? "/dashboard/mentor" : "/dashboard/user"}
                           onClick={closeMobileMenu}
-                          className="flex flex-col items-center gap-2 py-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 text-gray-700 dark:text-gray-200 hover:border-[#C4EE18] hover:text-[#C4EE18] transition-all"
+                          className="flex flex-col items-center gap-2 py-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 text-gray-700 dark:text-gray-200 hover:border-[#0CB2A9] hover:text-[#0CB2A9] transition-all"
                         >
                           <LuLayoutDashboard size={20} />
-                          <span className="text-[14px] font-bold uppercase font-teko tracking-wide">Dashboard</span>
+                          <span className="text-[14px] font-bold uppercase font-poppins tracking-wide">Dashboard</span>
                         </Link>
                         <button
                           onClick={handleLogout}
                           className="flex flex-col items-center gap-2 py-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/20 text-red-600 dark:text-red-400"
                         >
                           <LuLogOut size={20} />
-                          <span className="text-[14px] font-bold uppercase font-teko tracking-wide">Logout</span>
+                          <span className="text-[14px] font-bold uppercase font-poppins tracking-wide">Logout</span>
                         </button>
                       </div>
                     </div>
@@ -333,7 +331,7 @@ const Navbar = () => {
                       <Link
                         href={`/register?redirect=${encodeURIComponent(pathname + (typeof window !== 'undefined' ? window.location.search : ''))}`}
                         onClick={closeMobileMenu}
-                        className="block w-full text-center py-4 rounded-2xl bg-[#C4EE18] text-black font-bold uppercase font-teko text-xl shadow-lg border border-[#C4EE18] hover:bg-black hover:text-[#C4EE18] transition-all"
+                        className="block w-full text-center py-4 rounded-2xl bg-[#0CB2A9] text-black font-bold uppercase font-poppins text-xl shadow-lg border border-[#0CB2A9] hover:bg-black hover:text-[#0CB2A9] transition-all"
                       >
                         Join Platform
                       </Link>
@@ -357,18 +355,20 @@ const Navbar = () => {
 
             {/* Left: Logo & Categories */}
             <div className="flex items-center gap-8 xl:gap-12">
-              <Link href="/" className="relative flex-shrink-0 group">
-                <h2 className={`font-black font-teko uppercase text-black dark:text-white leading-none transition-all duration-300 tracking-tight ${isSticky ? "text-2xl lg:text-3xl" : "text-2xl lg:text-4xl"}`}>
-                  EXTRAIN <span className="text-[#FD9A00]">WEB</span>
-                  <span className="text-[#FD9A00]">.</span>
-                </h2>
+              <Link href="/" className="relative flex-shrink-0 group" aria-label="Extrain Web home">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/extrain-logo.png"
+                  alt="Extrain Web"
+                  className={`w-auto object-contain transition-all duration-300 dark:brightness-0 dark:invert ${isSticky ? "h-8 lg:h-9" : "h-9 lg:h-11"}`}
+                />
               </Link>
 
               {/* Category Dropdown - Desktop */}
               <div className="hidden lg:block relative group">
                 <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-200 hover:border-[#FD9A00] hover:text-[#FD9A00] hover:bg-[#FD9A00]/5 hover:shadow-md hover:shadow-[#FD9A00]/10 transition-all duration-300 group-hover:border-[#FD9A00] group-hover:text-[#FD9A00]">
                   <BiCategory size={20} />
-                  <span className={`text-[18px] font-bold font-teko uppercase tracking-wide ${language === 'bn' ? 'hind-siliguri text-base font-normal tracking-normal' : ''}`}>
+                  <span className={`text-[14px] font-bold font-poppins tracking-wide ${language === 'bn' ? 'hind-siliguri text-base font-normal tracking-normal' : ''}`}>
                     {language === 'bn' ? 'ক্যাটাগরি' : 'Category'}
                   </span>
                   <LuChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-300" />
@@ -387,7 +387,7 @@ const Navbar = () => {
                 <Link
                   key={href}
                   href={href}
-                  className={`relative px-3 py-2 text-[18px] font-teko uppercase tracking-wide whitespace-nowrap transition-all duration-300 group ${pathname === href
+                  className={`relative px-3 py-2 text-[14px] font-poppins tracking-wide whitespace-nowrap transition-all duration-300 group ${pathname === href
                     ? "text-[#FD9A00] font-medium"
                     : "text-gray-600 dark:text-gray-300 hover:text-[#FD9A00] font-medium"
                     } ${language === 'bn' ? 'hind-siliguri text-base font-normal tracking-normal' : ''}`}
@@ -451,12 +451,12 @@ const Navbar = () => {
                       {user.image ? (
                         <img src={user.image} alt={`${user.name || 'User'}'s profile picture`} className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full bg-black flex items-center justify-center text-[#C4EE18] text-sm font-bold font-teko uppercase">
+                        <div className="w-full h-full bg-black flex items-center justify-center text-[#0CB2A9] text-sm font-bold font-poppins uppercase">
                           {(user.name || "U").charAt(0)}
                         </div>
                       )}
                     </div>
-                    <span className={`text-sm font-bold text-gray-900 dark:text-white max-w-[100px] truncate font-teko uppercase tracking-wide ${bengaliClass}`}>
+                    <span className={`text-sm font-bold text-gray-900 dark:text-white max-w-[100px] truncate font-poppins uppercase tracking-wide ${bengaliClass}`}>
                       {user.name || user.gmail?.split('@')[0] || 'User'}
                     </span>
                     <LuChevronDown className={`text-gray-400 transition-transform duration-300 ${isProfileDropdownOpen ? 'rotate-180' : ''}`} size={16} />
@@ -475,17 +475,17 @@ const Navbar = () => {
                         {/* User Info Header */}
                         <div className="p-4 bg-gray-50 dark:bg-black/50 border-b border-gray-100 dark:border-white/10">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full border-2 border-[#C4EE18] overflow-hidden bg-black">
+                            <div className="w-12 h-12 rounded-full border-2 border-[#0CB2A9] overflow-hidden bg-black">
                               {user.image ? (
                                 <img src={user.image} alt={`${user.name || 'User'}'s profile picture`} className="w-full h-full object-cover" />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center text-[#C4EE18] font-bold text-lg font-teko uppercase">
+                                <div className="w-full h-full flex items-center justify-center text-[#0CB2A9] font-bold text-lg font-poppins uppercase">
                                   {(user.name || "U").charAt(0)}
                                 </div>
                               )}
                             </div>
                             <div>
-                              <p className={`font-bold text-gray-900 dark:text-white text-base font-teko uppercase tracking-wide ${bengaliClass}`}>{user.name || user.gmail?.split('@')[0]}</p>
+                              <p className={`font-bold text-gray-900 dark:text-white text-base font-poppins uppercase tracking-wide ${bengaliClass}`}>{user.name || user.gmail?.split('@')[0]}</p>
                               <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{user.role || 'Member'}</p>
                             </div>
                           </div>
@@ -498,8 +498,8 @@ const Navbar = () => {
                             onClick={() => setIsProfileDropdownOpen(false)}
                             className="flex items-center gap-3 px-4 py-3 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-all group border border-transparent hover:border-gray-200 dark:hover:border-white/10"
                           >
-                            <LuLayoutDashboard size={18} className="text-gray-400 group-hover:text-[#C4EE18] transition-colors" />
-                            <span className={`text-sm font-bold uppercase tracking-wider font-teko ${bengaliClass}`}>Dashboard</span>
+                            <LuLayoutDashboard size={18} className="text-gray-400 group-hover:text-[#0CB2A9] transition-colors" />
+                            <span className={`text-sm font-bold uppercase tracking-wider font-poppins ${bengaliClass}`}>Dashboard</span>
                           </Link>
                           <button
                             onClick={() => {
@@ -509,7 +509,7 @@ const Navbar = () => {
                             className="w-full flex items-center gap-3 px-4 py-3 rounded-md text-gray-500 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/10 hover:text-red-600 transition-all group mt-1"
                           >
                             <LuLogOut size={18} className="text-gray-400 group-hover:text-red-500 transition-colors" />
-                            <span className="text-sm font-bold uppercase tracking-wider font-teko">Logout</span>
+                            <span className="text-sm font-bold uppercase tracking-wider font-poppins">Logout</span>
                           </button>
                         </div>
                       </motion.div>

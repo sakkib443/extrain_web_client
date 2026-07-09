@@ -40,16 +40,16 @@ const Footer = () => {
   return (
     <footer className="relative bg-gradient-to-b from-gray-50 via-white to-gray-100 dark:from-[#0F172A] dark:via-[#1E293B] dark:to-[#0F172A] overflow-hidden">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(65,191,184,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(65,191,184,0.03)_1px,transparent_1px)] bg-[size:40px_40px] dark:opacity-30"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(12, 178, 169,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(12, 178, 169,0.03)_1px,transparent_1px)] bg-[size:40px_40px] dark:opacity-30"></div>
 
       {/* Gradient Orbs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-[#C4EE18]/5 dark:bg-[#C4EE18]/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 right-10 w-80 h-80 bg-[#C4EE18]/5 dark:bg-[#C4EE18]/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-20 left-10 w-72 h-72 bg-[#0CB2A9]/5 dark:bg-[#0CB2A9]/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-10 w-80 h-80 bg-[#0CB2A9]/5 dark:bg-[#0CB2A9]/10 rounded-full blur-3xl"></div>
 
       {/* Top CTA Section (Kept Original) */}
       <div className="relative border-b border-gray-200 dark:border-gray-700/50">
         <div className="container mx-auto px-4 lg:px-16 py-12">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-[#C4EE18]/5 dark:bg-[#C4EE18]/5 rounded-md p-6 lg:p-8 border border-gray-200 dark:border-gray-700/50">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-[#0CB2A9]/5 dark:bg-[#0CB2A9]/5 rounded-md p-6 lg:p-8 border border-gray-200 dark:border-gray-700/50">
             <div className="text-center lg:text-left">
               <h3 className={`text-xl lg:text-2xl font-bold text-gray-800 dark:text-white outfit mb-2 ${bengaliClass}`}>
                 {t("footer.ctaHeading")}
@@ -60,7 +60,7 @@ const Footer = () => {
             </div>
             <Link
               href="/website"
-              className={`group inline-flex items-center gap-2 px-8 py-4 bg-[#C4EE18] text-black rounded-md font-bold uppercase tracking-widest hover:bg-black hover:text-[#C4EE18] hover:shadow-lg hover:shadow-[#C4EE18]/20 transition-all duration-300 font-teko text-xl ${bengaliClass}`}
+              className={`group inline-flex items-center gap-2 px-8 py-4 bg-[#0CB2A9] text-black rounded-md font-bold uppercase tracking-widest hover:bg-black hover:text-[#0CB2A9] hover:shadow-lg hover:shadow-[#0CB2A9]/20 transition-all duration-300 font-poppins text-xl ${bengaliClass}`}
             >
               <span>{t("footer.exploreCourses")}</span>
               <LuArrowUpRight className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -75,11 +75,8 @@ const Footer = () => {
 
           {/* Brand Section */}
           <div className="lg:col-span-2 space-y-5">
-            <Link href="/" className="inline-block relative group">
-              <h2 className="text-4xl font-black font-teko uppercase text-gray-900 dark:text-white leading-none tracking-tight">
-                EXTRAIN <span className="text-[#FD9A00]">WEB</span>
-                <span className="text-cyan-500">.</span>
-              </h2>
+            <Link href="/" className="inline-block relative group" aria-label="Extrain Web home">
+              <img src="/extrain-logo.png" alt="Extrain Web" className="h-11 lg:h-12 w-auto object-contain dark:brightness-0 dark:invert" />
             </Link>
             <p className={`text-gray-600 dark:text-gray-400 text-sm leading-relaxed max-w-sm font-medium ${bengaliClass}`}>
               {t("footer.brandDescription") || "Extrain Web is a premium website and software marketplace in Bangladesh, providing high-quality digital products and custom development services."}
@@ -87,7 +84,7 @@ const Footer = () => {
 
             {/* Newsletter */}
             <div className="pt-4">
-              <h4 className={`text-gray-800 dark:text-white font-black font-teko uppercase text-xl mb-3 ${bengaliClass}`}>
+              <h4 className={`text-gray-800 dark:text-white font-black font-poppins uppercase text-xl mb-3 ${bengaliClass}`}>
                 {t("footer.subscribeNewsletter") || "Subscribe to Newsletter"}
               </h4>
               <div className="flex gap-0">
@@ -98,7 +95,7 @@ const Footer = () => {
                   placeholder={t("footer.enterEmail") || "Enter your email"}
                   className={`flex-1 px-4 py-3 bg-white dark:bg-[#1E293B] border border-gray-200 dark:border-gray-600/50 rounded-l-md text-gray-800 dark:text-gray-200 text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#FD9A00] transition-colors ${bengaliClass}`}
                 />
-                <button className="px-6 py-3 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold font-teko uppercase tracking-wide rounded-r-md transition-colors shadow-lg shadow-[#FD9A00]/20">
+                <button className="px-6 py-3 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold font-poppins uppercase tracking-wide rounded-r-md transition-colors shadow-lg shadow-[#FD9A00]/20">
                   <LuSend className="text-xl" />
                 </button>
               </div>
@@ -123,7 +120,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className={`text-gray-800 dark:text-white font-black font-teko uppercase text-xl mb-6 flex items-center gap-2 ${bengaliClass}`}>
+            <h4 className={`text-gray-800 dark:text-white font-black font-poppins uppercase text-xl mb-6 flex items-center gap-2 ${bengaliClass}`}>
               <span className="w-1.5 h-6 bg-[#FD9A00] rounded-full"></span>
               {t("footer.quickLinks") || "Quick Links"}
             </h4>
@@ -143,7 +140,7 @@ const Footer = () => {
 
           {/* Categories */}
           <div>
-            <h4 className={`text-gray-800 dark:text-white font-black font-teko uppercase text-xl mb-6 flex items-center gap-2 ${bengaliClass}`}>
+            <h4 className={`text-gray-800 dark:text-white font-black font-poppins uppercase text-xl mb-6 flex items-center gap-2 ${bengaliClass}`}>
               <span className="w-1.5 h-6 bg-[#FD9A00] rounded-full"></span>
               {t("footer.categories") || "Categories"}
             </h4>
@@ -163,7 +160,7 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h4 className={`text-gray-800 dark:text-white font-black font-teko uppercase text-xl mb-6 flex items-center gap-2 ${bengaliClass}`}>
+            <h4 className={`text-gray-800 dark:text-white font-black font-poppins uppercase text-xl mb-6 flex items-center gap-2 ${bengaliClass}`}>
               <span className="w-1.5 h-6 bg-[#FD9A00] rounded-full"></span>
               {t("footer.contactUs") || "Contact Us"}
             </h4>
@@ -175,7 +172,7 @@ const Footer = () => {
                   </div>
                   <div>
                     <p className={`text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ${bengaliClass}`}>{t("footer.phone") || "Phone"}</p>
-                    <a href="tel:+8801711946614" className="text-gray-800 dark:text-white font-teko font-bold text-lg hover:text-[#FD9A00] transition-colors">+880 1711-946614</a>
+                    <a href="tel:+8801711946614" className="text-gray-800 dark:text-white font-poppins font-bold text-lg hover:text-[#FD9A00] transition-colors">+880 1711-946614</a>
                   </div>
                 </div>
               </li>

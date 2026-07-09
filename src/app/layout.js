@@ -6,7 +6,6 @@ import {
   Work_Sans,
   Outfit,
   Hind_Siliguri,
-  Teko,
 } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/sheard/Navbar";
@@ -19,7 +18,6 @@ import { LanguageProvider } from "@/context/LanguageContext";
 
 import { Toaster } from "react-hot-toast";
 import ScrollToTopOnNavigate from "@/components/sheard/ScrollToTopOnNavigate";
-import CursorWrapper from "@/components/sheard/CursorWrapper";
 
 // Google Fonts
 const poppins = Poppins({
@@ -57,11 +55,6 @@ const hindSiliguri = Hind_Siliguri({
   subsets: ["bengali", "latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-hind-siliguri",
-});
-const teko = Teko({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-teko",
 });
 
 export const metadata = {
@@ -127,7 +120,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${roboto.variable} ${lobster.variable} ${caveat.variable} ${worksans.variable} ${outfit.variable} ${hindSiliguri.variable} ${teko.variable}`}
+      className={`${poppins.variable} ${roboto.variable} ${lobster.variable} ${caveat.variable} ${worksans.variable} ${outfit.variable} ${hindSiliguri.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -174,7 +167,6 @@ export default function RootLayout({ children }) {
       <body className="antialiased" suppressHydrationWarning>
         <ReduxProviderWrapper>
           <LanguageProvider>
-            <CursorWrapper />
             <Toaster position="top-center" reverseOrder={false} />
             <ScrollToTopOnNavigate />
             {children}

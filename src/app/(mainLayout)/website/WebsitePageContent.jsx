@@ -16,7 +16,7 @@ const RightWebsiteDetails = dynamic(
 // Loading fallback component
 const LoadingFallback = () => (
     <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-4 border-[#C4EE18] border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-4 border-[#0CB2A9] border-t-transparent rounded-full animate-spin"></div>
     </div>
 );
 
@@ -40,7 +40,7 @@ export default function WebsitePageContent({ initialWebsites = [] }) {
     if (!mounted) return <LoadingFallback />;
 
     return (
-        <div className="min-h-screen bg-white dark:bg-black transition-colors duration-300 relative selection:bg-[#C4EE18] selection:text-black">
+        <div className="min-h-screen bg-white dark:bg-black transition-colors duration-300 relative selection:bg-[#0CB2A9] selection:text-black">
             {/* Unified Filtered Background - Spans entire page */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
@@ -52,12 +52,12 @@ export default function WebsitePageContent({ initialWebsites = [] }) {
             <motion.div
                 animate={{ x: [0, 50, 0], y: [0, 30, 0], opacity: [0.3, 0.5, 0.3] }}
                 transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                className="fixed top-[-10%] right-[-5%] w-[600px] h-[600px] bg-[#C4EE18]/5 rounded-full blur-[120px] pointer-events-none z-0"
+                className="fixed top-[-10%] right-[-5%] w-[600px] h-[600px] bg-[#0CB2A9]/5 rounded-full blur-[120px] pointer-events-none z-0"
             />
             <motion.div
                 animate={{ x: [0, -30, 0], y: [0, -50, 0], opacity: [0.2, 0.4, 0.2] }}
                 transition={{ duration: 18, repeat: Infinity, ease: "linear", delay: 2 }}
-                className="fixed bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#C4EE18]/5 rounded-full blur-[100px] pointer-events-none z-0"
+                className="fixed bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#0CB2A9]/5 rounded-full blur-[100px] pointer-events-none z-0"
             />
 
             {/* Main Content Container */}
@@ -77,9 +77,9 @@ export default function WebsitePageContent({ initialWebsites = [] }) {
                                     initial={{ width: 0 }}
                                     animate={{ width: 40 }}
                                     transition={{ delay: 0.5, duration: 0.5 }}
-                                    className="h-[2px] bg-[#C4EE18]"
+                                    className="h-[2px] bg-[#0CB2A9]"
                                 />
-                                <span className={`text-[10px] font-black text-[#C4EE18] uppercase tracking-[0.4em] ${bengaliClass}`}>
+                                <span className={`text-[10px] font-black text-[#0CB2A9] uppercase tracking-[0.4em] ${bengaliClass}`}>
                                     {language === 'bn' ? 'প্রিমিয়াম ওয়েবসাইট' : 'Premium Websites'}
                                 </span>
                             </div>
@@ -88,9 +88,9 @@ export default function WebsitePageContent({ initialWebsites = [] }) {
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.3, duration: 0.8 }}
-                                className={`text-5xl lg:text-7xl font-black text-gray-950 dark:text-white mb-6 uppercase leading-[0.85] tracking-tighter font-teko ${bengaliClass}`}
+                                className={`text-5xl lg:text-7xl font-black text-gray-950 dark:text-white mb-6 uppercase leading-[0.85] tracking-tighter font-poppins ${bengaliClass}`}
                             >
-                                {language === 'bn' ? 'আমাদের' : 'Our Website '}<span className="text-[#C4EE18]">{language === 'bn' ? 'মার্কেটপ্লেস' : 'Marketplace'}</span>
+                                {language === 'bn' ? 'আমাদের' : 'Our Website '}<span className="text-[#0CB2A9]">{language === 'bn' ? 'মার্কেটপ্লেস' : 'Marketplace'}</span>
                             </motion.h1>
 
                             <p className={`text-gray-500 dark:text-gray-400 text-sm lg:text-base max-w-2xl leading-relaxed mb-10 ${bengaliClass}`}>
@@ -102,11 +102,11 @@ export default function WebsitePageContent({ initialWebsites = [] }) {
                             {/* Stats - Left Aligned & Modern */}
                             <div className="flex flex-wrap items-center gap-12">
                                 <div className="flex items-center gap-4 group">
-                                    <div className="w-12 h-12 bg-gray-50 dark:bg-white/5 rounded-md flex items-center justify-center border border-gray-100 dark:border-white/10 group-hover:border-[#C4EE18] transition-colors">
-                                        <LuGlobe className="text-gray-400 group-hover:text-[#C4EE18] transition-colors text-xl" />
+                                    <div className="w-12 h-12 bg-gray-50 dark:bg-white/5 rounded-md flex items-center justify-center border border-gray-100 dark:border-white/10 group-hover:border-[#0CB2A9] transition-colors">
+                                        <LuGlobe className="text-gray-400 group-hover:text-[#0CB2A9] transition-colors text-xl" />
                                     </div>
                                     <div>
-                                        <p className="text-2xl font-black text-gray-900 dark:text-white font-teko leading-none mb-1">{websiteList.length || '0'}+</p>
+                                        <p className="text-2xl font-black text-gray-900 dark:text-white font-poppins leading-none mb-1">{websiteList.length || '0'}+</p>
                                         <p className={`text-[11px] font-bold text-gray-400 uppercase tracking-widest ${bengaliClass}`}>{language === 'bn' ? 'ওয়েবসাইট' : 'Websites'}</p>
                                     </div>
                                 </div>
@@ -114,11 +114,11 @@ export default function WebsitePageContent({ initialWebsites = [] }) {
                                 <div className="w-px h-12 bg-gray-200 dark:bg-white/10 hidden sm:block"></div>
 
                                 <div className="flex items-center gap-4 group">
-                                    <div className="w-12 h-12 bg-gray-50 dark:bg-white/5 rounded-md flex items-center justify-center border border-gray-100 dark:border-white/10 group-hover:border-[#C4EE18] transition-colors">
-                                        <LuPlus className="text-gray-400 group-hover:text-[#C4EE18] transition-colors text-xl" />
+                                    <div className="w-12 h-12 bg-gray-50 dark:bg-white/5 rounded-md flex items-center justify-center border border-gray-100 dark:border-white/10 group-hover:border-[#0CB2A9] transition-colors">
+                                        <LuPlus className="text-gray-400 group-hover:text-[#0CB2A9] transition-colors text-xl" />
                                     </div>
                                     <div>
-                                        <p className="text-2xl font-black text-gray-900 dark:text-white font-teko leading-none mb-1">24/7</p>
+                                        <p className="text-2xl font-black text-gray-900 dark:text-white font-poppins leading-none mb-1">24/7</p>
                                         <p className={`text-[11px] font-bold text-gray-400 uppercase tracking-widest ${bengaliClass}`}>{language === 'bn' ? 'সাপোর্ট' : 'Support'}</p>
                                     </div>
                                 </div>

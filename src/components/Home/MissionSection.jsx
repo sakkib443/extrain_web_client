@@ -21,8 +21,8 @@ const SectionLabel = ({ text }) => (
         variants={fadeInUp}
         className="inline-flex items-center gap-3 mb-4 lg:mb-8"
     >
-        <div className="w-12 h-[2px] bg-[#C4EE18]" />
-        <span className="text-sm lg:text-base uppercase tracking-widest font-bold text-[#C4EE18] font-teko">
+        <div className="w-12 h-[2px] bg-[#0CB2A9]" />
+        <span className="text-sm lg:text-base uppercase tracking-widest font-bold text-[#0CB2A9] font-poppins">
             {text}
         </span>
     </motion.div>
@@ -43,9 +43,9 @@ const MissionSection = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6 }}
-                            className="text-4xl lg:text-6xl font-black uppercase font-teko leading-[0.9] text-gray-900 dark:text-white mb-8"
+                            className="text-4xl lg:text-6xl font-black uppercase font-poppins leading-[0.9] text-gray-900 dark:text-white mb-8"
                         >
-                            EMPOWERING <span className="text-[#C4EE18]">NEXT-GEN</span> <br />
+                            EMPOWERING <span className="text-[#0CB2A9]">NEXT-GEN</span> <br />
                             DIGITAL LEADERS.
                         </motion.h2>
                     </div>
@@ -73,10 +73,10 @@ const MissionSection = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.5, delay: 0.3 + (idx * 0.1) }}
-                                    className="p-6 border border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 rounded-xl hover:border-[#C4EE18] transition-colors group"
+                                    className="p-6 border border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 rounded-xl hover:border-[#0CB2A9] transition-colors group"
                                 >
-                                    <item.icon className="text-[#C4EE18] text-2xl mb-4 group-hover:scale-110 transition-transform" />
-                                    <h3 className="font-bold text-lg font-teko uppercase tracking-wide mb-2">{item.title}</h3>
+                                    <item.icon className="text-[#0CB2A9] text-2xl mb-4 group-hover:scale-110 transition-transform" />
+                                    <h3 className="font-bold text-lg font-poppins uppercase tracking-wide mb-2">{item.title}</h3>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">{item.desc}</p>
                                 </motion.div>
                             ))}

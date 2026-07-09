@@ -147,7 +147,7 @@ const ProductCard = ({ product, type, view = "grid" }) => {
                             href={product.previewUrl || detailUrl}
                             target={product.previewUrl ? "_blank" : "_self"}
                             rel="noopener noreferrer"
-                            className="flex-1 py-2.5 bg-white border border-[#FD9A00] text-[#FD9A00] rounded-md text-[14px] font-bold hover:bg-[#FD9A00] hover:text-white transition-all flex items-center justify-center gap-2 uppercase tracking-wide font-teko"
+                            className="flex-1 py-2.5 bg-white border border-[#FD9A00] text-[#FD9A00] rounded-md text-[14px] font-bold hover:bg-[#FD9A00] hover:text-white transition-all flex items-center justify-center gap-2 uppercase tracking-wide font-poppins"
                         >
                             <LuEye size={18} />
                             {language === 'bn' ? 'লাইভ প্রিভিউ' : 'Live View'}
@@ -196,7 +196,7 @@ const ProductCard = ({ product, type, view = "grid" }) => {
 
                     {/* Title */}
                     <Link href={detailUrl} className="mb-2 block">
-                        <h3 className={`text-lg lg:text-xl font-black text-slate-900 dark:text-white leading-tight line-clamp-2 hover:text-black dark:hover:text-[#C4EE18] transition-colors font-teko uppercase ${bengaliClass}`}>
+                        <h3 className={`text-lg lg:text-xl font-black text-slate-900 dark:text-white leading-tight line-clamp-2 hover:text-black dark:hover:text-[#0CB2A9] transition-colors font-poppins uppercase ${bengaliClass}`}>
                             {title}
                         </h3>
                     </Link>
@@ -204,11 +204,11 @@ const ProductCard = ({ product, type, view = "grid" }) => {
                     {/* Metadata (Sales) */}
                     <div className="flex items-center gap-3 mb-4">
                         <div className="flex items-center gap-1 bg-slate-100 dark:bg-white/5 px-2 py-1 rounded text-[10px] font-bold text-slate-600 dark:text-slate-400 font-poppins">
-                            <LuUsers size={12} className="text-[#C4EE18]" />
+                            <LuUsers size={12} className="text-[#0CB2A9]" />
                             <span>{sales.toLocaleString()} Units Sold</span>
                         </div>
                         <div className="flex items-center gap-1 bg-slate-100 dark:bg-white/5 px-2 py-1 rounded text-[10px] font-bold text-slate-600 dark:text-slate-400 font-poppins">
-                            <LuLayers size={12} className="text-[#C4EE18]" />
+                            <LuLayers size={12} className="text-[#0CB2A9]" />
                             <span>Version {version}</span>
                         </div>
                     </div>
@@ -217,7 +217,7 @@ const ProductCard = ({ product, type, view = "grid" }) => {
                     <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-100 dark:border-white/5">
                         <div className="flex flex-col">
                             <div className="flex items-center gap-2 leading-none">
-                                <span className="text-2xl font-black text-slate-950 dark:text-[#C4EE18] font-teko">
+                                <span className="text-2xl font-black text-slate-950 dark:text-[#0CB2A9] font-poppins">
                                     ৳{displayPrice?.toLocaleString()}
                                 </span>
                                 {hasDiscount && (
@@ -244,7 +244,7 @@ const ProductCard = ({ product, type, view = "grid" }) => {
                                 href={product.previewUrl || detailUrl}
                                 target={product.previewUrl ? "_blank" : "_self"}
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-200 transition-all text-[14px] font-bold uppercase tracking-wider font-teko"
+                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-200 transition-all text-[14px] font-bold uppercase tracking-wider font-poppins"
                                 title={product.previewUrl ? "Live Preview" : "View Details"}
                             >
                                 <LuEye size={18} />

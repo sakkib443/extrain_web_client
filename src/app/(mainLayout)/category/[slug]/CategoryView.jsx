@@ -27,20 +27,20 @@ export default function CategoryView({ slug }) {
             <section className="relative overflow-hidden border-b border-gray-100 dark:border-white/5">
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-[#FD9A00]/10 to-transparent rounded-full blur-3xl" />
-                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-[#C4EE18]/10 to-transparent rounded-full blur-3xl" />
+                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-[#0CB2A9]/10 to-transparent rounded-full blur-3xl" />
                 </div>
 
                 <div className="container mx-auto px-4 lg:px-16 relative z-10 py-14 lg:py-20">
                     <div className="grid lg:grid-cols-2 gap-10 items-center">
                         <div className="max-w-2xl">
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C4EE18]/10 border border-[#C4EE18]/30 mb-6">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0CB2A9]/10 border border-[#0CB2A9]/30 mb-6">
                             <LuSparkles size={14} className="text-[#7a9100]" />
                             <span className={`text-[11px] font-black uppercase tracking-[0.25em] text-[#5f7000] ${bn}`}>
                                 {name} {t("Service", "সার্ভিস")}
                             </span>
                         </div>
 
-                        <h1 className={`text-4xl lg:text-6xl font-black uppercase font-teko ${isBn ? "leading-[1.1]" : "leading-[0.9]"} tracking-tight text-gray-900 dark:text-white mb-4 ${bn}`}>
+                        <h1 className={`text-4xl lg:text-6xl font-black uppercase font-poppins ${isBn ? "leading-[1.1]" : "leading-[0.9]"} tracking-tight text-gray-900 dark:text-white mb-4 ${bn}`}>
                             <span className="block text-3xl lg:text-4xl text-gray-700 dark:text-gray-300">{name} {t("Website", "ওয়েবসাইট")}</span>
                             <span className="text-[#FD9A00]">{tagline}</span>
                         </h1>
@@ -76,13 +76,13 @@ export default function CategoryView({ slug }) {
                     {/* Section header */}
                     <div className="text-center max-w-2xl mx-auto mb-12">
                         <div className="flex items-center justify-center gap-3 mb-4">
-                            <div className="w-10 h-[2px] bg-[#C4EE18]" />
+                            <div className="w-10 h-[2px] bg-[#0CB2A9]" />
                             <span className={`text-[10px] font-black text-[#7a9100] uppercase tracking-[0.4em] ${bn}`}>
                                 {t("Pricing", "প্রাইসিং")}
                             </span>
-                            <div className="w-10 h-[2px] bg-[#C4EE18]" />
+                            <div className="w-10 h-[2px] bg-[#0CB2A9]" />
                         </div>
-                        <h2 className={`text-4xl lg:text-5xl font-black uppercase font-teko text-gray-900 dark:text-white leading-none ${bn}`}>
+                        <h2 className={`text-4xl lg:text-5xl font-black uppercase font-poppins text-gray-900 dark:text-white leading-none ${bn}`}>
                             {name} <span className="text-[#FD9A00]">{t("Packages", "প্যাকেজ")}</span>
                         </h2>
                         <p className={`text-gray-500 dark:text-gray-400 text-sm mt-3 ${bn}`}>
@@ -111,15 +111,15 @@ export default function CategoryView({ slug }) {
                                         </span>
                                     )}
                                     {!p.popular && <span className="mb-1 h-4" />}
-                                    <span className={`text-[11px] font-black uppercase font-teko tracking-widest ${activeTab === i ? "text-[#FD9A00]" : "text-gray-400 dark:text-gray-500"} ${bn}`}>
+                                    <span className={`text-[11px] font-black uppercase font-poppins tracking-widest ${activeTab === i ? "text-[#FD9A00]" : "text-gray-400 dark:text-gray-500"} ${bn}`}>
                                         {isBn ? p.nameBn : p.name}
                                     </span>
                                     {p.originalPrice && (
-                                        <span className="text-xs text-gray-400 line-through font-teko leading-none">
+                                        <span className="text-xs text-gray-400 line-through font-poppins leading-none">
                                             ৳{p.originalPrice.toLocaleString()}
                                         </span>
                                     )}
-                                    <span className={`text-2xl font-black font-teko leading-tight ${activeTab === i ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-500"}`}>
+                                    <span className={`text-2xl font-black font-poppins leading-tight ${activeTab === i ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-500"}`}>
                                         ৳{p.price.toLocaleString()}
                                     </span>
                                     {/* Active underline */}
@@ -141,7 +141,7 @@ export default function CategoryView({ slug }) {
                                             {t("Most Popular", "সবচেয়ে জনপ্রিয়")}
                                         </span>
                                     )}
-                                    <h3 className={`text-2xl font-black uppercase font-teko tracking-wide text-gray-900 dark:text-white mb-1 ${bn}`}>
+                                    <h3 className={`text-2xl font-black uppercase font-poppins tracking-wide text-gray-900 dark:text-white mb-1 ${bn}`}>
                                         {isBn ? plan.nameBn : plan.name}
                                     </h3>
                                     <p className={`text-xs text-gray-500 dark:text-gray-400 mb-6 leading-relaxed ${bn}`}>
@@ -150,7 +150,7 @@ export default function CategoryView({ slug }) {
                                     <div className="mb-1">
                                         {plan.originalPrice && (
                                             <div className="flex items-center gap-2 mb-1">
-                                                <span className="text-lg text-gray-400 line-through font-teko">
+                                                <span className="text-lg text-gray-400 line-through font-poppins">
                                                     ৳{plan.originalPrice.toLocaleString()}
                                                 </span>
                                                 <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-500/20 text-red-500">
@@ -158,7 +158,7 @@ export default function CategoryView({ slug }) {
                                                 </span>
                                             </div>
                                         )}
-                                        <span className="text-5xl font-black font-teko text-gray-900 dark:text-white leading-none">
+                                        <span className="text-5xl font-black font-poppins text-gray-900 dark:text-white leading-none">
                                             ৳{plan.price.toLocaleString()}
                                         </span>
                                     </div>
@@ -176,7 +176,7 @@ export default function CategoryView({ slug }) {
 
                                     {/* Domino Chain strip */}
                                     {plan.dominoChain && (
-                                        <div className="mb-5 p-4 rounded-2xl bg-gradient-to-r from-[#FD9A00]/10 via-[#FD9A00]/5 to-[#C4EE18]/10 border border-[#FD9A00]/20">
+                                        <div className="mb-5 p-4 rounded-2xl bg-gradient-to-r from-[#FD9A00]/10 via-[#FD9A00]/5 to-[#0CB2A9]/10 border border-[#FD9A00]/20">
                                             <p className={`text-[10px] font-black uppercase tracking-[0.2em] text-[#FD9A00] mb-2 ${bn}`}>
                                                 ⚡ {isBn ? plan.dominoChain.labelBn : plan.dominoChain.label}
                                             </p>
@@ -242,12 +242,12 @@ export default function CategoryView({ slug }) {
                     <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
                         <div>
                             <div className="flex items-center gap-3 mb-3">
-                                <div className="w-10 h-[2px] bg-[#C4EE18]" />
+                                <div className="w-10 h-[2px] bg-[#0CB2A9]" />
                                 <span className={`text-[10px] font-black text-[#7a9100] uppercase tracking-[0.4em] ${bn}`}>
                                     {t("Ready-Made", "রেডিমেড")}
                                 </span>
                             </div>
-                            <h2 className={`text-4xl lg:text-5xl font-black uppercase font-teko text-gray-900 dark:text-white leading-none ${bn}`}>
+                            <h2 className={`text-4xl lg:text-5xl font-black uppercase font-poppins text-gray-900 dark:text-white leading-none ${bn}`}>
                                 {name} <span className="text-[#FD9A00]">{t("Templates", "টেমপ্লেট")}</span>
                             </h2>
                         </div>

@@ -23,8 +23,8 @@ const CompanyLogos = () => {
         <section className="py-24 bg-white dark:bg-[#050505] border-t border-gray-100 dark:border-white/5 overflow-hidden">
             <div className="container mx-auto px-6 mb-16">
                 <div className="flex flex-col items-center">
-                    <div className="w-16 h-[2px] bg-[#C4EE18] mb-6"></div>
-                    <h3 className={`text-3xl md:text-5xl font-black uppercase font-teko text-center text-gray-900 dark:text-white ${bengaliClass}`}>
+                    <div className="w-16 h-[2px] bg-[#0CB2A9] mb-6"></div>
+                    <h3 className={`text-3xl md:text-5xl font-black uppercase font-poppins text-center text-gray-900 dark:text-white ${bengaliClass}`}>
                         {language === 'bn' ? 'আমাদের শিক্ষার্থীরা যেখানে কাজ করছে' : 'Building Future With Top Companies'}
                     </h3>
                     <p className="mt-4 text-gray-500 dark:text-gray-400 max-w-2xl text-center text-sm uppercase tracking-widest">

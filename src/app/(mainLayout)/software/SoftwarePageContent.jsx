@@ -17,7 +17,7 @@ const RightSoftwareDetails = dynamic(
 // Loading fallback component
 const LoadingFallback = () => (
     <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-4 border-[#C4EE18] border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-4 border-[#0CB2A9] border-t-transparent rounded-full animate-spin"></div>
     </div>
 );
 
@@ -40,7 +40,7 @@ export default function SoftwarePageContent({ initialSoftware = [] }) {
     if (!mounted) return <LoadingFallback />;
 
     return (
-        <div className="min-h-screen bg-white dark:bg-black transition-colors duration-300 relative selection:bg-[#C4EE18] selection:text-black">
+        <div className="min-h-screen bg-white dark:bg-black transition-colors duration-300 relative selection:bg-[#0CB2A9] selection:text-black">
             {/* Unified Filtered Background - Spans entire page */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
@@ -87,7 +87,7 @@ export default function SoftwarePageContent({ initialSoftware = [] }) {
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.3, duration: 0.8 }}
-                                className={`text-5xl lg:text-7xl font-black text-gray-950 dark:text-white mb-3 uppercase leading-[0.85] tracking-tighter font-teko ${bengaliClass}`}
+                                className={`text-5xl lg:text-7xl font-black text-gray-950 dark:text-white mb-3 uppercase leading-[0.85] tracking-tighter font-poppins ${bengaliClass}`}
                             >
                                 {language === 'bn' ? 'আমাদের' : 'Our Software '}<span className="text-[#FD9A00]">{language === 'bn' ? 'মার্কেটপ্লেস' : 'Marketplace'}</span>
                             </motion.h1>
@@ -124,7 +124,7 @@ export default function SoftwarePageContent({ initialSoftware = [] }) {
                                         <LuCpu className="text-gray-400 group-hover:text-[#FD9A00] transition-colors text-xl" />
                                     </div>
                                     <div>
-                                        <p className="text-2xl font-black text-gray-900 dark:text-white font-teko leading-none mb-1">{softwareList.length || '0'}+</p>
+                                        <p className="text-2xl font-black text-gray-900 dark:text-white font-poppins leading-none mb-1">{softwareList.length || '0'}+</p>
                                         <p className={`text-[11px] font-bold text-gray-400 uppercase tracking-widest ${bengaliClass}`}>{language === 'bn' ? 'সফটওয়্যার' : 'Software'}</p>
                                     </div>
                                 </div>
@@ -136,7 +136,7 @@ export default function SoftwarePageContent({ initialSoftware = [] }) {
                                         <LuPlus className="text-gray-400 group-hover:text-[#FD9A00] transition-colors text-xl" />
                                     </div>
                                     <div>
-                                        <p className="text-2xl font-black text-gray-900 dark:text-white font-teko leading-none mb-1">24/7</p>
+                                        <p className="text-2xl font-black text-gray-900 dark:text-white font-poppins leading-none mb-1">24/7</p>
                                         <p className={`text-[11px] font-bold text-gray-400 uppercase tracking-widest ${bengaliClass}`}>{language === 'bn' ? 'সাপোর্ট' : 'Support'}</p>
                                     </div>
                                 </div>

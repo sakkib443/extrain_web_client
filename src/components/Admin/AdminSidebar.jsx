@@ -119,6 +119,17 @@ const AdminSidebar = () => {
       gradient: 'from-green-500 to-emerald-500'
     },
     {
+      title: 'Project Tracker',
+      icon: FiClipboard,
+      gradient: 'from-teal-500 to-emerald-600',
+      submenu: [
+        { title: 'Overview', href: '/dashboard/admin/project-tracker', icon: FiGrid },
+        { title: 'Projects', href: '/dashboard/admin/project-tracker/projects', icon: FiUsers },
+        { title: 'Add Project', href: '/dashboard/admin/project-tracker/projects/create', icon: FiFileText },
+        { title: 'Expenses', href: '/dashboard/admin/project-tracker/expenses', icon: FiCreditCard },
+      ],
+    },
+    {
       title: 'Customization',
       href: '/dashboard/admin/customization',
       icon: FiClipboard,
@@ -198,7 +209,7 @@ const AdminSidebar = () => {
         {/* Logo */}
         <div className={`relative px-6 py-5 border-b ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
           <Link href="/" className="block w-32 h-10 group">
-            <img src="/images/logo.png" alt="Extrain Web" className="w-full h-full object-contain group-hover:opacity-80 transition-opacity" />
+            <img src="/extrain-logo.png" alt="Extrain Web" className={`w-full h-full object-contain group-hover:opacity-80 transition-opacity ${isDark ? 'brightness-0 invert' : ''}`} />
           </Link>
         </div>
 

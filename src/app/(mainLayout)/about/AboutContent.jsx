@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import {
     FiCheck,
     FiUsers,
@@ -28,7 +28,7 @@ const SectionLabel = ({ text }) => (
         className="inline-flex items-center gap-3 mb-4 lg:mb-8"
     >
         <div className="w-12 h-[2px] bg-[#FD9A00]" />
-        <span className="text-sm lg:text-base uppercase tracking-widest font-bold text-[#FD9A00] font-teko">
+        <span className="text-sm lg:text-base uppercase tracking-widest font-bold text-[#FD9A00] font-poppins">
             {text}
         </span>
     </motion.div>
@@ -37,16 +37,9 @@ const SectionLabel = ({ text }) => (
 export default function AboutContent() {
     const { language } = useLanguage();
     const isBN = language === 'bn';
-    const containerRef = useRef(null);
-
-    // Parallax
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end end"]
-    });
 
     return (
-        <div ref={containerRef} className="relative bg-white dark:bg-[#0A0A0A] selection:bg-[#FD9A00] selection:text-black font-poppins text-gray-900 dark:text-white overflow-hidden">
+        <div className="relative bg-white dark:bg-[#0A0A0A] selection:bg-[#FD9A00] selection:text-black font-poppins text-gray-900 dark:text-white overflow-hidden">
 
             {/* Background Grid */}
             <div className="fixed inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]"
@@ -72,7 +65,7 @@ export default function AboutContent() {
                             <div className="relative mb-6">
                                 <motion.h1
                                     variants={fadeInUp}
-                                    className="text-[10vw] lg:text-[5rem] leading-[0.85] font-black uppercase font-teko text-gray-950 dark:text-white"
+                                    className="text-[10vw] lg:text-[5rem] leading-[0.85] font-black uppercase font-poppins text-gray-950 dark:text-white"
                                 >
                                     WE ARE <br />
                                     <span className="text-[#FD9A00]">EXTRAIN.</span>
@@ -99,10 +92,10 @@ export default function AboutContent() {
                             </motion.p>
 
                             <motion.div variants={fadeInUp} className="flex gap-6">
-                                <Link href="/contact" className="px-8 py-3 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold font-teko uppercase text-xl rounded-none transition-all shadow-lg shadow-[#FD9A00]/20">
+                                <Link href="/contact" className="px-8 py-3 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold font-poppins uppercase text-xl rounded-none transition-all shadow-lg shadow-[#FD9A00]/20">
                                     {isBN ? "যোগাযোগ করুন" : "Get in Touch"}
                                 </Link>
-                                <Link href="/portfolio" className="px-8 py-3 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 hover:border-[#FD9A00] text-gray-900 dark:text-white font-bold font-teko uppercase text-xl rounded-none transition-all">
+                                <Link href="/portfolio" className="px-8 py-3 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 hover:border-[#FD9A00] text-gray-900 dark:text-white font-bold font-poppins uppercase text-xl rounded-none transition-all">
                                     {isBN ? "পোর্টফোলিও" : "Our Portfolio"}
                                 </Link>
                             </motion.div>
@@ -123,7 +116,7 @@ export default function AboutContent() {
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                                 <div className="absolute bottom-10 left-10 text-white">
                                     <div className="flex items-end gap-2 mb-1">
-                                        <span className="text-6xl font-black font-teko leading-none text-[#FD9A00]">5+</span>
+                                        <span className="text-6xl font-black font-poppins leading-none text-[#FD9A00]">5+</span>
                                         <span className="text-lg font-medium mb-1">Years</span>
                                     </div>
                                     <p className="uppercase tracking-widest text-sm opacity-80">Of Digital Excellence</p>
@@ -150,7 +143,7 @@ export default function AboutContent() {
                     <div className="grid lg:grid-cols-2 gap-20">
                         <div>
                             <SectionLabel text={isBN ? "মিশন" : "OUR MISSION"} />
-                            <h2 className="text-4xl lg:text-6xl font-black uppercase font-teko leading-[0.9] text-gray-900 dark:text-white mb-8">
+                            <h2 className="text-4xl lg:text-6xl font-black uppercase font-poppins leading-[0.9] text-gray-900 dark:text-white mb-8">
                                 EMPOWERING <span className="text-[#FD9A00]">NEXT-GEN</span> <br />
                                 DIGITAL LEADERS.
                             </h2>
@@ -169,7 +162,7 @@ export default function AboutContent() {
                                 ].map((item, idx) => (
                                     <div key={idx} className="p-6 border border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 rounded-xl hover:border-[#FD9A00] transition-colors group">
                                         <item.icon className="text-[#FD9A00] text-2xl mb-4 group-hover:scale-110 transition-transform" />
-                                        <h3 className="font-bold text-lg font-teko uppercase tracking-wide mb-2">{item.title}</h3>
+                                        <h3 className="font-bold text-lg font-poppins uppercase tracking-wide mb-2">{item.title}</h3>
                                         <p className="text-sm text-gray-500 dark:text-gray-400">{item.desc}</p>
                                     </div>
                                 ))}
@@ -203,7 +196,7 @@ export default function AboutContent() {
                                             { num: "5+", label: isBN ? "বছরের অভিজ্ঞতা" : "Years Experience" },
                                         ].map((stat, idx) => (
                                             <div key={idx} className="text-center bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-                                                <span className="text-3xl font-black font-teko text-[#FD9A00] block">{stat.num}</span>
+                                                <span className="text-3xl font-black font-poppins text-[#FD9A00] block">{stat.num}</span>
                                                 <span className="text-xs text-white/80 font-medium">{stat.label}</span>
                                             </div>
                                         ))}
@@ -215,7 +208,7 @@ export default function AboutContent() {
                         {/* Right - Content */}
                         <div>
                             <SectionLabel text={isBN ? "কেন আমরা" : "WHY CHOOSE US"} />
-                            <h2 className="text-4xl lg:text-6xl font-black uppercase font-teko leading-[0.9] text-gray-900 dark:text-white mb-6">
+                            <h2 className="text-4xl lg:text-6xl font-black uppercase font-poppins leading-[0.9] text-gray-900 dark:text-white mb-6">
                                 {isBN ? (
                                     <>আমরা শুধু কোড <span className="text-[#FD9A00]">লিখি না,</span><br />অভিজ্ঞতা তৈরি করি</>
                                 ) : (
@@ -247,10 +240,10 @@ export default function AboutContent() {
                             </div>
 
                             <div className="flex gap-4">
-                                <Link href="/contact" className="px-8 py-3 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold font-teko uppercase text-xl rounded-none transition-all shadow-lg shadow-[#FD9A00]/20">
+                                <Link href="/contact" className="px-8 py-3 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold font-poppins uppercase text-xl rounded-none transition-all shadow-lg shadow-[#FD9A00]/20">
                                     {isBN ? "আমাদের সাথে কথা বলুন" : "Talk to Us"}
                                 </Link>
-                                <Link href="/website" className="px-8 py-3 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 hover:border-[#FD9A00] text-gray-900 dark:text-white font-bold font-teko uppercase text-xl rounded-none transition-all">
+                                <Link href="/website" className="px-8 py-3 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 hover:border-[#FD9A00] text-gray-900 dark:text-white font-bold font-poppins uppercase text-xl rounded-none transition-all">
                                     {isBN ? "আমাদের কাজ দেখুন" : "See Our Work"}
                                 </Link>
                             </div>
@@ -263,13 +256,13 @@ export default function AboutContent() {
             <section className="py-32 bg-[#FD9A00] relative overflow-hidden">
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
                 <div className="container mx-auto px-6 lg:px-12 text-center relative z-10">
-                    <h2 className="text-5xl lg:text-[7rem] leading-[0.8] font-black uppercase font-teko text-black mb-8">
+                    <h2 className="text-5xl lg:text-[7rem] leading-[0.8] font-black uppercase font-poppins text-black mb-8">
                         LET'S BUILD <br /> THE FUTURE
                     </h2>
                     <p className="text-xl text-black/70 max-w-2xl mx-auto mb-12 font-medium">
                         Ready to transform your digital presence? Join thousands of satisfied clients who trust Extrain Web.
                     </p>
-                    <Link href="/contact" className="inline-block px-12 py-5 bg-black text-white text-2xl font-bold font-teko uppercase tracking-widest hover:scale-105 transition-transform shadow-2xl">
+                    <Link href="/contact" className="inline-block px-12 py-5 bg-black text-white text-2xl font-bold font-poppins uppercase tracking-widest hover:scale-105 transition-transform shadow-2xl">
                         Start A Project
                     </Link>
                 </div>

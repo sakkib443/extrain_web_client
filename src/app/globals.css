@@ -39,13 +39,14 @@
   --color-white: #ffffff;
 
   /* Font Families */
-  --font-heading: var(--font-teko), sans-serif;
+  --font-heading: var(--font-poppins), sans-serif;
   --font-body: var(--font-poppins), sans-serif;
   --font-bengali: "Hind Siliguri", sans-serif;
 }
 
+/* Legacy alias — Teko removed, now renders Poppins */
 .font-teko {
-  font-family: var(--font-teko), sans-serif !important;
+  font-family: var(--font-poppins), sans-serif !important;
 }
 
 /* =====================================================
@@ -112,7 +113,7 @@ body.font-bengali .font-icon {
    ===================================================== */
 
 .font-outfit {
-  font-family: var(--font-teko) !important;
+  font-family: var(--font-poppins) !important;
 }
 
 .font-poppins {
@@ -921,7 +922,7 @@ nav[class*="sticky"] {
 
 .dark footer a:hover .text-gray-700,
 .dark footer a:hover.text-gray-700 {
-  color: #41bfb8 !important;
+  color: #0CB2A9 !important;
 }
 
 /* Footer Input */
@@ -952,14 +953,14 @@ nav[class*="sticky"] {
 }
 
 /* Footer CTA Box */
-.dark footer [class*="from-[#41bfb8]/10"] {
-  background: linear-gradient(to right, rgba(65, 191, 184, 0.2), rgba(247, 153, 82, 0.2)) !important;
+.dark footer [class*="from-[#0CB2A9]/10"] {
+  background: linear-gradient(to right, rgba(12, 178, 169, 0.2), rgba(247, 153, 82, 0.2)) !important;
 }
 
 /* Footer Contact Icons Background */
-.dark footer [class*="bg-[#41bfb8]/10"],
+.dark footer [class*="bg-[#0CB2A9]/10"],
 .dark footer [class*="bg-[#F79952]/10"] {
-  background: rgba(65, 191, 184, 0.2) !important;
+  background: rgba(12, 178, 169, 0.2) !important;
 }
 
 /* =====================================================
@@ -985,7 +986,7 @@ nav[class*="sticky"] {
 }
 
 /* Hero Badge */
-.dark section[class*="from-[#e8f9f9]"] [class*="bg-[#41bfb8]/10"] {
+.dark section[class*="from-[#e8f9f9]"] [class*="bg-[#0CB2A9]/10"] {
   background: rgba(30, 41, 59, 0.8) !important;
   border-color: rgba(71, 85, 105, 0.5) !important;
 }
@@ -1001,7 +1002,7 @@ nav[class*="sticky"] {
 }
 
 /* Hero Stats Card Background */
-.dark section[class*="from-[#e8f9f9]"] [class*="bg-[#41bfb8]/10"].rounded-md,
+.dark section[class*="from-[#e8f9f9]"] [class*="bg-[#0CB2A9]/10"].rounded-md,
 .dark section[class*="from-[#e8f9f9]"] [class*="bg-[#F79952]/10"].rounded-md {
   background: rgba(30, 41, 59, 0.8) !important;
 }

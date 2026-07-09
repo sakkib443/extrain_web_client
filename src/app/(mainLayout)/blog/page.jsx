@@ -150,7 +150,7 @@ export default function BlogPage() {
                         </div>
 
                         {/* Title - Smaller */}
-                        <h1 className={`text-5xl lg:text-7xl font-black text-gray-950 dark:text-white mb-6 uppercase leading-[0.85] tracking-tighter font-teko ${bengaliClass}`}>
+                        <h1 className={`text-5xl lg:text-7xl font-black text-gray-950 dark:text-white mb-6 uppercase leading-[0.85] tracking-tighter font-poppins ${bengaliClass}`}>
                             {language === 'bn' ? 'জ্ঞান ও ' : 'Knowledge & '}
                             <span className="text-[#FD9A00]">{language === 'bn' ? 'অনুপ্রেরণা' : 'Inspiration'}</span>
                         </h1>
@@ -186,7 +186,7 @@ export default function BlogPage() {
                                             <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black" />
                                         )}
                                         {/* Category Badge on Image */}
-                                        <span className={`absolute top-6 left-6 px-4 py-2 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 text-white text-[12px] font-bold font-teko uppercase tracking-widest ${bengaliClass}`}>
+                                        <span className={`absolute top-6 left-6 px-4 py-2 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 text-white text-[12px] font-bold font-poppins uppercase tracking-widest ${bengaliClass}`}>
                                             {(featuredBlogs[0] || blogs[0]).category?.name || 'Featured'}
                                         </span>
                                     </div>
@@ -194,7 +194,7 @@ export default function BlogPage() {
                                     {/* Content Below Image */}
                                     <div className="p-8 flex-1 flex flex-col">
                                         {/* Title */}
-                                        <h2 className={`text-3xl font-bold font-teko uppercase text-gray-900 dark:text-white mb-4 leading-[0.9] group-hover:text-[#FD9A00] transition-colors line-clamp-2 ${bengaliClass}`}>
+                                        <h2 className={`text-3xl font-bold font-poppins uppercase text-gray-900 dark:text-white mb-4 leading-[0.9] group-hover:text-[#FD9A00] transition-colors line-clamp-2 ${bengaliClass}`}>
                                             {(featuredBlogs[0] || blogs[0]).title}
                                         </h2>
 
@@ -206,13 +206,13 @@ export default function BlogPage() {
                                         {/* Author & Date */}
                                         <div className="flex items-center gap-4 text-sm pt-6 border-t border-gray-200 dark:border-white/10">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-[#FD9A00]/20 flex items-center justify-center text-[#FD9A00] text-sm font-bold font-teko">
+                                                <div className="w-10 h-10 rounded-full bg-[#FD9A00]/20 flex items-center justify-center text-[#FD9A00] text-sm font-bold font-poppins">
                                                     {(featuredBlogs[0] || blogs[0]).author?.firstName?.[0] || 'A'}
                                                 </div>
-                                                <span className={`font-bold font-teko uppercase tracking-wider text-gray-700 dark:text-gray-300 ${bengaliClass}`}>{(featuredBlogs[0] || blogs[0]).author?.firstName}</span>
+                                                <span className={`font-bold font-poppins uppercase tracking-wider text-gray-700 dark:text-gray-300 ${bengaliClass}`}>{(featuredBlogs[0] || blogs[0]).author?.firstName}</span>
                                             </div>
                                             <span className="text-gray-300 dark:text-gray-600">•</span>
-                                            <span className={`text-[#FD9A00] font-bold font-teko uppercase tracking-wider ${bengaliClass}`}>{formatDate((featuredBlogs[0] || blogs[0]).publishedAt || (featuredBlogs[0] || blogs[0]).createdAt)}</span>
+                                            <span className={`text-[#FD9A00] font-bold font-poppins uppercase tracking-wider ${bengaliClass}`}>{formatDate((featuredBlogs[0] || blogs[0]).publishedAt || (featuredBlogs[0] || blogs[0]).createdAt)}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -230,7 +230,7 @@ export default function BlogPage() {
                         <div className="flex gap-2 mb-6 p-1 bg-white dark:bg-black/20 rounded-xl border border-gray-100 dark:border-white/5">
                             <button
                                 onClick={() => setActiveTab('popular')}
-                                className={`flex-1 py-2.5 rounded-lg text-sm font-bold font-teko uppercase tracking-wider transition-all ${activeTab === 'popular'
+                                className={`flex-1 py-2.5 rounded-lg text-sm font-bold font-poppins uppercase tracking-wider transition-all ${activeTab === 'popular'
                                     ? 'bg-[#FD9A00] text-white shadow-md'
                                     : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5'
                                     } ${bengaliClass}`}
@@ -239,7 +239,7 @@ export default function BlogPage() {
                             </button>
                             <button
                                 onClick={() => setActiveTab('recent')}
-                                className={`flex-1 py-2.5 rounded-lg text-sm font-bold font-teko uppercase tracking-wider transition-all ${activeTab === 'recent'
+                                className={`flex-1 py-2.5 rounded-lg text-sm font-bold font-poppins uppercase tracking-wider transition-all ${activeTab === 'recent'
                                     ? 'bg-[#FD9A00] text-white shadow-md'
                                     : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5'
                                     } ${bengaliClass}`}
@@ -267,10 +267,10 @@ export default function BlogPage() {
                                         )}
                                     </div>
                                     <div className="flex-1 min-w-0 py-1">
-                                        <h4 className={`font-bold font-teko uppercase text-gray-800 dark:text-white text-lg leading-[0.9] line-clamp-2 group-hover:text-[#FD9A00] transition-colors mb-1 ${bengaliClass}`}>
+                                        <h4 className={`font-bold font-poppins uppercase text-gray-800 dark:text-white text-lg leading-[0.9] line-clamp-2 group-hover:text-[#FD9A00] transition-colors mb-1 ${bengaliClass}`}>
                                             {blog.title}
                                         </h4>
-                                        <p className={`text-[11px] font-bold text-[#FD9A00] font-teko uppercase tracking-wider mt-1 ${bengaliClass}`}>
+                                        <p className={`text-[11px] font-bold text-[#FD9A00] font-poppins uppercase tracking-wider mt-1 ${bengaliClass}`}>
                                             {formatDate(blog.publishedAt || blog.createdAt)}
                                         </p>
                                     </div>
@@ -282,7 +282,7 @@ export default function BlogPage() {
 
                 {/* Blog Cards Section Header */}
                 <div className="flex items-center justify-between mb-8">
-                    <h2 className={`text-4xl font-black font-teko uppercase text-gray-900 dark:text-white ${bengaliClass}`}>
+                    <h2 className={`text-4xl font-black font-poppins uppercase text-gray-900 dark:text-white ${bengaliClass}`}>
                         {language === 'bn' ? 'সকল আর্টিকেল' : 'All Articles'}
                     </h2>
                 </div>
@@ -293,7 +293,7 @@ export default function BlogPage() {
                         <div className="w-20 h-20 mx-auto mb-6 bg-[#FD9A00]/10 rounded-2xl flex items-center justify-center">
                             <FiBookOpen className="text-[#FD9A00]" size={32} />
                         </div>
-                        <h3 className={`text-xl font-bold font-teko uppercase text-gray-800 dark:text-white mb-2 ${bengaliClass}`}>{text.noBlogsFound}</h3>
+                        <h3 className={`text-xl font-bold font-poppins uppercase text-gray-800 dark:text-white mb-2 ${bengaliClass}`}>{text.noBlogsFound}</h3>
                         <p className={`text-gray-500 dark:text-gray-400 ${bengaliClass}`}>{text.comingSoon}</p>
                     </div>
                 ) : (
@@ -325,14 +325,14 @@ export default function BlogPage() {
 
                                             {/* Category Badge */}
                                             <div className="absolute top-4 left-4">
-                                                <span className={`px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-md text-[10px] font-bold font-teko uppercase tracking-widest text-white border border-white/10 ${bengaliClass}`}>
+                                                <span className={`px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-md text-[10px] font-bold font-poppins uppercase tracking-widest text-white border border-white/10 ${bengaliClass}`}>
                                                     {blog.category?.name || (language === 'bn' ? 'ব্লগ' : 'Blog')}
                                                 </span>
                                             </div>
 
                                             {/* Reading Time Badge */}
                                             <div className="absolute top-4 right-4">
-                                                <span className={`px-3 py-1.5 rounded-lg bg-[#FD9A00] text-black text-[10px] font-bold font-teko uppercase tracking-widest flex items-center gap-1.5 ${bengaliClass}`}>
+                                                <span className={`px-3 py-1.5 rounded-lg bg-[#FD9A00] text-black text-[10px] font-bold font-poppins uppercase tracking-widest flex items-center gap-1.5 ${bengaliClass}`}>
                                                     <FiClock size={12} />
                                                     5 {text.min}
                                                 </span>
@@ -343,11 +343,11 @@ export default function BlogPage() {
                                         <div className="p-6 flex-1 flex flex-col">
                                             {/* Meta Info */}
                                             <div className="flex items-center gap-3 mb-4">
-                                                <div className="w-8 h-8 rounded-full bg-[#FD9A00]/20 flex items-center justify-center text-[#FD9A00] text-xs font-bold font-teko">
+                                                <div className="w-8 h-8 rounded-full bg-[#FD9A00]/20 flex items-center justify-center text-[#FD9A00] text-xs font-bold font-poppins">
                                                     {blog.author?.firstName?.[0] || 'A'}
                                                 </div>
                                                 <div>
-                                                    <p className={`text-sm font-bold font-teko uppercase tracking-wider text-gray-800 dark:text-white ${bengaliClass}`}>
+                                                    <p className={`text-sm font-bold font-poppins uppercase tracking-wider text-gray-800 dark:text-white ${bengaliClass}`}>
                                                         {blog.author?.firstName || 'Author'}
                                                     </p>
                                                     <p className={`text-[10px] font-bold text-gray-400 uppercase tracking-widest ${bengaliClass}`}>
@@ -357,7 +357,7 @@ export default function BlogPage() {
                                             </div>
 
                                             {/* Title */}
-                                            <h3 className={`text-2xl font-bold font-teko uppercase text-gray-900 dark:text-white group-hover:text-[#FD9A00] transition-colors duration-300 line-clamp-2 mb-3 leading-[0.9] ${bengaliClass}`}>
+                                            <h3 className={`text-2xl font-bold font-poppins uppercase text-gray-900 dark:text-white group-hover:text-[#FD9A00] transition-colors duration-300 line-clamp-2 mb-3 leading-[0.9] ${bengaliClass}`}>
                                                 {blog.title}
                                             </h3>
 
@@ -368,13 +368,13 @@ export default function BlogPage() {
 
                                             {/* Read More */}
                                             <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-white/10 mt-auto">
-                                                <span className={`text-sm font-bold font-teko uppercase tracking-wider text-[#FD9A00] group-hover:text-white transition-colors flex items-center gap-2 ${bengaliClass}`}>
+                                                <span className={`text-sm font-bold font-poppins uppercase tracking-wider text-[#FD9A00] group-hover:text-white transition-colors flex items-center gap-2 ${bengaliClass}`}>
                                                     {language === 'bn' ? 'আরো পড়ুন' : 'Read More'}
                                                     <FiArrowRight className="group-hover:translate-x-1 transition-transform" size={16} />
                                                 </span>
                                                 <div className="flex items-center gap-1 text-gray-400">
                                                     <FiTrendingUp size={14} />
-                                                    <span className="text-xs font-bold font-teko">{blog.views || 0}</span>
+                                                    <span className="text-xs font-bold font-poppins">{blog.views || 0}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -399,7 +399,7 @@ export default function BlogPage() {
                             <button
                                 key={page}
                                 onClick={() => setCurrentPage(page)}
-                                className={`w-12 h-12 rounded-xl font-bold font-teko text-lg transition-all ${currentPage === page
+                                className={`w-12 h-12 rounded-xl font-bold font-poppins text-lg transition-all ${currentPage === page
                                     ? 'bg-[#FD9A00] text-white shadow-lg shadow-[#FD9A00]/30'
                                     : 'bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:bg-[#FD9A00] hover:border-[#FD9A00] hover:text-white'
                                     }`}

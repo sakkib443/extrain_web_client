@@ -58,21 +58,6 @@ const Preloader = () => {
         }
     }, [progress]);
 
-    // Stagger animation for letters
-    const logoText = "EXTRAIN WEB";
-    const letterVariants = {
-        hidden: { opacity: 0, y: 30 },
-        visible: (i) => ({
-            opacity: 1,
-            y: 0,
-            transition: {
-                delay: i * 0.03,
-                duration: 0.3,
-                ease: [0.6, -0.05, 0.01, 0.99]
-            }
-        })
-    };
-
     return (
         <AnimatePresence>
             {loading && (
@@ -106,7 +91,7 @@ const Preloader = () => {
                             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                         />
                         <motion.div
-                            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#C4EE18]/10 rounded-full blur-[150px]"
+                            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#0CB2A9]/10 rounded-full blur-[150px]"
                             animate={{
                                 scale: [1, 1.2, 1],
                                 x: [0, -40, 0],
@@ -127,46 +112,31 @@ const Preloader = () => {
                                 Assalamu Alaikum
                             </motion.p>
 
-                            {/* Animated Logo Letters */}
+                            {/* Animated Logo */}
                             <div className="overflow-hidden mb-6">
-                                <motion.div
-                                    className="flex"
-                                    initial="hidden"
-                                    animate="visible"
-                                >
-                                    {logoText.split("").map((char, i) => (
-                                        <motion.span
-                                            key={i}
-                                            custom={i}
-                                            variants={letterVariants}
-                                            className={`text-3xl md:text-5xl lg:text-6xl font-black font-teko tracking-tight ${char === " " ? "mx-2" : ""
-                                                } ${i >= 7 ? "text-[#FD9A00]" : "text-white"}`}
-                                        >
-                                            {char}
-                                        </motion.span>
-                                    ))}
-                                    <motion.span
-                                        custom={logoText.length}
-                                        variants={letterVariants}
-                                        className="text-3xl md:text-5xl lg:text-6xl font-black font-teko text-[#C4EE18]"
-                                    >
-                                        .
-                                    </motion.span>
-                                </motion.div>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <motion.img
+                                    src="/extrain-logo.png"
+                                    alt="Extrain Web"
+                                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                    className="h-12 md:h-16 lg:h-20 w-auto object-contain brightness-0 invert"
+                                />
                             </div>
 
                             {/* Progress Number */}
                             <div className="relative mb-8">
-                                <div className="text-[80px] md:text-[120px] lg:text-[160px] font-black text-white/5 font-teko leading-none select-none">
+                                <div className="text-[80px] md:text-[120px] lg:text-[160px] font-black text-white/5 font-poppins leading-none select-none">
                                     {progress.toString().padStart(2, '0')}
                                 </div>
 
                                 {/* Overlay Number */}
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-[60px] md:text-[100px] lg:text-[130px] font-black font-teko leading-none bg-gradient-to-r from-[#FD9A00] via-[#FFBA4F] to-[#C4EE18] bg-clip-text text-transparent">
+                                    <span className="text-[60px] md:text-[100px] lg:text-[130px] font-black font-poppins leading-none bg-gradient-to-r from-[#FD9A00] via-[#FFBA4F] to-[#0CB2A9] bg-clip-text text-transparent">
                                         {progress.toString().padStart(2, '0')}
                                     </span>
-                                    <span className="text-[30px] md:text-[50px] text-[#C4EE18] font-bold font-teko">%</span>
+                                    <span className="text-[30px] md:text-[50px] text-[#0CB2A9] font-bold font-poppins">%</span>
                                 </div>
                             </div>
 
@@ -174,7 +144,7 @@ const Preloader = () => {
                             <div className="w-[200px] md:w-[300px] relative">
                                 <div className="h-[2px] bg-white/10 rounded-full overflow-hidden">
                                     <motion.div
-                                        className="h-full bg-gradient-to-r from-[#FD9A00] via-[#FFBA4F] to-[#C4EE18] rounded-full"
+                                        className="h-full bg-gradient-to-r from-[#FD9A00] via-[#FFBA4F] to-[#0CB2A9] rounded-full"
                                         style={{ width: `${progress}%` }}
                                     />
                                 </div>
@@ -204,7 +174,7 @@ const Preloader = () => {
 
                     {/* Reveal Overlay - Green (Stays on top and moves up) */}
                     <motion.div
-                        className="absolute inset-0 bg-[#C4EE18]"
+                        className="absolute inset-0 bg-[#0CB2A9]"
                         initial={{ y: "100%" }}
                         animate={phase === 2 ? { y: 0 } : { y: "100%" }}
                         transition={{

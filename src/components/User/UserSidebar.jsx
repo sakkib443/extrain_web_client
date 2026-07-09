@@ -167,7 +167,7 @@ const UserSidebar = () => {
                 {/* Logo */}
                 <div className={`relative px-6 py-5 border-b ${isDark ? 'border-white/5' : 'border-slate-200'}`}>
                     <Link href="/" className="block w-32 h-10 group">
-                        <img src="/images/logo.png" alt="Extrain Web" className="w-full h-full object-contain group-hover:opacity-80 transition-opacity" />
+                        <img src="/extrain-logo.png" alt="Extrain Web" className={`w-full h-full object-contain group-hover:opacity-80 transition-opacity ${isDark ? 'brightness-0 invert' : ''}`} />
                     </Link>
                 </div>
 

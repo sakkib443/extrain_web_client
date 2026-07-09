@@ -52,7 +52,7 @@ const IeltsPricing = () => {
         {
             title: language === 'bn' ? "অ্যাডমিন প্যানেল" : "Admin Panel",
             icon: LuShield,
-            color: "#C4EE18",
+            color: "#0CB2A9",
             features: [
                 language === 'bn' ? "সব রেজাল্ট দেখুন ও স্কোর পাবলিশ" : "View All Results & Publish Scores",
                 language === 'bn' ? "স্টুডেন্ট ম্যানেজমেন্ট ও এক্সাম ID তৈরি" : "Student Management & Exam ID Creation",
@@ -201,12 +201,12 @@ const IeltsPricing = () => {
 
     const colorClasses = {
         secondary: {
-            bg: "bg-[#C4EE18]/10",
-            text: "text-[#C4EE18]",
-            border: "border-[#C4EE18]/30",
-            button: "bg-[#C4EE18] hover:bg-[#b3dc15] text-gray-900",
-            gradient: "from-[#C4EE18] to-[#9fc412]",
-            shadow: "shadow-[#C4EE18]/30"
+            bg: "bg-[#0CB2A9]/10",
+            text: "text-[#0CB2A9]",
+            border: "border-[#0CB2A9]/30",
+            button: "bg-[#0CB2A9] hover:bg-[#b3dc15] text-gray-900",
+            gradient: "from-[#0CB2A9] to-[#9fc412]",
+            shadow: "shadow-[#0CB2A9]/30"
         },
         primary: {
             bg: "bg-[#FD9A00]/10",

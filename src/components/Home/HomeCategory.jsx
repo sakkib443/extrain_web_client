@@ -40,22 +40,22 @@ const HomeCategory = () => {
             {/* Background Elements - Static */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-20 left-[10%] w-72 h-72 bg-gradient-to-br from-[#FD9A00]/5 to-transparent rounded-full blur-3xl"></div>
-                <div className="absolute bottom-20 right-[10%] w-80 h-80 bg-gradient-to-br from-[#C4EE18]/5 to-transparent rounded-full blur-3xl"></div>
+                <div className="absolute bottom-20 right-[10%] w-80 h-80 bg-gradient-to-br from-[#0CB2A9]/5 to-transparent rounded-full blur-3xl"></div>
             </div>
 
             <div className='container mx-auto px-4 lg:px-16 relative z-10'>
                 {/* Section Header */}
                 <div className="flex flex-col items-center text-center mb-8 px-2">
                     <div className="flex items-center justify-center gap-3 mb-4">
-                        <div className="w-10 h-[2px] bg-[#C4EE18]" />
-                        <span className={`text-[10px] font-black text-[#C4EE18] uppercase tracking-[0.4em] ${bengaliClass}`}>
+                        <div className="w-10 h-[2px] bg-[#0CB2A9]" />
+                        <span className={`text-[10px] font-black text-[#0CB2A9] uppercase tracking-[0.4em] ${bengaliClass}`}>
                             {isBn ? 'আমাদের প্রোডাক্ট' : 'Our Products'}
                         </span>
-                        <div className="w-10 h-[2px] bg-[#C4EE18]" />
+                        <div className="w-10 h-[2px] bg-[#0CB2A9]" />
                     </div>
 
-                    <h2 className={`text-4xl lg:text-5xl font-black text-gray-950 dark:text-white mb-2 uppercase leading-[0.85] tracking-tighter max-w-3xl font-teko ${bengaliClass}`}>
-                        {isBn ? <>ক্যাটাগরি <span className="text-[#C4EE18]">অনুযায়ী খুঁজুন</span></> : <>Browse <span className="text-[#C4EE18]">by Category</span></>}
+                    <h2 className={`text-4xl lg:text-5xl font-black text-gray-950 dark:text-white mb-2 uppercase leading-[0.85] tracking-tighter max-w-3xl font-poppins ${bengaliClass}`}>
+                        {isBn ? <>ক্যাটাগরি <span className="text-[#0CB2A9]">অনুযায়ী খুঁজুন</span></> : <>Browse <span className="text-[#0CB2A9]">by Category</span></>}
                     </h2>
 
                     <div className="w-20 h-1 bg-gray-100 dark:bg-white/10 mb-2" />
