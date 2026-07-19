@@ -27,7 +27,8 @@ import {
     FiGlobe,
     FiShoppingBag,
     FiSettings,
-    FiHeart
+    FiHeart,
+    FiFileText
 } from 'react-icons/fi';
 import { useTheme } from '@/providers/ThemeProvider';
 
@@ -100,6 +101,12 @@ const UserSidebar = () => {
             href: '/dashboard/user/payments',
             icon: FiCreditCard,
             gradient: 'from-blue-500 to-indigo-500'
+        },
+        {
+            title: 'Money Receipts',
+            href: '/dashboard/user/receipts',
+            icon: FiFileText,
+            gradient: 'from-amber-500 to-orange-500'
         },
         {
             title: 'My Favorites',

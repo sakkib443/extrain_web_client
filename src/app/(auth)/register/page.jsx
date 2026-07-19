@@ -76,9 +76,24 @@ const Register = () => {
         throw new Error(data.message || "Registration failed");
       }
 
+      // রেজিস্টারের সাথে সাথে auto-login — আলাদা login লাগবে না
+      const token = data?.data?.token || data?.data?.tokens?.accessToken;
+      const userData = data?.data?.user;
       const searchParams = new URLSearchParams(window.location.search);
       const redirect = searchParams.get('redirect');
-      router.push(`/login${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`);
+
+      if (token && userData) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(userData));
+        if (redirect && !redirect.includes('/login') && !redirect.includes('/register')) {
+          router.push(redirect);
+        } else {
+          router.push(userData.role === "admin" ? "/dashboard/admin" : "/dashboard/user");
+        }
+      } else {
+        // token না পেলে fallback হিসেবে login পেজে
+        router.push(`/login${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ''}`);
+      }
     } catch (err) {
       setError(err.message);
     } finally {

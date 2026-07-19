@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
     FiHome,
-    FiBook,
     FiUsers,
     FiMessageSquare,
     FiImage,
@@ -21,7 +20,6 @@ import {
     FiSettings,
     FiLayers,
     FiCode,
-    FiPlay,
     FiStar,
     FiCreditCard,
     FiUserCheck,
@@ -78,19 +76,6 @@ const MentorSidebar = () => {
             gradient: 'from-indigo-500 to-purple-500'
         },
         // NO Analytics - Removed for Mentor
-        {
-            title: 'LMS',
-            icon: FiBook,
-            gradient: 'from-amber-500 to-orange-500',
-            submenu: [
-                { title: 'All Courses', href: '/dashboard/mentor/course', icon: FiBook },
-                { title: 'Create Course', href: '/dashboard/mentor/course/create', icon: FiFileText },
-                { title: 'All Modules', href: '/dashboard/mentor/module', icon: FiLayers },
-                { title: 'Create Module', href: '/dashboard/mentor/module/create', icon: FiFileText },
-                { title: 'All Lessons', href: '/dashboard/mentor/lesson', icon: FiPlay },
-                { title: 'Create Lesson', href: '/dashboard/mentor/lesson/create', icon: FiFileText },
-            ],
-        },
         {
             title: 'Marketplace',
             icon: FiGlobe,

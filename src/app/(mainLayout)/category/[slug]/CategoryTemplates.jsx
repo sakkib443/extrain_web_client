@@ -10,10 +10,9 @@ import { useLanguage } from "@/context/LanguageContext";
 const norm = (s) => (s || "").toString().toLowerCase().replace(/[^a-z0-9]/g, "");
 
 // Map a route slug to the category names/slugs that may exist in the backend
-// (backend data has typos/variations, e.g. "ecommercee", category "LMS" for learning-management).
+// (backend data has typos/variations, e.g. "ecommercee").
 const ALIASES = {
     ecommerce: ["ecommerce", "ecommercee", "e-commerce", "shop", "store"],
-    "learning-management": ["lms", "learning", "learning-management", "course", "education", "academy"],
     business: ["business", "corporate", "company", "agency", "startup"],
     portfolio: ["portfolio", "personal", "resume", "cv"],
     blog: ["blog", "news", "magazine", "article"],

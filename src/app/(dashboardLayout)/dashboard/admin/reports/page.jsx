@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import {
     FiDownload, FiFileText, FiPieChart, FiShoppingBag,
     FiUsers, FiCalendar, FiFilter, FiCheckCircle, FiActivity,
-    FiTrendingUp, FiDollarSign, FiBook, FiGlobe, FiCode,
+    FiTrendingUp, FiDollarSign, FiGlobe, FiCode,
     FiSettings, FiRefreshCw, FiX, FiCheck, FiClipboard
 } from 'react-icons/fi';
 import { useTheme } from '@/providers/ThemeProvider';
@@ -27,7 +27,6 @@ const ReportsPage = () => {
         includeRevenue: true,
         includeOrders: true,
         includeUsers: false,
-        includeCourses: false,
         includeWebsites: false,
         includeSoftware: false,
         includeTopProducts: true,
@@ -42,11 +41,10 @@ const ReportsPage = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const [dashboardRes, recentRes, topRes, coursesRes, websitesRes, softwareRes] = await Promise.all([
+            const [dashboardRes, recentRes, topRes, websitesRes, softwareRes] = await Promise.all([
                 fetch(`${API_BASE_URL}/analytics/dashboard`, { headers: { 'Authorization': `Bearer ${token}` } }),
                 fetch(`${API_BASE_URL}/analytics/recent-purchases?limit=100`, { headers: { 'Authorization': `Bearer ${token}` } }),
                 fetch(`${API_BASE_URL}/analytics/top-products?limit=30`, { headers: { 'Authorization': `Bearer ${token}` } }),
-                fetch(`${API_BASE_URL}/courses?limit=100`, { headers: { 'Authorization': `Bearer ${token}` } }),
                 fetch(`${API_BASE_URL}/websites?limit=100`, { headers: { 'Authorization': `Bearer ${token}` } }),
                 fetch(`${API_BASE_URL}/softwares?limit=100`, { headers: { 'Authorization': `Bearer ${token}` } })
             ]);
@@ -54,7 +52,6 @@ const ReportsPage = () => {
             const dashboardData = await dashboardRes.json();
             const recentData = await recentRes.json();
             const topData = await topRes.json();
-            const coursesData = await coursesRes.json();
             const websitesData = await websitesRes.json();
             const softwareData = await softwareRes.json();
 
@@ -62,7 +59,6 @@ const ReportsPage = () => {
                 summary: dashboardData.data,
                 recent: recentData.data || [],
                 top: topData.data || [],
-                courses: coursesData.data || [],
                 websites: websitesData.data || [],
                 software: softwareData.data || []
             });
@@ -96,7 +92,7 @@ const ReportsPage = () => {
             id: 'users',
             title: 'User Analytics',
             titleBn: 'ব্যবহারকারী বিশ্লেষণ',
-            description: 'User growth metrics, enrollment statistics and student engagement data.',
+            description: 'User growth metrics, registration trends and account engagement data.',
             icon: FiUsers,
             color: 'from-blue-500 to-cyan-600',
             bgColor: 'bg-blue-500'
@@ -105,7 +101,7 @@ const ReportsPage = () => {
             id: 'inventory',
             title: 'Product Portfolio',
             titleBn: 'প্রোডাক্ট পোর্টফোলিও',
-            description: 'Complete inventory of courses, websites and software with performance metrics.',
+            description: 'Complete inventory of websites and software with performance metrics.',
             icon: FiFileText,
             color: 'from-amber-500 to-orange-600',
             bgColor: 'bg-amber-500'
@@ -300,11 +296,11 @@ const ReportsPage = () => {
                 currentY += 5;
 
                 const userData = [
-                    ['Total Students', stats.summary?.totalStudents?.toString() || '0', 'Registered learners on platform'],
                     ['Total Users', stats.summary?.totalUsers?.toString() || '0', 'All registered accounts'],
                     ['New Users (This Month)', stats.summary?.newUsersThisMonth?.toString() || '0', 'Recent registrations'],
-                    ['Active Enrollments', stats.summary?.activeEnrollments?.toString() || '0', 'Currently active courses'],
-                    ['Completed Enrollments', stats.summary?.completedEnrollments?.toString() || '0', 'Finished courses']
+                    ['Total Orders', stats.summary?.totalOrders?.toString() || '0', 'All orders placed'],
+                    ['Completed Orders', stats.summary?.completedOrders?.toString() || '0', 'Fulfilled orders'],
+                    ['Pending Orders', stats.summary?.pendingOrders?.toString() || '0', 'Awaiting fulfilment']
                 ];
 
                 let tableEndY3 = currentY;
@@ -328,42 +324,6 @@ const ReportsPage = () => {
                 });
 
                 currentY = tableEndY3 + 15;
-            }
-
-            // Courses section
-            if (type === 'custom' && options.includeCourses && stats.courses.length > 0) {
-                if (currentY > 200) {
-                    doc.addPage();
-                    currentY = 20;
-                }
-
-                doc.setTextColor(15, 23, 42);
-                doc.setFontSize(14);
-                doc.setFont('helvetica', 'bold');
-                doc.text('All Courses', 15, currentY);
-                currentY += 5;
-
-                const courseRows = stats.courses.slice(0, 20).map((c, i) => [
-                    (i + 1).toString(),
-                    (c.title || 'Course').substring(0, 35),
-                    c.category?.name || 'N/A',
-                    `BDT ${c.price?.toLocaleString() || '0'}`,
-                    c.level || 'N/A',
-                    c.status || 'draft'
-                ]);
-
-                let tableEndY4 = currentY;
-                autoTable(doc, {
-                    startY: currentY,
-                    head: [['#', 'Course Title', 'Category', 'Price', 'Level', 'Status']],
-                    body: courseRows,
-                    theme: 'striped',
-                    headStyles: { fillColor: [139, 92, 246], fontSize: 9 },
-                    bodyStyles: { fontSize: 8 },
-                    didDrawPage: (data) => { tableEndY4 = data.cursor.y; }
-                });
-
-                currentY = tableEndY4 + 15;
             }
 
             // Websites section
@@ -513,7 +473,7 @@ const ReportsPage = () => {
                 {[
                     { label: 'Total Revenue', value: `৳${stats?.summary?.totalRevenue?.toLocaleString() || '0'}`, icon: FiDollarSign, color: 'from-emerald-500 to-rose-700' },
                     { label: 'Total Orders', value: stats?.summary?.totalOrdersCount || '0', icon: FiShoppingBag, color: 'from-blue-500 to-indigo-600' },
-                    { label: 'Total Courses', value: stats?.summary?.totalCourses || '0', icon: FiBook, color: 'from-purple-500 to-pink-600' },
+                    { label: 'Total Websites', value: stats?.summary?.totalWebsites || '0', icon: FiGlobe, color: 'from-purple-500 to-pink-600' },
                     { label: 'Total Users', value: stats?.summary?.totalUsers || '0', icon: FiUsers, color: 'from-amber-500 to-orange-600' }
                 ].map((stat, i) => (
                     <div key={i} className={`p-4 rounded-2xl border ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
@@ -654,7 +614,6 @@ const ReportsPage = () => {
                                     { key: 'includeOrders', label: 'Orders List', icon: FiShoppingBag },
                                     { key: 'includeUsers', label: 'User Stats', icon: FiUsers },
                                     { key: 'includeTopProducts', label: 'Top Products', icon: FiTrendingUp },
-                                    { key: 'includeCourses', label: 'All Courses', icon: FiBook },
                                     { key: 'includeWebsites', label: 'All Websites', icon: FiGlobe },
                                     { key: 'includeSoftware', label: 'All Software', icon: FiCode }
                                 ].map((option) => (

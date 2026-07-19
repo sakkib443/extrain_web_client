@@ -22,17 +22,6 @@ const TestimonialSection = () => {
             companyBn: "শাওন মার্ট বিডি"
         },
         {
-            name: "Md Abu Sayeed",
-            nameBn: "মোঃ আবু সাঈদ",
-            role: "Director",
-            roleBn: "ডিরেক্টর",
-            image: "/images/Testimonial/Md Abu Sayeed.jpg",
-            content: "We hired Extrain Web for our coaching center's LMS website. Batch management, attendance, online exam, certificate — everything works smoothly. The team responded fast and delivered before the deadline. Highly recommended.",
-            contentBn: "আমাদের কোচিং সেন্টারের LMS ওয়েবসাইটের জন্য এক্সট্রেন ওয়েবকে নিয়েছিলাম। ব্যাচ ম্যানেজমেন্ট, অ্যাটেনডেন্স, অনলাইন পরীক্ষা, সার্টিফিকেট — সবকিছু দারুণ চলছে। টিম খুব দ্রুত রেসপন্স করে এবং সময়ের আগেই ডেলিভারি দিয়েছে। অবশ্যই রিকমেন্ড করি।",
-            company: "Sayeed Academy",
-            companyBn: "সাঈদ একাডেমি"
-        },
-        {
             name: "Afsana Mimi",
             nameBn: "আফসানা মিমি",
             role: "Brand Owner",

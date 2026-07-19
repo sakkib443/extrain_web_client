@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { FiImage, FiBook, FiCode, FiStar, FiArrowRight } from 'react-icons/fi';
+import { FiImage, FiCode, FiStar, FiArrowRight } from 'react-icons/fi';
 
 const sections = [
     {
@@ -11,13 +11,6 @@ const sections = [
         href: '/dashboard/admin/design/home/hero',
         icon: FiImage,
         gradient: 'from-rose-600 to-cyan-500'
-    },
-    {
-        title: 'Popular Courses',
-        description: 'Featured courses section with stats',
-        href: '/dashboard/admin/design/home/popular-course',
-        icon: FiBook,
-        gradient: 'from-orange-500 to-amber-500'
     },
     {
         title: 'Digital Products',

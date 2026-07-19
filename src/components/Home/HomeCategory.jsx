@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
 import { motion } from 'framer-motion';
 import {
-    LuChevronRight, LuArrowRight, LuShoppingBag, LuGraduationCap, LuBriefcase,
+    LuChevronRight, LuArrowRight, LuShoppingBag, LuBriefcase,
     LuLayoutDashboard, LuNewspaper, LuUtensils, LuBuilding2, LuStethoscope
 } from 'react-icons/lu';
 
@@ -17,7 +17,6 @@ const HomeCategory = () => {
     // Soft pastel accent per card (full literal classes so Tailwind JIT keeps them).
     const categories = [
         { id: 'ecommerce', icon: LuShoppingBag, title: 'E-Commerce', titleBn: 'ই-কমার্স', subtitle: 'Online Stores & Shops', subtitleBn: 'অনলাইন স্টোর ও শপ', href: '/category/ecommerce', iconBg: 'bg-violet-50/50 dark:bg-violet-500/[0.06]', iconText: 'text-violet-500', pill: 'bg-violet-50 text-violet-600 dark:bg-violet-500/10 dark:text-violet-300' },
-        { id: 'lms', icon: LuGraduationCap, title: 'Learning Management', titleBn: 'লার্নিং ম্যানেজমেন্ট', subtitle: 'Education & Courses', subtitleBn: 'শিক্ষা ও কোর্স', href: '/category/learning-management', iconBg: 'bg-blue-50/50 dark:bg-blue-500/[0.06]', iconText: 'text-blue-500', pill: 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-300' },
         { id: 'business', icon: LuBriefcase, title: 'Business', titleBn: 'বিজনেস', subtitle: 'Corporate & Agency', subtitleBn: 'কর্পোরেট ও এজেন্সি', href: '/category/business', iconBg: 'bg-emerald-50/50 dark:bg-emerald-500/[0.06]', iconText: 'text-emerald-500', pill: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300' },
         { id: 'portfolio', icon: LuLayoutDashboard, title: 'Portfolio', titleBn: 'পোর্টফোলিও', subtitle: 'Personal & Creative', subtitleBn: 'পার্সোনাল ও ক্রিয়েটিভ', href: '/category/portfolio', iconBg: 'bg-amber-50/50 dark:bg-amber-500/[0.06]', iconText: 'text-amber-500', pill: 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-300' },
         { id: 'blog', icon: LuNewspaper, title: 'Blog & News', titleBn: 'ব্লগ ও নিউজ', subtitle: 'Blog & Magazine', subtitleBn: 'ব্লগ ও ম্যাগাজিন', href: '/category/blog', iconBg: 'bg-rose-50/50 dark:bg-rose-500/[0.06]', iconText: 'text-rose-500', pill: 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-300' },
@@ -62,8 +61,8 @@ const HomeCategory = () => {
 
                     <p className={`text-gray-500 dark:text-gray-400 text-sm lg:text-base max-w-2xl leading-relaxed ${bengaliClass}`}>
                         {isBn
-                            ? 'আপনার প্রজেক্টের জন্য পারফেক্ট ওয়েবসাইট টেমপ্লেট খুঁজে নিন — ই-কমার্স, লার্নিং ম্যানেজমেন্ট, বিজনেস থেকে পোর্টফোলিও, ব্লগ এবং আরও অনেক ক্যাটাগরি এক জায়গায়।'
-                            : 'Find the perfect website template for your project — from e-commerce and learning management to business, portfolio, blog and more, all in one place.'}
+                            ? 'আপনার প্রজেক্টের জন্য পারফেক্ট ওয়েবসাইট টেমপ্লেট খুঁজে নিন — ই-কমার্স, বিজনেস থেকে পোর্টফোলিও, ব্লগ এবং আরও অনেক ক্যাটাগরি এক জায়গায়।'
+                            : 'Find the perfect website template for your project — from e-commerce and business to portfolio, blog and more, all in one place.'}
                     </p>
                 </div>
 

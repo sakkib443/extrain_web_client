@@ -5,7 +5,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { FaFacebook, FaLinkedin, FaYoutube, FaInstagram } from "react-icons/fa";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
-import { LuSend, LuArrowUpRight, LuHeart } from "react-icons/lu";
+import { LuSend, LuHeart } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 
 const Footer = () => {
@@ -17,6 +17,7 @@ const Footer = () => {
 
   const quickLinks = [
     { to: "/", label: language === "bn" ? "হোম" : "Home" },
+    { to: "/confirm-order", label: language === "bn" ? "অর্ডার করুন" : "Place Order" },
     { to: "/website", label: language === "bn" ? "টেমপ্লেট" : "Templates" },
     { to: "/blog", label: language === "bn" ? "ব্লগ" : "Blog" },
     { to: "/about", label: language === "bn" ? "আমাদের সম্পর্কে" : "About Us" },
@@ -45,29 +46,6 @@ const Footer = () => {
       {/* Gradient Orbs */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-[#0CB2A9]/5 dark:bg-[#0CB2A9]/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 right-10 w-80 h-80 bg-[#0CB2A9]/5 dark:bg-[#0CB2A9]/10 rounded-full blur-3xl"></div>
-
-      {/* Top CTA Section (Kept Original) */}
-      <div className="relative border-b border-gray-200 dark:border-gray-700/50">
-        <div className="container mx-auto px-4 lg:px-16 py-12">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-[#0CB2A9]/5 dark:bg-[#0CB2A9]/5 rounded-md p-6 lg:p-8 border border-gray-200 dark:border-gray-700/50">
-            <div className="text-center lg:text-left">
-              <h3 className={`text-xl lg:text-2xl font-bold text-gray-800 dark:text-white outfit mb-2 ${bengaliClass}`}>
-                {t("footer.ctaHeading")}
-              </h3>
-              <p className={`text-gray-500 dark:text-gray-400 work text-sm ${bengaliClass}`}>
-                {t("footer.ctaDescription")}
-              </p>
-            </div>
-            <Link
-              href="/website"
-              className={`group inline-flex items-center gap-2 px-8 py-4 bg-[#0CB2A9] text-black rounded-md font-bold uppercase tracking-widest hover:bg-black hover:text-[#0CB2A9] hover:shadow-lg hover:shadow-[#0CB2A9]/20 transition-all duration-300 font-poppins text-xl ${bengaliClass}`}
-            >
-              <span>{t("footer.exploreCourses")}</span>
-              <LuArrowUpRight className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </Link>
-          </div>
-        </div>
-      </div>
 
       {/* Main Footer Content */}
       <div className="relative container mx-auto px-4 lg:px-16 py-12 lg:py-16">

@@ -21,7 +21,6 @@ const EMAIL = "info.extrainweb@gmail.com";
 // ── Local rule-based response engine (no backend needed) ───────────────────
 const CATS = [
     { slug: "ecommerce", en: "E-Commerce", bn: "ই-কমার্স" },
-    { slug: "learning-management", en: "Learning Management", bn: "লার্নিং ম্যানেজমেন্ট" },
     { slug: "business", en: "Business", bn: "বিজনেস" },
     { slug: "portfolio", en: "Portfolio", bn: "পোর্টফোলিও" },
     { slug: "blog", en: "Blog & News", bn: "ব্লগ ও নিউজ" },
@@ -66,8 +65,8 @@ function getBotResponse(raw, lang) {
     if (has(t, ["categor", "type", "ক্যাটাগরি", "ধরন", "কি কি", "types"])) {
         return {
             message: bn
-                ? "আমরা ৮টি ক্যাটাগরিতে ওয়েবসাইট বানাই 🎯\nযেকোনোটিতে ক্লিক করে বিস্তারিত ও প্রাইসিং দেখুন:"
-                : "We build websites in 8 categories 🎯\nTap any one to see details & pricing:",
+                ? "আমরা ৭টি ক্যাটাগরিতে ওয়েবসাইট বানাই 🎯\nযেকোনোটিতে ক্লিক করে বিস্তারিত ও প্রাইসিং দেখুন:"
+                : "We build websites in 7 categories 🎯\nTap any one to see details & pricing:",
             quickReplies: [],
             links: CATS.map((c) => ({ text: bn ? c.bn : c.en, url: `/category/${c.slug}` })),
         };
@@ -80,16 +79,6 @@ function getBotResponse(raw, lang) {
                 ? "ই-কমার্স ওয়েবসাইট 🛒\nপ্রোডাক্ট ক্যাটালগ, কার্ট, নিরাপদ চেকআউট, বিকাশ/নগদ/COD পেমেন্ট — সব নিয়ে সম্পূর্ণ অনলাইন স্টোর। শুরু ৳১৫,০০০ থেকে।"
                 : "E-Commerce Website 🛒\nFull online store with product catalog, cart, secure checkout, bKash/Nagad/COD payments. Starts from ৳15,000.",
             links: [{ text: bn ? "ই-কমার্স দেখুন" : "View E-Commerce", url: "/category/ecommerce" }],
-        };
-    }
-
-    // LMS / courses
-    if (has(t, ["lms", "learning", "course", "elearning", "কোর্স", "লার্নিং", "শেখা"])) {
-        return {
-            message: bn
-                ? "লার্নিং ম্যানেজমেন্ট (LMS) 📚\nভিডিও কোর্স, শিক্ষার্থী এনরোলমেন্ট, কুইজ, সার্টিফিকেট ও পেমেন্ট — নিজের অনলাইন লার্নিং প্ল্যাটফর্ম। শুরু ৳১২,৫০০ থেকে।"
-                : "Learning Management (LMS) 📚\nVideo courses, student enrollment, quizzes, certificates & payments — your own learning platform. Starts from ৳12,500.",
-            links: [{ text: bn ? "LMS দেখুন" : "View LMS", url: "/category/learning-management" }],
         };
     }
 
@@ -141,8 +130,8 @@ function getBotResponse(raw, lang) {
     if (has(t, ["service", "help", "what do you", "provide", "offer", "develop", "সার্ভিস", "সাহায্য", "কি কর", "বানা", "সেবা"])) {
         return {
             message: bn
-                ? "আমরা যা দিই 🚀\n• রেডিমেড ওয়েবসাইট টেমপ্লেট\n• কাস্টম ওয়েবসাইট ডেভেলপমেন্ট\n• ৮টি ক্যাটাগরি (ই-কমার্স, LMS, বিজনেস, পোর্টফোলিও...)\n\nকোনটি সম্পর্কে জানতে চান?"
-                : "What we offer 🚀\n• Ready-made website templates\n• Custom website development\n• 8 categories (E-Commerce, LMS, Business, Portfolio...)\n\nWhich one would you like to know about?",
+                ? "আমরা যা দিই 🚀\n• রেডিমেড ওয়েবসাইট টেমপ্লেট\n• কাস্টম ওয়েবসাইট ডেভেলপমেন্ট\n• ৭টি ক্যাটাগরি (ই-কমার্স, বিজনেস, পোর্টফোলিও, ব্লগ...)\n\nকোনটি সম্পর্কে জানতে চান?"
+                : "What we offer 🚀\n• Ready-made website templates\n• Custom website development\n• 7 categories (E-Commerce, Business, Portfolio, Blog...)\n\nWhich one would you like to know about?",
             quickReplies: bn ? ["ক্যাটাগরি", "প্রাইসিং", "যোগাযোগ"] : ["Categories", "Pricing", "Contact"],
         };
     }
@@ -282,7 +271,6 @@ const ChatBot = () => {
               { label: "💰 প্রাইসিং", msg: "প্রাইসিং কেমন?" },
               { label: "🗂️ ক্যাটাগরি", msg: "ক্যাটাগরি দেখান" },
               { label: "🛒 ই-কমার্স", msg: "ই-কমার্স ওয়েবসাইট" },
-              { label: "📚 LMS", msg: "lms সম্পর্কে বলুন" },
               { label: "📞 যোগাযোগ", msg: "যোগাযোগের তথ্য দিন" },
           ]
         : [
@@ -290,7 +278,6 @@ const ChatBot = () => {
               { label: "💰 Pricing", msg: "Tell me about pricing" },
               { label: "🗂️ Categories", msg: "Show me categories" },
               { label: "🛒 E-Commerce", msg: "ecommerce website" },
-              { label: "📚 LMS", msg: "tell me about lms" },
               { label: "📞 Contact", msg: "Give me contact info" },
           ];
 

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FiArrowLeft, FiSave, FiLoader, FiImage, FiGlobe, FiInfo, FiBook, FiCode, FiLayout, FiCheck, FiFolder, FiChevronRight } from 'react-icons/fi';
+import { FiArrowLeft, FiSave, FiLoader, FiImage, FiGlobe, FiInfo, FiCode, FiLayout, FiCheck, FiFolder, FiChevronRight } from 'react-icons/fi';
 import Link from 'next/link';
 import { API_BASE_URL } from "@/config/api";
 
@@ -13,7 +13,7 @@ const MentorCreateCategory = () => {
         description: '',
         image: '',
         status: 'active',
-        type: 'course',
+        type: 'website',
         isParent: false,
         parentCategory: null
     });
@@ -83,7 +83,6 @@ const MentorCreateCategory = () => {
 
     const getTypeColor = (type) => {
         switch (type) {
-            case 'course': return 'from-indigo-500 to-purple-500';
             case 'website': return 'from-emerald-500 to-rose-600';
             case 'software': return 'from-violet-500 to-purple-600';
             default: return 'from-slate-500 to-slate-600';
@@ -91,7 +90,6 @@ const MentorCreateCategory = () => {
     };
 
     const typeOptions = [
-        { value: 'course', label: 'Course', icon: FiBook, desc: 'LMS & Education', color: 'indigo' },
         { value: 'website', label: 'Website', icon: FiLayout, desc: 'Templates & Themes', color: 'emerald' },
         { value: 'software', label: 'Software', icon: FiCode, desc: 'Plugins & Scripts', color: 'violet' },
     ];
@@ -255,7 +253,6 @@ const MentorCreateCategory = () => {
                         <div>
                             <h4 className="text-xs font-black uppercase tracking-widest text-slate-300">Category Types</h4>
                             <p className="text-sm font-medium leading-relaxed mt-1 text-slate-400">
-                                <strong className="text-indigo-400">Course:</strong> For LMS courses & tutorials<br />
                                 <strong className="text-emerald-400">Website:</strong> For website templates & themes<br />
                                 <strong className="text-violet-400">Software:</strong> For plugins, scripts & tools
                             </p>

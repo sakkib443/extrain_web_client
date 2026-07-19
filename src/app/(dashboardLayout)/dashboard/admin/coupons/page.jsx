@@ -518,7 +518,6 @@ const CouponsPage = () => {
                                     className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-gray-50 border-gray-200'}`}
                                 >
                                     <option value="all">All Products</option>
-                                    <option value="course">Courses Only</option>
                                     <option value="website">Websites Only</option>
                                     <option value="software">Software Only</option>
                                 </select>

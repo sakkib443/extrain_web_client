@@ -91,11 +91,6 @@ export default function MentorDashboard() {
     const [hasMounted, setHasMounted] = useState(false);
     const [dashboardData, setDashboardData] = useState({
         totalRevenue: 0,
-        totalEnrollments: 0,
-        totalCourses: 0,
-        publishedCourses: 0,
-        totalLessons: 0,
-        totalStudents: 0,
         totalUsers: 0,
         totalWebsites: 0,
         totalSoftware: 0,
@@ -107,8 +102,6 @@ export default function MentorDashboard() {
         todayOrders: 0,
         monthlyRevenue: 0,
         newUsersThisMonth: 0,
-        activeEnrollments: 0,
-        completedEnrollments: 0,
         totalLikes: 0,
     });
 
@@ -127,13 +120,6 @@ export default function MentorDashboard() {
 
             setDashboardData({
                 totalRevenue: summary?.totalRevenue || 0,
-                totalEnrollments: summary?.totalEnrollments || 0,
-                activeEnrollments: summary?.activeEnrollments || 0,
-                completedEnrollments: summary?.completedEnrollments || 0,
-                totalCourses: summary?.totalCourses || 0,
-                publishedCourses: summary?.publishedCourses || 0,
-                totalLessons: summary?.totalLessons || 0,
-                totalStudents: summary?.totalStudents || 0,
                 totalUsers: summary?.totalUsers || 0,
                 totalWebsites: summary?.totalWebsites || 0,
                 totalSoftware: summary?.totalSoftware || 0,
@@ -204,7 +190,7 @@ export default function MentorDashboard() {
 
     // Product stats for cards - Updated to mentor links
     const productStats = [
-        { title: 'All Courses', value: dashboardData.totalCourses, icon: FiBook, gradient: 'from-indigo-500 to-purple-500', href: '/dashboard/mentor/course' },
+        { title: 'Total Orders', value: dashboardData.totalOrders, icon: FiShoppingCart, gradient: 'from-indigo-500 to-purple-500', href: '/dashboard/mentor/orders' },
         { title: 'All Softwares', value: dashboardData.totalSoftware, icon: FiCode, gradient: 'from-cyan-500 to-rose-600', href: '/dashboard/mentor/software' },
         { title: 'All Websites', value: dashboardData.totalWebsites, icon: FiGlobe, gradient: 'from-pink-500 to-rose-500', href: '/dashboard/mentor/website' },
         { title: 'All Categories', value: dashboardData.categories, icon: FiLayers, gradient: 'from-amber-500 to-orange-500', href: '/dashboard/mentor/category' },
@@ -212,10 +198,10 @@ export default function MentorDashboard() {
 
     // Quick actions - Updated to mentor links
     const quickActions = [
-        { title: 'Add Course', href: '/dashboard/mentor/course/create', icon: FiBook, gradient: 'from-amber-500 to-orange-500' },
         { title: 'Add Website', href: '/dashboard/mentor/website/create', icon: FiGlobe, gradient: 'from-pink-500 to-rose-500' },
         { title: 'Add Software', href: '/dashboard/mentor/software/create', icon: FiCode, gradient: 'from-cyan-500 to-rose-600' },
         { title: 'Add Category', href: '/dashboard/mentor/category/create', icon: FiLayers, gradient: 'from-violet-500 to-purple-500' },
+        { title: 'Add Blog', href: '/dashboard/mentor/blog/create', icon: FiBook, gradient: 'from-amber-500 to-orange-500' },
     ];
 
     return (
@@ -366,15 +352,15 @@ export default function MentorDashboard() {
                             ? 'bg-slate-900/50 border-slate-700'
                             : 'bg-slate-50 border-slate-100'
                             }`}>
-                            <span className="text-sm text-slate-500">Active Enrollments</span>
-                            <span className="text-lg font-bold text-indigo-600">{dashboardData.activeEnrollments}</span>
+                            <span className="text-sm text-slate-500">Total Orders</span>
+                            <span className="text-lg font-bold text-indigo-600">{dashboardData.totalOrders}</span>
                         </div>
                         <div className={`flex justify-between items-center p-3 rounded-xl border ${isDark
                             ? 'bg-slate-900/50 border-slate-700'
                             : 'bg-slate-50 border-slate-100'
                             }`}>
-                            <span className="text-sm text-slate-500">Total Enrollments</span>
-                            <span className="text-lg font-bold text-emerald-600">{dashboardData.totalEnrollments}</span>
+                            <span className="text-sm text-slate-500">New Users</span>
+                            <span className="text-lg font-bold text-emerald-600">+{dashboardData.newUsersThisMonth}</span>
                         </div>
                     </div>
                 </div>
@@ -394,7 +380,7 @@ export default function MentorDashboard() {
                             Mentor Access Notice
                         </h3>
                         <p className={`text-sm ${isDark ? 'text-amber-300/80' : 'text-amber-700'}`}>
-                            As a Mentor, you can create and update courses, websites, software, and categories.
+                            As a Mentor, you can create and update websites, software, categories, and blogs.
                             However, you cannot delete any content or access analytics/reports.
                             For delete operations or advanced analytics, please contact an Administrator.
                         </p>

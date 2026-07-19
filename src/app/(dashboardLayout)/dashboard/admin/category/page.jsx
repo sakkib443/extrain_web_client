@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { FiPlus, FiEdit3, FiTrash2, FiLoader, FiCheck, FiX, FiGrid, FiSearch, FiImage, FiRefreshCw, FiBook, FiCode, FiLayout, FiFolder, FiChevronRight, FiChevronDown } from 'react-icons/fi';
+import { FiPlus, FiEdit3, FiTrash2, FiLoader, FiCheck, FiX, FiGrid, FiSearch, FiImage, FiRefreshCw, FiCode, FiLayout, FiFolder, FiChevronRight, FiChevronDown } from 'react-icons/fi';
 import Link from 'next/link';
 import { API_BASE_URL } from "@/config/api";
 
@@ -116,7 +116,6 @@ const CategoryPage = () => {
 
   const getTypeColor = (type) => {
     switch (type) {
-      case 'course': return 'from-indigo-500 to-purple-500';
       case 'website': return 'from-emerald-500 to-rose-600';
       case 'software': return 'from-violet-500 to-purple-600';
       default: return 'from-slate-500 to-slate-600';
@@ -125,7 +124,6 @@ const CategoryPage = () => {
 
   const getTypeIcon = (type) => {
     switch (type) {
-      case 'course': return <FiBook size={16} />;
       case 'website': return <FiLayout size={16} />;
       case 'software': return <FiCode size={16} />;
       default: return <FiGrid size={16} />;
@@ -134,7 +132,6 @@ const CategoryPage = () => {
 
   const stats = {
     total: categories.length,
-    course: categories.filter(c => c.type === 'course').length,
     website: categories.filter(c => c.type === 'website').length,
     software: categories.filter(c => c.type === 'software').length,
     parents: categories.filter(c => c.isParent).length,
@@ -175,7 +172,7 @@ const CategoryPage = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center">
@@ -184,15 +181,6 @@ const CategoryPage = () => {
             <span className="text-2xl font-black text-slate-800">{stats.total}</span>
           </div>
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total</p>
-        </div>
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
-              <FiBook className="text-white" size={18} />
-            </div>
-            <span className="text-2xl font-black text-slate-800">{stats.course}</span>
-          </div>
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Course</p>
         </div>
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <div className="flex items-center justify-between mb-3">
@@ -235,7 +223,7 @@ const CategoryPage = () => {
           />
         </div>
         <div className="flex items-center gap-2">
-          {['all', 'course', 'website', 'software'].map(type => (
+          {['all', 'website', 'software'].map(type => (
             <button
               key={type}
               onClick={() => setTypeFilter(type)}
@@ -459,7 +447,7 @@ const CategoryPage = () => {
               <div>
                 <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Category Type</label>
                 <div className="grid grid-cols-3 gap-3">
-                  {['course', 'website', 'software'].map(type => (
+                  {['website', 'software'].map(type => (
                     <button
                       key={type}
                       type="button"

@@ -34,6 +34,7 @@ import {
   FiLock,
   FiTag,
   FiEdit3,
+  FiInbox,
 } from 'react-icons/fi';
 import { useTheme } from '@/providers/ThemeProvider';
 
@@ -92,15 +93,18 @@ const AdminSidebar = () => {
         { title: 'Create Website', href: '/dashboard/admin/website/create', icon: FiFileText },
         { title: 'All Software', href: '/dashboard/admin/software', icon: FiCode },
         { title: 'Create Software', href: '/dashboard/admin/software/create', icon: FiFileText },
+        { title: 'All Categories', href: '/dashboard/admin/category', icon: FiLayers },
+        { title: 'Create Category', href: '/dashboard/admin/category/create', icon: FiFileText },
+        { title: 'Orders', href: '/dashboard/admin/orders', icon: FiShoppingBag },
       ],
     },
     {
-      title: 'Categories',
-      icon: FiLayers,
-      gradient: 'from-violet-500 to-purple-500',
+      title: 'Project Tracker',
+      icon: FiClipboard,
+      gradient: 'from-teal-500 to-emerald-600',
       submenu: [
-        { title: 'All Categories', href: '/dashboard/admin/category', icon: FiLayers },
-        { title: 'Create Category', href: '/dashboard/admin/category/create', icon: FiFileText },
+        { title: 'Overview', href: '/dashboard/admin/project-tracker', icon: FiGrid },
+        { title: 'Order Requests', href: '/dashboard/admin/project-tracker/requests', icon: FiInbox },
       ],
     },
     {
@@ -110,23 +114,6 @@ const AdminSidebar = () => {
       submenu: [
         { title: 'All Users', href: '/dashboard/admin/user', icon: FiUsers },
         { title: 'Create User', href: '/dashboard/admin/user/create', icon: FiFileText },
-      ],
-    },
-    {
-      title: 'Orders',
-      href: '/dashboard/admin/orders',
-      icon: FiShoppingBag,
-      gradient: 'from-green-500 to-emerald-500'
-    },
-    {
-      title: 'Project Tracker',
-      icon: FiClipboard,
-      gradient: 'from-teal-500 to-emerald-600',
-      submenu: [
-        { title: 'Overview', href: '/dashboard/admin/project-tracker', icon: FiGrid },
-        { title: 'Projects', href: '/dashboard/admin/project-tracker/projects', icon: FiUsers },
-        { title: 'Add Project', href: '/dashboard/admin/project-tracker/projects/create', icon: FiFileText },
-        { title: 'Expenses', href: '/dashboard/admin/project-tracker/expenses', icon: FiCreditCard },
       ],
     },
     {

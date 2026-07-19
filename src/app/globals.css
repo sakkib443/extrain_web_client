@@ -44,6 +44,38 @@
   --font-bengali: "Hind Siliguri", sans-serif;
 }
 
+/* =====================================================
+   GLOBAL SCALE — একটু ছোট/কম্প্যাক্ট লুকের জন্য
+   root font-size কমালে সব rem-based text ও spacing
+   proportionally ছোট হয়। container max-width কমালে
+   বড় স্ক্রিনে কন্টেন্ট একটু সরু (কম চওড়া) হয়।
+   ===================================================== */
+html {
+  font-size: 15px;
+}
+
+/* Main site এর content width cap (dashboard আলাদা .dashboard-container, প্রভাবিত হবে না) */
+@media (min-width: 1280px) {
+  body .container {
+    max-width: 1280px;
+  }
+}
+
+/* navbar আর প্রতিটা section একই inner width পায় —
+   সব .container এর horizontal padding navbar এর সমান (px-4 lg:px-6) করা,
+   যাতে content-edge সব সেকশনে navbar এর সাথে মিলে যায়। */
+body .container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 1024px) {
+  body .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
 /* Legacy alias — Teko removed, now renders Poppins */
 .font-teko {
   font-family: var(--font-poppins), sans-serif !important;
@@ -106,6 +138,14 @@ body.font-bengali [class*="lucide-"],
 body.font-bengali [class*="fa-"],
 body.font-bengali .font-icon {
   font-family: inherit;
+}
+
+/* Money Receipt — পুরোটা সবসময় Poppins (Bengali mode-এর global override-কেও হারায়) */
+.receipt-poppins,
+.receipt-poppins *,
+body.font-bengali .receipt-poppins,
+body.font-bengali .receipt-poppins * {
+  font-family: var(--font-poppins), sans-serif !important;
 }
 
 /* =====================================================

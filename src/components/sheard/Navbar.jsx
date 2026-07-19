@@ -10,7 +10,7 @@ import {
   LuLayoutDashboard, LuShoppingCart, LuSearch,
   LuSparkles, LuUser, LuArrowRight, LuSun, LuMoon, LuChevronRight,
   LuCode, LuGlobe, LuBookOpen, LuLayers, LuPalette, LuCpu, LuDatabase, LuSmartphone,
-  LuShoppingBag, LuGraduationCap, LuBriefcase, LuNewspaper, LuUtensils, LuBuilding2, LuStethoscope
+  LuShoppingBag, LuBriefcase, LuNewspaper, LuUtensils, LuBuilding2, LuStethoscope
 } from "react-icons/lu";
 import { HiOutlineSparkles, HiOutlineUserCircle } from "react-icons/hi2";
 import { useSelector } from "react-redux";
@@ -35,7 +35,6 @@ const categoryIcons = {
 // Same 8 website categories as the home "Browse by Category" section.
 const NAV_CATEGORIES = [
   { slug: "ecommerce", icon: LuShoppingBag, en: "E-Commerce", bn: "ই-কমার্স", subEn: "Online Stores & Shops", subBn: "অনলাইন স্টোর ও শপ" },
-  { slug: "learning-management", icon: LuGraduationCap, en: "Learning Management", bn: "লার্নিং ম্যানেজমেন্ট", subEn: "Education & Courses", subBn: "শিক্ষা ও কোর্স" },
   { slug: "business", icon: LuBriefcase, en: "Business", bn: "বিজনেস", subEn: "Corporate & Agency", subBn: "কর্পোরেট ও এজেন্সি" },
   { slug: "portfolio", icon: LuLayoutDashboard, en: "Portfolio", bn: "পোর্টফোলিও", subEn: "Personal & Creative", subBn: "পার্সোনাল ও ক্রিয়েটিভ" },
   { slug: "blog", icon: LuNewspaper, en: "Blog & News", bn: "ব্লগ ও নিউজ", subEn: "Blog & Magazine", subBn: "ব্লগ ও ম্যাগাজিন" },
