@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { FiX, FiSave, FiPlus, FiTrash2, FiCheck, FiCheckCircle, FiCreditCard, FiCornerUpLeft, FiFileText } from 'react-icons/fi';
-import { ptApi, bdt, PACKAGE_TYPES, WEBSITE_TYPES, STATUS_OPTIONS } from '@/lib/projectTracker';
+import { ptApi, bdt, packageLabel, WEBSITE_TYPES, STATUS_OPTIONS } from '@/lib/projectTracker';
 
 const toInput = (d) => (d ? new Date(d).toISOString().slice(0, 10) : '');
 const today = () => new Date().toISOString().slice(0, 10);
@@ -248,7 +248,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                             <div className={`px-3 py-2.5 rounded-lg border text-sm font-medium ${init.hasDomainHosting
                                 ? (isDark ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700')
                                 : (isDark ? 'bg-slate-800 border-slate-700 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-500')}`}>
-                                {init.hasDomainHosting ? 'With Domain & Hosting' : 'Without Domain & Hosting'}
+                                {packageLabel(init.packageType)}
                             </div>
                             {init.hasDomainHosting ? (
                                 <p className="text-[11px] mt-1 text-slate-400">Domain: buy {bdt(init.domainBuy)} • sell {bdt(init.domainSell)} • profit <b className={init.domainProfitLinked >= 0 ? 'text-emerald-500' : 'text-rose-500'}>{bdt(init.domainProfitLinked)}</b></p>

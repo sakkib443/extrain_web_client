@@ -151,8 +151,11 @@ export const WEBSITE_TYPES = [
     'Business Website', 'Portfolio', 'Restaurant Website', 'News/Blog', 'Landing Page', 'Custom Software', 'Other',
 ];
 
+// packageType — Domain/Hosting registry এর linked domain এর Type দেখে auto নির্ধারিত হয়
 export const PACKAGE_TYPES = [
     { value: 'without_domain_hosting', label: 'Without Domain & Hosting' },
+    { value: 'with_domain', label: 'With Domain' },
+    { value: 'with_hosting', label: 'With Hosting' },
     { value: 'with_domain_hosting', label: 'With Domain & Hosting' },
 ];
 
