@@ -92,11 +92,11 @@ export const ptApi = {
             body: JSON.stringify(body),
         }).then(handle),
 
-    // ---- Domains / Hosting ----
-    getDomains: () =>
-        fetch(`${API_BASE_URL}/project-tracker/admin/domains`, { headers: authHeaders() }).then(handle),
-    getDomainSummary: () =>
-        fetch(`${API_BASE_URL}/project-tracker/admin/domains/summary`, { headers: authHeaders() }).then(handle),
+    // ---- Domains / Hosting (মাসভিত্তিক — purchaseDate অনুযায়ী) ----
+    getDomains: (month) =>
+        fetch(`${API_BASE_URL}/project-tracker/admin/domains${month ? `?month=${month}` : ''}`, { headers: authHeaders() }).then(handle),
+    getDomainSummary: (month) =>
+        fetch(`${API_BASE_URL}/project-tracker/admin/domains/summary${month ? `?month=${month}` : ''}`, { headers: authHeaders() }).then(handle),
     createDomain: (body) =>
         fetch(`${API_BASE_URL}/project-tracker/admin/domains`, { method: 'POST', headers: authHeaders(), body: JSON.stringify(body) }).then(handle),
     updateDomain: (id, body) =>

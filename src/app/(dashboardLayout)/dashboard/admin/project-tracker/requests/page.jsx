@@ -5,12 +5,13 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import {
     FiArrowLeft, FiInbox, FiRefreshCw, FiCheckCircle, FiEdit3, FiX,
-    FiPhone, FiGlobe, FiPackage, FiClock, FiCreditCard,
+    FiPhone, FiGlobe, FiPackage, FiClock, FiCreditCard, FiFileText,
 } from 'react-icons/fi';
 import { useTheme } from '@/providers/ThemeProvider';
 import { ptApi, fmtDate, packageLabel, bdt } from '@/lib/projectTracker';
 import ProjectModal from '@/components/ProjectTracker/ProjectModal';
 import SendReceiptDialog from '@/components/ProjectTracker/SendReceiptDialog';
+import GenerateBillDialog from '@/components/ProjectTracker/GenerateBillDialog';
 
 export default function RequestsPage() {
     const { isDark } = useTheme();
@@ -19,6 +20,7 @@ export default function RequestsPage() {
     const [busy, setBusy] = useState(null);
     const [editing, setEditing] = useState(null);   // edit + confirm modal (single flow)
     const [receiptFor, setReceiptFor] = useState(null); // confirm এর পর receipt popup
+    const [billFor, setBillFor] = useState(null);   // Generate Bill (পেমেন্ট ছাড়া, শুধু বিল ডকুমেন্ট)
 
     const load = async () => {
         setLoading(true);
@@ -94,16 +96,22 @@ export default function RequestsPage() {
                                 )}
                             </div>
 
-                            {/* actions — একটাই flow: খুললে edit + confirm একসাথে */}
-                            <div className="mt-auto grid grid-cols-3 gap-2">
-                                <button onClick={() => setEditing(r)} disabled={busy === r._id}
-                                    className="col-span-2 inline-flex items-center justify-center gap-2 py-2.5 rounded-xl text-white font-semibold shadow hover:opacity-90 transition disabled:opacity-60" style={{ background: '#FD9A00' }}>
-                                    <FiCheckCircle size={16} /> Confirm / Edit
+                            {/* actions — Confirm/Edit + Generate Bill (পেমেন্ট ছাড়া শুধু বিল) + Reject */}
+                            <div className="mt-auto space-y-2">
+                                <button onClick={() => setBillFor(r)} disabled={busy === r._id}
+                                    className={`w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm border transition disabled:opacity-60 ${isDark ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}>
+                                    <FiFileText size={15} style={{ color: '#FD9A00' }} /> Generate Bill
                                 </button>
-                                <button onClick={() => reject(r._id)} disabled={busy === r._id}
-                                    className="inline-flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm text-rose-500 hover:bg-rose-500/10 transition disabled:opacity-60">
-                                    <FiX size={14} /> Reject
-                                </button>
+                                <div className="grid grid-cols-3 gap-2">
+                                    <button onClick={() => setEditing(r)} disabled={busy === r._id}
+                                        className="col-span-2 inline-flex items-center justify-center gap-2 py-2.5 rounded-xl text-white font-semibold shadow hover:opacity-90 transition disabled:opacity-60" style={{ background: '#FD9A00' }}>
+                                        <FiCheckCircle size={16} /> Confirm / Edit
+                                    </button>
+                                    <button onClick={() => reject(r._id)} disabled={busy === r._id}
+                                        className="inline-flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm text-rose-500 hover:bg-rose-500/10 transition disabled:opacity-60">
+                                        <FiX size={14} /> Reject
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -123,6 +131,15 @@ export default function RequestsPage() {
                         if (meta?.receiptInstallmentNo && saved) setReceiptFor({ project: saved, focusNo: meta.receiptInstallmentNo });
                         else if (meta?.confirmed && saved) setReceiptFor({ project: saved });
                     }}
+                />
+            )}
+
+            {/* Generate Bill — পেমেন্ট ছাড়া, শুধু বিল ডকুমেন্ট (editable + template) */}
+            {billFor && (
+                <GenerateBillDialog
+                    isDark={isDark}
+                    request={billFor}
+                    onClose={() => setBillFor(null)}
                 />
             )}
 

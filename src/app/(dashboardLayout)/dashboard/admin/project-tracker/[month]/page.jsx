@@ -121,7 +121,7 @@ export default function MonthlyTrackerPage() {
             {tab === 'expenses' && <ExpensesTab isDark={isDark} month={month} onChanged={load} />}
 
             {/* ===== DOMAINS TAB ===== */}
-            {tab === 'domains' && <DomainsTab isDark={isDark} />}
+            {tab === 'domains' && <DomainsTab isDark={isDark} month={month} />}
 
             {/* ===== PROJECTS TAB ===== */}
             {tab === 'projects' && <>

@@ -25,7 +25,7 @@ const emptyForm = { domainName: '', type: 'domain', hostingGB: '', owner: '', li
 
 const TYPE_LABEL = { domain: 'Domain', hosting: 'Hosting', both: 'Domain + Hosting' };
 
-export default function DomainsTab({ isDark }) {
+export default function DomainsTab({ isDark, month }) {
     const [domains, setDomains] = useState([]);
     const [summary, setSummary] = useState(null);
     const [projects, setProjects] = useState([]);
@@ -37,14 +37,16 @@ export default function DomainsTab({ isDark }) {
     const load = async () => {
         setLoading(true);
         try {
-            const [d, s, p] = await Promise.all([ptApi.getDomains(), ptApi.getDomainSummary(), ptApi.getProjects()]);
+            // ডোমেইন/হোস্টিং ও প্রজেক্ট — শুধু এই মাসের (month-scoped)
+            const [d, s, p] = await Promise.all([ptApi.getDomains(month), ptApi.getDomainSummary(month), ptApi.getProjects(month)]);
             setDomains(d); setSummary(s); setProjects(p);
         } catch (e) { toast.error(e.message); }
         finally { setLoading(false); }
     };
-    useEffect(() => { load(); }, []);
+    useEffect(() => { load(); }, [month]);
 
-    const openNew = () => { setForm(emptyForm); setEditing('new'); };
+    // নতুন ডোমেইন এই মাসেই যোগ হবে (purchaseDate ডিফল্ট = viewed month এর ১ তারিখ, editable)
+    const openNew = () => { setForm({ ...emptyForm, purchaseDate: month ? `${month}-01` : '' }); setEditing('new'); };
     const openEdit = (d) => {
         setForm({
             domainName: d.domainName || '', type: d.type || 'domain', hostingGB: d.hostingGB ?? '',
