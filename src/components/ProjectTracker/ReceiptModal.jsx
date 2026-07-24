@@ -81,7 +81,14 @@ export default function ReceiptModal({ project: p, onClose }) {
                     <div style={{ background: '#fff7ed', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
                         <table style={{ width: '100%', fontSize: '14px' }}>
                             <tbody>
-                                <tr><td style={{ padding: '6px 0', color: '#64748b' }}>Total Project Amount</td><td style={{ padding: '6px 0', fontWeight: 700, textAlign: 'right' }}>{bdt(p.totalProjectAmount)}</td></tr>
+                                {/* ডোমেইন প্রজেক্টের দামের ভিতরে থাকলে ভাগটা দেখানো হয় */}
+                                {(p.domainSellIncluded || 0) > 0 && (
+                                    <>
+                                        <tr><td style={{ padding: '6px 0', color: '#64748b' }}>Website Development</td><td style={{ padding: '6px 0', fontWeight: 600, textAlign: 'right' }}>{bdt(p.websiteAmount)}</td></tr>
+                                        <tr><td style={{ padding: '6px 0', color: '#64748b' }}>Domain &amp; Hosting</td><td style={{ padding: '6px 0', fontWeight: 600, textAlign: 'right' }}>{bdt(p.domainSellIncluded)}</td></tr>
+                                    </>
+                                )}
+                                <tr style={(p.domainSellIncluded || 0) > 0 ? { borderTop: '1px solid #fed7aa' } : undefined}><td style={{ padding: '6px 0', color: '#64748b' }}>Total Project Amount</td><td style={{ padding: '6px 0', fontWeight: 700, textAlign: 'right' }}>{bdt(p.totalProjectAmount)}</td></tr>
                                 <tr><td style={{ padding: '6px 0', color: '#64748b' }}>Total Paid</td><td style={{ padding: '6px 0', fontWeight: 700, textAlign: 'right', color: '#059669' }}>{bdt(p.totalPaid)}</td></tr>
                                 <tr style={{ borderTop: '1px dashed #fdba74' }}><td style={{ padding: '8px 0 2px', color: '#64748b', fontWeight: 600 }}>Due</td><td style={{ padding: '8px 0 2px', fontWeight: 800, textAlign: 'right', color: '#d97706', fontSize: '16px' }}>{bdt(p.totalDue)}</td></tr>
                             </tbody>

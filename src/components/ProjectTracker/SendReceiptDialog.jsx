@@ -37,6 +37,35 @@ function buildReceiptMessage(p, focusNo) {
     return `Dear ${p.clientName}, your ${ordinal(inst.no)} installment payment of ${amt} has been received. Total Paid: ${money(p.totalPaid)}, Due: ${money(p.totalDue)}${next}.`;
 }
 
+// রিসিটের টাকার সারিগুলো — PDF ও on-screen preview দুই জায়গাতেই এখান থেকেই আসে।
+// [label, value, highlight, indent, dividerAbove]
+export function buildAmountRows(p, options) {
+    const domainAmt = p.domainSellIncluded || 0;
+    const split = options.splitDomain && domainAmt > 0;
+    const rows = [];
+
+    if (split) {
+        const webAmt = p.websiteAmount ?? Math.max(0, (p.totalProjectAmount || 0) - domainAmt);
+        const webPaid = p.websitePaid ?? 0;
+        const webDue = p.websiteDue ?? Math.max(0, webAmt - webPaid);
+        const domPaid = p.domainPaidIncluded || 0;
+        const domDue = p.domainDueIncluded ?? Math.max(0, domainAmt - domPaid);
+
+        rows.push(['Website Development', money(webAmt), false, false, false]);
+        if (options.paymentConfirmation) rows.push(['Paid', money(webPaid), false, true, false]);
+        if (options.due !== false) rows.push(['Due', money(webDue), false, true, false]);
+
+        rows.push(['Domain & Hosting', money(domainAmt), false, false, false]);
+        if (options.paymentConfirmation) rows.push(['Paid', money(domPaid), false, true, false]);
+        if (options.due !== false) rows.push(['Due', money(domDue), false, true, false]);
+    }
+
+    rows.push(['Total Project Amount', money(p.totalProjectAmount), false, false, split]);
+    if (options.paymentConfirmation) rows.push(['Total Paid', money(p.totalPaid), false, false, false]);
+    if (options.due !== false) rows.push(['Due', money(p.totalDue), true, false, false]);
+    return rows;
+}
+
 // public/extrain-logo.png কে PNG dataURL হিসেবে লোড (PDF এ বসানোর জন্য)
 function loadLogo() {
     return new Promise((resolve) => {
@@ -126,17 +155,20 @@ export async function generateReceiptPdf(p, options, message, receiptNo) {
     y += 8;
 
     // ---- Amounts box ----
-    const amounts = [['Total Project Amount', money(p.totalProjectAmount), false]];
-    if (options.paymentConfirmation) amounts.push(['Total Paid', money(p.totalPaid), false]);
-    if (options.due !== false) amounts.push(['Due', money(p.totalDue), true]);
+    const amounts = buildAmountRows(p, options);
     const boxH = amounts.length * 22 + 14;
     doc.setFillColor(255, 247, 237); doc.roundedRect(M, y, W - 2 * M, boxH, 8, 8, 'F');
     let ay = y + 22;
-    amounts.forEach(([k, v, hi]) => {
-        doc.setFont('Poppins', 'normal'); doc.setFontSize(hi ? 12 : 11); doc.setTextColor(100);
-        doc.text(k, M + 16, ay);
-        doc.setFont('Poppins', 'bold');
-        if (hi) doc.setTextColor(217, 119, 6); else doc.setTextColor(30);
+    amounts.forEach(([k, v, hi, indent, divider]) => {
+        if (divider) {
+            doc.setDrawColor(234, 214, 188); doc.setLineWidth(0.5);
+            doc.line(M + 16, ay - 14, W - M - 16, ay - 14);
+        }
+        doc.setFont('Poppins', 'normal'); doc.setFontSize(hi ? 12 : indent ? 9.5 : 11);
+        doc.setTextColor(indent ? 140 : 100);
+        doc.text(k, M + (indent ? 30 : 16), ay);
+        doc.setFont('Poppins', 'bold'); doc.setFontSize(hi ? 12 : indent ? 9.5 : 11);
+        if (hi) doc.setTextColor(217, 119, 6); else doc.setTextColor(indent ? 100 : 30);
         doc.text(v, W - M - 16, ay, { align: 'right' });
         ay += 22;
     });
@@ -208,6 +240,8 @@ export default function SendReceiptDialog({ isDark, project: p, focusInstallment
         delivery: !!p.projectDeliveryDate,
         due: true,
         contact: true,
+        // ডোমেইন/হোস্টিং প্রজেক্টের দামের ভিতরে থাকলে ডিফল্টে আলাদা করে দেখাই
+        splitDomain: (p.domainSellIncluded || 0) > 0,
     });
     const [message, setMessage] = useState(buildReceiptMessage(p, focusInstallmentNo));
     const [busy, setBusy] = useState(false);
@@ -260,6 +294,16 @@ export default function SendReceiptDialog({ isDark, project: p, focusInstallment
                                 <label className={chk}><input type="checkbox" checked={options.delivery} onChange={toggle('delivery')} className="w-4 h-4 accent-orange-500" /> Delivery Date</label>
                                 <label className={chk}><input type="checkbox" checked={options.due} onChange={toggle('due')} className="w-4 h-4 accent-orange-500" /> Due / Next Payment</label>
                                 <label className={chk}><input type="checkbox" checked={options.contact} onChange={toggle('contact')} className="w-4 h-4 accent-orange-500" /> Contact তথ্য</label>
+                                {(p.domainSellIncluded || 0) > 0 && (
+                                    <>
+                                        <label className={chk}><input type="checkbox" checked={options.splitDomain} onChange={toggle('splitDomain')} className="w-4 h-4 accent-teal-500" /> ওয়েবসাইট ও ডোমেইনের টাকা আলাদা</label>
+                                        <p className={`text-[11px] pl-6 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                                            {options.splitDomain
+                                                ? `Website ${money(p.websiteAmount)} + Domain ${money(p.domainSellIncluded)} আলাদা লাইনে, নিচে মোট ${money(p.totalProjectAmount)}`
+                                                : `শুধু মোট ${money(p.totalProjectAmount)} দেখাবে`}
+                                        </p>
+                                    </>
+                                )}
                             </div>
                         </div>
                         <div>
@@ -338,9 +382,26 @@ function ReceiptPreview({ p, options, message, receiptNo }) {
             <div style={{ background: '#fff7ed', borderRadius: 10, padding: 14, marginBottom: 14 }}>
                 <table style={{ width: '100%' }}>
                     <tbody>
-                        <tr><td style={{ ...rowStyle, color: '#64748b' }}>Total Project Amount</td><td style={{ ...rowStyle, textAlign: 'right', fontWeight: 700 }}>{money(p.totalProjectAmount)}</td></tr>
-                        {options.paymentConfirmation && <tr><td style={{ ...rowStyle, color: '#64748b' }}>Total Paid</td><td style={{ ...rowStyle, textAlign: 'right', fontWeight: 700, color: '#16a34a' }}>{money(p.totalPaid)}</td></tr>}
-                        {options.due && <tr><td style={{ ...rowStyle, color: '#64748b', fontWeight: 600 }}>Due</td><td style={{ ...rowStyle, textAlign: 'right', fontWeight: 800, color: '#d97706' }}>{money(p.totalDue)}</td></tr>}
+                        {buildAmountRows(p, options).map(([k, v, hi, indent, divider], idx) => (
+                            <tr key={idx} style={divider ? { borderTop: '1px solid #ead6bc' } : undefined}>
+                                <td style={{
+                                    ...rowStyle,
+                                    color: indent ? '#94a3b8' : '#64748b',
+                                    fontWeight: hi ? 600 : 400,
+                                    paddingLeft: indent ? 14 : 0,
+                                    fontSize: indent ? 11 : undefined,
+                                    paddingTop: divider ? 8 : undefined,
+                                }}>{k}</td>
+                                <td style={{
+                                    ...rowStyle,
+                                    textAlign: 'right',
+                                    fontWeight: hi ? 800 : indent ? 500 : 700,
+                                    color: hi ? '#d97706' : indent ? '#64748b' : '#0f172a',
+                                    fontSize: indent ? 11 : undefined,
+                                    paddingTop: divider ? 8 : undefined,
+                                }}>{v}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
