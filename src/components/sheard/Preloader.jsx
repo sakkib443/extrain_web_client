@@ -54,7 +54,16 @@ const Preloader = () => {
                         className="h-10 md:h-12 w-auto object-contain"
                     />
 
-                    <div className="mt-8 h-[2px] w-36 md:w-44 rounded-full bg-slate-900/10 overflow-hidden">
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.25, ease: "easeOut" }}
+                        className="mt-5 text-[10px] md:text-[11px] text-slate-400 uppercase tracking-[0.4em]"
+                    >
+                        Assalamu Alaikum
+                    </motion.p>
+
+                    <div className="mt-7 h-[2px] w-36 md:w-44 rounded-full bg-slate-900/10 overflow-hidden">
                         <div
                             className="h-full rounded-full bg-[#0CB2A9] transition-[width] duration-150 ease-out"
                             style={{ width: `${progress}%` }}
