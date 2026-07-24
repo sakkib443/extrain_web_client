@@ -62,7 +62,8 @@ const Preloader = () => {
         <AnimatePresence>
             {loading && (
                 <motion.div
-                    className="fixed inset-0 z-[9999] overflow-hidden bg-[#0A0A0A]"
+                    className="fixed inset-0 z-[9999] overflow-hidden"
+                    style={{ background: "linear-gradient(180deg,#FFFDF8 0%,#F5FBFA 55%,#FFFFFF 100%)" }}
                     animate={phase === 2 ? { y: "-100%" } : { y: 0 }}
                     exit={{ y: "-100%" }}
                     transition={{
@@ -74,16 +75,16 @@ const Preloader = () => {
                     <div className="absolute inset-0">
                         {/* Grid Pattern */}
                         <div
-                            className="absolute inset-0 opacity-[0.04]"
+                            className="absolute inset-0 opacity-[0.10]"
                             style={{
-                                backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
+                                backgroundImage: `linear-gradient(#0F3549 1px, transparent 1px), linear-gradient(90deg, #0F3549 1px, transparent 1px)`,
                                 backgroundSize: '60px 60px'
                             }}
                         />
 
                         {/* Gradient Orbs */}
                         <motion.div
-                            className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#FD9A00]/10 rounded-full blur-[150px]"
+                            className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#FD9A00]/25 rounded-full blur-[150px]"
                             animate={{
                                 scale: [1, 1.3, 1],
                                 x: [0, 50, 0],
@@ -91,7 +92,7 @@ const Preloader = () => {
                             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                         />
                         <motion.div
-                            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#0CB2A9]/10 rounded-full blur-[150px]"
+                            className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#0CB2A9]/25 rounded-full blur-[150px]"
                             animate={{
                                 scale: [1, 1.2, 1],
                                 x: [0, -40, 0],
@@ -107,7 +108,7 @@ const Preloader = () => {
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.4 }}
-                                className="text-[10px] md:text-xs text-gray-500 uppercase tracking-[0.5em] mb-6 font-medium"
+                                className="text-[10px] md:text-xs text-slate-500 uppercase tracking-[0.5em] mb-6 font-medium"
                             >
                                 Assalamu Alaikum
                             </motion.p>
@@ -121,13 +122,13 @@ const Preloader = () => {
                                     initial={{ opacity: 0, y: 30, scale: 0.9 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                                    className="h-12 md:h-16 lg:h-20 w-auto object-contain brightness-0 invert"
+                                    className="h-12 md:h-16 lg:h-20 w-auto object-contain"
                                 />
                             </div>
 
                             {/* Progress Number */}
                             <div className="relative mb-8">
-                                <div className="text-[80px] md:text-[120px] lg:text-[160px] font-black text-white/5 font-poppins leading-none select-none">
+                                <div className="text-[80px] md:text-[120px] lg:text-[160px] font-black text-slate-900/[0.07] font-poppins leading-none select-none">
                                     {progress.toString().padStart(2, '0')}
                                 </div>
 
@@ -142,7 +143,7 @@ const Preloader = () => {
 
                             {/* Progress Bar */}
                             <div className="w-[200px] md:w-[300px] relative">
-                                <div className="h-[2px] bg-white/10 rounded-full overflow-hidden">
+                                <div className="h-[2px] bg-slate-900/10 rounded-full overflow-hidden">
                                     <motion.div
                                         className="h-full bg-gradient-to-r from-[#FD9A00] via-[#FFBA4F] to-[#0CB2A9] rounded-full"
                                         style={{ width: `${progress}%` }}
@@ -152,7 +153,7 @@ const Preloader = () => {
 
                             {/* Loading Text */}
                             <motion.p
-                                className="mt-6 text-[10px] text-gray-600 uppercase tracking-[0.3em] font-medium"
+                                className="mt-6 text-[10px] text-slate-500 uppercase tracking-[0.3em] font-medium"
                                 animate={{ opacity: [0.4, 0.8, 0.4] }}
                                 transition={{ duration: 1.5, repeat: Infinity }}
                             >
