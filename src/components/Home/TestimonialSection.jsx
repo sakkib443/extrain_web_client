@@ -38,8 +38,8 @@ const TestimonialSection = () => {
             role: "Startup Founder",
             roleBn: "স্টার্টআপ ফাউন্ডার",
             image: "/images/Testimonial/Zayed Uddin.jpg",
-            content: "Professional team with great attention to detail. They built our SaaS dashboard with Next.js and the performance is impressive — fast loading, secure, and SEO-ready out of the box. Will definitely come back for our next project.",
-            contentBn: "প্রফেশনাল টিম, প্রতিটা ডিটেইলে নজর। আমাদের SaaS ড্যাশবোর্ডটা Next.js দিয়ে বানিয়েছে, পারফরম্যান্স অসাধারণ — দ্রুত লোড, নিরাপদ, আর SEO-রেডি। পরের প্রোজেক্টের জন্য অবশ্যই আবার আসব।",
+            content: "Professional team with great attention to detail. They built our SaaS dashboard with Next.js and the performance is impressive — fast loading, secure, and rock solid on mobile. Will definitely come back for our next project.",
+            contentBn: "প্রফেশনাল টিম, প্রতিটা ডিটেইলে নজর। আমাদের SaaS ড্যাশবোর্ডটা Next.js দিয়ে বানিয়েছে, পারফরম্যান্স অসাধারণ — দ্রুত লোড, নিরাপদ, আর মোবাইলেও একদম স্মুথ। পরের প্রোজেক্টের জন্য অবশ্যই আবার আসব।",
             company: "Zayed Tech",
             companyBn: "যায়েদ টেক"
         }
