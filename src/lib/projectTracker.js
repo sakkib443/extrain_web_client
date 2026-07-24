@@ -151,16 +151,36 @@ export const WEBSITE_TYPES = [
     'Business Website', 'Portfolio', 'Restaurant Website', 'News/Blog', 'Landing Page', 'Custom Software', 'Other',
 ];
 
-// packageType — Domain/Hosting registry এর linked domain এর Type দেখে auto নির্ধারিত হয়
+// packageType — Confirm Order এ বেছে নেওয়া হয়; Domain/Hosting registry তে রেকর্ড auto যোগ হয়
 export const PACKAGE_TYPES = [
-    { value: 'without_domain_hosting', label: 'Without Domain & Hosting' },
-    { value: 'with_domain', label: 'With Domain' },
-    { value: 'with_hosting', label: 'With Hosting' },
-    { value: 'with_domain_hosting', label: 'With Domain & Hosting' },
+    { value: 'without_domain_hosting', label: 'Without Domain & Hosting', short: 'Without' },
+    { value: 'with_domain', label: 'With Domain', short: 'Domain' },
+    { value: 'with_hosting', label: 'With Hosting', short: 'Hosting' },
+    { value: 'with_domain_hosting', label: 'With Domain & Hosting', short: 'Domain + Hosting' },
 ];
 
 export const packageLabel = (v) =>
     PACKAGE_TYPES.find((p) => p.value === v)?.label || 'Without Domain & Hosting';
+
+// ডোমেইন/হোস্টিংয়ের দাম প্রজেক্টের টোটালের ভিতরে, নাকি আলাদা পেমেন্ট
+export const BILLING_MODES = [
+    {
+        value: 'included',
+        label: 'প্রজেক্টের দামের ভিতরে',
+        hint: 'Total Project Amount এর ভিতরেই ধরা — লাভে শুধু আমাদের খরচ বাদ যাবে',
+    },
+    {
+        value: 'separate',
+        label: 'আলাদা পেমেন্ট',
+        hint: 'প্রজেক্টের টাকার বাইরে — লাভে (Sell − Buy) যোগ হবে',
+    },
+];
+
+export const billingLabel = (v) => (v === 'included' ? 'Included' : 'Separate');
+
+// একটা domain রেকর্ড মাসের লাভে কতটা যোগ করে (server এর domainRevenueImpact এর মিরর)
+export const domainRevenueImpact = (d) =>
+    (d?.billing === 'included' ? 0 : Number(d?.sellPrice) || 0) - (Number(d?.buyPrice) || 0);
 
 export const STATUS_OPTIONS = ['pending', 'working', 'done', 'cancelled'];
 

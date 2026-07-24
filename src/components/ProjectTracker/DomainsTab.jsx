@@ -6,7 +6,7 @@ import {
     FiPlus, FiTrash2, FiEdit3, FiRefreshCw, FiX, FiSave, FiGlobe,
     FiTrendingUp, FiTrendingDown, FiDollarSign,
 } from 'react-icons/fi';
-import { ptApi, bdt, fmtDate } from '@/lib/projectTracker';
+import { ptApi, bdt, fmtDate, BILLING_MODES, domainRevenueImpact } from '@/lib/projectTracker';
 
 const Stat = ({ isDark, icon: Icon, label, value, tone }) => {
     const tones = { blue: 'from-blue-500 to-indigo-600', red: 'from-rose-500 to-red-600', green: 'from-emerald-500 to-green-600', slate: 'from-slate-500 to-slate-600' };
@@ -21,7 +21,7 @@ const Stat = ({ isDark, icon: Icon, label, value, tone }) => {
     );
 };
 
-const emptyForm = { domainName: '', type: 'domain', hostingGB: '', owner: '', linkedProjectId: '', linkedClientName: '', provider: '', buyPrice: '', sellPrice: '', purchaseDate: '', expiryDate: '', note: '' };
+const emptyForm = { domainName: '', type: 'domain', hostingGB: '', owner: '', linkedProjectId: '', linkedClientName: '', billing: 'separate', provider: '', buyPrice: '', sellPrice: '', purchaseDate: '', expiryDate: '', note: '' };
 
 const TYPE_LABEL = { domain: 'Domain', hosting: 'Hosting', both: 'Domain + Hosting' };
 
@@ -51,7 +51,8 @@ export default function DomainsTab({ isDark, month }) {
         setForm({
             domainName: d.domainName || '', type: d.type || 'domain', hostingGB: d.hostingGB ?? '',
             owner: d.owner || '', linkedProjectId: d.linkedProjectId || '',
-            linkedClientName: d.linkedClientName || '', provider: d.provider || '',
+            linkedClientName: d.linkedClientName || '', billing: d.billing || 'separate',
+            provider: d.provider || '',
             buyPrice: d.buyPrice ?? '', sellPrice: d.sellPrice ?? '',
             purchaseDate: d.purchaseDate ? new Date(d.purchaseDate).toISOString().slice(0, 10) : '',
             expiryDate: d.expiryDate ? new Date(d.expiryDate).toISOString().slice(0, 10) : '',
@@ -60,7 +61,7 @@ export default function DomainsTab({ isDark, month }) {
         setEditing(d);
     };
 
-    const profit = (Number(form.sellPrice) || 0) - (Number(form.buyPrice) || 0);
+    const impact = domainRevenueImpact(form);
 
     const onSelectProject = (e) => {
         const pid = e.target.value;
@@ -100,7 +101,7 @@ export default function DomainsTab({ isDark, month }) {
                 <Stat isDark={isDark} icon={FiGlobe} label="Total Domains" value={summary?.count || 0} tone="slate" />
                 <Stat isDark={isDark} icon={FiTrendingDown} label="Total Buy Cost" value={bdt(summary?.totalBuy)} tone="red" />
                 <Stat isDark={isDark} icon={FiDollarSign} label="Total Sell" value={bdt(summary?.totalSell)} tone="blue" />
-                <Stat isDark={isDark} icon={FiTrendingUp} label="Total Profit" value={bdt(summary?.totalProfit)} tone={(summary?.totalProfit || 0) >= 0 ? 'green' : 'red'} />
+                <Stat isDark={isDark} icon={FiTrendingUp} label="Net Profit (মাসের লাভে)" value={bdt(summary?.revenueImpact ?? summary?.totalProfit)} tone={((summary?.revenueImpact ?? summary?.totalProfit) || 0) >= 0 ? 'green' : 'red'} />
             </div>
 
             <div className="flex items-center justify-between">
@@ -125,18 +126,19 @@ export default function DomainsTab({ isDark, month }) {
                                 <th className={th}>Owner</th>
                                 <th className={th}>Linked Project</th>
                                 <th className={th}>Provider</th>
+                                <th className={th}>Billing</th>
                                 <th className={th}>Buy</th>
                                 <th className={th}>Sell</th>
-                                <th className={th}>Profit</th>
+                                <th className={th}>Net Profit</th>
                                 <th className={th}>Expiry</th>
                                 <th className={th + ' text-right'}>Actions</th>
                             </tr>
                         </thead>
                         <tbody className={isDark ? 'divide-y divide-slate-700/50' : 'divide-y divide-slate-100'}>
                             {loading ? (
-                                <tr><td colSpan={10} className={`text-center py-14 ${muted}`}>লোড হচ্ছে...</td></tr>
+                                <tr><td colSpan={11} className={`text-center py-14 ${muted}`}>লোড হচ্ছে...</td></tr>
                             ) : domains.length === 0 ? (
-                                <tr><td colSpan={10} className={`text-center py-14 ${muted}`}>কোনো ডোমেইন নেই। Add Domain চাপুন।</td></tr>
+                                <tr><td colSpan={11} className={`text-center py-14 ${muted}`}>কোনো ডোমেইন নেই। Add Domain চাপুন।</td></tr>
                             ) : domains.map((d) => (
                                 <tr key={d._id} className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}>
                                     <td className={td + ' font-semibold'}>{d.domainName}</td>
@@ -151,9 +153,19 @@ export default function DomainsTab({ isDark, month }) {
                                         ) : '—'}
                                     </td>
                                     <td className={td}>{d.provider || '—'}</td>
+                                    <td className={td}>
+                                        {d.billing === 'included' ? (
+                                            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700" title="দাম প্রজেক্টের Total Amount এর ভিতরে">প্রজেক্টের ভিতরে</span>
+                                        ) : (
+                                            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-700" title="আলাদা পেমেন্ট">আলাদা</span>
+                                        )}
+                                    </td>
                                     <td className={td + ' text-rose-500 font-semibold'}>{bdt(d.buyPrice)}</td>
                                     <td className={td + ' text-blue-500 font-semibold'}>{bdt(d.sellPrice)}</td>
-                                    <td className={td + ' font-bold ' + ((d.profit || 0) >= 0 ? 'text-emerald-500' : 'text-rose-500')}>{bdt(d.profit)}</td>
+                                    <td className={td + ' font-bold ' + (domainRevenueImpact(d) >= 0 ? 'text-emerald-500' : 'text-rose-500')}
+                                        title={d.billing === 'included' ? 'Sell টা project collection এ ধরা — শুধু Buy বাদ' : 'Sell − Buy'}>
+                                        {bdt(domainRevenueImpact(d))}
+                                    </td>
                                     <td className={td}>{d.expiryDate ? fmtDate(d.expiryDate) : '—'}</td>
                                     <td className={td + ' text-right'}>
                                         <div className="inline-flex gap-1">
@@ -215,12 +227,29 @@ export default function DomainsTab({ isDark, month }) {
                                     ))}
                                 </select>
                             </div>
+                            {/* দাম প্রজেক্টের টোটালের ভিতরে না আলাদা — মাসের লাভের হিসাব এটার উপর নির্ভর করে */}
+                            <div>
+                                <label className={label}>পেমেন্ট</label>
+                                <div className="grid sm:grid-cols-2 gap-2">
+                                    {BILLING_MODES.map((b) => (
+                                        <button key={b.value} type="button" onClick={() => setForm({ ...form, billing: b.value })}
+                                            className={`text-left px-3 py-2.5 rounded-lg border text-sm transition ${form.billing === b.value
+                                                ? 'border-transparent text-white'
+                                                : isDark ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
+                                            style={form.billing === b.value ? { background: '#0CB2A9' } : {}}>
+                                            <span className="font-semibold block">{b.label}</span>
+                                            <span className={`text-[11px] ${form.billing === b.value ? 'text-white/80' : 'text-slate-400'}`}>{b.hint}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
                             <div className="grid md:grid-cols-3 gap-4">
                                 <div><label className={label}>Buy Price (৳)</label><input type="number" className={input} value={form.buyPrice} onChange={(e) => setForm({ ...form, buyPrice: e.target.value })} /></div>
                                 <div><label className={label}>Sell Price (৳)</label><input type="number" className={input} value={form.sellPrice} onChange={(e) => setForm({ ...form, sellPrice: e.target.value })} /></div>
                                 <div>
-                                    <label className={label}>Profit (auto)</label>
-                                    <div className={`px-3 py-2.5 rounded-lg border text-sm font-bold ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'} ${profit >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>{bdt(profit)}</div>
+                                    <label className={label}>মাসের লাভে যোগ (auto)</label>
+                                    <div className={`px-3 py-2.5 rounded-lg border text-sm font-bold ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'} ${impact >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>{bdt(impact)}</div>
                                 </div>
                             </div>
                             <div className="grid md:grid-cols-3 gap-4">

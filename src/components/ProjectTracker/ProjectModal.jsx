@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { FiX, FiSave, FiPlus, FiTrash2, FiCheck, FiCheckCircle, FiCreditCard, FiCornerUpLeft, FiFileText } from 'react-icons/fi';
-import { ptApi, bdt, packageLabel, WEBSITE_TYPES, STATUS_OPTIONS } from '@/lib/projectTracker';
+import { FiX, FiSave, FiPlus, FiTrash2, FiCheck, FiCheckCircle, FiCreditCard, FiCornerUpLeft, FiFileText, FiGlobe } from 'react-icons/fi';
+import { ptApi, bdt, WEBSITE_TYPES, STATUS_OPTIONS, PACKAGE_TYPES, BILLING_MODES, domainRevenueImpact } from '@/lib/projectTracker';
 
 const toInput = (d) => (d ? new Date(d).toISOString().slice(0, 10) : '');
 const today = () => new Date().toISOString().slice(0, 10);
@@ -43,6 +43,26 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
         adminNote: init.adminNote || '',
         installmentCount: init.installmentCount || ((init.installments || []).filter((i) => i.note !== 'Refund' && (Number(i.amount) || 0) >= 0).length || ''),
     });
+    // Domain/Hosting — linked registry রেকর্ড থাকলে সেটা, নাহলে খালি ফর্ম
+    const linkedDomain = (init.linkedDomains || [])[0] || null;
+    const [dh, setDh] = useState({
+        domainName: linkedDomain?.domainName || '',
+        hostingGB: linkedDomain?.hostingGB ?? '',
+        owner: linkedDomain?.owner || '',
+        provider: linkedDomain?.provider || '',
+        billing: linkedDomain?.billing || 'included',
+        buyPrice: linkedDomain?.buyPrice ?? '',
+        sellPrice: linkedDomain?.sellPrice ?? '',
+        purchaseDate: toInput(linkedDomain?.purchaseDate),
+        expiryDate: toInput(linkedDomain?.expiryDate),
+        note: linkedDomain?.note || '',
+    });
+    const setD = (k) => (e) => setDh((prev) => ({ ...prev, [k]: e.target.value }));
+
+    const hasPackage = f.packageType !== 'without_domain_hosting';
+    const needsHostingGB = f.packageType === 'with_hosting' || f.packageType === 'with_domain_hosting';
+    const dhImpact = domainRevenueImpact(dh);
+
     // paid: false = planned/future (Paid এ ধরা হয় না); isRefund = negative amount
     // NOTE: load এ balanceLast করা হয় না — existing amount অক্ষত রাখতে। শুধু plan/edit এ balance হয়।
     const [installments, setInstallments] = useState(
@@ -174,6 +194,10 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
             toast.error('অর্ডার কনফার্ম করতে Total Project Amount দিন');
             return;
         }
+        if (hasPackage && !dh.domainName.trim()) {
+            toast.error('Domain / Site এর নাম দিন (Package এ Domain/Hosting আছে)');
+            return;
+        }
         // confirm করলে request → working; নাহলে বর্তমান status রাখে
         const nextStatus = confirm && f.status === 'request' ? 'working' : f.status;
         setSaving(true);
@@ -192,6 +216,15 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                     note: i.note || undefined,
                     paid: i.paid !== false,
                 })),
+                // Domain/Hosting registry sync — without হলে null পাঠালেই auto রেকর্ড মুছে যায়
+                domainHosting: hasPackage
+                    ? {
+                        ...dh,
+                        buyPrice: Number(dh.buyPrice) || 0,
+                        sellPrice: Number(dh.sellPrice) || 0,
+                        hostingGB: needsHostingGB && dh.hostingGB ? Number(dh.hostingGB) : undefined,
+                    }
+                    : null,
             };
             const saved = project?._id ? await ptApi.updateProject(project._id, body) : await ptApi.createProject(body);
             toast.success(confirm ? 'অর্ডার কনফার্ম হয়েছে ✅' : (project ? 'সেভ হয়েছে' : 'যোগ হয়েছে'));
@@ -244,19 +277,81 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                             </select>
                         </div>
                         <div>
-                            <label className={label}>Package Type <span className="font-normal text-slate-400">(auto)</span></label>
-                            <div className={`px-3 py-2.5 rounded-lg border text-sm font-medium ${init.hasDomainHosting
-                                ? (isDark ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700')
-                                : (isDark ? 'bg-slate-800 border-slate-700 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-500')}`}>
-                                {packageLabel(init.packageType)}
-                            </div>
-                            {init.hasDomainHosting ? (
-                                <p className="text-[11px] mt-1 text-slate-400">Domain: buy {bdt(init.domainBuy)} • sell {bdt(init.domainSell)} • profit <b className={init.domainProfitLinked >= 0 ? 'text-emerald-500' : 'text-rose-500'}>{bdt(init.domainProfitLinked)}</b></p>
-                            ) : (
-                                <p className="text-[11px] mt-1 text-slate-400">Domain / Hosting tab এ domain add করে এই project link করলে auto &quot;With&quot; হবে</p>
-                            )}
+                            <label className={label}>Package Type *</label>
+                            <select className={input} value={f.packageType} onChange={set('packageType')}>
+                                {PACKAGE_TYPES.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+                            </select>
+                            <p className="text-[11px] mt-1 text-slate-400">
+                                {hasPackage
+                                    ? 'নিচের Domain / Hosting তথ্য দিলে Domain/Hosting পেজে auto যোগ হবে'
+                                    : 'Domain/Hosting পেজে কিছু যোগ হবে না'}
+                            </p>
                         </div>
                     </div>
+
+                    {/* Domain / Hosting — package এ থাকলেই দেখাবে, Domain registry তে auto sync হয় */}
+                    {hasPackage && (
+                        <div className={`rounded-xl p-4 space-y-4 border ${isDark ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-emerald-50/60 border-emerald-200'}`}>
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <p className={`text-xs font-bold uppercase tracking-wide flex items-center gap-1.5 ${isDark ? 'text-emerald-400' : 'text-emerald-700'}`}>
+                                    <FiGlobe size={13} /> Domain / Hosting
+                                </p>
+                                <span className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                                    সেভ করলে Domain/Hosting পেজে এই রেকর্ড যোগ/আপডেট হবে
+                                </span>
+                            </div>
+
+                            {/* দাম প্রজেক্টের ভিতরে না আলাদা — Total Revenue এর হিসাব এটার উপর নির্ভর করে */}
+                            <div>
+                                <label className={label}>ডোমেইন/হোস্টিংয়ের পেমেন্ট</label>
+                                <div className="grid sm:grid-cols-2 gap-2">
+                                    {BILLING_MODES.map((b) => (
+                                        <button key={b.value} type="button" onClick={() => setDh({ ...dh, billing: b.value })}
+                                            className={`text-left px-3 py-2.5 rounded-lg border text-sm transition ${dh.billing === b.value
+                                                ? 'border-transparent text-white'
+                                                : isDark ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+                                            style={dh.billing === b.value ? { background: '#0CB2A9' } : {}}>
+                                            <span className="font-semibold block">{b.label}</span>
+                                            <span className={`text-[11px] ${dh.billing === b.value ? 'text-white/80' : 'text-slate-400'}`}>{b.hint}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="grid md:grid-cols-3 gap-4">
+                                <div className={needsHostingGB ? '' : 'md:col-span-2'}>
+                                    <label className={label}>Domain / Site Name *</label>
+                                    <input className={input} placeholder="example.com" value={dh.domainName} onChange={setD('domainName')} />
+                                </div>
+                                {needsHostingGB && (
+                                    <div><label className={label}>Hosting (GB)</label><input type="number" className={input} placeholder="যেমন 10" value={dh.hostingGB} onChange={setD('hostingGB')} /></div>
+                                )}
+                                <div><label className={label}>Provider</label><input className={input} placeholder="Namecheap ইত্যাদি" value={dh.provider} onChange={setD('provider')} /></div>
+                            </div>
+
+                            <div className="grid md:grid-cols-3 gap-4">
+                                <div><label className={label}>আমাদের খরচ / Buy (৳)</label><input type="number" className={input} value={dh.buyPrice} onChange={setD('buyPrice')} /></div>
+                                <div><label className={label}>ক্লায়েন্টের দাম / Sell (৳)</label><input type="number" className={input} value={dh.sellPrice} onChange={setD('sellPrice')} /></div>
+                                <div>
+                                    <label className={label}>মাসের লাভে যোগ হবে</label>
+                                    <div className={`px-3 py-2.5 rounded-lg border text-sm font-bold ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} ${dhImpact >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                        {bdt(dhImpact)}
+                                    </div>
+                                    <p className="text-[11px] mt-1 text-slate-400">
+                                        {dh.billing === 'included' ? 'Sell টা Total Amount এ আছে — শুধু Buy বাদ' : 'Sell − Buy'}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="grid md:grid-cols-3 gap-4">
+                                <div><label className={label}>Owner (মালিক)</label><input className={input} value={dh.owner} onChange={setD('owner')} /></div>
+                                <div><label className={label}>Purchase Date</label><input type="date" className={input} value={dh.purchaseDate} onChange={setD('purchaseDate')} /></div>
+                                <div><label className={label}>Expiry Date</label><input type="date" className={input} value={dh.expiryDate} onChange={setD('expiryDate')} /></div>
+                            </div>
+
+                            <div><label className={label}>Note</label><input className={input} value={dh.note} onChange={setD('note')} /></div>
+                        </div>
+                    )}
 
                     {/* Client brief (optional) */}
                     <div className={`rounded-xl p-4 space-y-4 ${isDark ? 'bg-slate-800/50' : 'bg-slate-50'}`}>
