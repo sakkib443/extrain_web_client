@@ -87,6 +87,20 @@ function loadLogo() {
     });
 }
 
+// Poppins এ Regular আর Bold-ই embed করা — মাঝের weight নেই। ডান পাশের মানগুলো
+// Bold এ বেশি ভারী লাগে, তাই Regular এর উপর চুলের মতো সরু stroke দিয়ে semibold
+// এর মতো দেখানো হয় (renderingMode: fillThenStroke)।
+// 11pt এ Poppins Regular এর stem ≈ 0.97pt, Bold ≈ 1.54pt। 0.3pt stroke এ
+// stem ≈ 1.27pt — অর্থাৎ SemiBold এর কাছাকাছি, Bold এর মতো ভারী নয়।
+const SEMI = 0.3;
+const setSemibold = (doc, r, g, b) => {
+    doc.setFont('Poppins', 'normal');
+    doc.setTextColor(r, g, b);
+    doc.setDrawColor(r, g, b);
+    doc.setLineWidth(SEMI);
+};
+const semiOpts = (extra) => ({ ...extra, renderingMode: 'fillThenStroke' });
+
 // project থেকে professional English money receipt PDF (jsPDF) — async (logo লোড করে)
 export async function generateReceiptPdf(p, options, message, receiptNo) {
     const doc = new jsPDF({ unit: 'pt', format: 'a4' });
@@ -149,7 +163,8 @@ export async function generateReceiptPdf(p, options, message, receiptNo) {
     ];
     info.forEach(([k, v]) => {
         doc.setTextColor(100); doc.setFont('Poppins', 'normal'); doc.text(k, M, y);
-        doc.setTextColor(30); doc.setFont('Poppins', 'bold'); doc.text(String(v), W - M, y, { align: 'right' });
+        setSemibold(doc, 30, 41, 59);
+        doc.text(String(v), W - M, y, semiOpts({ align: 'right' }));
         y += 19;
     });
     y += 8;
@@ -167,9 +182,11 @@ export async function generateReceiptPdf(p, options, message, receiptNo) {
         doc.setFont('Poppins', 'normal'); doc.setFontSize(hi ? 12 : indent ? 9.5 : 11);
         doc.setTextColor(indent ? 140 : 100);
         doc.text(k, M + (indent ? 30 : 16), ay);
-        doc.setFont('Poppins', 'bold'); doc.setFontSize(hi ? 12 : indent ? 9.5 : 11);
-        if (hi) doc.setTextColor(217, 119, 6); else doc.setTextColor(indent ? 100 : 30);
-        doc.text(v, W - M - 16, ay, { align: 'right' });
+        doc.setFontSize(hi ? 12 : indent ? 9.5 : 11);
+        if (hi) setSemibold(doc, 217, 119, 6);
+        else if (indent) setSemibold(doc, 100, 116, 139);
+        else setSemibold(doc, 30, 41, 59);
+        doc.text(v, W - M - 16, ay, semiOpts({ align: 'right' }));
         ay += 22;
     });
     y += boxH + 20;
@@ -197,7 +214,8 @@ export async function generateReceiptPdf(p, options, message, receiptNo) {
     if (options.due !== false && p.nextPayDate && p.totalDue > 0) extra.push(['Next Payment Date', fmtDate(p.nextPayDate)]);
     extra.forEach(([k, v]) => {
         doc.setFontSize(10); doc.setFont('Poppins', 'normal'); doc.setTextColor(100); doc.text(k, M, y);
-        doc.setTextColor(30); doc.setFont('Poppins', 'bold'); doc.text(v, W - M, y, { align: 'right' });
+        setSemibold(doc, 30, 41, 59);
+        doc.text(v, W - M, y, semiOpts({ align: 'right' }));
         y += 19;
     });
     y += 10;
@@ -395,8 +413,8 @@ function ReceiptPreview({ p, options, message, receiptNo }) {
                                 <td style={{
                                     ...rowStyle,
                                     textAlign: 'right',
-                                    fontWeight: hi ? 800 : indent ? 500 : 700,
-                                    color: hi ? '#d97706' : indent ? '#64748b' : '#0f172a',
+                                    fontWeight: hi ? 600 : indent ? 500 : 600,
+                                    color: hi ? '#d97706' : indent ? '#64748b' : '#1e293b',
                                     fontSize: indent ? 11 : undefined,
                                     paddingTop: divider ? 8 : undefined,
                                 }}>{v}</td>
