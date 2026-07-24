@@ -193,6 +193,36 @@ export default function MonthlyTrackerPage() {
                     </table>
                 </div>
             </div>
+
+            {/* ওয়েবসাইট থেকে মাসের লাভ — ডোমেইন/হোস্টিং এই হিসাবের বাইরে (ওটা নিজের ট্যাবে) */}
+            <div className="flex justify-end">
+                <div className={`w-full sm:w-[340px] rounded-xl border overflow-hidden ${isDark ? 'bg-slate-800/50 border-slate-700/60' : 'bg-white border-slate-200/70'}`}>
+                    <div className={`px-5 py-3 border-b ${isDark ? 'border-slate-700/60' : 'border-slate-100'}`}>
+                        <p className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-400'}`}>
+                            Total Profit for Website
+                        </p>
+                    </div>
+                    <div className="px-5 py-3.5 space-y-2">
+                        <div className="flex items-center justify-between text-sm">
+                            <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Collection</span>
+                            <span className="font-semibold text-emerald-500">{bdt(summary?.totalCollection)}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                            <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Expenses</span>
+                            <span className="font-semibold text-rose-500">− {bdt(summary?.totalExpenses)}</span>
+                        </div>
+                        <div className={`flex items-center justify-between pt-2.5 border-t ${isDark ? 'border-slate-700/60' : 'border-slate-100'}`}>
+                            <span className={`text-sm font-semibold ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Profit</span>
+                            <span className={`text-[22px] leading-tight font-bold ${(summary?.websiteProfit ?? 0) >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                {bdt(summary?.websiteProfit)}
+                            </span>
+                        </div>
+                        <p className={`text-[11px] pt-1 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                            ডোমেইন/হোস্টিং এখানে ধরা হয়নি — ওটা নিজের ট্যাবে
+                        </p>
+                    </div>
+                </div>
+            </div>
             </>}
 
             {editing && (
