@@ -178,7 +178,11 @@ export const BILLING_MODES = [
 
 export const billingLabel = (v) => (v === 'included' ? 'Included' : 'Separate');
 
-// একটা domain রেকর্ড মাসের লাভে কতটা যোগ করে (server এর domainRevenueImpact এর মিরর)
+// ডোমেইনের নিজের লাভ — যত টাকায় বেচা, তত টাকায় কেনা বাদ
+export const domainProfit = (d) => (Number(d?.sellPrice) || 0) - (Number(d?.buyPrice) || 0);
+
+// মাসের মোট লাভে এই রেকর্ড কতটা যোগ করে (server এর domainRevenueImpact এর মিরর)।
+// included হলে Sell টা project এর installment এই আদায় হয়েছে — তাই শুধু আমাদের খরচ বাদ যায়।
 export const domainRevenueImpact = (d) =>
     (d?.billing === 'included' ? 0 : Number(d?.sellPrice) || 0) - (Number(d?.buyPrice) || 0);
 

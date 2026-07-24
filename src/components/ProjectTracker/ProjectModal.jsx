@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { FiX, FiSave, FiPlus, FiTrash2, FiCheck, FiCheckCircle, FiCreditCard, FiCornerUpLeft, FiFileText, FiGlobe } from 'react-icons/fi';
-import { ptApi, bdt, WEBSITE_TYPES, STATUS_OPTIONS, PACKAGE_TYPES, BILLING_MODES, domainRevenueImpact } from '@/lib/projectTracker';
+import { ptApi, bdt, WEBSITE_TYPES, STATUS_OPTIONS, PACKAGE_TYPES, BILLING_MODES, domainProfit } from '@/lib/projectTracker';
 
 const toInput = (d) => (d ? new Date(d).toISOString().slice(0, 10) : '');
 const today = () => new Date().toISOString().slice(0, 10);
@@ -61,7 +61,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
 
     const hasPackage = f.packageType !== 'without_domain_hosting';
     const needsHostingGB = f.packageType === 'with_hosting' || f.packageType === 'with_domain_hosting';
-    const dhImpact = domainRevenueImpact(dh);
+    const dhProfit = domainProfit(dh);
 
     // paid: false = planned/future (Paid এ ধরা হয় না); isRefund = negative amount
     // NOTE: load এ balanceLast করা হয় না — existing amount অক্ষত রাখতে। শুধু plan/edit এ balance হয়।
@@ -316,6 +316,11 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                                         </button>
                                     ))}
                                 </div>
+                                <p className={`text-[11px] mt-1.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                                    {dh.billing === 'included'
+                                        ? <>মাসের মোট লাভে: ক্লায়েন্টের দাম installment এই আদায় হচ্ছে, তাই শুধু আমাদের খরচ <b className="text-rose-500">−{bdt(Number(dh.buyPrice) || 0)}</b> বাদ যাবে।</>
+                                        : <>মাসের মোট লাভে: প্রজেক্টের টাকার বাইরে, তাই পুরো লাভ <b className="text-emerald-500">{bdt(dhProfit)}</b> যোগ হবে।</>}
+                                </p>
                             </div>
 
                             <div className="grid md:grid-cols-3 gap-4">
@@ -333,13 +338,11 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                                 <div><label className={label}>আমাদের খরচ / Buy (৳)</label><input type="number" className={input} value={dh.buyPrice} onChange={setD('buyPrice')} /></div>
                                 <div><label className={label}>ক্লায়েন্টের দাম / Sell (৳)</label><input type="number" className={input} value={dh.sellPrice} onChange={setD('sellPrice')} /></div>
                                 <div>
-                                    <label className={label}>মাসের লাভে যোগ হবে</label>
-                                    <div className={`px-3 py-2.5 rounded-lg border text-sm font-bold ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} ${dhImpact >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
-                                        {bdt(dhImpact)}
+                                    <label className={label}>Profit (auto)</label>
+                                    <div className={`px-3 py-2.5 rounded-lg border text-sm font-bold ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} ${dhProfit >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                        {bdt(dhProfit)}
                                     </div>
-                                    <p className="text-[11px] mt-1 text-slate-400">
-                                        {dh.billing === 'included' ? 'Sell টা Total Amount এ আছে — শুধু Buy বাদ' : 'Sell − Buy'}
-                                    </p>
+                                    <p className="text-[11px] mt-1 text-slate-400">Sell − Buy</p>
                                 </div>
                             </div>
 

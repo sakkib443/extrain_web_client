@@ -6,7 +6,7 @@ import {
     FiPlus, FiTrash2, FiEdit3, FiRefreshCw, FiX, FiSave, FiGlobe,
     FiTrendingUp, FiTrendingDown, FiDollarSign,
 } from 'react-icons/fi';
-import { ptApi, bdt, fmtDate, BILLING_MODES, domainRevenueImpact } from '@/lib/projectTracker';
+import { ptApi, bdt, fmtDate, BILLING_MODES, domainProfit } from '@/lib/projectTracker';
 
 const Stat = ({ isDark, icon: Icon, label, value, tone }) => {
     const tones = { blue: 'from-blue-500 to-indigo-600', red: 'from-rose-500 to-red-600', green: 'from-emerald-500 to-green-600', slate: 'from-slate-500 to-slate-600' };
@@ -61,7 +61,7 @@ export default function DomainsTab({ isDark, month }) {
         setEditing(d);
     };
 
-    const impact = domainRevenueImpact(form);
+    const profit = domainProfit(form);
 
     const onSelectProject = (e) => {
         const pid = e.target.value;
@@ -101,8 +101,17 @@ export default function DomainsTab({ isDark, month }) {
                 <Stat isDark={isDark} icon={FiGlobe} label="Total Domains" value={summary?.count || 0} tone="slate" />
                 <Stat isDark={isDark} icon={FiTrendingDown} label="Total Buy Cost" value={bdt(summary?.totalBuy)} tone="red" />
                 <Stat isDark={isDark} icon={FiDollarSign} label="Total Sell" value={bdt(summary?.totalSell)} tone="blue" />
-                <Stat isDark={isDark} icon={FiTrendingUp} label="Net Profit (মাসের লাভে)" value={bdt(summary?.revenueImpact ?? summary?.totalProfit)} tone={((summary?.revenueImpact ?? summary?.totalProfit) || 0) >= 0 ? 'green' : 'red'} />
+                <Stat isDark={isDark} icon={FiTrendingUp} label="Total Profit" value={bdt(summary?.totalProfit)} tone={(summary?.totalProfit || 0) >= 0 ? 'green' : 'red'} />
             </div>
+
+            {/* উপরের Total Profit = Sell − Buy। কিন্তু 'প্রজেক্টের ভিতরে' ওয়ালাগুলোর Sell
+                project collection এই ধরা আছে, তাই মাসের মোট লাভে অবদান আলাদা হয়। */}
+            {summary?.includedCount > 0 && (
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                    এর মধ্যে <b>{summary.includedCount}</b> টি প্রজেক্টের দামের ভিতরে — ওগুলোর বিক্রি installment এই আদায় হয়েছে,
+                    তাই মাসের মোট লাভে ডোমেইন/হোস্টিং থেকে যোগ হচ্ছে <b className={(summary.revenueImpact || 0) >= 0 ? 'text-emerald-500' : 'text-rose-500'}>{bdt(summary.revenueImpact)}</b>।
+                </p>
+            )}
 
             <div className="flex items-center justify-between">
                 <h3 className={`font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-800'}`}><FiGlobe style={{ color: '#FD9A00' }} /> Domain List</h3>
@@ -129,7 +138,7 @@ export default function DomainsTab({ isDark, month }) {
                                 <th className={th}>Billing</th>
                                 <th className={th}>Buy</th>
                                 <th className={th}>Sell</th>
-                                <th className={th}>Net Profit</th>
+                                <th className={th}>Profit</th>
                                 <th className={th}>Expiry</th>
                                 <th className={th + ' text-right'}>Actions</th>
                             </tr>
@@ -162,9 +171,8 @@ export default function DomainsTab({ isDark, month }) {
                                     </td>
                                     <td className={td + ' text-rose-500 font-semibold'}>{bdt(d.buyPrice)}</td>
                                     <td className={td + ' text-blue-500 font-semibold'}>{bdt(d.sellPrice)}</td>
-                                    <td className={td + ' font-bold ' + (domainRevenueImpact(d) >= 0 ? 'text-emerald-500' : 'text-rose-500')}
-                                        title={d.billing === 'included' ? 'Sell টা project collection এ ধরা — শুধু Buy বাদ' : 'Sell − Buy'}>
-                                        {bdt(domainRevenueImpact(d))}
+                                    <td className={td + ' font-bold ' + ((d.profit || 0) >= 0 ? 'text-emerald-500' : 'text-rose-500')} title="Sell − Buy">
+                                        {bdt(d.profit)}
                                     </td>
                                     <td className={td}>{d.expiryDate ? fmtDate(d.expiryDate) : '—'}</td>
                                     <td className={td + ' text-right'}>
@@ -248,8 +256,9 @@ export default function DomainsTab({ isDark, month }) {
                                 <div><label className={label}>Buy Price (৳)</label><input type="number" className={input} value={form.buyPrice} onChange={(e) => setForm({ ...form, buyPrice: e.target.value })} /></div>
                                 <div><label className={label}>Sell Price (৳)</label><input type="number" className={input} value={form.sellPrice} onChange={(e) => setForm({ ...form, sellPrice: e.target.value })} /></div>
                                 <div>
-                                    <label className={label}>মাসের লাভে যোগ (auto)</label>
-                                    <div className={`px-3 py-2.5 rounded-lg border text-sm font-bold ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'} ${impact >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>{bdt(impact)}</div>
+                                    <label className={label}>Profit (auto)</label>
+                                    <div className={`px-3 py-2.5 rounded-lg border text-sm font-bold ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'} ${profit >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>{bdt(profit)}</div>
+                                    <p className="text-[11px] mt-1 text-slate-400">Sell − Buy</p>
                                 </div>
                             </div>
                             <div className="grid md:grid-cols-3 gap-4">
