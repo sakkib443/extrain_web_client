@@ -162,10 +162,18 @@ export default function MonthlyTrackerPage() {
                                     <td className={td}>{p.companyBrand || '—'}</td>
                                     <td className={td}>{p.phone}</td>
                                     <td className={td}>{p.websiteType}</td>
-                                    <td className={td + ' font-semibold'}>{bdt(p.totalProjectAmount)}</td>
-                                    <td className={td + ' text-emerald-500 font-semibold'}>{bdt(p.totalPaid)}</td>
-                                    <td className={td + ' text-amber-500 font-semibold'}>{bdt(p.totalDue)}</td>
-                                    <td className={td}>{p.duePercentage}%</td>
+                                    {/* Total/Paid/Due — ডোমেইনের অংশ বাদ দিয়ে শুধু ওয়েবসাইটের টাকা */}
+                                    <td className={td + ' font-semibold'}>
+                                        {bdt(p.websiteAmount ?? p.totalProjectAmount)}
+                                        {p.domainSellIncluded > 0 && (
+                                            <span className="block text-[11px] font-normal text-slate-400" title={`মোট ${bdt(p.totalProjectAmount)} এর ভিতরে ডোমেইন/হোস্টিং ${bdt(p.domainSellIncluded)}`}>
+                                                +{bdt(p.domainSellIncluded)} ডোমেইন
+                                            </span>
+                                        )}
+                                    </td>
+                                    <td className={td + ' text-emerald-500 font-semibold'}>{bdt(p.websitePaid ?? p.totalPaid)}</td>
+                                    <td className={td + ' text-amber-500 font-semibold'}>{bdt(p.websiteDue ?? p.totalDue)}</td>
+                                    <td className={td}>{p.websiteDuePercentage ?? p.duePercentage}%</td>
                                     <td className={td}>{fmtDate(p.nextPayDate)}</td>
                                     <td className={td}>{fmtDate(p.projectDeliveryDate)}</td>
                                     <td className={td}>

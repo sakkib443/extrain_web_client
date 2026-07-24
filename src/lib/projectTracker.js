@@ -181,10 +181,16 @@ export const billingLabel = (v) => (v === 'included' ? 'Included' : 'Separate');
 // ডোমেইনের নিজের লাভ — যত টাকায় বেচা, তত টাকায় কেনা বাদ
 export const domainProfit = (d) => (Number(d?.sellPrice) || 0) - (Number(d?.buyPrice) || 0);
 
+// ডোমেইন বাবদ ক্লায়েন্টের কাছে কত বাকি
+export const domainDue = (d) =>
+    Math.max(0, (Number(d?.sellPrice) || 0) - (Number(d?.clientPaid) || 0));
+
 // মাসের মোট লাভে এই রেকর্ড কতটা যোগ করে (server এর domainRevenueImpact এর মিরর)।
-// included হলে Sell টা project এর installment এই আদায় হয়েছে — তাই শুধু আমাদের খরচ বাদ যায়।
+// included হলে Sell টা প্রজেক্টের Total এ ধরা — Tracker এর collection থেকে clientPaid বাদ
+// দিয়ে website collection হয়, তাই এখানে clientPaid ধরা হয়।
 export const domainRevenueImpact = (d) =>
-    (d?.billing === 'included' ? 0 : Number(d?.sellPrice) || 0) - (Number(d?.buyPrice) || 0);
+    (d?.billing === 'included' ? Number(d?.clientPaid) || 0 : Number(d?.sellPrice) || 0) -
+    (Number(d?.buyPrice) || 0);
 
 export const STATUS_OPTIONS = ['pending', 'working', 'done', 'cancelled'];
 

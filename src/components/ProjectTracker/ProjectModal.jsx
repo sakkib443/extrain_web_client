@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { FiX, FiSave, FiPlus, FiTrash2, FiCheck, FiCheckCircle, FiCreditCard, FiCornerUpLeft, FiFileText, FiGlobe } from 'react-icons/fi';
-import { ptApi, bdt, WEBSITE_TYPES, STATUS_OPTIONS, PACKAGE_TYPES, BILLING_MODES, domainProfit } from '@/lib/projectTracker';
+import { ptApi, bdt, WEBSITE_TYPES, STATUS_OPTIONS, PACKAGE_TYPES, BILLING_MODES, domainProfit, domainDue } from '@/lib/projectTracker';
 
 const toInput = (d) => (d ? new Date(d).toISOString().slice(0, 10) : '');
 const today = () => new Date().toISOString().slice(0, 10);
@@ -53,6 +53,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
         billing: linkedDomain?.billing || 'included',
         buyPrice: linkedDomain?.buyPrice ?? '',
         sellPrice: linkedDomain?.sellPrice ?? '',
+        clientPaid: linkedDomain?.clientPaid ?? '',
         purchaseDate: toInput(linkedDomain?.purchaseDate),
         expiryDate: toInput(linkedDomain?.expiryDate),
         note: linkedDomain?.note || '',
@@ -62,6 +63,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
     const hasPackage = f.packageType !== 'without_domain_hosting';
     const needsHostingGB = f.packageType === 'with_hosting' || f.packageType === 'with_domain_hosting';
     const dhProfit = domainProfit(dh);
+    const dhDue = domainDue(dh);
 
     // paid: false = planned/future (Paid এ ধরা হয় না); isRefund = negative amount
     // NOTE: load এ balanceLast করা হয় না — existing amount অক্ষত রাখতে। শুধু plan/edit এ balance হয়।
@@ -222,6 +224,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                         ...dh,
                         buyPrice: Number(dh.buyPrice) || 0,
                         sellPrice: Number(dh.sellPrice) || 0,
+                        clientPaid: Number(dh.clientPaid) || 0,
                         hostingGB: needsHostingGB && dh.hostingGB ? Number(dh.hostingGB) : undefined,
                     }
                     : null,
@@ -318,8 +321,8 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                                 </div>
                                 <p className={`text-[11px] mt-1.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                                     {dh.billing === 'included'
-                                        ? <>মাসের মোট লাভে: ক্লায়েন্টের দাম installment এই আদায় হচ্ছে, তাই শুধু আমাদের খরচ <b className="text-rose-500">−{bdt(Number(dh.buyPrice) || 0)}</b> বাদ যাবে।</>
-                                        : <>মাসের মোট লাভে: প্রজেক্টের টাকার বাইরে, তাই পুরো লাভ <b className="text-emerald-500">{bdt(dhProfit)}</b> যোগ হবে।</>}
+                                        ? <>Tracker এ Total দেখাবে <b>{bdt(Math.max(0, (Number(f.totalProjectAmount) || 0) - (Number(dh.sellPrice) || 0)))}</b> — মোট {bdt(Number(f.totalProjectAmount) || 0)} থেকে ডোমেইনের {bdt(Number(dh.sellPrice) || 0)} বাদ।</>
+                                        : <>প্রজেক্টের টাকার বাইরে — Tracker এর Total এ এই টাকা ঢুকবে না।</>}
                                 </p>
                             </div>
 
@@ -334,9 +337,16 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                                 <div><label className={label}>Provider</label><input className={input} placeholder="Namecheap ইত্যাদি" value={dh.provider} onChange={setD('provider')} /></div>
                             </div>
 
-                            <div className="grid md:grid-cols-3 gap-4">
+                            <div className="grid md:grid-cols-4 gap-4">
                                 <div><label className={label}>আমাদের খরচ / Buy (৳)</label><input type="number" className={input} value={dh.buyPrice} onChange={setD('buyPrice')} /></div>
                                 <div><label className={label}>ক্লায়েন্টের দাম / Sell (৳)</label><input type="number" className={input} value={dh.sellPrice} onChange={setD('sellPrice')} /></div>
+                                <div>
+                                    <label className={label}>ক্লায়েন্ট দিয়েছে (৳)</label>
+                                    <input type="number" className={input} value={dh.clientPaid} onChange={setD('clientPaid')} />
+                                    <p className="text-[11px] mt-1 text-slate-400">
+                                        বাকি <b className={dhDue > 0 ? 'text-amber-500' : 'text-emerald-500'}>{bdt(dhDue)}</b>
+                                    </p>
+                                </div>
                                 <div>
                                     <label className={label}>Profit (auto)</label>
                                     <div className={`px-3 py-2.5 rounded-lg border text-sm font-bold ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} ${dhProfit >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
@@ -345,6 +355,15 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                                     <p className="text-[11px] mt-1 text-slate-400">Sell − Buy</p>
                                 </div>
                             </div>
+
+                            {/* included হলে installment এর কোন অংশটা ডোমেইনে গেল সেটা এখানেই ঠিক হয় */}
+                            {dh.billing === 'included' && (
+                                <div className={`rounded-lg px-3 py-2.5 text-[12px] ${isDark ? 'bg-slate-800/70 text-slate-300' : 'bg-white text-slate-600 border border-slate-200'}`}>
+                                    ক্লায়েন্টের দেওয়া মোট <b>{bdt(totalPaid)}</b> এর মধ্যে <b>{bdt(Number(dh.clientPaid) || 0)}</b> ডোমেইনে ধরা হচ্ছে —
+                                    তাই Tracker এ Paid দেখাবে <b className="text-emerald-500">{bdt(Math.max(0, totalPaid - (Number(dh.clientPaid) || 0)))}</b>,
+                                    Due <b className="text-amber-500">{bdt(Math.max(0, Math.max(0, (Number(f.totalProjectAmount) || 0) - (Number(dh.sellPrice) || 0)) - Math.max(0, totalPaid - (Number(dh.clientPaid) || 0))))}</b>।
+                                </div>
+                            )}
 
                             <div className="grid md:grid-cols-3 gap-4">
                                 <div><label className={label}>Owner (মালিক)</label><input className={input} value={dh.owner} onChange={setD('owner')} /></div>
