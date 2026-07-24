@@ -192,6 +192,21 @@ export const domainRevenueImpact = (d) =>
     (d?.billing === 'included' ? Number(d?.clientPaid) || 0 : Number(d?.sellPrice) || 0) -
     (Number(d?.buyPrice) || 0);
 
+// খরচের খাত — Expense.category তে slug টাই সেভ হয়, UI তে label দেখানো হয়
+export const EXPENSE_CATEGORIES = [
+    { value: 'ads', label: 'Ads / বিজ্ঞাপন' },
+    { value: 'page_like', label: 'Page Like' },
+    { value: 'fb_video', label: 'FB Video' },
+    { value: 'transport', label: 'যাতায়াত / Visit' },
+    { value: 'salary', label: 'Salary / বেতন' },
+    { value: 'tools', label: 'Tools / Software' },
+    { value: 'domain_hosting', label: 'Domain / Hosting' },
+    { value: 'other', label: 'Other / অন্যান্য' },
+];
+
+export const expenseCategoryLabel = (v) =>
+    EXPENSE_CATEGORIES.find((c) => c.value === v)?.label || v || '—';
+
 export const STATUS_OPTIONS = ['pending', 'working', 'done', 'cancelled'];
 
 export const statusStyle = (s) => {

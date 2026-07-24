@@ -3,15 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FiPlus, FiTrash2, FiRefreshCw, FiX, FiSave } from 'react-icons/fi';
-import { ptApi, bdt, fmtDate, monthLabel } from '@/lib/projectTracker';
-
-const CATEGORIES = ['ads', 'page_like', 'fb_video', 'salary', 'tools', 'domain_hosting', 'other'];
+import { ptApi, bdt, fmtDate, monthLabel, EXPENSE_CATEGORIES, expenseCategoryLabel } from '@/lib/projectTracker';
 
 export default function ExpensesTab({ isDark, month, onChanged }) {
     const [expenses, setExpenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [filter, setFilter] = useState('all'); // কোন খাত দেখাচ্ছি
     const [form, setForm] = useState({ reason: '', category: 'ads', amount: '', costDate: `${month}-01` });
 
     const load = async () => {
@@ -23,6 +22,23 @@ export default function ExpensesTab({ isDark, month, onChanged }) {
     useEffect(() => { load(); }, [month]);
 
     const total = expenses.reduce((s, e) => s + (e.amount || 0), 0);
+
+    // খাত অনুযায়ী মোট — যে খাতে এই মাসে খরচ আছে শুধু সেগুলোই chip হিসেবে দেখাই
+    const byCategory = expenses.reduce((acc, e) => {
+        const k = e.category || 'other';
+        acc[k] = (acc[k] || 0) + (e.amount || 0);
+        return acc;
+    }, {});
+    const usedCategories = [
+        ...EXPENSE_CATEGORIES.filter((c) => byCategory[c.value] !== undefined),
+        // পুরনো ডেটায় তালিকার বাইরের কোনো খাত থাকলে সেটাও দেখাই
+        ...Object.keys(byCategory)
+            .filter((k) => !EXPENSE_CATEGORIES.some((c) => c.value === k))
+            .map((k) => ({ value: k, label: k })),
+    ];
+
+    const shown = filter === 'all' ? expenses : expenses.filter((e) => (e.category || 'other') === filter);
+    const shownTotal = shown.reduce((s, e) => s + (e.amount || 0), 0);
 
     const save = async () => {
         if (!form.reason || !form.amount) { toast.error('Reason ও Amount দিন'); return; }
@@ -50,8 +66,11 @@ export default function ExpensesTab({ isDark, month, onChanged }) {
         <div className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className={`rounded-2xl px-5 py-3 border ${isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white border-slate-200'}`}>
-                    <span className={`text-sm ${muted}`}>{monthLabel(month)} মোট খরচ: </span>
-                    <span className="text-xl font-bold text-rose-500">{bdt(total)}</span>
+                    <span className={`text-sm ${muted}`}>
+                        {monthLabel(month)} {filter === 'all' ? 'মোট খরচ' : `${expenseCategoryLabel(filter)} খরচ`}:{' '}
+                    </span>
+                    <span className="text-xl font-bold text-rose-500">{bdt(shownTotal)}</span>
+                    {filter !== 'all' && <span className={`text-sm ${muted}`}> / মোট {bdt(total)}</span>}
                 </div>
                 <div className="flex gap-2">
                     <button onClick={load} className={`p-2.5 rounded-xl ${isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
@@ -62,6 +81,25 @@ export default function ExpensesTab({ isDark, month, onChanged }) {
                     </button>
                 </div>
             </div>
+
+            {/* খাত অনুযায়ী ফিল্টার — প্রতিটায় ওই খাতের মোট খরচ দেখা যায় */}
+            {usedCategories.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                    {[{ value: 'all', label: 'সব খাত', amount: total }, ...usedCategories.map((c) => ({ ...c, amount: byCategory[c.value] }))].map((c) => {
+                        const active = filter === c.value;
+                        return (
+                            <button key={c.value} onClick={() => setFilter(c.value)}
+                                className={`px-3.5 py-2 rounded-xl border text-sm transition ${active
+                                    ? 'text-white border-transparent shadow'
+                                    : isDark ? 'bg-slate-800/60 border-slate-700 text-slate-300 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+                                style={active ? { background: '#FD9A00' } : {}}>
+                                <span className="font-semibold">{c.label}</span>
+                                <span className={`ml-2 font-bold ${active ? 'text-white' : 'text-rose-500'}`}>{bdt(c.amount)}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
 
             <div className={`rounded-2xl border overflow-hidden ${isDark ? 'bg-slate-800/40 border-slate-700' : 'bg-white border-slate-200'} shadow-sm`}>
                 <div className="overflow-x-auto">
@@ -76,15 +114,17 @@ export default function ExpensesTab({ isDark, month, onChanged }) {
                         <tbody className={isDark ? 'divide-y divide-slate-700/50' : 'divide-y divide-slate-100'}>
                             {loading ? (
                                 <tr><td colSpan={6} className={`text-center py-14 ${muted}`}>লোড হচ্ছে...</td></tr>
-                            ) : expenses.length === 0 ? (
-                                <tr><td colSpan={6} className={`text-center py-14 ${muted}`}>এই মাসে কোনো খরচ নেই।</td></tr>
-                            ) : expenses.map((e, i) => (
+                            ) : shown.length === 0 ? (
+                                <tr><td colSpan={6} className={`text-center py-14 ${muted}`}>
+                                    {filter === 'all' ? 'এই মাসে কোনো খরচ নেই।' : `${expenseCategoryLabel(filter)} খাতে এই মাসে কোনো খরচ নেই।`}
+                                </td></tr>
+                            ) : shown.map((e, i) => (
                                 <tr key={e._id} className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}>
                                     <td className={`px-4 py-3 text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{e.slNo || i + 1}</td>
                                     <td className={`px-4 py-3 text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{fmtDate(e.costDate)}</td>
                                     <td className={`px-4 py-3 text-sm font-medium ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>{e.reason}</td>
                                     <td className="px-4 py-3 text-sm">
-                                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${isDark ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>{e.category || '—'}</span>
+                                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${isDark ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>{expenseCategoryLabel(e.category)}</span>
                                     </td>
                                     <td className="px-4 py-3 text-sm text-right font-bold text-rose-500">{bdt(e.amount)}</td>
                                     <td className="px-4 py-3 text-right">
@@ -109,7 +149,7 @@ export default function ExpensesTab({ isDark, month, onChanged }) {
                             <input className={input + ' w-full'} placeholder="Reason (যেমন: Facebook Ads)" value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} />
                             <div className="grid grid-cols-2 gap-3">
                                 <select className={input + ' w-full'} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
-                                    {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                                    {EXPENSE_CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
                                 </select>
                                 <input className={input + ' w-full'} type="number" placeholder="Amount (৳)" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} />
                             </div>
