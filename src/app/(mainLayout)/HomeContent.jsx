@@ -7,7 +7,6 @@ import Hero from "@/components/Home/Hero";
 import HomeCategory from "@/components/Home/HomeCategory";
 import WhatWeProvide from "@/components/Home/WhatWeProvide";
 import DigitalProducts from "@/components/Home/DigitalProducts";
-import MissionSection from "@/components/Home/MissionSection";
 import TestimonialSection from "@/components/Home/TestimonialSection";
 import CompanyLogos from "@/components/Home/CompanyLogos";
 
@@ -30,7 +29,6 @@ export default function HomeContent() {
                 <section className="relative z-10 bg-white dark:bg-[#020202]">
                     <HomeCategory />
                     <DigitalProducts />
-                    <MissionSection />
                     <WhatWeProvide />
                     <CompanyLogos />
                     <TestimonialSection />
