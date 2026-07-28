@@ -21,6 +21,7 @@ const balanceLast = (rows, total) => {
 export default function ProjectModal({ isDark, project, defaultMonth, onClose, onSaved }) {
     const init = project || {};
     const [f, setF] = useState({
+        projectId: init.projectId || '', // Order Number — editable, ফাঁকা রাখলে confirm এ auto
         clientName: init.clientName || '',
         companyBrand: init.companyBrand || '',
         phone: init.phone || '',
@@ -206,6 +207,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
         try {
             const body = {
                 ...f,
+                projectId: f.projectId.trim(), // ফাঁকা হলে server confirm এ auto বসাবে
                 status: nextStatus,
                 totalProjectAmount: Number(f.totalProjectAmount) || 0,
                 domainClientPaid: Number(f.domainClientPaid) || 0,
@@ -459,6 +461,15 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                         <div className={`flex gap-6 mt-3 text-sm font-semibold ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                             <span>Paid: <span className="text-emerald-500">{bdt(totalPaid)}</span></span>
                             <span>Due: <span className="text-amber-500">{bdt(due)}</span></span>
+                        </div>
+                    </div>
+
+                    {/* Order Number — editable; request এ ফাঁকা রাখলে confirm এ auto বসে */}
+                    <div className="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label className={label}>Order Number {init.status === 'request' && <span className="font-normal text-slate-400">(confirm এ auto)</span>}</label>
+                            <input className={input + ' font-mono'} placeholder={init.status === 'request' ? 'ফাঁকা রাখলে auto তৈরি হবে' : 'EXP...'} value={f.projectId} onChange={set('projectId')} />
+                            <p className="text-[11px] mt-1 text-slate-400">সবশেষ অর্ডার থেকে এক বাড়িয়ে auto — চাইলে নিজে বদলাতে পারেন (একই নম্বর দুবারও চলবে)</p>
                         </div>
                     </div>
 
