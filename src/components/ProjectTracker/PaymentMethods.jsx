@@ -48,7 +48,7 @@ async function copyText(text) {
 }
 
 export default function PaymentMethods({ isDark }) {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true); // ডিফল্টে খোলা — এক নজরে দেখা যায়
     const [copied, setCopied] = useState(null); // কোনটা এইমাত্র কপি হলো
 
     const copy = async (key, text, okMsg) => {
