@@ -7,6 +7,7 @@ import { FaFacebook, FaLinkedin, FaYoutube, FaInstagram } from "react-icons/fa";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
 import { LuSend, LuHeart } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
+import PaymentMethods from "@/components/sheard/PaymentMethods";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -22,13 +23,6 @@ const Footer = () => {
     { to: "/blog", label: language === "bn" ? "ব্লগ" : "Blog" },
     { to: "/about", label: language === "bn" ? "আমাদের সম্পর্কে" : "About Us" },
     { to: "/contact", label: language === "bn" ? "যোগাযোগ" : "Contact" },
-  ];
-
-  const categories = [
-    { label: language === "bn" ? "ওয়েবসাইট টেমপ্লেট" : "Website Templates", path: "/website" },
-    { label: language === "bn" ? "ওয়ার্ডপ্রেস থিম" : "WordPress Themes", path: "/website?category=wordpress" },
-    { label: language === "bn" ? "ই-কমার্স সল্যুশন" : "eCommerce", path: "/website?category=ecommerce" },
-    { label: language === "bn" ? "ইউআই/ইউএক্স ডিজাইন" : "UI/UX Design", path: "/website?category=uiux" },
   ];
 
   const socialLinks = [
@@ -116,25 +110,8 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Categories */}
-          <div>
-            <h4 className={`text-gray-800 dark:text-white font-black font-poppins uppercase text-xl mb-6 flex items-center gap-2 ${bengaliClass}`}>
-              <span className="w-1.5 h-6 bg-[#FD9A00] rounded-full"></span>
-              {t("footer.categories") || "Categories"}
-            </h4>
-            <ul className="space-y-3">
-              {categories.map((cat, index) => (
-                <li key={index}>
-                  <Link
-                    href={cat.path}
-                    className={`text-gray-600 dark:text-gray-400 hover:text-[#FD9A00] text-sm font-normal transition-colors block group ${bengaliClass}`}
-                  >
-                    {cat.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Payment Methods — ক্লায়েন্ট এখান থেকে টাকা পাঠাতে পারবে */}
+          <PaymentMethods variant="footer" />
 
           {/* Contact Info */}
           <div>

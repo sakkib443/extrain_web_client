@@ -18,7 +18,6 @@ import SendReceiptDialog from '@/components/ProjectTracker/SendReceiptDialog';
 import ProjectDetailModal from '@/components/ProjectTracker/ProjectDetailModal';
 import ExpensesTab from '@/components/ProjectTracker/ExpensesTab';
 import DomainsTab from '@/components/ProjectTracker/DomainsTab';
-import PaymentMethods from '@/components/ProjectTracker/PaymentMethods';
 
 const SummaryTile = ({ isDark, label, value, cls, accent }) => (
     <div className={`relative rounded-xl pl-5 pr-4 py-3.5 border ${isDark ? 'bg-slate-800/50 border-slate-700/60' : 'bg-white border-slate-200/70'}`}>
@@ -100,9 +99,6 @@ export default function MonthlyTrackerPage() {
                 <SummaryTile isDark={isDark} label="Expenses" value={bdt(summary?.totalExpenses)} cls="text-rose-500" accent="#f43f5e" />
                 <SummaryTile isDark={isDark} label="Total Profit" value={bdt(summary?.totalProfit)} cls={summary?.totalProfit >= 0 ? 'text-emerald-500' : 'text-rose-500'} accent={summary?.totalProfit >= 0 ? '#10b981' : '#f43f5e'} />
             </div>
-
-            {/* পেমেন্ট মাধ্যম — ক্লায়েন্টকে পাঠাতে এক ক্লিকে কপি */}
-            <PaymentMethods isDark={isDark} />
 
             {/* Tabs — summary এর নিচে */}
             <div className={`inline-flex gap-1 p-1 rounded-xl ${isDark ? 'bg-slate-800/60' : 'bg-slate-100'}`}>

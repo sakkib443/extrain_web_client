@@ -9,6 +9,7 @@ import {
     FiType, FiLink, FiCopy, FiGrid, FiHome,
 } from 'react-icons/fi';
 import { ptApi, WEBSITE_TYPES } from '@/lib/projectTracker';
+import PaymentMethods from '@/components/sheard/PaymentMethods';
 
 const BRAND = '#FD9A00';
 
@@ -215,6 +216,9 @@ export default function ConfirmOrderPage() {
                             <textarea rows={2} className="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none transition text-slate-800" placeholder="বিস্তারিত ব্রিফ — কী টাইপের ওয়েবসাইট চান, কী কী ফিচার লাগবে..." value={form.projectDetails} onChange={set('projectDetails')} />
                         </div>
                     </div>
+
+                    {/* কোথায় টাকা পাঠাবে — পেমেন্ট মাধ্যম */}
+                    <PaymentMethods variant="card" />
 
                     {/* Optional payment */}
                     <div className="rounded-2xl border border-dashed border-orange-200 bg-orange-50/50 p-4">
