@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import {
     FiUser, FiBriefcase, FiPhone, FiMail, FiGlobe, FiPackage,
     FiFileText, FiCheckCircle, FiCreditCard, FiHash, FiChevronRight,
-    FiType, FiLink, FiCopy, FiGrid, FiHome,
+    FiType, FiLink, FiCopy, FiGrid, FiHome, FiInfo,
 } from 'react-icons/fi';
 import { ptApi, WEBSITE_TYPES } from '@/lib/projectTracker';
 import PaymentMethods from '@/components/sheard/PaymentMethods';
@@ -158,15 +158,21 @@ export default function ConfirmOrderPage() {
                     {/* Section label */}
                     <p className="text-xs font-bold uppercase tracking-wide text-slate-400">ক্লায়েন্ট ও প্রজেক্ট তথ্য</p>
 
+                    {/* ইংরেজিতে লেখার সুপারিশ — অনেকে বাংলায় লেখেন, কিন্তু নাম/কোম্পানি ইংরেজিতে হলে রিসিট-ডকুমেন্টে প্রফেশনাল দেখায় */}
+                    <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-[13px] leading-relaxed text-amber-800">
+                        <FiInfo className="mt-0.5 shrink-0" style={{ color: BRAND }} />
+                        <span>অনুগ্রহ করে <b>নাম</b> ও <b>কোম্পানি/ব্র্যান্ডের নাম</b> ইংরেজিতে লিখুন (যেমন: <span className="font-semibold">Md Sumon Hossen</span>)। রিসিট ও অফিসিয়াল ডকুমেন্টে সুন্দর ও প্রফেশনাল দেখায়।</span>
+                    </div>
+
                     {/* Client + basic info — 3 columns, compact */}
                     <div className="grid md:grid-cols-3 gap-3">
                         <div className="relative">
                             <FiUser className={iconCls} />
-                            <input className={inputCls} placeholder="আপনার নাম *" value={form.clientName} onChange={set('clientName')} />
+                            <input className={inputCls} placeholder="আপনার নাম * (ইংরেজিতে)" value={form.clientName} onChange={set('clientName')} />
                         </div>
                         <div className="relative">
                             <FiBriefcase className={iconCls} />
-                            <input className={inputCls} placeholder="কোম্পানি / ব্র্যান্ড" value={form.companyBrand} onChange={set('companyBrand')} />
+                            <input className={inputCls} placeholder="কোম্পানি / ব্র্যান্ড (ইংরেজিতে)" value={form.companyBrand} onChange={set('companyBrand')} />
                         </div>
                         <div className="relative">
                             <FiPhone className={iconCls} />
