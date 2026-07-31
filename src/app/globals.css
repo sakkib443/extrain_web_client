@@ -140,12 +140,13 @@ body.font-bengali .font-icon {
   font-family: inherit;
 }
 
-/* Money Receipt — পুরোটা সবসময় Poppins (Bengali mode-এর global override-কেও হারায়) */
+/* Money Receipt/Bill — Latin এ Poppins, বাংলায় Hind Siliguri fallback (Bengali mode override কেও হারায়)।
+   প্রিভিউ ও PDF দুটোই একই ফন্ট পায় — PDF এখন এই HTML প্রিভিউ থেকেই ছবি বানিয়ে তৈরি হয় (@/lib/pdfCapture)। */
 .receipt-poppins,
 .receipt-poppins *,
 body.font-bengali .receipt-poppins,
 body.font-bengali .receipt-poppins * {
-  font-family: var(--font-poppins), sans-serif !important;
+  font-family: var(--font-poppins), var(--font-hind-siliguri), sans-serif !important;
 }
 
 /* =====================================================

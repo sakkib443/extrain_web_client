@@ -1,13 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import {
     FiX, FiDownload, FiFileText, FiSettings, FiEye, FiPlus, FiTrash2, FiRotateCcw,
 } from 'react-icons/fi';
-import { registerPoppins } from '@/lib/poppinsFont';
-import { BRAND, CONTACT_LINE, money, loadLogo, drawWatermark } from '@/lib/pdfBrand';
+import { reactToPdf } from '@/lib/pdfCapture';
+import { BRAND, CONTACT_LINE, money } from '@/lib/pdfBrand';
 import { fmtDate } from '@/lib/projectTracker';
 
 // ---------- ডিফল্ট টেমপ্লেট (সব লেখা edit করা যাবে) ----------
@@ -52,133 +50,12 @@ export const billTotal = (form) =>
     (form.domainHosting === 'charged' ? Number(form.dhAmount) || 0 : 0);
 
 // ---------- PDF ----------
+// Bill PDF — নিচের BillPreview কেই (on-screen প্রিভিউ) হুবহু ছবি বানিয়ে A4 তে বসানো হয়।
+// ব্রাউজার বাংলা shape করে বলে ক্লায়েন্টের বাংলা নাম/কোম্পানি ও ৳ সব ঠিকঠাক আসে।
 export async function generateBillPdf(r, form, options, billNo) {
-    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
-    registerPoppins(doc);
-    doc.setFont('Poppins', 'normal');
-    const W = doc.internal.pageSize.getWidth();
-    const H = doc.internal.pageSize.getHeight();
-    const M = 44;
-    let y = 50;
-
-    const logo = await loadLogo();
-
-    // ---- Header ----
-    if (logo && logo.w && logo.h) {
-        const h = 34;
-        const w = Math.min(160, logo.w * (h / logo.h));
-        doc.addImage(logo.dataUrl, 'PNG', M, y - 12, w, h);
-    } else {
-        doc.setFontSize(22); doc.setTextColor(253, 154, 0); doc.setFont('Poppins', 'bold');
-        doc.text('Extrain Web', M, y + 8);
-    }
-
-    doc.setFontSize(15); doc.setTextColor(30); doc.setFont('Poppins', 'bold');
-    doc.text('BILL', W - M, y, { align: 'right' });
-    let ry = y + 16;
-    if (r.projectId) {
-        doc.setFontSize(9); doc.setTextColor(253, 154, 0); doc.setFont('Poppins', 'bold');
-        doc.text(`Project ID: ${r.projectId}`, W - M, ry, { align: 'right' }); ry += 12;
-    }
-    doc.setFontSize(9); doc.setTextColor(120); doc.setFont('Poppins', 'normal');
-    doc.text(`Bill #${billNo || '-'}`, W - M, ry, { align: 'right' }); ry += 12;
-    doc.text(fmtDate(new Date()), W - M, ry, { align: 'right' });
-
-    y += 56;
-    doc.setDrawColor(253, 154, 0); doc.setLineWidth(2); doc.line(M, y, W - M, y);
-    y += 24;
-
-    // ---- Welcome + intro ----
-    if (form.welcome) {
-        doc.setFontSize(13); doc.setFont('Poppins', 'bold'); doc.setTextColor(253, 154, 0);
-        doc.text(form.welcome, M, y);
-        y += 18;
-    }
-    if (form.intro) {
-        doc.setFontSize(10.5); doc.setFont('Poppins', 'normal'); doc.setTextColor(71, 85, 105);
-        const lines = doc.splitTextToSize(form.intro, W - 2 * M);
-        doc.text(lines, M, y);
-        y += lines.length * 14 + 10;
-    }
-
-    // ---- Client info ----
-    if (options.clientInfo) {
-        doc.setFontSize(10);
-        const info = [
-            ['Client', r.clientName || '-'],
-            ...(r.companyBrand ? [['Company', r.companyBrand]] : []),
-            ['Phone', r.phone || '-'],
-            ...(r.email ? [['Email', r.email]] : []),
-            ...(r.desiredWebsiteName ? [['Website Name', r.desiredWebsiteName]] : []),
-        ];
-        info.forEach(([k, v]) => {
-            doc.setTextColor(100); doc.setFont('Poppins', 'normal'); doc.text(k, M, y);
-            doc.setTextColor(30); doc.setFont('Poppins', 'bold'); doc.text(String(v), W - M, y, { align: 'right' });
-            y += 18;
-        });
-        y += 6;
-    }
-
-    // ---- Items list ----
-    const body = (form.items || []).map((i, idx) => [idx + 1, i.desc || '-', money(i.amount)]);
-    body.push([body.length + 1, 'Domain & Hosting (1 Year)', dhCell(form)]);
-    if (form.deliveryDays) {
-        body.push([body.length + 1, 'Estimated Delivery Time', `${form.deliveryDays} days`]);
-    }
-    autoTable(doc, {
-        startY: y, margin: { left: M, right: M },
-        head: [['#', 'Description', 'Amount']],
-        body,
-        headStyles: { fillColor: [253, 154, 0], textColor: 255, fontSize: 9.5, fontStyle: 'bold', font: 'Poppins' },
-        styles: { fontSize: 9.5, cellPadding: 6, font: 'Poppins' },
-        alternateRowStyles: { fillColor: [250, 250, 250] },
-        columnStyles: { 0: { cellWidth: 28 }, 2: { halign: 'right', cellWidth: 110 } },
-    });
-    y = doc.lastAutoTable.finalY + 16;
-
-    // ---- Total ----
-    const boxH = 40;
-    doc.setFillColor(255, 247, 237); doc.roundedRect(M, y, W - 2 * M, boxH, 8, 8, 'F');
-    doc.setFont('Poppins', 'bold'); doc.setFontSize(12); doc.setTextColor(100);
-    doc.text('Total Payable', M + 16, y + 25);
-    doc.setFontSize(14); doc.setTextColor(217, 119, 6);
-    doc.text(money(billTotal(form)), W - M - 16, y + 25, { align: 'right' });
-    y += boxH + 20;
-
-    // ---- Note ----
-    if (options.note && form.note) {
-        doc.setFontSize(9.5); doc.setFont('Poppins', 'bold'); doc.setTextColor(90);
-        doc.text('Note', M, y); y += 14;
-        doc.setFont('Poppins', 'normal'); doc.setTextColor(110);
-        const nl = doc.splitTextToSize(form.note, W - 2 * M);
-        doc.text(nl, M, y); y += nl.length * 13 + 10;
-    }
-
-    // ---- Terms ----
-    if (options.terms && form.terms) {
-        doc.setFontSize(9); doc.setFont('Poppins', 'normal'); doc.setTextColor(140);
-        const tl = doc.splitTextToSize(form.terms, W - 2 * M);
-        doc.text(tl, M, y); y += tl.length * 12 + 10;
-    }
-
-    // ---- Contact ----
-    if (options.contact) {
-        doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(M, y, W - M, y); y += 16;
-        doc.setFontSize(9.5); doc.setFont('Poppins', 'bold'); doc.setTextColor(90);
-        doc.text('Contact', M, y);
-        doc.setFont('Poppins', 'normal'); doc.setTextColor(110);
-        doc.text(CONTACT_LINE, M, y + 14);
-        y += 30;
-    }
-
-    // ---- Footer পেজের নিচে ----
-    const footerY = Math.max(y + 20, H - 42);
-    doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(M, footerY - 16, W - M, footerY - 16);
-    doc.setFontSize(9); doc.setFont('Poppins', 'normal'); doc.setTextColor(160);
-    doc.text('Thank you for being with us  -  Extrain Web Team', W / 2, footerY, { align: 'center' });
-
-    drawWatermark(doc, logo);
-    return doc;
+    return reactToPdf(
+        <BillPreview r={r} form={form} options={options} billNo={billNo} forPrint />
+    );
 }
 
 // ---------- Dialog ----------
@@ -287,8 +164,8 @@ export default function GenerateBillDialog({ isDark, request: r, onClose }) {
                             </div>
                         </div>
 
-                        <p className="text-xs text-amber-600 bg-amber-50 rounded-lg p-2">
-                            ⚠️ PDF এ লেখা <b>English</b> এ লিখুন — বাংলা লিখলে PDF এ ভাঙা দেখাবে (ফন্টের সীমাবদ্ধতা)।
+                        <p className="text-xs text-emerald-600 bg-emerald-50 rounded-lg p-2">
+                            ✅ বাংলা লিখতে পারেন — PDF এখন প্রিভিউ যেমন দেখাচ্ছে হুবহু সেভাবেই তৈরি হয়, বাংলা ও ৳ ঠিকঠাক আসে।
                         </p>
                     </div>
 
@@ -312,15 +189,17 @@ export default function GenerateBillDialog({ isDark, request: r, onClose }) {
 }
 
 // on-screen preview (PDF এর মতোই দেখতে)
-function BillPreview({ r, form, options, billNo }) {
+function BillPreview({ r, form, options, billNo, forPrint = false }) {
     const row = { padding: '5px 0', fontSize: 13 };
+    // forPrint: PDF এ পেজ নিজেই ফ্রেম দেয়, তাই কার্ডের বর্ডার/শ্যাডো বাদ
+    const frame = forPrint ? '' : 'rounded-xl border border-slate-200 shadow-sm';
     const items = [
         ...(form.items || []).map((i) => [i.desc || '-', money(i.amount)]),
         ['Domain & Hosting (1 Year)', dhCell(form)],
         ...(form.deliveryDays ? [['Estimated Delivery Time', `${form.deliveryDays} days`]] : []),
     ];
     return (
-        <div className="receipt-poppins relative overflow-hidden bg-white rounded-xl border border-slate-200 p-6 text-slate-800 shadow-sm">
+        <div className={`receipt-poppins relative overflow-hidden bg-white p-6 text-slate-800 ${frame}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/extrain-logo.png" alt="" aria-hidden="true" draggable="false"
                 style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '68%', maxWidth: 360, opacity: 0.05, pointerEvents: 'none', userSelect: 'none', zIndex: 20 }} />

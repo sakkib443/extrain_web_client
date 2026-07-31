@@ -1,5 +1,6 @@
-// PDF ব্র্যান্ড হেল্পার — Money Receipt ও Bill/Quotation দুটোতেই একই লোগো, জলছাপ ও কন্ট্যাক্ট।
-// নোট: jsPDF + Poppins ইউনিকোড বাংলা/৳ render করতে পারে না — তাই PDF এর লেখা English, currency "Tk"।
+// PDF ব্র্যান্ড হেল্পার — Money Receipt ও Bill/Quotation এ একই BRAND রং, কন্ট্যাক্ট লাইন ও money() ফরম্যাট।
+// নোট: PDF এখন HTML প্রিভিউ থেকে ছবি বানিয়ে তৈরি হয় (@/lib/pdfCapture), তাই বাংলা render হয়।
+// currency আপাতত "Tk" রাখা হলো (চাইলে '৳' এ বদলানো যাবে — এখন Unicode সাপোর্ট করে)।
 
 export const BRAND = '#FD9A00';
 export const CONTACT_LINE = '+880 1711-946614   |   info.extrainweb@gmail.com   |   extrainweb.com';

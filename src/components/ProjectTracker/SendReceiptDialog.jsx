@@ -1,10 +1,8 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import { registerPoppins } from '@/lib/poppinsFont';
+import { reactToPdf } from '@/lib/pdfCapture';
 import {
     FiX, FiDownload, FiSend, FiSave, FiCheckCircle, FiMail, FiSettings, FiEye,
 } from 'react-icons/fi';
@@ -12,8 +10,8 @@ import { ptApi, bdt, fmtDate, packageLabel } from '@/lib/projectTracker';
 
 const BRAND = '#FD9A00';
 
-// Receipt এর সব লেখা English — jsPDF এর Helvetica ফন্ট Unicode (৳/বাংলা) render করতে পারে না।
-// তাই currency "Tk" দিয়ে দেখানো হয় (৳ চিহ্ন garble হয়)।
+// PDF এখন প্রিভিউ HTML থেকেই ছবি বানিয়ে তৈরি হয় (দেখুন @/lib/pdfCapture),
+// তাই বাংলা নাম/কোম্পানি ও ৳ সব ঠিকঠাক আসে। currency আপাতত "Tk" রাখা হলো।
 const money = (n) => 'Tk ' + Number(n || 0).toLocaleString('en-US');
 const CONTACT_LINE = '+880 1711-946614   |   info.extrainweb@gmail.com   |   extrainweb.com';
 export const DEFAULT_RECEIPT_MESSAGE = (name) =>
@@ -66,189 +64,12 @@ export function buildAmountRows(p, options) {
     return rows;
 }
 
-// public/extrain-logo.png কে PNG dataURL হিসেবে লোড (PDF এ বসানোর জন্য)
-function loadLogo() {
-    return new Promise((resolve) => {
-        try {
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.onload = () => {
-                try {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.naturalWidth;
-                    canvas.height = img.naturalHeight;
-                    canvas.getContext('2d').drawImage(img, 0, 0);
-                    resolve({ dataUrl: canvas.toDataURL('image/png'), w: img.naturalWidth, h: img.naturalHeight });
-                } catch { resolve(null); }
-            };
-            img.onerror = () => resolve(null);
-            img.src = '/extrain-logo.png';
-        } catch { resolve(null); }
-    });
-}
-
-// Poppins এ Regular আর Bold-ই embed করা — মাঝের weight নেই। ডান পাশের মানগুলো
-// Bold এ বেশি ভারী লাগে, তাই Regular এর উপর চুলের মতো সরু stroke দিয়ে semibold
-// এর মতো দেখানো হয় (renderingMode: fillThenStroke)।
-// 11pt এ Poppins Regular এর stem ≈ 0.97pt, Bold ≈ 1.54pt। 0.3pt stroke এ
-// stem ≈ 1.27pt — অর্থাৎ SemiBold এর কাছাকাছি, Bold এর মতো ভারী নয়।
-const SEMI = 0.3;
-const setSemibold = (doc, r, g, b) => {
-    doc.setFont('Poppins', 'normal');
-    doc.setTextColor(r, g, b);
-    doc.setDrawColor(r, g, b);
-    doc.setLineWidth(SEMI);
-};
-const semiOpts = (extra) => ({ ...extra, renderingMode: 'fillThenStroke' });
-
-// project থেকে professional English money receipt PDF (jsPDF) — async (logo লোড করে)
+// Money Receipt PDF — নিচের ReceiptPreview কেই (on-screen প্রিভিউ যেটা) হুবহু ছবি বানিয়ে
+// A4 তে বসানো হয়। ব্রাউজার বাংলা shape করে বলে নাম/কোম্পানি/৳ সব নিখুঁত আসে।
 export async function generateReceiptPdf(p, options, message, receiptNo) {
-    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
-    registerPoppins(doc); // পুরো রিসিট Poppins ফন্টে
-    doc.setFont('Poppins', 'normal');
-    const W = doc.internal.pageSize.getWidth();
-    const M = 44;
-    let y = 50;
-
-    const logo = await loadLogo();
-
-    // ---- Header: logo (left) + receipt meta (right) ----
-    if (logo && logo.w && logo.h) {
-        const h = 34;
-        const w = Math.min(160, logo.w * (h / logo.h));
-        doc.addImage(logo.dataUrl, 'PNG', M, y - 12, w, h);
-    } else {
-        doc.setFontSize(22); doc.setTextColor(253, 154, 0); doc.setFont('Poppins', 'bold');
-        doc.text('Extrain Web', M, y + 8);
-    }
-
-    doc.setFontSize(15); doc.setTextColor(30); doc.setFont('Poppins', 'bold');
-    doc.text('MONEY RECEIPT', W - M, y, { align: 'right' });
-    let ry = y + 16;
-    if (p.projectId) {
-        doc.setFontSize(9); doc.setTextColor(253, 154, 0); doc.setFont('Poppins', 'bold');
-        doc.text(`Project ID: ${p.projectId}`, W - M, ry, { align: 'right' }); ry += 12;
-    }
-    doc.setFontSize(9); doc.setTextColor(120); doc.setFont('Poppins', 'normal');
-    doc.text(`Receipt #${receiptNo || '-'}`, W - M, ry, { align: 'right' }); ry += 12;
-    doc.text(fmtDate(new Date()), W - M, ry, { align: 'right' });
-
-    y += 56;
-    doc.setDrawColor(253, 154, 0); doc.setLineWidth(2); doc.line(M, y, W - M, y);
-    y += 24;
-
-    // ---- Payment confirmed badge ----
-    if (options.paymentConfirmation) {
-        doc.setFillColor(220, 252, 231); doc.roundedRect(M, y - 13, 138, 20, 4, 4, 'F');
-        doc.setTextColor(22, 163, 74); doc.setFont('Poppins', 'bold'); doc.setFontSize(10);
-        doc.text('PAYMENT CONFIRMED', M + 10, y + 1);
-        y += 26;
-    }
-
-    // ---- Message ----
-    if (message) {
-        doc.setTextColor(71, 85, 105); doc.setFont('Poppins', 'normal'); doc.setFontSize(10.5);
-        const lines = doc.splitTextToSize(message, W - 2 * M);
-        doc.text(lines, M, y);
-        y += lines.length * 14 + 12;
-    }
-
-    // ---- Client info ----
-    doc.setFontSize(10);
-    const info = [
-        ['Client', p.clientName || '-'],
-        ...(p.companyBrand ? [['Company', p.companyBrand]] : []),
-        ['Phone', p.phone || '-'],
-        ['Project', `${p.websiteType || ''} (${packageLabel(p.packageType)})`],
-    ];
-    info.forEach(([k, v]) => {
-        doc.setTextColor(100); doc.setFont('Poppins', 'normal'); doc.text(k, M, y);
-        setSemibold(doc, 30, 41, 59);
-        doc.text(String(v), W - M, y, semiOpts({ align: 'right' }));
-        y += 19;
-    });
-    y += 8;
-
-    // ---- Amounts box ----
-    const amounts = buildAmountRows(p, options);
-    const boxH = amounts.length * 22 + 14;
-    doc.setFillColor(255, 247, 237); doc.roundedRect(M, y, W - 2 * M, boxH, 8, 8, 'F');
-    let ay = y + 22;
-    amounts.forEach(([k, v, hi, indent, divider]) => {
-        if (divider) {
-            doc.setDrawColor(234, 214, 188); doc.setLineWidth(0.5);
-            doc.line(M + 16, ay - 14, W - M - 16, ay - 14);
-        }
-        doc.setFont('Poppins', 'normal'); doc.setFontSize(hi ? 12 : indent ? 9.5 : 11);
-        doc.setTextColor(indent ? 140 : 100);
-        doc.text(k, M + (indent ? 30 : 16), ay);
-        doc.setFontSize(hi ? 12 : indent ? 9.5 : 11);
-        if (hi) setSemibold(doc, 217, 119, 6);
-        else if (indent) setSemibold(doc, 100, 116, 139);
-        else setSemibold(doc, 30, 41, 59);
-        doc.text(v, W - M - 16, ay, semiOpts({ align: 'right' }));
-        ay += 22;
-    });
-    y += boxH + 20;
-
-    // ---- Installments ----
-    if (options.installments && p.installments?.length) {
-        autoTable(doc, {
-            startY: y, margin: { left: M, right: M },
-            head: [['#', 'Note', 'Date', 'Status', 'Amount']],
-            body: p.installments.map((i, idx) => [
-                i.no || idx + 1, i.note || '-', fmtDate(i.date),
-                i.paid === false ? 'Due' : 'Paid', money(i.amount),
-            ]),
-            headStyles: { fillColor: [253, 154, 0], textColor: 255, fontSize: 9, fontStyle: 'bold', font: 'Poppins' },
-            styles: { fontSize: 9, cellPadding: 5, font: 'Poppins' },
-            alternateRowStyles: { fillColor: [250, 250, 250] },
-            columnStyles: { 4: { halign: 'right' } },
-        });
-        y = doc.lastAutoTable.finalY + 18;
-    }
-
-    // ---- Dates ----
-    const extra = [];
-    if (options.delivery && p.projectDeliveryDate) extra.push(['Delivery Date', fmtDate(p.projectDeliveryDate)]);
-    if (options.due !== false && p.nextPayDate && p.totalDue > 0) extra.push(['Next Payment Date', fmtDate(p.nextPayDate)]);
-    extra.forEach(([k, v]) => {
-        doc.setFontSize(10); doc.setFont('Poppins', 'normal'); doc.setTextColor(100); doc.text(k, M, y);
-        setSemibold(doc, 30, 41, 59);
-        doc.text(v, W - M, y, semiOpts({ align: 'right' }));
-        y += 19;
-    });
-    y += 10;
-
-    // ---- Contact + footer ----
-    if (options.contact) {
-        doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(M, y, W - M, y); y += 16;
-        doc.setFontSize(9.5); doc.setFont('Poppins', 'bold'); doc.setTextColor(90);
-        doc.text('Contact', M, y);
-        doc.setFont('Poppins', 'normal'); doc.setTextColor(110);
-        doc.text(CONTACT_LINE, M, y + 14);
-        y += 30;
-    }
-    // Footer পেজের একদম নিচে পিন (content ছোট হলেও নিচেই থাকবে; বড় হলে content এর পরে)
-    const H = doc.internal.pageSize.getHeight();
-    const footerY = Math.max(y + 20, H - 42);
-    doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(M, footerY - 16, W - M, footerY - 16);
-    doc.setFontSize(9); doc.setFont('Poppins', 'normal'); doc.setTextColor(160);
-    doc.text('Thank you for being with us  -  Extrain Web Team', W / 2, footerY, { align: 'center' });
-
-    // ---- Faint logo watermark (anti-copy জলছাপ) — সবার উপরে, page center-এ, uniform (কাটে না) ----
-    if (logo && logo.w && logo.h) {
-        try {
-            const ww = Math.min(W * 0.68, 380);
-            const wh = ww * (logo.h / logo.w);
-            doc.saveGraphicsState();
-            doc.setGState(new doc.GState({ opacity: 0.05 }));
-            doc.addImage(logo.dataUrl, 'PNG', (W - ww) / 2, (H - wh) / 2, ww, wh);
-            doc.restoreGraphicsState();
-        } catch { /* GState না থাকলে watermark skip */ }
-    }
-
-    return doc;
+    return reactToPdf(
+        <ReceiptPreview p={p} options={options} message={message} receiptNo={receiptNo} forPrint />
+    );
 }
 
 export default function SendReceiptDialog({ isDark, project: p, focusInstallmentNo = null, onClose, onSent }) {
@@ -359,10 +180,12 @@ export default function SendReceiptDialog({ isDark, project: p, focusInstallment
 }
 
 // on-screen preview (email/PDF এর মতোই দেখতে)
-function ReceiptPreview({ p, options, message, receiptNo }) {
+function ReceiptPreview({ p, options, message, receiptNo, forPrint = false }) {
     const rowStyle = { padding: '5px 0', fontSize: 13 };
+    // forPrint: PDF এ পেজ নিজেই ফ্রেম দেয়, তাই কার্ডের বর্ডার/শ্যাডো বাদ
+    const frame = forPrint ? '' : 'rounded-xl border border-slate-200 shadow-sm';
     return (
-        <div className="receipt-poppins relative overflow-hidden bg-white rounded-xl border border-slate-200 p-6 text-slate-800 shadow-sm">
+        <div className={`receipt-poppins relative overflow-hidden bg-white p-6 text-slate-800 ${frame}`}>
             {/* faint logo watermark — anti-copy জলছাপ (কন্টেন্টের উপরে, uniform, কাটে না) */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/extrain-logo.png" alt="" aria-hidden="true" draggable="false"
