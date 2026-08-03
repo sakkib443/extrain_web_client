@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
     FiRefreshCw, FiTrendingUp, FiTrendingDown, FiClock, FiInbox, FiUsers,
     FiHeart, FiFolder, FiDollarSign, FiArrowRight, FiGlobe, FiFileText, FiBarChart2,
-    FiCode, FiLayers, FiEdit3, FiPlus,
+    FiCode, FiLayers, FiEdit3, FiPlus, FiChevronLeft, FiChevronRight,
 } from 'react-icons/fi';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { useTheme } from '@/providers/ThemeProvider';
@@ -14,6 +14,13 @@ import { ptApi, bdt, fmtDate, monthLabel, statusStyle } from '@/lib/projectTrack
 
 const currentMonthKey = () => {
     const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+};
+
+// "2026-08" থেকে আগের/পরের মাসের key ("2026-07" / "2026-09")
+const shiftMonth = (key, delta) => {
+    const [y, m] = key.split('-').map(Number);
+    const d = new Date(y, m - 1 + delta, 1);
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 };
 
@@ -51,7 +58,9 @@ const Kpi = ({ isDark, label, value, icon: Icon, color, highlight }) => (
 
 export default function AdminDashboard() {
     const { isDark } = useTheme();
-    const month = currentMonthKey();
+    const thisMonth = currentMonthKey();
+    const [month, setMonth] = useState(thisMonth);   // কোন মাসের ডেটা দেখাচ্ছি
+    const isCurrent = month === thisMonth;
     const [summary, setSummary] = useState(null);
     const [requests, setRequests] = useState([]);
     const [projects, setProjects] = useState([]);
@@ -95,14 +104,40 @@ export default function AdminDashboard() {
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>Dashboard</h1>
-                    <p className={`text-sm ${muted}`}>This month overview — <span className="font-semibold" style={{ color: '#FD9A00' }}>{monthLabel(month)}</span></p>
+                    <p className={`text-sm ${muted}`}>
+                        {isCurrent ? 'This month overview' : 'Past month overview'} — <span className="font-semibold" style={{ color: '#FD9A00' }}>{monthLabel(month)}</span>
+                        {!isCurrent && <span className="ml-2 px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-600">Previous</span>}
+                    </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                    {/* Month switcher — আগের / পরের মাস */}
+                    <div className={`inline-flex items-center rounded-xl p-1 ${isDark ? 'bg-slate-800' : 'bg-white border border-slate-200'}`}>
+                        <button onClick={() => setMonth(shiftMonth(month, -1))} title="Previous month"
+                            className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition ${isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-slate-600 hover:bg-slate-100'}`}>
+                            <FiChevronLeft size={14} /> Prev
+                        </button>
+                        <span className={`px-2.5 text-xs font-bold whitespace-nowrap ${isDark ? 'text-white' : 'text-slate-700'}`}>{monthLabel(month)}</span>
+                        <button onClick={() => setMonth(shiftMonth(month, 1))} disabled={isCurrent} title="Next month"
+                            className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition ${isCurrent
+                                ? 'opacity-40 cursor-not-allowed ' + (isDark ? 'text-slate-500' : 'text-slate-400')
+                                : isDark ? 'text-slate-300 hover:bg-slate-700' : 'text-slate-600 hover:bg-slate-100'}`}>
+                            Next <FiChevronRight size={14} />
+                        </button>
+                    </div>
+
+                    {!isCurrent && (
+                        <button onClick={() => setMonth(thisMonth)}
+                            className="px-3 py-2 rounded-xl text-xs font-bold border transition hover:opacity-80"
+                            style={{ borderColor: '#FD9A00', color: '#FD9A00' }}>
+                            This Month
+                        </button>
+                    )}
+
                     <button onClick={load} className={`p-2.5 rounded-xl transition ${isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
                         <FiRefreshCw size={16} className={loading ? 'animate-spin' : ''} />
                     </button>
                     <Link href={`/dashboard/admin/project-tracker/${month}`} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-white font-semibold shadow hover:opacity-90 transition" style={{ background: '#FD9A00' }}>
-                        <FiFolder size={16} /> This Month
+                        <FiFolder size={16} /> Open Tracker
                     </Link>
                 </div>
             </div>
@@ -161,12 +196,14 @@ export default function AdminDashboard() {
                     {/* This month's projects */}
                     <div className={`rounded-xl border shadow-sm ${cardBox}`}>
                         <div className={`flex items-center justify-between px-5 py-4 border-b ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
-                            <h3 className={`font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-800'}`}><FiFolder style={{ color: '#FD9A00' }} /> This Month&apos;s Projects</h3>
+                            <h3 className={`font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-800'}`}>
+                                <FiFolder style={{ color: '#FD9A00' }} /> {isCurrent ? "This Month's Projects" : `${monthLabel(month)} Projects`}
+                            </h3>
                             <Link href={`/dashboard/admin/project-tracker/${month}`} className="text-sm font-semibold flex items-center gap-1" style={{ color: '#FD9A00' }}>View all <FiArrowRight size={14} /></Link>
                         </div>
                         <div className="p-2">
                             {projects.length === 0 ? (
-                                <p className={`text-center py-10 text-sm ${muted}`}>No projects this month.</p>
+                                <p className={`text-center py-10 text-sm ${muted}`}>No projects in {monthLabel(month)}.</p>
                             ) : projects.slice(0, 6).map((p) => (
                                 <div key={p._id} className={`flex items-center justify-between px-3 py-2.5 rounded-lg ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-50'}`}>
                                     <div className="min-w-0">
@@ -221,6 +258,11 @@ export default function AdminDashboard() {
                             );
                             return m.href ? <Link key={m.label} href={m.href}>{inner}</Link> : <div key={m.label}>{inner}</div>;
                         })}
+                        {!isCurrent && (
+                            <p className={`px-3 pt-1 pb-2 text-[11px] leading-snug ${muted}`}>
+                                Order Requests, New Clients &amp; Likes are live totals — these are not filtered by month.
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>
