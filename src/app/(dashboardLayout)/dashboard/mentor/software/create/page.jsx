@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { getStoredUser } from '@/lib/authUser';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -163,7 +164,7 @@ export default function CreateSoftwarePage() {
         setLoading(true);
         const BASE_URL = 'https://extrain-web-server.vercel.app/api';
         const token = localStorage.getItem('token');
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const user = getStoredUser() || {};
 
         const cleanArray = (arr) => arr?.filter(item => item && item.trim() !== '') || [];
 
