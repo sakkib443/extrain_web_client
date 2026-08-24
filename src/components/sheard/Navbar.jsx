@@ -16,6 +16,7 @@ import { HiOutlineSparkles, HiOutlineUserCircle } from "react-icons/hi2";
 import { useSelector } from "react-redux";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useLanguage } from "@/context/LanguageContext";
+import { getStoredUser } from "@/lib/authUser";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { API_BASE_URL } from "@/config/api";
@@ -130,16 +131,13 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-          setTimeout(() => setUser(JSON.parse(storedUser)), 0);
-        }
-      }
-    } catch (error) {
-      console.error("Error loading user:", error);
-    }
+    // getStoredUser নিরাপদে parse করে (poisoned "undefined"/"null" হলে null দেয়, throw করে না)।
+    // setTimeout দিয়ে effect-এর ভেতরে সরাসরি setState এড়াই (cascading render রোধ)।
+    const t = setTimeout(() => {
+      const storedUser = getStoredUser();
+      if (storedUser) setUser(storedUser);
+    }, 0);
+    return () => clearTimeout(t);
   }, []);
 
   const handleLogout = () => {

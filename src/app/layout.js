@@ -18,6 +18,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 
 import { Toaster } from "react-hot-toast";
 import ScrollToTopOnNavigate from "@/components/sheard/ScrollToTopOnNavigate";
+import ChunkErrorReload from "@/components/sheard/ChunkErrorReload";
 
 // Google Fonts
 const poppins = Poppins({
@@ -168,6 +169,7 @@ export default function RootLayout({ children }) {
         <ReduxProviderWrapper>
           <LanguageProvider>
             <Toaster position="top-center" reverseOrder={false} />
+            <ChunkErrorReload />
             <ScrollToTopOnNavigate />
             {children}
           </LanguageProvider>

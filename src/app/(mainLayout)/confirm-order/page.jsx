@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fi';
 import { ptApi, WEBSITE_TYPES } from '@/lib/projectTracker';
 import PaymentMethods from '@/components/sheard/PaymentMethods';
+import { setStoredUser } from '@/lib/authUser';
 
 const BRAND = '#FD9A00';
 
@@ -74,7 +75,7 @@ export default function ConfirmOrderPage() {
             // Account তৈরি হলে auto-login — token + user localStorage এ রাখা
             if (data?.account?.accessToken && typeof window !== 'undefined') {
                 localStorage.setItem('token', data.account.accessToken);
-                localStorage.setItem('user', JSON.stringify(data.account.user));
+                setStoredUser(data.account.user); // undefined হলেও "undefined" জমা হবে না
             }
             setDone(data);
             toast.success('অর্ডার রিকোয়েস্ট জমা হয়েছে!');

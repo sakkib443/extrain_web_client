@@ -9,6 +9,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import { API_BASE_URL } from '@/config/api';
+import { getStoredUser } from '@/lib/authUser';
 
 const CheckoutContent = () => {
     const { items: cartItems, totalAmount: cartTotal } = useSelector((state) => state.cart || { items: [], totalAmount: 0 });
@@ -115,7 +116,7 @@ const CheckoutContent = () => {
     });
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const user = getStoredUser() || {};
         if (user) {
             setFormData({
                 fullName: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.name || '',
