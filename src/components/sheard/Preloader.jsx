@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Cormorant_Garamond, Amiri } from "next/font/google";
+import { announceIntroReady } from "@/hooks/useIntroReady";
 
 // classic serif italic for the greeting, proper Arabic calligraphy for السلام عليكم
 const serif = Cormorant_Garamond({ subsets: ["latin"], weight: ["500", "600"], style: ["italic"], display: "swap", variable: "--pl-serif" });
@@ -36,6 +37,7 @@ const Preloader = () => {
     const finish = () => {
         try { sessionStorage.setItem("hasVisited", "true"); } catch { /* private mode */ }
         setShow(false);
+        announceIntroReady(); // the page behind starts its entrance animations as the curtain opens
     };
 
     useEffect(() => {

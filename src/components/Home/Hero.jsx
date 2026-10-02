@@ -21,6 +21,7 @@ import {
 import { FaFacebookF, FaStar } from "react-icons/fa";
 import { useLanguage } from "@/context/LanguageContext";
 import { TEAM } from "@/data/team";
+import useIntroReady from "@/hooks/useIntroReady";
 
 // Left contact rail — just the three ways people actually reach us.
 const socials = [
@@ -68,11 +69,47 @@ const filledA = { color: "#F8921C", WebkitTextStroke: "0" };
 
 const SCROLL_SPRING = { stiffness: 110, damping: 28, mass: 0.4 };
 
+// ---- entrance choreography ----
+// Plays when the page is first visible: right after the greeting preloader starts opening (or at once on later visits).
+// `delay` is seconds after that moment; INTRO_LEAD lets the curtain get out of the way first.
+const EASE = [0.16, 1, 0.3, 1];
+const INTRO_LEAD = 0.35;
+const SHOWN = { opacity: 1, x: 0, y: 0, scale: 1, rotate: 0, filter: "blur(0px)" };
+const intro = (ready, delay, from = { opacity: 0, y: 30 }, duration = 0.9) => ({
+    initial: from,
+    animate: ready ? SHOWN : from,
+    transition: { duration, delay: ready ? INTRO_LEAD + delay : 0, ease: EASE },
+});
+
+// one headline line: rises out of a soft blur
+const Line = ({ ready, delay, className = "", style, children }) => (
+    <motion.span
+        className={`block ${className}`}
+        style={style}
+        {...intro(ready, delay, { opacity: 0, y: "0.55em", filter: "blur(12px)" }, 1)}
+    >
+        {children}
+    </motion.span>
+);
+
+// paragraph that appears word by word
+const Words = ({ ready, delay, text }) =>
+    text.split(" ").map((w, i) => (
+        <motion.span
+            key={i}
+            className="inline-block whitespace-pre"
+            {...intro(ready, delay + i * 0.025, { opacity: 0, y: 10, filter: "blur(6px)" }, 0.6)}
+        >
+            {w + " "}
+        </motion.span>
+    ));
+
 const Hero = () => {
     const { language } = useLanguage();
     const isBn = language === "bn";
     const bn = isBn ? "hind-siliguri" : "";
     const reduce = useReducedMotion();
+    const ready = useIntroReady();
 
     const heroRef = useRef(null);
     const bandRef = useRef(null);
@@ -139,12 +176,14 @@ const Hero = () => {
                 <div className="absolute inset-0 pointer-events-none bg-black/25" />
 
                 {/* ===== Left social rail (xl and up) ===== */}
-                <aside
+                <motion.aside
                     aria-label="Social links"
+                    {...intro(ready, 0.55, { opacity: 0, x: "-100%" }, 0.9)}
                     className="absolute left-0 top-20 bottom-0 z-10 hidden xl:flex w-16 flex-col overflow-hidden border-r border-white/10 bg-white/[0.03]"
                 >
-                    {socials.map(({ label, icon: Icon, href }) => (
-                        <a
+                    {socials.map(({ label, icon: Icon, href }, i) => (
+                        <motion.a
+                            {...intro(ready, 0.75 + i * 0.1, { opacity: 0, x: -16 }, 0.6)}
                             key={label}
                             href={href}
                             target={href.startsWith("mailto:") ? undefined : "_blank"}
@@ -156,14 +195,14 @@ const Hero = () => {
                                 {label}
                             </span>
                             <Icon size={14} />
-                        </a>
+                        </motion.a>
                     ))}
-                    <div className="flex min-h-0 flex-1 items-center justify-center">
+                    <motion.div {...intro(ready, 1.05, { opacity: 0 }, 0.6)} className="flex min-h-0 flex-1 items-center justify-center">
                         <span style={verticalText} className="text-[12px] font-semibold uppercase tracking-[0.1em] text-white/60">
                             Follow us:
                         </span>
-                    </div>
-                </aside>
+                    </motion.div>
+                </motion.aside>
 
                 <div className="relative z-10 container mx-auto px-6 lg:px-10">
                     <div className="home-rail-offset relative grid lg:grid-cols-[1.4fr_0.6fr] items-center gap-10 pt-32 pb-14 lg:pb-20 lg:min-h-[calc(100vh-130px)]">
@@ -172,9 +211,7 @@ const Hero = () => {
                         <motion.div style={reduce ? undefined : { y: textY, opacity: textOpacity }}>
                             {/* phones only: small eyebrow pill above the headline */}
                             <motion.div
-                                initial={{ opacity: 0, y: 14 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                {...intro(ready, 0, { opacity: 0, y: 14 }, 0.7)}
                                 className={`mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] py-1.5 pl-2.5 pr-4 backdrop-blur-sm sm:hidden ${bn}`}
                             >
                                 <span className="relative flex h-2 w-2">
@@ -187,43 +224,47 @@ const Hero = () => {
                             </motion.div>
 
                             {/* headline with corner brackets (phones: an orange accent bar on the left instead) */}
-                            <motion.h1
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                            <h1
                                 className="relative border-l-[3px] border-[#F8921C] pl-4 font-poppins font-bold uppercase tracking-[-0.015em] leading-[1.12] text-[clamp(2.2rem,4.6vw,4.8rem)] sm:border-l-0 sm:pl-0 sm:leading-[1.08]"
                             >
-                                {/* top-left bracket */}
-                                <span
+                                {/* top-left bracket — draws in from its corner */}
+                                <motion.span
                                     aria-hidden="true"
+                                    style={{ originX: 0, originY: 0 }}
+                                    {...intro(ready, 0.1, { opacity: 0, scale: 0.3 }, 0.8)}
                                     className="pointer-events-none absolute -top-4 left-0 hidden sm:block w-16 h-16 border-t border-l border-white/90"
                                 >
                                     <i className="absolute -top-[5px] -left-[5px] w-2.5 h-2.5 bg-[#F8921C]" />
                                     <i className="absolute -bottom-[5px] -left-[5px] w-2.5 h-2.5 bg-[#F8921C]" />
-                                </span>
+                                </motion.span>
 
-                                <span className="block pl-0 text-white tracking-[-0.015em] sm:pl-[0.55em] md:whitespace-nowrap" style={{ fontSize: "1.1em" }}>WE ARE BEST WEB</span>
-                                <span className="block tracking-[-0.015em] md:whitespace-nowrap" style={{ fontSize: "0.9em" }}>
+                                {/* the three lines rise in one after another */}
+                                <Line ready={ready} delay={0.15} className="pl-0 text-white tracking-[-0.015em] sm:pl-[0.55em] md:whitespace-nowrap" style={{ fontSize: "1.1em" }}>
+                                    WE ARE BEST WEB
+                                </Line>
+                                <Line ready={ready} delay={0.3} className="tracking-[-0.015em] md:whitespace-nowrap" style={{ fontSize: "0.9em" }}>
                                     <span className="text-white">&amp; DIGITAL</span>{" "}
                                     <span style={outlineStyle}>
                                         CRE<span style={filledA}>A</span>TIVE
                                     </span>
-                                </span>
-                                <span className="block text-white tracking-[-0.015em] md:whitespace-nowrap" style={{ fontSize: "0.74em" }}>
+                                </Line>
+                                <Line ready={ready} delay={0.45} className="text-white tracking-[-0.015em] md:whitespace-nowrap" style={{ fontSize: "0.74em" }}>
                                     AGENCY{" "}
                                     <span className="relative inline-block">
                                         BUSINESS
-                                        {/* bottom-right bracket */}
-                                        <span
+                                        {/* bottom-right bracket — draws in from its corner */}
+                                        <motion.span
                                             aria-hidden="true"
+                                            style={{ originX: 1, originY: 1 }}
+                                            {...intro(ready, 0.7, { opacity: 0, scale: 0.3 }, 0.8)}
                                             className="pointer-events-none absolute -bottom-3 -right-8 hidden sm:block w-14 h-16 border-b border-r border-white/90"
                                         >
                                             <i className="absolute -top-[5px] -right-[5px] w-2.5 h-2.5 bg-[#F8921C]" />
                                             <i className="absolute -bottom-[5px] -right-[5px] w-2.5 h-2.5 bg-[#F8921C]" />
-                                        </span>
+                                        </motion.span>
                                     </span>
-                                </span>
-                            </motion.h1>
+                                </Line>
+                            </h1>
 
                             {/* phones only: a short divider between headline and copy */}
                             <span aria-hidden="true" className="mt-6 flex items-center gap-2 sm:hidden">
@@ -232,22 +273,21 @@ const Hero = () => {
                             </span>
 
                             {/* description */}
-                            <motion.p
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                                className={`mt-5 sm:mt-9 max-w-md text-white/70 text-base lg:text-lg leading-relaxed ${bn}`}
-                            >
-                                {isBn
-                                    ? "ওয়েব ডেভেলপমেন্ট, ডিজিটাল মার্কেটিং ও ক্রিয়েটিভ কন্টেন্ট — আমরা আপনার ব্যবসাকে অনলাইনে এগিয়ে নিই, দ্রুত ও আধুনিকভাবে।"
-                                    : "Web development, digital marketing and creative content — we help your business grow online, fast and modern."}
-                            </motion.p>
+                            <p className={`mt-5 sm:mt-9 max-w-md text-white/70 text-base lg:text-lg leading-relaxed ${bn}`}>
+                                <Words
+                                    ready={ready}
+                                    delay={0.65}
+                                    text={
+                                        isBn
+                                            ? "ওয়েব ডেভেলপমেন্ট, ডিজিটাল মার্কেটিং ও ক্রিয়েটিভ কন্টেন্ট — আমরা আপনার ব্যবসাকে অনলাইনে এগিয়ে নিই, দ্রুত ও আধুনিকভাবে।"
+                                            : "Web development, digital marketing and creative content — we help your business grow online, fast and modern."
+                                    }
+                                />
+                            </p>
 
                             {/* CTA: pill + round arrow */}
                             <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.7, delay: 0.4 }}
+                                {...intro(ready, 1.0, { opacity: 0, y: 24 }, 0.8)}
                                 className="mt-8 flex items-center gap-2"
                             >
                                 <Link
@@ -272,6 +312,10 @@ const Hero = () => {
                                 style={reduce ? undefined : { x: orbX, y: orbY }}
                                 className="absolute top-0 right-0 w-[240px] h-[240px] z-20"
                             >
+                                <motion.div
+                                    className="w-full h-full"
+                                    {...intro(ready, 0.5, { opacity: 0, scale: 0.4, rotate: -120 }, 1.4)}
+                                >
                                 <div className="orb-float w-full h-full">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
@@ -280,6 +324,7 @@ const Hero = () => {
                                         className="orb-spin w-full h-full object-contain drop-shadow-[0_30px_60px_rgba(245,184,20,0.35)]"
                                     />
                                 </div>
+                                </motion.div>
                             </motion.div>
                         </div>
                     </div>
@@ -287,10 +332,15 @@ const Hero = () => {
             </div>
 
             {/* ================= Big image — spans text area + band, flush right ================= */}
+            {/* rises up from the bottom edge, unveiling from below */}
             <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                {...intro(
+                    ready,
+                    0.2,
+                    { opacity: 0.4, y: 120, clipPath: "inset(100% 0% 0% 0%)" },
+                    1.3
+                )}
+                animate={ready ? { opacity: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)" } : { opacity: 0.4, y: 120, clipPath: "inset(100% 0% 0% 0%)" }}
                 className="group relative z-[5] order-2 lg:order-none w-full aspect-[3/2] lg:aspect-auto lg:w-[52%] lg:absolute lg:right-0 lg:bottom-0 lg:h-[min(calc(38vh+306px),37.6vw)] overflow-hidden rounded-t-[48px] lg:rounded-t-none lg:rounded-tl-[140px] bg-[color:var(--tone-deep)]"
             >
                 {/* inner layer carries the parallax; slightly oversized so edges never show */}
@@ -342,7 +392,8 @@ const Hero = () => {
                         style={{ width: "calc(max(0px, (100% - 1280px) / 2) + 1.5rem)" }}
                     />
 
-                    <div
+                    <motion.div
+                        {...intro(ready, 0.6, { opacity: 0, y: 70 }, 1.1)}
                         className="relative mx-4 my-8 flex-1 overflow-hidden rounded-3xl border border-[#F8921C]/25 px-6 py-7 shadow-[inset_0_1px_0_rgba(255,214,150,0.18)] lg:mx-0 lg:my-0 lg:flex lg:flex-col lg:justify-center lg:rounded-none lg:rounded-tl-[2rem] lg:border-b-0 lg:border-r-0 lg:px-10 lg:py-9"
                         style={{
                             background:
@@ -420,7 +471,7 @@ const Hero = () => {
                                 </Link>
                             </div>
                         </motion.div>
-                    </div>
+                    </motion.div>
 
                     {/* space under the image */}
                     <div className="hidden lg:block w-[52%] shrink-0" />
