@@ -26,6 +26,9 @@ import ProjectDetailModal from '@/components/ProjectTracker/ProjectDetailModal';
 
 const BRAND = '#FD9A00';
 
+// 20 Jan 26 — short enough for the narrow Project cell (Excel / CSV keep the full date)
+const shortFmt = (d) => (d ? new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' }) : '—');
+
 // ---------------------------------------------------------------
 // Date presets
 // ---------------------------------------------------------------
@@ -98,18 +101,18 @@ function EditCell({ isDark, value, placeholder = '+ add', listId, onSave, displa
                     if (e.key === 'Enter') e.currentTarget.blur();
                     if (e.key === 'Escape') { cancelled.current = true; setDraft(value || ''); setEditing(false); }
                 }}
-                className={`w-44 px-2 py-1 rounded-md border outline-none text-sm ${isDark ? 'bg-slate-800 border-orange-500/60 text-white' : 'bg-white border-orange-400 text-slate-800'}`}
+                className={`w-full min-w-0 px-2 py-1 rounded-md border outline-none text-sm ${isDark ? 'bg-slate-800 border-orange-500/60 text-white' : 'bg-white border-orange-400 text-slate-800'}`}
             />
         );
     }
     return (
-        <span className="group inline-flex items-center gap-1.5 max-w-[230px]" title={title}>
+        <span className="group relative flex min-w-0 max-w-full items-center" title={title}>
             {display || (
                 <button type="button" onClick={start} className="text-left truncate">
                     {value ? value : <span className="italic text-slate-400">{placeholder}</span>}
                 </button>
             )}
-            <button type="button" onClick={start} aria-label="Edit" className="opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-slate-400 hover:text-orange-500 shrink-0">
+            <button type="button" onClick={start} aria-label="Edit" className={`absolute right-0 top-1/2 -translate-y-1/2 rounded p-0.5 opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-slate-400 hover:text-orange-500 ${isDark ? 'bg-slate-900/90' : 'bg-white/90'}`}>
                 <FiEdit3 size={12} />
             </button>
         </span>
@@ -168,8 +171,12 @@ function PriceCell({ r, isDark }) {
                 className={`text-left rounded-lg px-2 py-1 -mx-2 transition ${open ? (isDark ? 'bg-slate-700/60' : 'bg-orange-50') : 'hover:bg-slate-500/10'}`}
             >
                 <span className="block font-bold">{bdt(r.price)}</span>
-                <span className="block text-[11px] font-normal text-slate-400">
-                    <span className="text-emerald-500">{bdt(r.paid)}</span> paid · <span className="text-amber-500">{bdt(r.due)}</span> due
+                <span className="block text-[11px] font-normal whitespace-nowrap">
+                    {r.price <= 0
+                        ? <span className="text-slate-400">no price yet</span>
+                        : r.due > 0
+                            ? <span className="text-amber-500">{bdt(r.due)} due</span>
+                            : <span className="text-emerald-500">paid in full</span>}
                 </span>
             </button>
 
@@ -252,14 +259,6 @@ function PriceCell({ r, isDark }) {
         </>
     );
 }
-
-// The first three columns (#, date, code) stay put while the rest of the sheet scrolls sideways.
-const FROZEN = [
-    { left: 0, w: 44 },
-    { left: 44, w: 112 },
-    { left: 156, w: 108 },
-];
-const frozen = (i) => ({ position: 'sticky', left: FROZEN[i].left, width: FROZEN[i].w, minWidth: FROZEN[i].w, maxWidth: FROZEN[i].w });
 
 // ---------------------------------------------------------------
 // Page
@@ -388,12 +387,14 @@ export default function AllProjectsPage() {
     const card = isDark ? 'bg-slate-800/40 border-slate-700/60' : 'bg-white border-slate-200/70';
     const ctrl = `px-3 py-2 rounded-lg border outline-none text-sm transition ${isDark ? 'bg-slate-800 border-slate-700 text-white focus:border-orange-500' : 'bg-slate-50 border-slate-200 text-slate-800 focus:border-orange-400 focus:bg-white'}`;
     const iconBtn = `p-2.5 rounded-xl transition ${isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`;
-    const th = `px-2.5 py-2.5 text-left text-[11px] font-bold uppercase tracking-wide whitespace-nowrap sticky top-0 z-10 ${isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-50 text-slate-500'}`;
-    const td = `px-2.5 py-2.5 text-[13px] align-top ${isDark ? 'text-slate-200' : 'text-slate-700'}`;
-    const frozenBg = isDark ? 'bg-slate-900 group-hover/row:bg-slate-800' : 'bg-white group-hover/row:bg-slate-50';
-    const link = 'inline-flex items-center gap-1 text-sky-500 hover:underline whitespace-nowrap';
+    const th = `px-2 py-2 text-left text-[11px] font-bold uppercase tracking-wide align-bottom sticky top-0 z-10 ${isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-50 text-slate-500'}`;
+    const td = `px-2 py-2.5 text-[13px] align-top ${isDark ? 'text-slate-200' : 'text-slate-700'}`;
+    const sub = `text-[11.5px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`; // the second line of a cell
+    const hsub = 'block text-[10px] font-medium normal-case tracking-normal text-slate-400 truncate'; // header sub-label
+    const tag = 'text-[10px] font-bold uppercase tracking-wide text-slate-400';
+    const link = 'inline-flex min-w-0 max-w-full items-center gap-1 text-sky-500 hover:underline';
 
-    const COLS = 19;
+    const COLS = 9;
 
     return (
         <div className="space-y-5">
@@ -493,29 +494,25 @@ export default function AllProjectsPage() {
                 <SummaryTile isDark={isDark} label="Due" value={bdt(totals.due)} cls="text-amber-500" accent="#f59e0b" />
             </div>
 
-            {/* Sheet */}
+            {/* Sheet — every project is a two-line row, so the whole table fits the screen without sideways scrolling.
+                (The Excel / CSV file keeps one column per item.) */}
             <div className={`rounded-xl border overflow-hidden ${isDark ? 'bg-slate-900 border-slate-700/60' : 'bg-white border-slate-200/70'}`}>
                 <div className="overflow-auto max-h-[72vh]">
-                    <table className="w-full">
+                    <table className="w-full min-w-[900px] table-fixed">
+                        <colgroup>
+                            {[3, 14, 10, 13, 19, 10, 16, 8, 7].map((w, i) => <col key={i} style={{ width: `${w}%` }} />)}
+                        </colgroup>
                         <thead>
                             <tr>
-                                <th className={th + ' !z-20'} style={frozen(0)}>#</th>
-                                <th className={th + ' !z-20'} style={frozen(1)}>Project Date</th>
-                                <th className={th + ' !z-20 shadow-[2px_0_0_rgba(100,116,139,0.18)]'} style={frozen(2)}>Project Code</th>
-                                <th className={th}>Project Name</th>
-                                <th className={th}>Owner Name</th>
-                                <th className={th}>Owner Phone</th>
-                                <th className={th}>Company</th>
-                                <th className={th}>Website Link</th>
-                                <th className={th}>Domain</th>
-                                <th className={th}>Hosting</th>
-                                <th className={th}>Domain &amp; Hosting by us?</th>
-                                <th className={th}>Price</th>
-                                <th className={th}>Submitted By</th>
-                                <th className={th}>Employee (under)</th>
-                                <th className={th}>Submit Date</th>
-                                <th className={th}>Status</th>
-                                <th className={th + ' text-right'}>Actions</th>
+                                <th className={th}>#</th>
+                                <th className={th}>Project<span className={hsub}>name · code · date</span></th>
+                                <th className={th}>Owner<span className={hsub}>name · phone</span></th>
+                                <th className={th}>Company<span className={hsub}>company · website link</span></th>
+                                <th className={th}>Domain / Hosting<span className={hsub}>domain · hosting · by us?</span></th>
+                                <th className={th}>Price<span className={hsub}>hover for history</span></th>
+                                <th className={th}>People<span className={hsub}>submitted by · employee</span></th>
+                                <th className={th}>Status<span className={hsub}>submit date</span></th>
+                                <th className={th + ' text-right'}>&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody className={isDark ? 'divide-y divide-slate-700/50' : 'divide-y divide-slate-100'}>
@@ -526,62 +523,93 @@ export default function AllProjectsPage() {
                                     {rows.length === 0 ? 'এখনো কোনো প্রজেক্ট নেই।' : 'এই ফিল্টারে কোনো প্রজেক্ট মেলেনি।'}
                                 </td></tr>
                             ) : filtered.map((r, i) => (
-                                <tr key={r.id} className={`group/row ${isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50/70'}`}>
-                                    <td className={td + ' z-[5] text-slate-400 tabular-nums ' + frozenBg} style={frozen(0)}>{i + 1}</td>
-                                    <td className={td + ' z-[5] whitespace-nowrap ' + frozenBg} style={frozen(1)}>{fmtDate(r.date)}</td>
-                                    <td className={td + ' z-[5] font-mono font-semibold whitespace-nowrap shadow-[2px_0_0_rgba(100,116,139,0.18)] ' + frozenBg} style={{ ...frozen(2), color: BRAND }}>{r.code || '—'}</td>
-                                    <td className={td + ' min-w-[170px] max-w-[230px]'}>
-                                        <span className="font-semibold">{r.name || '—'}</span>
-                                        {r.raw.desiredWebsiteName && r.type ? <span className="block text-[11px] text-slate-400">{r.type}</span> : null}
-                                    </td>
-                                    <td className={td + ' font-semibold whitespace-nowrap'}>{r.owner}</td>
-                                    <td className={td + ' whitespace-nowrap'}>{r.phone}</td>
-                                    <td className={td}>{r.company || '—'}</td>
+                                <tr key={r.id} className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50/70'}>
+                                    <td className={td + ' text-slate-400 tabular-nums'}>{i + 1}</td>
 
-                                    {/* Website link — editable (otherwise taken from the domain we registered) */}
-                                    <td className={td + ' min-w-[170px]'}>
-                                        <EditCell
-                                            isDark={isDark}
-                                            value={r.raw.websiteUrl || ''}
-                                            placeholder="+ add link"
-                                            title={r.raw.websiteUrl ? '' : r.siteText ? 'ডোমেইন থেকে নেওয়া — নিজে দিতে এডিট করুন' : ''}
-                                            onSave={(v) => saveField(r.id, 'websiteUrl', v)}
-                                            display={r.siteUrl ? (
-                                                <a href={r.siteUrl} target="_blank" rel="noopener noreferrer" className={link}>
-                                                    {r.siteText.replace(/^https?:\/\//i, '').replace(/\/$/, '')} <FiExternalLink size={11} className="shrink-0" />
-                                                </a>
-                                            ) : null}
-                                        />
-                                    </td>
-
+                                    {/* Project: name / code · date */}
                                     <td className={td}>
-                                        {r.domainText
-                                            ? r.domainText.split(', ').map((d) => (
-                                                <a key={d} href={toUrl(d)} target="_blank" rel="noopener noreferrer" className={link + ' block'}>{d}</a>
-                                            ))
-                                            : <span className="text-slate-400">—</span>}
-                                    </td>
-                                    <td className={td + ' min-w-[150px]'}>{r.hostingText || <span className="text-slate-400">—</span>}</td>
-                                    <td className={td + ' whitespace-nowrap'}>
-                                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${BY_US_STYLE[r.byUs] || BY_US_STYLE.No}`}>{r.byUs}</span>
+                                        <p className="font-semibold truncate" title={r.name}>{r.name || '—'}</p>
+                                        <p className={`${sub} mt-0.5 flex items-center gap-1.5 whitespace-nowrap`}>
+                                            <span className="font-mono font-semibold" style={{ color: BRAND }}>{r.code || '—'}</span>
+                                            <span className="text-slate-300">·</span>
+                                            <span className="truncate" title={fmtDate(r.date)}>{shortFmt(r.date)}</span>
+                                        </p>
                                     </td>
 
-                                    <td className={td + ' whitespace-nowrap'}><PriceCell r={r} isDark={isDark} /></td>
+                                    {/* Owner: name / phone */}
+                                    <td className={td}>
+                                        <p className="font-semibold truncate" title={r.owner}>{r.owner}</p>
+                                        <p className={`${sub} mt-0.5 truncate tabular-nums`}>{r.phone}</p>
+                                    </td>
 
+                                    {/* Company / website link (editable; otherwise taken from the domain we registered) */}
                                     <td className={td}>
-                                        <EditCell isDark={isDark} value={r.submittedBy} placeholder="+ add" listId="pt-people-list" onSave={(v) => saveField(r.id, 'submittedBy', v)} />
+                                        <p className="truncate" title={r.company}>{r.company || <span className="text-slate-400">—</span>}</p>
+                                        <div className={`${sub} mt-0.5 min-w-0`}>
+                                            <EditCell
+                                                isDark={isDark}
+                                                value={r.raw.websiteUrl || ''}
+                                                placeholder="+ add link"
+                                                title={r.raw.websiteUrl ? '' : r.siteText ? 'ডোমেইন থেকে নেওয়া — নিজে দিতে এডিট করুন' : ''}
+                                                onSave={(v) => saveField(r.id, 'websiteUrl', v)}
+                                                display={r.siteUrl ? (
+                                                    <a href={r.siteUrl} target="_blank" rel="noopener noreferrer" className={link} title={r.siteUrl}>
+                                                        <span className="truncate">{r.siteText.replace(/^https?:\/\//i, '').replace(/\/$/, '')}</span>
+                                                        <FiExternalLink size={11} className="shrink-0" />
+                                                    </a>
+                                                ) : null}
+                                            />
+                                        </div>
                                     </td>
+
+                                    {/* Domain + "by us?" / hosting */}
                                     <td className={td}>
-                                        <EditCell isDark={isDark} value={r.employee} placeholder="+ add" listId="pt-people-list" onSave={(v) => saveField(r.id, 'assignedEmployee', v)} />
+                                        <div className="flex items-center gap-2 min-w-0">
+                                            <span className="min-w-0 flex-1 truncate">
+                                                {r.domainText
+                                                    ? r.domainText.split(', ').map((d, k) => (
+                                                        <React.Fragment key={d}>
+                                                            {k > 0 && ', '}
+                                                            <a href={toUrl(d)} target="_blank" rel="noopener noreferrer" className="text-sky-500 hover:underline">{d}</a>
+                                                        </React.Fragment>
+                                                    ))
+                                                    : <span className="text-slate-400">—</span>}
+                                            </span>
+                                            <span title={`Domain & Hosting by us: ${r.byUs}`} className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-semibold border whitespace-nowrap ${BY_US_STYLE[r.byUs] || BY_US_STYLE.No}`}>
+                                                {r.byUs === 'No' ? 'Not by us' : r.byUs.replace(' + ', '+')}
+                                            </span>
+                                        </div>
+                                        <p className={`${sub} mt-0.5 truncate`} title={r.hostingText}>{r.hostingText || '—'}</p>
                                     </td>
-                                    <td className={td + ' whitespace-nowrap'}>{r.submitDate ? fmtDate(r.submitDate) : <span className="text-slate-400">—</span>}</td>
-                                    <td className={td + ' whitespace-nowrap'}>
-                                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${statusStyle(r.status)}`}>{r.status}</span>
+
+                                    <td className={td}><PriceCell r={r} isDark={isDark} /></td>
+
+                                    {/* People: submitted by / employee (both editable) */}
+                                    <td className={td}>
+                                        <div className="flex items-center gap-1.5 min-w-0">
+                                            <span className={`${tag} w-10 shrink-0`}>By</span>
+                                            <div className="min-w-0 flex-1">
+                                                <EditCell isDark={isDark} value={r.submittedBy} placeholder="+ add" listId="pt-people-list" onSave={(v) => saveField(r.id, 'submittedBy', v)} />
+                                            </div>
+                                        </div>
+                                        <div className="mt-0.5 flex items-center gap-1.5 min-w-0">
+                                            <span className={`${tag} w-10 shrink-0`}>Under</span>
+                                            <div className="min-w-0 flex-1">
+                                                <EditCell isDark={isDark} value={r.employee} placeholder="+ add" listId="pt-people-list" onSave={(v) => saveField(r.id, 'assignedEmployee', v)} />
+                                            </div>
+                                        </div>
                                     </td>
+
+                                    {/* Status / submit date */}
+                                    <td className={td}>
+                                        <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold border ${statusStyle(r.status)}`}>{r.status}</span>
+                                        <p className={`${sub} mt-1 whitespace-nowrap`}>{r.submitDate ? fmtDate(r.submitDate) : '—'}</p>
+                                    </td>
+
                                     <td className={td + ' text-right whitespace-nowrap'}>
-                                        <div className="inline-flex items-center gap-1">
-                                            <button onClick={() => setViewing(r.raw)} title="View Details" className="p-2 rounded-lg text-slate-500 hover:bg-slate-500/10 transition"><FiEye size={15} /></button>
-                                            <button onClick={() => setEditing(r.raw)} title="Edit" className="p-2 rounded-lg text-blue-500 hover:bg-blue-500/10 transition"><FiEdit3 size={15} /></button>
+                                        <div className="inline-flex items-center">
+                                            <button onClick={() => setViewing(r.raw)} title="View Details" className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-500/10 transition"><FiEye size={15} /></button>
+                                            <button onClick={() => setEditing(r.raw)} title="Edit" className="p-1.5 rounded-lg text-blue-500 hover:bg-blue-500/10 transition"><FiEdit3 size={15} /></button>
                                         </div>
                                     </td>
                                 </tr>
