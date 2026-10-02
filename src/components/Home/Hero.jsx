@@ -171,15 +171,15 @@ const Hero = () => {
                                     <i className="absolute -bottom-[5px] -left-[5px] w-2.5 h-2.5 bg-[#F8921C]" />
                                 </span>
 
-                                <span className="block pl-[0.55em] text-white md:whitespace-nowrap">WE ARE BEST</span>
-                                <span className="block text-white md:whitespace-nowrap">WEB &amp; DIGITAL</span>
-                                <span className="block md:whitespace-nowrap">
+                                <span className="block pl-[0.55em] text-white tracking-[-0.015em] md:whitespace-nowrap" style={{ fontSize: "1.1em" }}>WE ARE BEST WEB</span>
+                                <span className="block tracking-[-0.015em] md:whitespace-nowrap" style={{ fontSize: "0.9em" }}>
+                                    <span className="text-white">&amp; DIGITAL</span>{" "}
                                     <span style={outlineStyle}>
                                         CRE<span style={filledA}>A</span>TIVE
-                                    </span>{" "}
-                                    <span className="text-white">AGENCY</span>
+                                    </span>
                                 </span>
-                                <span className="block text-white">
+                                <span className="block text-white tracking-[-0.015em] md:whitespace-nowrap" style={{ fontSize: "0.74em" }}>
+                                    AGENCY{" "}
                                     <span className="relative inline-block">
                                         BUSINESS
                                         {/* bottom-right bracket */}
