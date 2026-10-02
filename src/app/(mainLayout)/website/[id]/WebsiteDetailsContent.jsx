@@ -7,56 +7,42 @@ import { fetchWebsites, toggleWebsiteLike } from "@/redux/websiteSlice";
 import { useLanguage } from "@/context/LanguageContext";
 import { addToCart } from "@/redux/cartSlice";
 import {
-    LuDownload, LuExternalLink, LuClock, LuLayoutGrid, LuEye, LuPackage,
-    LuShieldCheck, LuSettings, LuFileCode, LuGlobe, LuCheck, LuSparkles, LuZap, LuX, LuImage, LuChevronLeft, LuChevronRight
+    LuDownload, LuExternalLink, LuClock, LuLayoutGrid, LuEye, LuPackage, LuShieldCheck, LuSettings,
+    LuFileCode, LuCheck, LuSparkles, LuZap, LuX, LuChevronLeft, LuChevronRight, LuShoppingCart,
+    LuArrowUpRight, LuMonitorSmartphone, LuLayers, LuPlay,
 } from "react-icons/lu";
-import { FaHeart, FaRegHeart, FaStar, FaArrowRight } from "react-icons/fa";
-import { MdVerified, MdPlayCircleOutline } from "react-icons/md";
+import { FaHeart, FaRegHeart, FaStar, FaWhatsapp } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import ReviewsSection from "@/components/Reviews/ReviewsSection";
+import { EdgeDots } from "@/components/Home/Decor";
+import { reveal } from "@/components/Aboutpage/sections/shared";
 
-// Animated Counter
-const AnimatedCounter = ({ value }) => {
-    const [count, setCount] = useState(0);
-    useEffect(() => {
-        if (!value) { setCount(0); return; }
-        const duration = 1200;
-        const steps = 50;
-        const increment = value / steps;
-        let current = 0;
-        const timer = setInterval(() => {
-            current += increment;
-            if (current >= value) {
-                setCount(value);
-                clearInterval(timer);
-            } else {
-                setCount(Math.floor(current));
-            }
-        }, duration / steps);
-        return () => clearInterval(timer);
-    }, [value]);
+// Black theme, same look as the website listing page.
+//   top (deep):    breadcrumb · gallery (main image + thumbnails) | purchase panel (sticky)
+//   bottom (soft): tabs (overview / features / technical / reviews) | similar websites
 
-    const formatNumber = (num) => {
-        if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-        return num.toLocaleString();
-    };
-    return <span className="tabular-nums">{formatNumber(count)}</span>;
-};
+const EASE = [0.16, 1, 0.3, 1];
+
+const fmtCount = (n = 0) => (n >= 1000 ? (n / 1000).toFixed(1) + "K" : n.toLocaleString());
+const slugOf = (item) =>
+    item.slug || item.title?.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") || item._id;
 
 export default function WebsiteDetailsContent({ initialWebsite }) {
     const router = useRouter();
     const dispatch = useDispatch();
     const { websiteList = [] } = useSelector((state) => state.websites || {});
     const { language } = useLanguage();
+    const isBn = language === "bn";
+    const bn = isBn ? "hind-siliguri" : "";
+
+    const [website, setWebsite] = useState(initialWebsite); // local copy so likes update instantly
     const [activeTab, setActiveTab] = useState("overview");
-    const [popularWebsites, setPopularWebsites] = useState([]);
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [activeImg, setActiveImg] = useState(0);
+    const [lightbox, setLightbox] = useState(null); // index of the image open full-screen
     const [showVideoModal, setShowVideoModal] = useState(false);
     const [isLiking, setIsLiking] = useState(false);
-
-    // local state for real-time updates while keeping SSR data
-    const [website, setWebsite] = useState(initialWebsite);
+    const [added, setAdded] = useState(false);
 
     useEffect(() => {
         if (initialWebsite) {
@@ -65,11 +51,20 @@ export default function WebsiteDetailsContent({ initialWebsite }) {
         }
     }, [initialWebsite, dispatch]);
 
+    const similar = website?._id ? websiteList.filter((w) => w._id !== website._id).slice(0, 4) : [];
+
+    // lightbox keys: ← → Esc
     useEffect(() => {
-        if (websiteList.length > 0 && website?._id) {
-            setPopularWebsites(websiteList.filter(item => item._id !== website._id).slice(0, 3));
-        }
-    }, [websiteList, website?._id]);
+        if (lightbox === null) return;
+        const n = website?.images?.length || 0;
+        const onKey = (e) => {
+            if (e.key === "Escape") setLightbox(null);
+            if (e.key === "ArrowRight") setLightbox((i) => (i + 1) % n);
+            if (e.key === "ArrowLeft") setLightbox((i) => (i - 1 + n) % n);
+        };
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, [lightbox, website?.images?.length]);
 
     const handleAddToCart = () => {
         if (!website) return;
@@ -78,34 +73,32 @@ export default function WebsiteDetailsContent({ initialWebsite }) {
             title: website.title,
             price: website.offerPrice || website.price,
             image: website.images?.[0] || website.image || "/images/placeholder.png",
-            type: 'website',
-            productType: 'website',
+            type: "website",
+            productType: "website",
             isBookingAllowed: website.isBookingAllowed,
-            bookingAmount: website.bookingAmount
+            bookingAmount: website.bookingAmount,
         }));
+        setAdded(true);
+        setTimeout(() => setAdded(false), 2000);
     };
 
     const handleBuyNow = () => {
         handleAddToCart();
-        router.push('/cart');
+        router.push("/cart");
     };
 
     const handleToggleLike = async () => {
         const token = localStorage.getItem("token");
         if (!token) {
             alert("Please login to like this website");
-            router.push('/login');
+            router.push("/login");
             return;
         }
         if (isLiking) return;
         setIsLiking(true);
         try {
             const result = await dispatch(toggleWebsiteLike(website._id)).unwrap();
-            setWebsite(prev => ({
-                ...prev,
-                isLiked: result.isLiked,
-                likeCount: result.likeCount
-            }));
+            setWebsite((prev) => ({ ...prev, isLiked: result.isLiked, likeCount: result.likeCount }));
         } catch (err) {
             console.error("Like error:", err);
             alert(err.message || "Failed to like. Please try again.");
@@ -116,408 +109,531 @@ export default function WebsiteDetailsContent({ initialWebsite }) {
 
     if (!website) {
         return (
-            <div className="min-h-screen bg-[#FAFBFC] dark:bg-slate-950 flex items-center justify-center">
-                <div className="text-center p-8">
-                    <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">Loading...</h2>
-                    <p className="text-gray-500">Please wait while we fetch the website details.</p>
+            <div className="grid min-h-[80vh] place-items-center bg-[color:var(--tone-deep)] px-6 text-center text-white">
+                <div>
+                    <p className={`text-2xl font-semibold ${bn}`}>{isBn ? "ওয়েবসাইটটি পাওয়া যায়নি" : "Website not found"}</p>
+                    <p className={`mt-2 text-sm text-white/55 ${bn}`}>
+                        {isBn ? "লিংকটি ভুল হতে পারে, অথবা ওয়েবসাইটটি সরিয়ে নেওয়া হয়েছে।" : "The link may be wrong, or the website was removed."}
+                    </p>
+                    <Link href="/website" className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#F8921C] px-6 py-3 text-sm font-semibold text-black hover:bg-[#e07d0a]">
+                        <LuChevronLeft size={16} />
+                        {isBn ? "সব ওয়েবসাইট" : "All websites"}
+                    </Link>
                 </div>
             </div>
         );
     }
 
+    const images = website.images?.length ? website.images : [website.image || "/images/placeholder.png"];
+    const price = website.offerPrice || website.price;
+    const hasDiscount = website.offerPrice && website.offerPrice < website.price;
+    const off = hasDiscount ? Math.round((1 - website.offerPrice / website.price) * 100) : 0;
+    const rating = Number(website.rating || 5).toFixed(1);
+    const category = website.category?.name || website.projectType || "Website";
+    const ytId = website.videoUrl ? website.videoUrl.split("v=")[1]?.split("&")[0] || website.videoUrl.split("/").pop() : null;
+    const waLink = `https://wa.me/8801711946614?text=${encodeURIComponent(`Hello Extrain Web! I have a question about "${website.title}".`)}`;
+
+    const tabs = [
+        { id: "overview", label: isBn ? "বিবরণ" : "Overview", icon: LuLayoutGrid },
+        { id: "features", label: isBn ? "ফিচার" : "Features", icon: LuZap },
+        { id: "technical", label: isBn ? "টেকনিক্যাল" : "Technical", icon: LuSettings },
+        { id: "reviews", label: isBn ? "রিভিউ" : "Reviews", icon: FaStar },
+    ];
+
+    const included = [
+        ["Complete Source Code", "সম্পূর্ণ সোর্স কোড"],
+        ["Responsive Design", "রেসপনসিভ ডিজাইন"],
+        ["Cross-Browser Compatible", "সব ব্রাউজারে চলে"],
+        ["Clean & Documented Code", "পরিষ্কার ও ডকুমেন্টেড কোড"],
+        ["SEO Optimized", "SEO অপটিমাইজড"],
+        ["Fast Loading Speed", "দ্রুত লোডিং"],
+        ["Easy to Customize", "সহজে কাস্টমাইজযোগ্য"],
+        ["Free Updates (6 Months)", "ফ্রি আপডেট (৬ মাস)"],
+    ];
+
+    const perks = [
+        { icon: LuFileCode, en: "Full source code", bn: "সম্পূর্ণ সোর্স কোড" },
+        { icon: LuDownload, en: "Instant delivery", bn: "দ্রুত ডেলিভারি" },
+        { icon: LuClock, en: "6 months of updates", bn: "৬ মাস আপডেট" },
+        { icon: LuShieldCheck, en: "Premium support", bn: "প্রিমিয়াম সাপোর্ট" },
+    ];
+
     return (
-        <div className="min-h-screen bg-[#FAFBFC] dark:bg-slate-950">
-            {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-[#f0fffe] via-[#e8f9f8] to-[#f5f5ff] dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 pt-12 pb-28 lg:pt-16 lg:pb-36">
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.015)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none"></div>
-
-                <div className="container mx-auto px-4 lg:px-24 relative z-10">
-                    <div className="max-w-3xl">
-                        {/* Breadcrumb */}
-                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-6 poppins">
-                            <Link href="/" className="hover:text-teal-600 transition-colors">Home</Link>
-                            <span>/</span>
-                            <Link href="/website" className="hover:text-teal-600 transition-colors">Website</Link>
-                            <span>/</span>
-                            <span className="text-gray-700 dark:text-white font-medium truncate max-w-[200px]">{website.title}</span>
-                        </div>
-
-                        {/* Badges */}
-                        <div className="flex flex-wrap items-center gap-2 mb-5">
-                            <span className="px-3 py-1 bg-gradient-to-r from-teal-500 to-teal-600 rounded text-white text-[11px] font-bold uppercase tracking-wider poppins">
-                                {website.projectType || 'Website'}
-                            </span>
-                            {website.isFeatured && (
-                                <span className="px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded text-white text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
-                                    <LuSparkles size={10} /> Featured
-                                </span>
-                            )}
-                        </div>
-
-                        {/* Title */}
-                        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold outfit leading-[1.2] tracking-tight text-gray-900 dark:text-white mb-4">
-                            {website.title}
-                        </h1>
-
-                        {/* Description */}
-                        <p className="text-[15px] lg:text-base text-gray-600 dark:text-gray-400 poppins leading-relaxed mb-6 max-w-2xl">
-                            {website.description}
-                        </p>
-
-                        {/* Stats Row */}
-                        <div className="flex flex-wrap items-center gap-3 mb-5">
-                            <div className="flex items-center gap-2 bg-white dark:bg-slate-800 px-8 py-2.5 rounded-md border border-gray-200 dark:border-slate-700">
-                                <div className="flex text-amber-400 gap-0.5">
-                                    {[1, 2, 3, 4, 5].map((s) => <FaStar key={s} size={12} />)}
-                                </div>
-                                <span className="font-bold outfit text-gray-900 dark:text-white">{website.rating || '5.0'}</span>
-                                <span className="text-gray-400 dark:text-gray-500 text-xs poppins">({website.reviewCount || 0})</span>
-                            </div>
-
-                            <div className="flex items-center gap-3 bg-white dark:bg-slate-800 px-8 py-2.5 rounded-md border border-gray-200 dark:border-slate-700">
-                                <div className="w-7 h-7 rounded bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center">
-                                    <LuPackage className="text-emerald-600" size={14} />
-                                </div>
-                                <span className="text-gray-700 dark:text-gray-300 font-medium text-sm poppins">
-                                    <AnimatedCounter value={website.salesCount || 0} />
-                                    <span className="text-gray-400 dark:text-gray-500 ml-1">sold</span>
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Platform & Like */}
-                        <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-2 bg-white dark:bg-slate-800 px-3 py-2 rounded-md border border-gray-200 dark:border-slate-700">
-                                <span className="text-gray-400 dark:text-gray-500 text-sm poppins">Type</span>
-                                <span className="text-teal-600 dark:text-teal-400 font-semibold text-sm outfit">{website.projectType || 'Full Stack'}</span>
-                                <MdVerified className="text-blue-500" size={16} />
-                            </div>
-
-                            <button
-                                onClick={handleToggleLike}
-                                disabled={isLiking}
-                                className={`flex items-center gap-2 px-3 py-2 rounded-md border transition-all ${website.isLiked
-                                    ? 'bg-rose-50 dark:bg-rose-900/20 border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400'
-                                    : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-gray-400 hover:border-rose-200 dark:hover:border-rose-700 hover:text-rose-500'
-                                    }`}
-                            >
-                                {website.isLiked ? <FaHeart size={14} /> : <FaRegHeart size={14} />}
-                                <span className="font-semibold text-sm poppins">
-                                    <AnimatedCounter value={website.likeCount || 0} />
-                                </span>
-                            </button>
-                        </div>
-                    </div>
+        <div className="relative min-h-screen overflow-x-clip bg-[color:var(--tone-deep)] text-white selection:bg-[#F8921C] selection:text-black">
+            {/* ======================= TOP: gallery + purchase ======================= */}
+            <section className="relative overflow-hidden pb-14 pt-8 lg:pb-20 lg:pt-10">
+                <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+                    <div className="absolute left-1/4 top-0 h-80 w-[36rem] -translate-x-1/2 rounded-full bg-[#F8921C]/[0.06] blur-3xl" />
+                    <EdgeDots />
                 </div>
-            </section>
 
-            {/* Content Section */}
-            <section className="bg-white dark:bg-slate-950 relative">
-                <div className="container mx-auto px-4 lg:px-24 pb-20 relative z-20">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                        {/* Left Side */}
-                        <div className="lg:col-span-8 space-y-6">
-                            <div className="bg-white rounded-md border border-gray-200 overflow-hidden">
-                                <div className="flex border-b border-gray-100 bg-gray-50/80">
-                                    {[
-                                        { id: "overview", label: "Overview", icon: LuLayoutGrid },
-                                        { id: "gallery", label: "Gallery", icon: LuImage },
-                                        { id: "features", label: "Features", icon: LuZap },
-                                        { id: "technical", label: "Technical", icon: LuSettings },
-                                        { id: "reviews", label: "Reviews", icon: FaStar },
-                                    ].map((tab) => (
+                <div className="container relative z-10 mx-auto px-6 lg:px-10">
+                    {/* breadcrumb */}
+                    <nav aria-label="Breadcrumb" className={`mb-6 flex items-center gap-2 text-[13px] text-white/45 ${bn}`}>
+                        <Link href="/" className="transition-colors hover:text-[#F8921C]">{isBn ? "হোম" : "Home"}</Link>
+                        <LuChevronRight size={13} />
+                        <Link href="/website" className="transition-colors hover:text-[#F8921C]">{isBn ? "ওয়েবসাইট" : "Websites"}</Link>
+                        <LuChevronRight size={13} />
+                        <span className="max-w-[220px] truncate text-white/80">{website.title}</span>
+                    </nav>
+
+                    <div className="grid items-start gap-8 lg:grid-cols-[1.45fr_1fr] lg:gap-10">
+                        {/* ---------- gallery ---------- */}
+                        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }}>
+                            <div className="group relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10 bg-[color:var(--tone-soft)]">
+                                <AnimatePresence mode="wait">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <motion.img
+                                        key={images[activeImg]}
+                                        src={images[activeImg]}
+                                        alt={`${website.title} — screenshot ${activeImg + 1}`}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="absolute inset-0 h-full w-full cursor-zoom-in object-cover object-top"
+                                        onClick={() => setLightbox(activeImg)}
+                                    />
+                                </AnimatePresence>
+                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+
+                                {/* overlay actions */}
+                                <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2">
+                                    <div className="flex gap-2">
+                                        {website.previewUrl && (
+                                            <a
+                                                href={website.previewUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={`inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 text-[13px] font-semibold text-black shadow-lg transition-colors hover:bg-[#F8921C] ${bn}`}
+                                            >
+                                                <LuEye size={15} />
+                                                {isBn ? "লাইভ প্রিভিউ" : "Live Preview"}
+                                            </a>
+                                        )}
+                                        {ytId && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowVideoModal(true)}
+                                                className={`inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-black/55 px-4 py-2 text-[13px] font-semibold text-white backdrop-blur-md transition-colors hover:border-[#F8921C] hover:text-[#F8921C] ${bn}`}
+                                            >
+                                                <LuPlay size={14} />
+                                                {isBn ? "ভিডিও দেখুন" : "Watch Video"}
+                                            </button>
+                                        )}
+                                    </div>
+                                    {images.length > 1 && (
+                                        <span className="rounded-md bg-black/55 px-2.5 py-1 text-[12px] tabular-nums text-white/80 backdrop-blur-md">
+                                            {activeImg + 1} / {images.length}
+                                        </span>
+                                    )}
+                                </div>
+
+                                {images.length > 1 && (
+                                    <>
                                         <button
-                                            key={tab.id}
-                                            onClick={() => setActiveTab(tab.id)}
-                                            className={`flex-1 flex items-center justify-center gap-2 py-4 text-sm font-semibold transition-all border-b-2 -mb-[1px] poppins ${activeTab === tab.id
-                                                ? "text-teal-600 border-teal-500 bg-white"
-                                                : "text-gray-500 border-transparent hover:text-gray-700"
-                                                }`}
+                                            type="button"
+                                            aria-label="Previous image"
+                                            onClick={() => setActiveImg((i) => (i - 1 + images.length) % images.length)}
+                                            className="absolute left-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-md transition-all hover:bg-[#F8921C] hover:text-black group-hover:opacity-100"
                                         >
-                                            <tab.icon size={16} />
-                                            <span className="hidden sm:inline">{tab.label}</span>
+                                            <LuChevronLeft size={20} />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            aria-label="Next image"
+                                            onClick={() => setActiveImg((i) => (i + 1) % images.length)}
+                                            className="absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-md transition-all hover:bg-[#F8921C] hover:text-black group-hover:opacity-100"
+                                        >
+                                            <LuChevronRight size={20} />
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+
+                            {/* thumbnails */}
+                            {images.length > 1 && (
+                                <div className="mt-3 flex gap-2.5 overflow-x-auto pb-1">
+                                    {images.map((img, i) => (
+                                        <button
+                                            key={img + i}
+                                            type="button"
+                                            onClick={() => setActiveImg(i)}
+                                            aria-label={`Show image ${i + 1}`}
+                                            className={`relative aspect-[16/10] w-24 shrink-0 overflow-hidden rounded-lg border-2 transition-all sm:w-28 ${
+                                                i === activeImg ? "border-[#F8921C]" : "border-transparent opacity-55 hover:opacity-100"
+                                            }`}
+                                        >
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                                            <img src={img} alt="" className="h-full w-full object-cover object-top" />
                                         </button>
                                     ))}
                                 </div>
+                            )}
+                        </motion.div>
 
-                                <div className="p-6 lg:p-8">
-                                    {activeTab === "overview" && (
-                                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
-                                            <div>
-                                                <h2 className="text-lg font-bold outfit text-gray-900 mb-4 flex items-center gap-2">
-                                                    <span className="w-1 h-5 bg-teal-500 rounded-full"></span>
-                                                    About This Website
-                                                </h2>
-                                                <p className="text-gray-600 poppins text-[15px] leading-7">
-                                                    {website.description}
-                                                </p>
-                                                {website.longDescription && (
-                                                    <div className="mt-4 p-4 bg-gray-50 rounded-md border border-gray-100 text-gray-600 poppins text-sm leading-7 whitespace-pre-line">
-                                                        {website.longDescription}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </motion.div>
-                                    )}
-
-                                    {activeTab === "gallery" && (
-                                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                                                {website.images?.map((img, idx) => (
-                                                    <div key={idx} onClick={() => setSelectedImage(img)} className="group relative aspect-video bg-gray-100 rounded-md overflow-hidden cursor-pointer border border-gray-200">
-                                                        <img src={img} alt="Screenshot" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                                                            <LuEye className="text-white opacity-0 group-hover:opacity-100" size={24} />
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </motion.div>
-                                    )}
-
-                                    {activeTab === "features" && (
-                                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                            {website.features?.map((feature, idx) => (
-                                                <div key={idx} className="flex items-start gap-3 p-4 bg-gray-50 border border-gray-100 rounded-md">
-                                                    <div className="w-8 h-8 rounded bg-teal-100 flex items-center justify-center"><LuCheck className="text-teal-600" size={16} /></div>
-                                                    <span className="text-gray-700 font-medium text-sm leading-relaxed poppins">{feature}</span>
-                                                </div>
-                                            ))}
-                                        </motion.div>
-                                    )}
-
-                                    {activeTab === "technical" && (
-                                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-                                            {/* Tech Stack */}
-                                            <div>
-                                                <h3 className="text-lg font-bold outfit text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                                                    <span className="w-1 h-5 bg-teal-500 rounded-full"></span>
-                                                    Technology Stack
-                                                </h3>
-                                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                                    {(website.techStack || ['HTML5', 'CSS3', 'JavaScript', 'React.js', 'Node.js', 'MongoDB']).map((tech, idx) => (
-                                                        <div key={idx} className="flex items-center gap-2 p-3 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 border border-gray-200 dark:border-slate-700 rounded-lg">
-                                                            <LuFileCode className="text-teal-500" size={16} />
-                                                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 poppins">{tech}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {/* Project Info Grid */}
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div className="p-4 bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-100 dark:border-slate-700">
-                                                    <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 poppins">Project Type</h4>
-                                                    <p className="text-gray-900 dark:text-white font-semibold outfit">{website.projectType || 'Full Stack'}</p>
-                                                </div>
-                                                <div className="p-4 bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-100 dark:border-slate-700">
-                                                    <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 poppins">Total Pages</h4>
-                                                    <p className="text-gray-900 dark:text-white font-semibold outfit">{website.totalPages || '10+'} Pages</p>
-                                                </div>
-                                                <div className="p-4 bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-100 dark:border-slate-700">
-                                                    <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 poppins">Responsive</h4>
-                                                    <p className="text-emerald-600 font-semibold outfit flex items-center gap-2">
-                                                        <LuCheck size={16} /> Fully Responsive
-                                                    </p>
-                                                </div>
-                                                <div className="p-4 bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-100 dark:border-slate-700">
-                                                    <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 poppins">Browser Support</h4>
-                                                    <p className="text-gray-900 dark:text-white font-semibold outfit">All Modern Browsers</p>
-                                                </div>
-                                            </div>
-
-                                            {/* What's Included */}
-                                            <div>
-                                                <h3 className="text-lg font-bold outfit text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                                                    <span className="w-1 h-5 bg-emerald-500 rounded-full"></span>
-                                                    What's Included
-                                                </h3>
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                    {[
-                                                        'Complete Source Code',
-                                                        'Responsive Design',
-                                                        'Cross-Browser Compatible',
-                                                        'Clean & Well Documented',
-                                                        'SEO Optimized',
-                                                        'Fast Loading Speed',
-                                                        'Easy to Customize',
-                                                        'Free Updates (6 Months)'
-                                                    ].map((item, idx) => (
-                                                        <div key={idx} className="flex items-center gap-3 p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/30 rounded-lg">
-                                                            <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0">
-                                                                <LuCheck className="text-white" size={14} />
-                                                            </div>
-                                                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 poppins">{item}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </motion.div>
-                                    )}
-
-                                    {activeTab === "reviews" && (
-                                        <ReviewsSection productId={website._id} productType="website" />
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Right Sidebar - Positioned to overlap hero */}
-                        <div className="lg:col-span-4 lg:-mt-[450px]">
-                            <div className="sticky top-24 space-y-5">
-                                <div className="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden">
-                                    <div className="relative aspect-video group cursor-pointer" onClick={() => website.videoUrl && setShowVideoModal(true)}>
-                                        <img src={website.images?.[0] || website.image || "/images/placeholder.png"} alt={website.title} className="w-full h-full object-cover" />
-                                        {website.videoUrl && <div className="absolute inset-0 bg-black/40 flex items-center justify-center"><MdPlayCircleOutline className="text-white text-6xl" /></div>}
-                                    </div>
-                                    <div className="p-5 space-y-5">
-                                        <div className="flex items-baseline gap-2">
-                                            <span className="text-2xl font-bold text-gray-900 outfit">৳{(website.offerPrice || website.price)?.toLocaleString()}</span>
-                                            {website.offerPrice < website.price && <span className="text-gray-400 line-through text-sm">৳{website.price?.toLocaleString()}</span>}
-                                        </div>
-                                        <div className="space-y-2.5">
-                                            <button onClick={handleBuyNow} className="w-full py-3 bg-teal-500 text-white font-semibold rounded-md hover:bg-teal-600 transition-colors">Buy Now</button>
-                                            <button onClick={handleAddToCart} className="w-full py-2.5 bg-white border border-gray-200 text-gray-700 font-semibold rounded-md hover:border-teal-400 transition-colors">Add to Cart</button>
-                                            {website.previewUrl && <a href={website.previewUrl} target="_blank" className="w-full py-2.5 bg-gray-50 border border-gray-200 text-gray-600 font-medium rounded-md hover:text-teal-600 transition-colors flex items-center justify-center gap-2 text-sm"><LuExternalLink size={14} /> Live Preview</a>}
-                                        </div>
-                                        <ul className="space-y-2.5 pt-4 border-t border-gray-100">
-                                            <li className="flex items-center gap-2.5 text-gray-600 text-sm poppins"><LuFileCode className="text-teal-500" size={15} /> Full Source Code</li>
-                                            <li className="flex items-center gap-2.5 text-gray-600 text-sm poppins"><LuDownload className="text-teal-500" size={15} /> Instant Download</li>
-                                            <li className="flex items-center gap-2.5 text-gray-600 text-sm poppins"><LuClock className="text-teal-500" size={15} /> 6 Months Updates</li>
-                                            <li className="flex items-center gap-2.5 text-gray-600 text-sm poppins"><LuShieldCheck className="text-teal-500" size={15} /> Premium Support</li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                {/* Related Websites - Below Sticky Card */}
-                                {popularWebsites.length > 0 && (
-                                    <div className="bg-white rounded-md border border-gray-200 p-4 mt-5">
-                                        <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2 poppins">
-                                            <LuLayoutGrid size={14} className="text-teal-500" />
-                                            Similar Websites
-                                        </h3>
-                                        <div className="space-y-3">
-                                            {popularWebsites.slice(0, 4).map((item) => (
-                                                <Link
-                                                    key={item._id}
-                                                    href={`/website/${item.slug || item.title?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`}
-                                                    className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-50 transition-colors group"
-                                                >
-                                                    <div className="w-16 h-12 rounded overflow-hidden flex-shrink-0 border border-gray-100">
-                                                        <img
-                                                            src={item.images?.[0] || item.image || "/images/placeholder.png"}
-                                                            alt={item.title}
-                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                                                        />
-                                                    </div>
-                                                    <div className="flex-1 min-w-0">
-                                                        <h4 className="text-xs font-semibold text-gray-800 truncate group-hover:text-teal-600 transition-colors poppins">
-                                                            {item.title}
-                                                        </h4>
-                                                        <p className="text-[11px] text-gray-500 poppins">
-                                                            ৳{(item.offerPrice || item.price)?.toLocaleString()}
-                                                        </p>
-                                                    </div>
-                                                    <FaArrowRight size={10} className="text-gray-300 group-hover:text-teal-500 transition-colors" />
-                                                </Link>
-                                            ))}
-                                        </div>
-                                        <Link
-                                            href="/website"
-                                            className="block text-center text-xs text-teal-600 font-medium mt-3 pt-3 border-t border-gray-100 hover:text-teal-700 poppins"
-                                        >
-                                            View All Websites →
-                                        </Link>
-                                    </div>
+                        {/* ---------- purchase panel ---------- */}
+                        <motion.aside
+                            initial={{ opacity: 0, y: 24 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
+                            className="lg:sticky lg:top-24"
+                        >
+                            <div className="flex flex-wrap items-center gap-2">
+                                <span className={`rounded-md border border-white/15 bg-white/[0.05] px-2.5 py-1 text-[12px] font-semibold text-white/80 ${bn}`}>{category}</span>
+                                {website.isFeatured && (
+                                    <span className="inline-flex items-center gap-1 rounded-md bg-[#F8921C]/15 px-2.5 py-1 text-[12px] font-semibold text-[#F8921C]">
+                                        <LuSparkles size={12} /> {isBn ? "ফিচারড" : "Featured"}
+                                    </span>
                                 )}
                             </div>
-                        </div>
+
+                            <h1 style={{ color: "#fff" }} className={`mt-4 text-[1.7rem] font-bold leading-[1.2] sm:text-[2rem] ${bn}`}>
+                                {website.title}
+                            </h1>
+                            {website.description && (
+                                <p className={`mt-3 line-clamp-3 text-[15px] leading-7 text-white/60 ${bn}`}>{website.description}</p>
+                            )}
+
+                            {/* rating · sold · likes */}
+                            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-white/60">
+                                <span className="inline-flex items-center gap-1.5">
+                                    <span className="flex gap-0.5 text-[#F8921C]">
+                                        {[1, 2, 3, 4, 5].map((s) => <FaStar key={s} size={12} className={s <= Math.round(rating) ? "" : "opacity-25"} />)}
+                                    </span>
+                                    <b className="font-semibold text-white">{rating}</b>
+                                    <span>({website.reviewCount || 0})</span>
+                                </span>
+                                <span className="inline-flex items-center gap-1.5">
+                                    <LuPackage size={14} className="text-white/40" />
+                                    {fmtCount(website.salesCount || 0)} {isBn ? "বিক্রি" : "sold"}
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={handleToggleLike}
+                                    disabled={isLiking}
+                                    aria-pressed={!!website.isLiked}
+                                    className={`inline-flex items-center gap-1.5 transition-colors ${website.isLiked ? "text-rose-400" : "hover:text-rose-400"}`}
+                                >
+                                    {website.isLiked ? <FaHeart size={13} /> : <FaRegHeart size={13} />}
+                                    {fmtCount(website.likeCount || 0)}
+                                </button>
+                            </div>
+
+                            {/* price + actions */}
+                            <div className="mt-6 rounded-2xl border border-white/10 bg-[color:var(--tone-soft)] p-5 sm:p-6">
+                                <div className="flex items-end justify-between gap-3">
+                                    <div>
+                                        {hasDiscount && (
+                                            <div className="mb-1 flex items-center gap-2">
+                                                <span className="text-sm text-white/35 line-through">৳{website.price?.toLocaleString()}</span>
+                                                <span className="rounded-md bg-[#F8921C] px-1.5 py-0.5 text-[11px] font-bold text-black">-{off}%</span>
+                                            </div>
+                                        )}
+                                        <span className="text-[2.3rem] font-bold leading-none tracking-tight text-white">৳{price?.toLocaleString()}</span>
+                                    </div>
+                                    <span className={`text-right text-[12px] text-white/45 ${bn}`}>{isBn ? "এককালীন মূল্য" : "One-time price"}</span>
+                                </div>
+
+                                <div className="mt-5 grid gap-2.5">
+                                    <button
+                                        type="button"
+                                        onClick={handleBuyNow}
+                                        className={`inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#F8921C] text-sm font-semibold uppercase text-black transition-colors hover:bg-[#e07d0a] ${bn ? "tracking-normal" : "tracking-wide"} ${bn}`}
+                                    >
+                                        {isBn ? "এখনই কিনুন" : "Buy Now"}
+                                        <LuArrowUpRight size={17} />
+                                    </button>
+                                    <div className="grid grid-cols-2 gap-2.5">
+                                        <button
+                                            type="button"
+                                            onClick={handleAddToCart}
+                                            className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl border text-[13px] font-semibold transition-colors ${
+                                                added ? "border-emerald-500 bg-emerald-500 text-white" : "border-white/15 text-white hover:border-[#F8921C] hover:text-[#F8921C]"
+                                            } ${bn}`}
+                                        >
+                                            {added ? <LuCheck size={16} /> : <LuShoppingCart size={16} />}
+                                            {added ? (isBn ? "যোগ হয়েছে" : "Added") : (isBn ? "কার্টে যোগ" : "Add to Cart")}
+                                        </button>
+                                        <a
+                                            href={waLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/15 text-[13px] font-semibold text-white transition-colors hover:border-[#F8921C] hover:text-[#F8921C] ${bn}`}
+                                        >
+                                            <FaWhatsapp size={16} />
+                                            {isBn ? "প্রশ্ন করুন" : "Ask a Question"}
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <ul className="mt-5 grid grid-cols-2 gap-x-3 gap-y-2.5 border-t border-white/10 pt-5">
+                                    {perks.map(({ icon: Icon, en, bn: bnText }) => (
+                                        <li key={en} className={`flex items-center gap-2 text-[13px] text-white/70 ${bn}`}>
+                                            <Icon size={15} className="shrink-0 text-[#F8921C]" />
+                                            {isBn ? bnText : en}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </motion.aside>
                     </div>
                 </div>
             </section>
 
-            {/* Modal for Images and Videos */}
+            {/* ======================= BOTTOM: details tabs + similar ======================= */}
+            <section className="relative border-t border-white/10 bg-[color:var(--tone-soft)] pb-24 pt-12 lg:pb-28 lg:pt-14">
+                <div className="container mx-auto px-6 lg:px-10">
+                    <div className="grid items-start gap-8 lg:grid-cols-[1.45fr_1fr] lg:gap-10">
+                        {/* ---------- tabs ---------- */}
+                        <div>
+                            <div role="tablist" className="flex gap-1 overflow-x-auto rounded-xl border border-white/10 bg-[color:var(--tone-deep)]/60 p-1">
+                                {tabs.map(({ id, label, icon: Icon }) => (
+                                    <button
+                                        key={id}
+                                        type="button"
+                                        role="tab"
+                                        aria-selected={activeTab === id}
+                                        onClick={() => setActiveTab(id)}
+                                        className={`inline-flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-[13.5px] font-semibold transition-colors ${
+                                            activeTab === id ? "bg-[#F8921C] text-black" : "text-white/60 hover:text-white"
+                                        } ${bn}`}
+                                    >
+                                        <Icon size={15} />
+                                        {label}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="mt-6">
+                                <AnimatePresence mode="wait">
+                                    <motion.div
+                                        key={activeTab}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -6 }}
+                                        transition={{ duration: 0.25 }}
+                                    >
+                                        {activeTab === "overview" && (
+                                            <div className="rounded-2xl border border-white/10 bg-[color:var(--tone-deep)] p-6 sm:p-8">
+                                                <SectionTitle bn={bn}>{isBn ? "এই ওয়েবসাইট সম্পর্কে" : "About this website"}</SectionTitle>
+                                                <p className={`text-[15px] leading-7 text-white/70 ${bn}`}>{website.description}</p>
+                                                {website.longDescription && (
+                                                    <p className={`mt-5 whitespace-pre-line border-l-2 border-[#F8921C] pl-5 text-[14.5px] leading-7 text-white/60 ${bn}`}>
+                                                        {website.longDescription}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {activeTab === "features" && (
+                                            <div className="grid gap-3 sm:grid-cols-2">
+                                                {(website.features?.length ? website.features : []).map((f, i) => (
+                                                    <div key={i} className="flex items-start gap-3 rounded-xl border border-white/10 bg-[color:var(--tone-deep)] p-4">
+                                                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[#F8921C]/10 text-[#F8921C]">
+                                                            <LuCheck size={16} />
+                                                        </span>
+                                                        <span className={`pt-1 text-[14px] leading-6 text-white/80 ${bn}`}>{f}</span>
+                                                    </div>
+                                                ))}
+                                                {!website.features?.length && (
+                                                    <p className={`text-sm text-white/50 ${bn}`}>{isBn ? "ফিচার তালিকা শীঘ্রই আসছে।" : "Feature list coming soon."}</p>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {activeTab === "technical" && (
+                                            <div className="space-y-5">
+                                                <div className="rounded-2xl border border-white/10 bg-[color:var(--tone-deep)] p-6 sm:p-8">
+                                                    <SectionTitle bn={bn}>{isBn ? "টেকনোলজি" : "Technology stack"}</SectionTitle>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {(website.techStack || ["HTML5", "CSS3", "JavaScript", "React.js", "Node.js", "MongoDB"]).map((tech) => (
+                                                            <span key={tech} className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-[13px] text-white/80">
+                                                                <LuFileCode size={14} className="text-[#F8921C]" />
+                                                                {tech}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+
+                                                    <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                                                        {[
+                                                            { icon: LuLayers, k: isBn ? "প্রজেক্ট টাইপ" : "Project type", v: website.projectType || "Full Stack" },
+                                                            { icon: LuLayoutGrid, k: isBn ? "মোট পেজ" : "Total pages", v: `${website.totalPages || "10+"} ${isBn ? "পেজ" : "pages"}` },
+                                                            { icon: LuMonitorSmartphone, k: isBn ? "রেসপনসিভ" : "Responsive", v: isBn ? "সব ডিভাইসে" : "Fully responsive" },
+                                                            { icon: LuShieldCheck, k: isBn ? "ব্রাউজার সাপোর্ট" : "Browser support", v: isBn ? "সব আধুনিক ব্রাউজার" : "All modern browsers" },
+                                                        ].map(({ icon: Icon, k, v }) => (
+                                                            <div key={k} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                                                                <Icon size={18} className="shrink-0 text-[#F8921C]" />
+                                                                <div>
+                                                                    <p className={`text-[12px] text-white/45 ${bn}`}>{k}</p>
+                                                                    <p className={`text-[14px] font-semibold text-white ${bn}`}>{v}</p>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div className="rounded-2xl border border-white/10 bg-[color:var(--tone-deep)] p-6 sm:p-8">
+                                                    <SectionTitle bn={bn}>{isBn ? "যা যা পাচ্ছেন" : "What's included"}</SectionTitle>
+                                                    <ul className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
+                                                        {included.map(([en, bnText]) => (
+                                                            <li key={en} className={`flex items-center gap-2.5 text-[14px] text-white/75 ${bn}`}>
+                                                                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#F8921C] text-black">
+                                                                    <LuCheck size={11} strokeWidth={3} />
+                                                                </span>
+                                                                {isBn ? bnText : en}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {activeTab === "reviews" && (
+                                            <div className="reviews-dark">
+                                                <ReviewsSection productId={website._id} productType="website" />
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                </AnimatePresence>
+                            </div>
+                        </div>
+
+                        {/* ---------- similar websites ---------- */}
+                        {similar.length > 0 && (
+                            <motion.aside {...reveal(0)} className="rounded-2xl border border-white/10 bg-[color:var(--tone-deep)] p-5 lg:sticky lg:top-24">
+                                <h2 style={{ color: "#fff" }} className={`mb-4 flex items-center gap-2 text-[15px] font-semibold ${bn}`}>
+                                    <LuLayoutGrid size={15} className="text-[#F8921C]" />
+                                    {isBn ? "একই রকম ওয়েবসাইট" : "Similar websites"}
+                                </h2>
+                                <div className="space-y-2">
+                                    {similar.map((item) => (
+                                        <Link
+                                            key={item._id}
+                                            href={`/website/${slugOf(item)}`}
+                                            className="group flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-white/[0.04]"
+                                        >
+                                            <span className="relative aspect-[16/10] w-24 shrink-0 overflow-hidden rounded-lg border border-white/10">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img
+                                                    src={item.images?.[0] || item.image || "/images/placeholder.png"}
+                                                    alt={item.title}
+                                                    loading="lazy"
+                                                    className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                                                />
+                                            </span>
+                                            <span className="min-w-0 flex-1">
+                                                <span className={`line-clamp-2 text-[13.5px] font-medium leading-snug text-white/85 transition-colors group-hover:text-[#F8921C] ${bn}`}>
+                                                    {item.title}
+                                                </span>
+                                                <span className="mt-1 block text-[13px] font-semibold text-white">৳{(item.offerPrice || item.price)?.toLocaleString()}</span>
+                                            </span>
+                                        </Link>
+                                    ))}
+                                </div>
+                                <Link
+                                    href="/website"
+                                    className={`mt-4 flex items-center justify-center gap-1.5 rounded-lg border border-white/10 py-2.5 text-[13px] font-semibold text-white/80 transition-colors hover:border-[#F8921C] hover:text-[#F8921C] ${bn}`}
+                                >
+                                    {isBn ? "সব ওয়েবসাইট দেখুন" : "View all websites"}
+                                    <LuArrowUpRight size={15} />
+                                </Link>
+                            </motion.aside>
+                        )}
+                    </div>
+                </div>
+            </section>
+
+            {/* ======================= lightbox + video ======================= */}
             <AnimatePresence>
-                {selectedImage && (
+                {lightbox !== null && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
-                        onClick={() => setSelectedImage(null)}
+                        className="fixed inset-0 z-[80] flex items-center justify-center bg-black/95 p-4"
+                        onClick={() => setLightbox(null)}
+                        role="dialog"
+                        aria-modal="true"
                     >
-                        {/* Close Button */}
-                        <button
-                            onClick={() => setSelectedImage(null)}
-                            className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all z-10"
-                        >
+                        <button type="button" aria-label="Close" onClick={() => setLightbox(null)} className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[#F8921C] hover:text-black">
                             <LuX size={20} />
                         </button>
-
-                        {/* Image Counter */}
-                        {website.images?.length > 1 && (
-                            <div className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white text-sm font-medium poppins">
-                                {website.images.indexOf(selectedImage) + 1} / {website.images.length}
-                            </div>
-                        )}
-
-                        {/* Navigation Arrows */}
-                        {website.images?.length > 1 && (
+                        {images.length > 1 && (
                             <>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        const currentIndex = website.images.indexOf(selectedImage);
-                                        const prevIndex = currentIndex === 0 ? website.images.length - 1 : currentIndex - 1;
-                                        setSelectedImage(website.images[prevIndex]);
-                                    }}
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all"
-                                >
+                                <span className="absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-white/10 px-4 py-1.5 text-sm tabular-nums text-white">
+                                    {lightbox + 1} / {images.length}
+                                </span>
+                                <button type="button" aria-label="Previous image" onClick={(e) => { e.stopPropagation(); setLightbox((i) => (i - 1 + images.length) % images.length); }} className="absolute left-4 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[#F8921C] hover:text-black">
                                     <LuChevronLeft size={24} />
                                 </button>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        const currentIndex = website.images.indexOf(selectedImage);
-                                        const nextIndex = currentIndex === website.images.length - 1 ? 0 : currentIndex + 1;
-                                        setSelectedImage(website.images[nextIndex]);
-                                    }}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all"
-                                >
+                                <button type="button" aria-label="Next image" onClick={(e) => { e.stopPropagation(); setLightbox((i) => (i + 1) % images.length); }} className="absolute right-4 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[#F8921C] hover:text-black">
                                     <LuChevronRight size={24} />
                                 </button>
                             </>
                         )}
-
-                        {/* Main Image */}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <motion.img
-                            key={selectedImage}
-                            initial={{ scale: 0.9, opacity: 0 }}
+                            key={lightbox}
+                            initial={{ scale: 0.94, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            src={selectedImage}
-                            alt="Gallery Preview"
-                            className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+                            src={images[lightbox]}
+                            alt={`${website.title} — screenshot ${lightbox + 1}`}
+                            className="max-h-[85vh] max-w-full rounded-lg object-contain shadow-2xl"
                             onClick={(e) => e.stopPropagation()}
                         />
                     </motion.div>
                 )}
-                {showVideoModal && website.videoUrl && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
-                        {/* Close Button */}
-                        <button
-                            onClick={() => setShowVideoModal(false)}
-                            className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all z-10"
-                        >
+                {showVideoModal && ytId && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[80] flex items-center justify-center bg-black/95 p-4"
+                        onClick={() => setShowVideoModal(false)}
+                        role="dialog"
+                        aria-modal="true"
+                    >
+                        <button type="button" aria-label="Close" onClick={() => setShowVideoModal(false)} className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[#F8921C] hover:text-black">
                             <LuX size={20} />
                         </button>
-                        <div className="relative w-full max-w-4xl aspect-video" onClick={(e) => e.stopPropagation()}>
-                            <iframe src={`https://www.youtube.com/embed/${website.videoUrl.split('v=')[1] || website.videoUrl.split('/').pop()}?autoplay=1`} className="w-full h-full rounded-lg" allowFullScreen />
+                        <div className="relative aspect-video w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
+                            <iframe
+                                src={`https://www.youtube.com/embed/${ytId}?autoplay=1`}
+                                className="h-full w-full rounded-lg"
+                                allow="autoplay; encrypted-media"
+                                allowFullScreen
+                                title={`${website.title} video`}
+                            />
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* ReviewsSection is built for light pages — re-tone it for the dark theme, here only */}
+            <style jsx global>{`
+                .reviews-dark > div { margin-top: 0 !important; background: var(--tone-deep) !important; border-color: rgba(255,255,255,0.1) !important; box-shadow: none !important; border-radius: 1rem !important; }
+                .reviews-dark .bg-white, .reviews-dark .bg-gray-50, .reviews-dark [class*="bg-gray-50/"] { background: rgba(255,255,255,0.03) !important; }
+                .reviews-dark .border-gray-100, .reviews-dark .border-gray-200, .reviews-dark [class*="border-gray-200/"] { border-color: rgba(255,255,255,0.1) !important; }
+                .reviews-dark .text-gray-900, .reviews-dark .text-gray-800 { color: #fff !important; }
+                .reviews-dark .text-gray-600, .reviews-dark .text-gray-500 { color: rgba(255,255,255,0.6) !important; }
+                .reviews-dark .text-gray-400, .reviews-dark .text-gray-300 { color: rgba(255,255,255,0.4) !important; }
+                .reviews-dark .bg-gray-200 { background: rgba(255,255,255,0.08) !important; }
+                .reviews-dark .bg-gray-900 { background: #f8921c !important; color: #000 !important; box-shadow: none !important; }
+                .reviews-dark .bg-gray-900:hover { background: #e07d0a !important; }
+                .reviews-dark h2, .reviews-dark h3, .reviews-dark h4 { color: #fff !important; }
+                .reviews-dark .text-amber-400 { color: #f8921c !important; }
+            `}</style>
         </div>
+    );
+}
+
+// small heading used inside the tab panels
+function SectionTitle({ children, bn }) {
+    return (
+        <h2 style={{ color: "#fff" }} className={`mb-4 flex items-center gap-2.5 text-[17px] font-semibold ${bn}`}>
+            <span className="h-5 w-1 rounded-full bg-[#F8921C]" />
+            {children}
+        </h2>
     );
 }
