@@ -149,6 +149,9 @@ export default function ProjectDetailModal({ isDark, project: p, onClose, onEdit
                             <Row isDark={isDark} icon={FiCheckCircle} label="Delivery Date" value={p.projectDeliveryDate ? fmtDate(p.projectDeliveryDate) : null} />
                             <Row isDark={isDark} icon={FiCalendar} label="Project Start" value={p.projectStartDate ? fmtDate(p.projectStartDate) : null} />
                             <Row isDark={isDark} icon={FiCalendar} label="Message Date" value={p.messageDate ? fmtDate(p.messageDate) : null} />
+                            <Row isDark={isDark} icon={FiGlobe} label="Website Link" value={p.websiteUrl} />
+                            <Row isDark={isDark} icon={FiUser} label="Submitted By" value={p.submittedBy} />
+                            <Row isDark={isDark} icon={FiUser} label="Employee (under)" value={p.assignedEmployee} />
                             {p.workingDays ? <Row isDark={isDark} icon={FiClock} label="Working Days" value={`${p.workingDays} days`} /> : null}
                         </div>
                     </div>

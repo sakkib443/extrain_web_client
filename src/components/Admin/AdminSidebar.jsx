@@ -35,6 +35,7 @@ import {
   FiTag,
   FiEdit3,
   FiInbox,
+  FiList,
 } from 'react-icons/fi';
 import { useTheme } from '@/providers/ThemeProvider';
 
@@ -105,6 +106,7 @@ const AdminSidebar = () => {
       submenu: [
         { title: 'Overview', href: '/dashboard/admin/project-tracker', icon: FiGrid },
         { title: 'Order Requests', href: '/dashboard/admin/project-tracker/requests', icon: FiInbox },
+        { title: 'All Projects', href: '/dashboard/admin/project-tracker/all', icon: FiList },
       ],
     },
     {

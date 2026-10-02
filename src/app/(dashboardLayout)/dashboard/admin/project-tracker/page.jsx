@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
     FiFolder, FiTrendingUp, FiTrendingDown, FiDollarSign, FiClock,
-    FiInbox, FiRefreshCw, FiCreditCard, FiChevronRight, FiPlus,
+    FiInbox, FiRefreshCw, FiCreditCard, FiChevronRight, FiPlus, FiList,
 } from 'react-icons/fi';
 import { useTheme } from '@/providers/ThemeProvider';
 import { ptApi, bdt, monthLabel } from '@/lib/projectTracker';
@@ -69,6 +69,10 @@ export default function ProjectTrackerOverview() {
                                 {summary.pendingRequests}
                             </span>
                         )}
+                    </Link>
+                    <Link href="/dashboard/admin/project-tracker/all"
+                        className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition ${isDark ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'}`}>
+                        <FiList size={16} /> All Projects
                     </Link>
                     <Link href="/dashboard/admin/project-tracker/expenses"
                         className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition ${isDark ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'}`}>

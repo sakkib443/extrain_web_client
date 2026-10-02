@@ -80,6 +80,13 @@ export const ptApi = {
             headers: authHeaders(),
             body: JSON.stringify(body),
         }).then(handle),
+    // "All Projects" শিটের ইনলাইন-এডিট (ওয়েবসাইট লিংক / কে সাবমিট করেছে / কোন এমপ্লয়ির আন্ডারে)
+    updateProjectSheet: (id, body) =>
+        fetch(`${API_BASE_URL}/project-tracker/admin/projects/${id}/sheet`, {
+            method: 'PATCH',
+            headers: authHeaders(),
+            body: JSON.stringify(body),
+        }).then(handle),
     deleteProject: (id) =>
         fetch(`${API_BASE_URL}/project-tracker/admin/projects/${id}`, {
             method: 'DELETE',

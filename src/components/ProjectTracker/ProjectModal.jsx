@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { FiX, FiSave, FiPlus, FiTrash2, FiCheck, FiCheckCircle, FiCreditCard, FiCornerUpLeft, FiFileText, FiGlobe } from 'react-icons/fi';
+import { TEAM } from '@/data/team';
 import { ptApi, bdt, WEBSITE_TYPES, STATUS_OPTIONS, PACKAGE_TYPES, BILLING_MODES, domainProfit, domainDue } from '@/lib/projectTracker';
 
 const toInput = (d) => (d ? new Date(d).toISOString().slice(0, 10) : '');
@@ -42,6 +43,9 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
         projectDeliveryDate: toInput(init.projectDeliveryDate),
         status: init.status || 'pending', // 'request' হলে সেটাই রাখে — edit করলে auto-approve হবে না
         adminNote: init.adminNote || '',
+        websiteUrl: init.websiteUrl || '', // লাইভ ওয়েবসাইটের লিংক ("All Projects" শিটে দেখায়)
+        submittedBy: init.submittedBy || '', // প্রজেক্টটা কে সাবমিট করেছিল
+        assignedEmployee: init.assignedEmployee || '', // কোন এমপ্লয়ির আন্ডারে ছিল
         installmentCount: init.installmentCount || ((init.installments || []).filter((i) => i.note !== 'Refund' && (Number(i.amount) || 0) >= 0).length || ''),
     });
     // Domain/Hosting — linked registry রেকর্ড থাকলে সেটা, নাহলে খালি ফর্ম
@@ -486,6 +490,25 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                         <div><label className={label}>Project Start Date</label><input type="date" className={input} value={f.projectStartDate} onChange={set('projectStartDate')} /></div>
                         <div><label className={label}>Delivery Date</label><input type="date" className={input} value={f.projectDeliveryDate} onChange={set('projectDeliveryDate')} /></div>
                         <div><label className={label}>Message Date</label><input type="date" className={input} value={f.messageDate} onChange={set('messageDate')} /></div>
+                    </div>
+
+                    {/* "All Projects" শিটের কলাম */}
+                    <div className="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label className={label}>Website Link <span className="font-normal text-slate-400">(লাইভ সাইট)</span></label>
+                            <input className={input} placeholder="https://..." value={f.websiteUrl} onChange={set('websiteUrl')} />
+                        </div>
+                        <div>
+                            <label className={label}>Submitted By <span className="font-normal text-slate-400">(কে সাবমিট করেছিল)</span></label>
+                            <input className={input} list="pt-people" value={f.submittedBy} onChange={set('submittedBy')} />
+                        </div>
+                        <div>
+                            <label className={label}>Employee (under) <span className="font-normal text-slate-400">(কার আন্ডারে ছিল)</span></label>
+                            <input className={input} list="pt-people" value={f.assignedEmployee} onChange={set('assignedEmployee')} />
+                        </div>
+                        <datalist id="pt-people">
+                            {TEAM.map((m) => <option key={m.id} value={m.name} />)}
+                        </datalist>
                     </div>
 
                     <div><label className={label}>Admin Note</label><input className={input} value={f.adminNote} onChange={set('adminNote')} /></div>
