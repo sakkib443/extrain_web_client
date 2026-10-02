@@ -38,10 +38,13 @@
   --color-gray-50: #f8fafc;
   --color-white: #ffffff;
 
-  /* Font Families */
-  --font-heading: var(--font-poppins), sans-serif;
-  --font-body: var(--font-poppins), sans-serif;
-  --font-bengali: "Hind Siliguri", sans-serif;
+  /* Font Families — Plus Jakarta Sans (loaded in layout.js as --font-jakarta).
+     To go back to Poppins, point both back to var(--font-poppins). */
+  --font-heading: var(--font-jakarta), sans-serif;
+  --font-body: var(--font-jakarta), sans-serif;
+  /* Bengali mode: Latin letters come from Plus Jakarta Sans (listed first), and because it has no
+     Bengali glyphs the browser takes every Bengali character from Hind Siliguri automatically. */
+  --font-bengali: var(--font-jakarta), "Hind Siliguri", sans-serif;
 }
 
 /* =====================================================
@@ -76,9 +79,163 @@ body .container {
   }
 }
 
-/* Legacy alias — Teko removed, now renders Poppins */
+/* Home "Our Clients": scrolling strip of company pills (reuses the galleryLeft keyframes).
+   The track holds the pill set twice, so -50% is exactly one set → seamless loop.
+   Speed comes from --clients-dur, set per render from the number of pills. */
+.clients-track {
+  animation: galleryLeft var(--clients-dur, 60s) linear infinite;
+  will-change: transform;
+}
+.clients-row:hover .clients-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .clients-track { animation: none; }
+  .clients-row { overflow-x: auto; }
+  .clients-dup { display: none; }
+}
+
+/* Background decorations of the home sections (rings, sparkles). */
+@keyframes decorSpin {
+  to { transform: rotate(360deg); }
+}
+@keyframes decorFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-16px) rotate(12deg); }
+}
+.decor-spin { animation: decorSpin 110s linear infinite; }
+.decor-spin-rev { animation: decorSpin 150s linear infinite reverse; }
+.decor-float { animation: decorFloat 9s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .decor-spin, .decor-spin-rev, .decor-float { animation: none; }
+}
+
+/* ===== 3D solar system behind the home "services" section — pure CSS 3D, no library =====
+   Structure (components/Home/SolarSystem.jsx):
+     scene (tilted with rotateX, preserve-3d)
+       └ ring  — one orbit (a grey circle on the tilted plane)
+           └ mover   — turns about the plane's normal  → carries the planet along the orbit
+               └ holder  — sits on the orbit
+                   └ counter — turns back the other way, so the planet is not carried round
+                       └ face  — stands the planet up toward the screen (cancels the scene's tilt: --tilt)
+                           └ planet (a shaded sphere)
+   Sizes are in em; the scene's font-size is 1% of its width, so everything scales together. */
+.sys-ring { position: absolute; transform-style: preserve-3d; }
+.sys-line { position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.42); }
+.sys-line-dash { border-style: dashed; border-color: rgba(255, 255, 255, 0.34); }
+.sys-mover {
+  position: absolute; inset: 0; transform-style: preserve-3d;
+  transform: rotateZ(var(--a, 0deg));
+  animation: sysOrbit var(--t, 60s) linear infinite;
+}
+.sys-holder { position: absolute; left: 100%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; }
+.sys-counter {
+  position: absolute; inset: 0; transform-style: preserve-3d;
+  transform: rotateZ(calc(var(--a, 0deg) * -1));
+  animation: sysCounter var(--t, 60s) linear infinite;
+}
+.sys-face {
+  position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d;
+  transform: rotateX(calc(var(--tilt, 67deg) * -1));
+}
+/* the sun, standing at the centre */
+.sys-sun {
+  position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d;
+  transform: rotateX(calc(var(--tilt, 67deg) * -1));
+}
+.sys-sun > i {
+  position: absolute; left: -5em; top: -5em; width: 10em; height: 10em; border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, #ffe6b0 0%, #ffb445 30%, #f8921c 62%, #c4560c 100%);
+  box-shadow: 0 0 2.4em 0.8em rgba(248, 146, 28, 0.5), 0 0 11em 4.5em rgba(248, 146, 28, 0.2);
+  animation: sysPulse 6s ease-in-out infinite;
+}
+/* a planet = a shaded ball (background set per planet) */
+.sys-body {
+  position: absolute; left: -0.5em; top: -0.5em; width: 1em; height: 1em; border-radius: 50%;
+  box-shadow: inset -0.24em -0.2em 0.42em rgba(0, 0, 0, 0.72), 0 0 0.6em rgba(255, 255, 255, 0.06);
+}
+.sys-body::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0) 42%);
+}
+.sys-earth { box-shadow: inset -0.24em -0.2em 0.42em rgba(0, 0, 0, 0.72), 0 0 0.5em rgba(110, 185, 255, 0.55); }
+.sys-earth-land {
+  position: absolute; inset: 0; border-radius: 50%; background-repeat: repeat-x; background-size: 2em 1em;
+  animation: sysEarthSpin 26s linear infinite;
+}
+.sys-moon-orbit {
+  position: absolute; left: -1.7em; top: -1.7em; width: 3.4em; height: 3.4em; border-radius: 50%;
+  border: 1px dashed rgba(160, 164, 172, 0.3); animation: sysSpin2d 8s linear infinite;
+}
+.sys-moon {
+  position: absolute; left: 50%; top: 0; width: 0.36em; height: 0.36em; margin: -0.18em 0 0 -0.18em; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f2f2f2, #9b9b9e 60%, #55565a);
+}
+.sys-sat-ring {
+  position: absolute; left: -1.4em; top: -1.4em; width: 2.8em; height: 2.8em; border-radius: 50%;
+  border: 0.17em solid rgba(226, 198, 152, 0.8); box-shadow: 0 0 0 0.1em rgba(226, 198, 152, 0.28);
+  transform: rotate(-20deg) scaleY(0.3);
+}
+.sys-sat-front { clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%); } /* the near half is drawn over the planet */
+.sys-belt {
+  position: absolute; inset: 0; border-radius: 50%; border: 0.3em dotted rgba(150, 153, 161, 0.3);
+  animation: sysOrbit 260s linear infinite;
+}
+@keyframes sysOrbit { from { transform: rotateZ(var(--a, 0deg)); } to { transform: rotateZ(calc(var(--a, 0deg) + 360deg)); } }
+@keyframes sysCounter { from { transform: rotateZ(calc(var(--a, 0deg) * -1)); } to { transform: rotateZ(calc(var(--a, 0deg) * -1 - 360deg)); } }
+@keyframes sysSpin2d { to { transform: rotate(360deg); } }
+@keyframes sysEarthSpin { from { background-position: 0 0; } to { background-position: -2em 0; } }
+@keyframes sysPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@media (prefers-reduced-motion: reduce) {
+  .sys-mover, .sys-counter, .sys-sun > i, .sys-earth-land, .sys-moon-orbit, .sys-belt { animation: none; }
+}
+
+/* Home page: one black theme, two tones. Neighbouring dark sections alternate between them
+   so every section reads as its own block (deep → soft → deep → soft …). */
+:root {
+  --tone-deep: #0e0f11;
+  --tone-soft: #1a1b1f;
+}
+
+/* Home hero left social rail (60px wide, xl+): on screens where the centered
+   container leaves less than ~73px on the left, push navbar logo + hero text
+   right just enough to clear the rail. On wide screens this resolves to 0. */
+@media (min-width: 1280px) {
+  .home-rail-offset {
+    padding-left: max(0px, calc(73px - (100vw - 1280px) / 2));
+  }
+}
+
+/* Home gallery: two full-width marquee rows moving in opposite directions.
+   Each track holds the tile set twice, so -50% is exactly one set → seamless loop. */
+@keyframes galleryLeft {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes galleryRight {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.gallery-track {
+  animation: galleryLeft var(--gallery-dur, 75s) linear infinite;
+  will-change: transform;
+}
+.gallery-track.gallery-rev {
+  animation-name: galleryRight;
+  animation-duration: var(--gallery-dur, 85s);
+}
+.gallery-row:hover .gallery-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-track { animation: none; }
+  .gallery-row { overflow-x: auto; }
+  .gallery-dup { display: none; }
+}
+
+/* Legacy alias — Teko removed, now renders the main site font (Plus Jakarta Sans) */
 .font-teko {
-  font-family: var(--font-poppins), sans-serif !important;
+  font-family: var(--font-jakarta), sans-serif !important;
 }
 
 /* =====================================================
@@ -153,12 +310,14 @@ body.font-bengali .receipt-poppins * {
    FONT UTILITY CLASSES
    ===================================================== */
 
+/* Legacy class names — the components still say "poppins"/"outfit", they now render Plus Jakarta Sans.
+   (Only .receipt-poppins above and the PDF font keep real Poppins, so printed bills don't change.) */
 .font-outfit {
-  font-family: var(--font-poppins) !important;
+  font-family: var(--font-jakarta) !important;
 }
 
 .font-poppins {
-  font-family: var(--font-poppins) !important;
+  font-family: var(--font-jakarta) !important;
 }
 
 /* Outfit Weights */
@@ -184,22 +343,22 @@ body.font-bengali .receipt-poppins * {
 
 /* Poppins Weights */
 .poppins {
-  font-family: var(--font-poppins);
+  font-family: var(--font-jakarta);
   font-weight: 400;
 }
 
 .poppins-medium {
-  font-family: var(--font-poppins);
+  font-family: var(--font-jakarta);
   font-weight: 500;
 }
 
 .poppins-semibold {
-  font-family: var(--font-poppins);
+  font-family: var(--font-jakarta);
   font-weight: 600;
 }
 
 .poppins-bold {
-  font-family: var(--font-poppins);
+  font-family: var(--font-jakarta);
   font-weight: 700;
 }
 

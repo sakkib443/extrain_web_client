@@ -90,7 +90,7 @@ const Navbar = () => {
             <motion.div
               initial={{ x: "-100%" }} animate={{ x: 0 }} exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed lg:hidden top-0 left-0 w-[85%] max-w-[360px] h-full bg-[#0d0d0d] z-[70] shadow-2xl flex flex-col border-r border-white/10"
+              className="fixed lg:hidden top-0 left-0 w-[85%] max-w-[360px] h-full bg-[#0e0f11] z-[70] shadow-2xl flex flex-col border-r border-white/10"
             >
               <div className="flex items-center justify-between p-6 border-b border-white/10">
                 <Link href="/" onClick={closeMobileMenu} className="flex items-center gap-2">
@@ -152,12 +152,12 @@ const Navbar = () => {
       <nav
         className={`${pathname === "/" ? "fixed" : "sticky"} top-0 inset-x-0 z-50 transition-all duration-500 ${
           isSticky || pathname !== "/"
-            ? "bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/10 py-3"
+            ? "bg-[#0e0f11]/95 backdrop-blur-xl border-b border-white/10 py-3"
             : "bg-transparent border-b border-transparent py-5"
         }`}
       >
         <div className="container mx-auto px-6 lg:px-10">
-          <div className="flex items-center justify-between gap-4">
+          <div className={`flex items-center justify-between gap-4 ${pathname === "/" ? "home-rail-offset" : ""}`}>
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 flex-shrink-0" aria-label="Extrain Web home">
@@ -167,17 +167,27 @@ const Navbar = () => {
 
             {/* Center nav */}
             <div className="hidden lg:flex items-center gap-1">
-              {menu.map(({ href, label }) => (
-                <Link
-                  key={href} href={href}
-                  className={`group relative flex items-center gap-1 px-4 py-2 text-[15px] font-medium transition-colors ${
-                    pathname === href ? "text-[#F8921C]" : "text-white/80 hover:text-white"
-                  } ${bn}`}
-                >
-                  {label}
-                  <LuChevronDown size={14} className="opacity-60 group-hover:rotate-180 transition-transform duration-300" />
-                </Link>
-              ))}
+              {menu.map(({ href, label }) => {
+                const active = pathname === href;
+                return (
+                  <Link
+                    key={href} href={href}
+                    aria-current={active ? "page" : undefined}
+                    className={`group relative px-4 py-2 text-[15px] font-medium transition-colors ${
+                      active ? "text-white" : "text-white/70 hover:text-white"
+                    } ${bn}`}
+                  >
+                    {label}
+                    {/* underline: stays on the current page, slides in on hover */}
+                    <span
+                      aria-hidden="true"
+                      className={`absolute inset-x-4 -bottom-0.5 h-[2px] origin-left rounded-full bg-[#F8921C] transition-transform duration-300 ${
+                        active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                      }`}
+                    />
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Right actions */}
@@ -185,9 +195,9 @@ const Navbar = () => {
               {/* search */}
               <button
                 aria-label="Search"
-                className="w-11 h-11 grid place-items-center rounded-full bg-[#F8921C] text-black hover:bg-[#e07d0a] transition-colors"
+                className="w-11 h-11 grid place-items-center rounded-full border border-white/15 text-white/80 hover:border-[#F8921C] hover:text-[#F8921C] transition-colors"
               >
-                <LuSearch size={20} />
+                <LuSearch size={19} />
               </button>
 
               {/* language */}

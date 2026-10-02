@@ -65,11 +65,11 @@ export default function PaymentMethods({ variant = "card" }) {
     if (variant === "footer") {
         return (
             <div>
-                <h4 className={`text-gray-800 dark:text-white font-black font-poppins uppercase text-xl mb-6 flex items-center gap-2 ${bn}`}>
-                    <span className="w-1.5 h-6 bg-[#FD9A00] rounded-full" />
+                <h4 style={{ color: "#fff" }} className={`mb-6 flex items-center gap-2.5 text-[15px] font-bold uppercase ${isBn ? "tracking-normal" : "tracking-[0.14em]"} ${bn}`}>
+                    <span className="h-6 w-1.5 rounded-full bg-[#F8921C]" />
                     {isBn ? "পেমেন্ট মাধ্যম" : "Payment Methods"}
                 </h4>
-                <p className="text-xs text-gray-400 mb-3">Personal • Send Money</p>
+                <p className="mb-3 text-xs text-white/45">Personal • Send Money</p>
                 <ul className="space-y-2.5">
                     {METHODS.map((m) => (
                         <li key={m.key}>
@@ -78,14 +78,14 @@ export default function PaymentMethods({ variant = "card" }) {
                                 className="group w-full flex items-center justify-between gap-2 text-left"
                                 title={isBn ? "কপি করুন" : "Copy"}
                             >
-                                <span className={`text-sm text-gray-600 dark:text-gray-400 ${bn}`}>
+                                <span className={`text-sm text-white/65 ${bn}`}>
                                     <span className="mr-1">{m.emoji}</span>{isBn ? m.label : m.labelEn}
                                 </span>
                                 <span className="flex items-center gap-1.5">
-                                    <span className="font-mono text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[#FD9A00] transition-colors">{m.value}</span>
+                                    <span className="font-mono text-sm font-semibold text-white/90 group-hover:text-[#F8921C] transition-colors">{m.value}</span>
                                     {copied === m.key
                                         ? <FiCheck size={14} className="text-emerald-500" />
-                                        : <FiCopy size={13} className="text-gray-400 group-hover:text-[#FD9A00] transition-colors" />}
+                                        : <FiCopy size={13} className="text-white/40 group-hover:text-[#F8921C] transition-colors" />}
                                 </span>
                             </button>
                         </li>

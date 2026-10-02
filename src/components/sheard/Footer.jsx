@@ -8,6 +8,7 @@ import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5
 import { LuSend, LuHeart } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 import PaymentMethods from "@/components/sheard/PaymentMethods";
+import { EdgeDots } from "@/components/Home/Decor";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +16,8 @@ const Footer = () => {
 
   // Apply Bengali font class when language is Bengali
   const bengaliClass = language === "bn" ? "hind-siliguri" : "";
+  // Bengali conjuncts break when letter-spacing is applied, so only English headings are tracked out
+  const headTracking = language === "bn" ? "tracking-normal" : "tracking-[0.14em]";
 
   const quickLinks = [
     { to: "/", label: language === "bn" ? "হোম" : "Home" },
@@ -26,65 +29,84 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: FaFacebook, href: "https://www.facebook.com/Extrain Web", color: "#1877F2", label: "Facebook" },
-    { icon: FaLinkedin, href: "https://www.linkedin.com/company/Extrain Web/", color: "#0A66C2", label: "LinkedIn" },
-    { icon: FaYoutube, href: "https://www.youtube.com/@Extrain Web", color: "#FF0000", label: "YouTube" },
-    { icon: FaInstagram, href: "https://www.instagram.com/Extrain Web/", color: "#E4405F", label: "Instagram" },
+    { icon: FaFacebook, href: "https://www.facebook.com/Extrain Web", label: "Facebook" },
+    { icon: FaLinkedin, href: "https://www.linkedin.com/company/Extrain Web/", label: "LinkedIn" },
+    { icon: FaYoutube, href: "https://www.youtube.com/@Extrain Web", label: "YouTube" },
+    { icon: FaInstagram, href: "https://www.instagram.com/Extrain Web/", label: "Instagram" },
   ];
 
-  return (
-    <footer className="relative bg-gradient-to-b from-gray-50 via-white to-gray-100 dark:from-[#0F172A] dark:via-[#1E293B] dark:to-[#0F172A] overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(12, 178, 169,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(12, 178, 169,0.03)_1px,transparent_1px)] bg-[size:40px_40px] dark:opacity-30"></div>
+  // Column heading (a plain function, not a component, so typing in the newsletter box never remounts it): orange bar + small bold caps. (Inline colour: the global `h4 { color }` rule beats Tailwind's text-white.)
+  const heading = (children) => (
+    <h4
+      style={{ color: "#fff" }}
+      className={`mb-6 flex items-center gap-2.5 text-[15px] font-bold uppercase ${headTracking} ${bengaliClass}`}
+    >
+      <span className="h-6 w-1.5 rounded-full bg-[#F8921C]" />
+      {children}
+    </h4>
+  );
 
-      {/* Gradient Orbs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-[#0CB2A9]/5 dark:bg-[#0CB2A9]/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 right-10 w-80 h-80 bg-[#0CB2A9]/5 dark:bg-[#0CB2A9]/10 rounded-full blur-3xl"></div>
+  return (
+    <footer className="relative overflow-hidden border-t border-white/10 bg-[color:var(--tone-deep)] text-white">
+      {/* Background decoration */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <EdgeDots />
+        <div className="absolute -top-24 left-[8%] h-72 w-72 rounded-full bg-[#F8921C]/[0.07] blur-3xl" />
+        <div className="absolute -bottom-24 right-[8%] h-80 w-80 rounded-full bg-[#F8921C]/[0.05] blur-3xl" />
+      </div>
 
       {/* Main Footer Content */}
-      <div className="relative container mx-auto px-4 lg:px-16 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
+      <div className="relative container mx-auto px-6 py-14 lg:px-10 lg:py-20">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5 lg:gap-8">
 
           {/* Brand Section */}
-          <div className="lg:col-span-2 space-y-5">
-            <Link href="/" className="inline-block relative group" aria-label="Extrain Web home">
-              <img src="/extrain-logo.png" alt="Extrain Web" className="h-11 lg:h-12 w-auto object-contain dark:brightness-0 dark:invert" />
+          <div className="space-y-5 lg:col-span-2">
+            <Link href="/" className="inline-flex items-center gap-2.5" aria-label="Extrain Web home">
+              <span className="grid h-10 w-10 place-items-center rounded-lg bg-[#F8921C] text-xl font-extrabold text-black">A</span>
+              <span className="text-[1.7rem] font-extrabold tracking-tight text-white">Extrain</span>
             </Link>
-            <p className={`text-gray-600 dark:text-gray-400 text-sm leading-relaxed max-w-sm font-medium ${bengaliClass}`}>
+            <p className={`max-w-sm text-sm leading-relaxed text-white/60 ${bengaliClass}`}>
               {t("footer.brandDescription") || "Extrain Web is a premium website and software marketplace in Bangladesh, providing high-quality digital products and custom development services."}
             </p>
 
             {/* Newsletter */}
             <div className="pt-4">
-              <h4 className={`text-gray-800 dark:text-white font-black font-poppins uppercase text-xl mb-3 ${bengaliClass}`}>
+              <h4
+                style={{ color: "#fff" }}
+                className={`mb-3 text-[15px] font-bold uppercase ${headTracking} ${bengaliClass}`}
+              >
                 {t("footer.subscribeNewsletter") || "Subscribe to Newsletter"}
               </h4>
-              <div className="flex gap-0">
+              <div className="flex max-w-md">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t("footer.enterEmail") || "Enter your email"}
-                  className={`flex-1 px-4 py-3 bg-white dark:bg-[#1E293B] border border-gray-200 dark:border-gray-600/50 rounded-l-md text-gray-800 dark:text-gray-200 text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:border-[#FD9A00] transition-colors ${bengaliClass}`}
+                  className={`min-w-0 flex-1 rounded-l-full border border-white/10 bg-white/[0.05] px-5 py-3 text-sm text-white placeholder:text-white/40 transition-colors focus:border-[#F8921C] focus:outline-none ${bengaliClass}`}
                 />
-                <button className="px-6 py-3 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold font-poppins uppercase tracking-wide rounded-r-md transition-colors shadow-lg shadow-[#FD9A00]/20">
+                <button
+                  type="button"
+                  aria-label="Subscribe"
+                  className="rounded-r-full bg-[#F8921C] px-6 py-3 font-bold text-black transition-colors hover:bg-[#e07d0a]"
+                >
                   <LuSend className="text-xl" />
                 </button>
               </div>
             </div>
 
             {/* Social Links */}
-            <div className="flex gap-3 mt-4">
+            <div className="mt-4 flex gap-3">
               {socialLinks.map((social, index) => (
                 <a
                   key={index}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-md bg-white dark:bg-[#1E293B] border border-gray-200 dark:border-gray-600/50 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-[#FD9A00] hover:text-white hover:border-[#FD9A00] transition-all duration-300 shadow-sm"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/70 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#F8921C] hover:bg-[#F8921C] hover:text-black"
                   title={social.label}
                 >
-                  <social.icon size={18} />
+                  <social.icon size={17} />
                 </a>
               ))}
             </div>
@@ -92,17 +114,15 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className={`text-gray-800 dark:text-white font-black font-poppins uppercase text-xl mb-6 flex items-center gap-2 ${bengaliClass}`}>
-              <span className="w-1.5 h-6 bg-[#FD9A00] rounded-full"></span>
-              {t("footer.quickLinks") || "Quick Links"}
-            </h4>
+            {heading(t("footer.quickLinks") || "Quick Links")}
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.to}
-                    className={`text-gray-600 dark:text-gray-400 hover:text-[#FD9A00] text-sm font-normal transition-colors block group ${bengaliClass}`}
+                    className={`group inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-[#F8921C] ${bengaliClass}`}
                   >
+                    <span className="h-px w-0 bg-[#F8921C] transition-all duration-300 group-hover:w-3" />
                     {link.label}
                   </Link>
                 </li>
@@ -115,41 +135,38 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h4 className={`text-gray-800 dark:text-white font-black font-poppins uppercase text-xl mb-6 flex items-center gap-2 ${bengaliClass}`}>
-              <span className="w-1.5 h-6 bg-[#FD9A00] rounded-full"></span>
-              {t("footer.contactUs") || "Contact Us"}
-            </h4>
+            {heading(t("footer.contactUs") || "Contact Us")}
             <ul className="space-y-6">
               <li>
                 <div className="group flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[#FD9A00]/10 flex items-center justify-center shrink-0 group-hover:bg-[#FD9A00] transition-colors duration-300">
-                    <IoCallOutline className="text-[#FD9A00] text-lg group-hover:text-white transition-colors" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F8921C]/10 transition-colors duration-300 group-hover:bg-[#F8921C]">
+                    <IoCallOutline className="text-lg text-[#F8921C] transition-colors group-hover:text-black" />
                   </div>
                   <div>
-                    <p className={`text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ${bengaliClass}`}>{t("footer.phone") || "Phone"}</p>
-                    <a href="tel:+8801711946614" className="text-gray-800 dark:text-white font-poppins font-bold text-lg hover:text-[#FD9A00] transition-colors">+880 1711-946614</a>
+                    <p className={`mb-1 text-xs font-bold uppercase text-white/40 ${language === "bn" ? "tracking-normal" : "tracking-widest"} ${bengaliClass}`}>{t("footer.phone") || "Phone"}</p>
+                    <a href="tel:+8801711946614" className="text-lg font-bold text-white transition-colors hover:text-[#F8921C]">+880 1711-946614</a>
                   </div>
                 </div>
               </li>
               <li>
                 <div className="group flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[#FD9A00]/10 flex items-center justify-center shrink-0 group-hover:bg-[#FD9A00] transition-colors duration-300">
-                    <IoMailOutline className="text-[#FD9A00] text-lg group-hover:text-white transition-colors" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F8921C]/10 transition-colors duration-300 group-hover:bg-[#F8921C]">
+                    <IoMailOutline className="text-lg text-[#F8921C] transition-colors group-hover:text-black" />
                   </div>
                   <div>
-                    <p className={`text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ${bengaliClass}`}>{t("footer.email") || "Email"}</p>
-                    <a href="mailto:info.extrainweb@gmail.com" className="text-gray-700 dark:text-gray-300 text-sm font-medium hover:text-[#FD9A00] transition-colors">info.extrainweb@gmail.com</a>
+                    <p className={`mb-1 text-xs font-bold uppercase text-white/40 ${language === "bn" ? "tracking-normal" : "tracking-widest"} ${bengaliClass}`}>{t("footer.email") || "Email"}</p>
+                    <a href="mailto:info.extrainweb@gmail.com" className="text-sm font-medium text-white/75 transition-colors hover:text-[#F8921C]">info.extrainweb@gmail.com</a>
                   </div>
                 </div>
               </li>
               <li>
                 <div className="group flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[#FD9A00]/10 flex items-center justify-center shrink-0 group-hover:bg-[#FD9A00] transition-colors duration-300">
-                    <IoLocationOutline className="text-[#FD9A00] text-lg group-hover:text-white transition-colors" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F8921C]/10 transition-colors duration-300 group-hover:bg-[#F8921C]">
+                    <IoLocationOutline className="text-lg text-[#F8921C] transition-colors group-hover:text-black" />
                   </div>
                   <div>
-                    <p className={`text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ${bengaliClass}`}>{t("footer.address") || "Address"}</p>
-                    <p className={`text-gray-700 dark:text-gray-300 text-sm leading-relaxed ${bengaliClass}`}>
+                    <p className={`mb-1 text-xs font-bold uppercase text-white/40 ${language === "bn" ? "tracking-normal" : "tracking-widest"} ${bengaliClass}`}>{t("footer.address") || "Address"}</p>
+                    <p className={`text-sm leading-relaxed text-white/75 ${bengaliClass}`}>
                       {t("footer.addressValue") || "Road - 11, DIT Project, Marul Badda, Badda, Dhaka -1214"}
                     </p>
                   </div>
@@ -161,18 +178,18 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="relative border-t border-gray-200 dark:border-gray-700/50 bg-white/50 dark:bg-[#0F172A]/80">
-        <div className="container mx-auto px-4 lg:px-16 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className={`text-gray-500 dark:text-gray-400 text-sm font-medium text-center md:text-left ${bengaliClass}`}>
+      <div className="relative border-t border-white/10 bg-black/25">
+        <div className="container mx-auto px-6 py-6 lg:px-10">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <p className={`text-center text-sm text-white/50 md:text-left ${bengaliClass}`}>
               {t("footer.copyright")}
             </p>
-            <div className="flex items-center gap-6">
-              <span className="text-gray-400 dark:text-gray-500 text-xs font-bold uppercase tracking-widest">
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+              <span className={`text-xs font-bold uppercase text-white/35 ${language === "bn" ? "tracking-normal" : "tracking-widest"}`}>
                 {t("footer.tradeLicense")}
               </span>
-              <span className={`text-gray-500 dark:text-gray-400 text-sm font-medium flex items-center gap-1 ${bengaliClass}`}>
-                {t("footer.madeWith")} <LuHeart className="text-red-500 text-xs" /> {t("footer.inBangladesh")}
+              <span className={`flex items-center gap-1 text-sm text-white/50 ${bengaliClass}`}>
+                {t("footer.madeWith")} <LuHeart className="text-xs text-red-500" /> {t("footer.inBangladesh")}
               </span>
             </div>
           </div>

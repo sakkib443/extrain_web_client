@@ -6,6 +6,7 @@ import {
   Work_Sans,
   Outfit,
   Hind_Siliguri,
+  Plus_Jakarta_Sans,
 } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/sheard/Navbar";
@@ -21,6 +22,12 @@ import ScrollToTopOnNavigate from "@/components/sheard/ScrollToTopOnNavigate";
 import ChunkErrorReload from "@/components/sheard/ChunkErrorReload";
 
 // Google Fonts
+// Main site font (matches the Amoxi reference design). Poppins stays loaded only for the receipts/PDF.
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
+});
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -121,7 +128,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${roboto.variable} ${lobster.variable} ${caveat.variable} ${worksans.variable} ${outfit.variable} ${hindSiliguri.variable}`}
+      className={`${jakarta.variable} ${poppins.variable} ${roboto.variable} ${lobster.variable} ${caveat.variable} ${worksans.variable} ${outfit.variable} ${hindSiliguri.variable}`}
       suppressHydrationWarning
     >
       <head>
