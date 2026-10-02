@@ -40,7 +40,7 @@ const services = [
         titleBn: "ডিজিটাল মার্কেটিং",
         desc: "SEO, social media and paid campaigns that bring real customers.",
         descBn: "SEO, সোশ্যাল মিডিয়া ও পেইড ক্যাম্পেইন — যা আসল কাস্টমার আনে।",
-        href: "/contact",
+        href: "/digital-marketing",
     },
     {
         id: "media",
@@ -51,7 +51,7 @@ const services = [
         titleBn: "কন্টেন্ট ও মিডিয়া",
         desc: "Photography, video, graphics and copy that tell your story.",
         descBn: "ফটোগ্রাফি, ভিডিও, গ্রাফিক্স ও লেখা — যা আপনার গল্প বলে।",
-        href: "/contact",
+        href: "/media-content",
     },
 ];
 
