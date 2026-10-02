@@ -23,7 +23,7 @@ const viewport = { once: true, amount: 0.12 };
 const WebsiteCardSkeleton = () => (
     <div className="w-full animate-pulse">
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-            <div className="h-48 bg-white/[0.06]"></div>
+            <div className="aspect-[16/10] bg-white/[0.06]"></div>
             <div className="space-y-3 p-4">
                 <div className="h-4 w-1/3 rounded bg-white/[0.06]"></div>
                 <div className="h-6 w-3/4 rounded bg-white/[0.06]"></div>
@@ -50,7 +50,7 @@ const FilterSelect = ({ icon: Icon, active, wrapClass = "", selectClass = "", ch
         <select
             {...props}
             style={{ colorScheme: "dark" }}
-            className={`w-full cursor-pointer appearance-none rounded-full border py-2 pl-4 pr-9 text-[14px] outline-none transition-colors focus:border-[#F8921C] ${
+            className={`h-10 w-full cursor-pointer appearance-none rounded-lg border pl-3.5 pr-9 text-[13.5px] outline-none transition-colors focus:border-[#F8921C] ${
                 active
                     ? "border-[#F8921C]/70 bg-[#F8921C]/10 text-white"
                     : "border-white/10 bg-white/[0.05] text-white/80 hover:border-white/25"
@@ -160,16 +160,16 @@ const RightWebsiteDetails = ({ searchQuery, selectedType, setSearchQuery }) => {
     const gridClass = isGridView ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3" : "grid-cols-1";
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-7">
             {/* ===== Filter bar ===== */}
-            <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-3 sm:p-4">
+            <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-white/10 bg-[color:var(--tone-deep)]/60 p-2.5 sm:p-3">
                 {/* Left Side - All Category + Category Dropdown + Price + Rating */}
-                <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+                <div className="flex flex-wrap items-center gap-2">
                     {/* All Category chip */}
                     <button
                         type="button"
                         onClick={resetFilters}
-                        className={`flex items-center gap-2 rounded-full border px-5 py-2 text-[14px] font-semibold transition-all ${bn} ${
+                        className={`flex h-10 items-center gap-2 rounded-lg border px-4 text-[13.5px] font-semibold transition-all ${bn} ${
                             filtersAtDefault
                                 ? "border-[#F8921C] bg-[#F8921C] text-black"
                                 : "border-white/10 bg-white/[0.05] text-white/70 hover:border-[#F8921C]/60 hover:text-white"
@@ -231,8 +231,11 @@ const RightWebsiteDetails = ({ searchQuery, selectedType, setSearchQuery }) => {
                     </FilterSelect>
                 </div>
 
-                {/* Right Side - Sort Dropdown + View Toggles */}
-                <div className="flex items-center gap-3">
+                {/* Right Side - Count + Sort Dropdown + View Toggles */}
+                <div className="flex items-center gap-2">
+                    <span className={`mr-1 hidden whitespace-nowrap text-[13px] text-white/50 md:inline ${bn}`}>
+                        <b className="font-semibold text-white">{loading ? "…" : sortedWebsites.length}</b> {isBn ? "টি ওয়েবসাইট" : "websites"}
+                    </span>
                     {/* Sort Dropdown */}
                     <FilterSelect
                         icon={LuArrowUpDown}
@@ -249,13 +252,13 @@ const RightWebsiteDetails = ({ searchQuery, selectedType, setSearchQuery }) => {
                     </FilterSelect>
 
                     {/* View Toggles */}
-                    <div className="flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.05] p-1">
+                    <div className="flex h-10 items-center gap-1 rounded-lg border border-white/10 bg-white/[0.05] p-1">
                         <button
                             type="button"
                             onClick={() => setIsGridView(true)}
                             aria-label={isBn ? "গ্রিড ভিউ" : "Grid view"}
                             aria-pressed={isGridView}
-                            className={`grid h-8 w-8 place-items-center rounded-full transition-all ${isGridView ? "bg-[#F8921C] text-black" : "text-white/50 hover:text-white"}`}
+                            className={`grid h-8 w-8 place-items-center rounded-md transition-all ${isGridView ? "bg-[#F8921C] text-black" : "text-white/50 hover:text-white"}`}
                         >
                             <LuLayoutGrid size={16} />
                         </button>
@@ -264,7 +267,7 @@ const RightWebsiteDetails = ({ searchQuery, selectedType, setSearchQuery }) => {
                             onClick={() => setIsGridView(false)}
                             aria-label={isBn ? "লিস্ট ভিউ" : "List view"}
                             aria-pressed={!isGridView}
-                            className={`grid h-8 w-8 place-items-center rounded-full transition-all ${!isGridView ? "bg-[#F8921C] text-black" : "text-white/50 hover:text-white"}`}
+                            className={`grid h-8 w-8 place-items-center rounded-md transition-all ${!isGridView ? "bg-[#F8921C] text-black" : "text-white/50 hover:text-white"}`}
                         >
                             <LuList size={16} />
                         </button>

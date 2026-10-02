@@ -67,10 +67,11 @@ const Navbar = () => {
 
   const menu = [
     { href: "/", label: language === "bn" ? "হোম" : "Home" },
+    { href: "/about", label: language === "bn" ? "আমাদের সম্পর্কে" : "About" },
     { href: "/website", label: language === "bn" ? "ওয়েবসাইট" : "Websites" },
     { href: "/ielts-software", label: language === "bn" ? "সফটওয়্যার" : "Software" },
-    { href: "/happy-clients", label: language === "bn" ? "ক্লায়েন্ট" : "Clients" },
-    { href: "/about", label: language === "bn" ? "আমাদের সম্পর্কে" : "About" },
+    { href: "/digital-marketing", label: language === "bn" ? "মার্কেটিং" : "Marketing" },
+    { href: "/media-content", label: language === "bn" ? "মিডিয়া" : "Media" },
     { href: "/contact", label: language === "bn" ? "যোগাযোগ" : "Contact" },
   ];
 

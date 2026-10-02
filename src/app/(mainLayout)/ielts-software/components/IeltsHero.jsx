@@ -1,206 +1,227 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useTransform } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
+import useSectionMotion from "@/hooks/useSectionMotion";
+import BracketLabel from "@/components/Home/BracketLabel";
+import { Star4, EdgeDots, OrbitRing } from "@/components/Home/Decor";
+import { outlineStyle, filledAccent } from "@/components/Aboutpage/sections/shared";
 import {
-    LuPlay,
-    LuArrowRight,
-    LuBuilding2,
-    LuUsers,
-    LuHighlighter,
-    LuPencil,
-    LuSun,
-    LuType,
-    LuShieldCheck,
-    LuCircleCheck,
+    LuPlay, LuMoveRight, LuBuilding2, LuUsers, LuHighlighter, LuPencil, LuSun, LuType, LuShieldCheck, LuCircleCheck,
 } from "react-icons/lu";
 
 const IeltsHero = () => {
     const { language } = useLanguage();
-    const bengaliClass = language === "bn" ? "hind-siliguri" : "";
+    const isBn = language === "bn";
+    const bn = isBn ? "hind-siliguri" : "";
 
     const features = [
-        { icon: LuHighlighter, text: language === "bn" ? "হাইলাইট করুন" : "Text Highlight" },
-        { icon: LuPencil, text: language === "bn" ? "নোট নিন" : "Take Notes" },
-        { icon: LuSun, text: language === "bn" ? "থিম পরিবর্তন" : "Theme Change" },
-        { icon: LuType, text: language === "bn" ? "ফন্ট সাইজ" : "Font Size" },
+        { icon: LuHighlighter, text: isBn ? "হাইলাইট করুন" : "Text Highlight" },
+        { icon: LuPencil, text: isBn ? "নোট নিন" : "Take Notes" },
+        { icon: LuSun, text: isBn ? "থিম পরিবর্তন" : "Theme Change" },
+        { icon: LuType, text: isBn ? "ফন্ট সাইজ" : "Font Size" },
     ];
 
-    const scrollToPricing = () => {
-        document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
-    };
+    const trust = [
+        { icon: LuBuilding2, value: isBn ? "৫০+" : "50+", label: isBn ? "কোচিং সেন্টার" : "Coaching Centers" },
+        { icon: LuUsers, value: isBn ? "১০,০০০+" : "10,000+", label: isBn ? "স্টুডেন্ট" : "Students" },
+        { icon: LuShieldCheck, value: "BC", label: isBn ? "মানের ইন্টারফেস" : "Standard Interface" },
+    ];
+
+    const scrollToPricing = () => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
+
+    // ---- scroll + mouse motion (same feel as the About hero) ----
+    const { ref, p, mx, my, reduce, isLg } = useSectionMotion();
+    const k = isLg ? 1 : 0.4;
+    const textY = useTransform(p, [0, 1], [14 * k, -34 * k]);
+    const visY = useTransform(p, [0, 1], [22 * k, -22 * k]);
+    const imgX = useTransform(mx, [-0.5, 0.5], [10, -10]);
+    const imgY = useTransform(my, [-0.5, 0.5], [8, -8]);
+    const glowX = useTransform(mx, [-0.5, 0.5], [-50, 50]);
+    const ringX = useTransform(mx, [-0.5, 0.5], [-28, 28]);
+    const ringY = useTransform(p, [0, 1], [-50, 50]);
+    const starY = useTransform(p, [0, 1], [-60, 60]);
+    const starX = useTransform(mx, [-0.5, 0.5], [-24, 24]);
 
     return (
-        <section className="relative flex items-center overflow-hidden bg-white dark:bg-[#0A0A0A]">
-            {/* Soft static background glows — adds depth without motion */}
-            <div className="absolute top-0 right-0 w-[38rem] h-[38rem] bg-[#FD9A00]/10 dark:bg-[#FD9A00]/[0.07] rounded-full blur-[120px] -translate-y-1/3 translate-x-1/4 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-[32rem] h-[32rem] bg-[#0CB2A9]/10 dark:bg-[#0CB2A9]/[0.06] rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+        <section ref={ref} className="relative overflow-hidden bg-[color:var(--tone-deep)] text-white">
+            <div className="pointer-events-none absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/hero-bg.webp')" }} />
+            <div className="pointer-events-none absolute inset-0 bg-black/30" />
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-20 pt-16 pb-20 lg:pt-24 lg:pb-24 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-10 lg:gap-8 items-center">
-                    {/* ============ LEFT CONTENT ============ */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 24 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.7, ease: "easeOut" }}
-                    >
-                        {/* Badge */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.15, duration: 0.5 }}
-                            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FD9A00]/10 border border-[#FD9A00]/25 text-[#FD9A00] text-xs font-semibold mb-4"
-                        >
-                            <LuBuilding2 size={14} />
-                            <span className={bengaliClass}>
-                                {language === "bn" ? "কোচিং সেন্টার ও ইনস্টিটিউটের জন্য" : "For Coaching Centers & Institutes"}
-                            </span>
+            <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+                <motion.div style={reduce ? undefined : { x: glowX }} className="absolute -bottom-32 left-[8%] h-96 w-96 rounded-full bg-[#F8921C]/[0.10] blur-3xl" />
+                <EdgeDots />
+                <motion.div style={reduce ? undefined : { x: ringX, y: ringY }} className="absolute -right-[16rem] top-[6%] hidden sm:block">
+                    <div className="relative aspect-square w-[36rem]">
+                        <OrbitRing dashed className="absolute inset-0 border-white/[0.12]" />
+                        <OrbitRing reverse dot="bottom" className="absolute inset-[16%] border-[#F8921C]/25" />
+                    </div>
+                </motion.div>
+                <motion.div style={reduce ? undefined : { x: starX, y: starY }} className="absolute left-[46%] top-[12%] hidden lg:block">
+                    <Star4 size={34} filled className="decor-float text-[#F8921C]" style={{ animationDuration: "10s" }} />
+                </motion.div>
+            </div>
+
+            <div className="container relative z-10 mx-auto px-6 lg:px-10">
+                <div className="grid items-center gap-16 pb-20 pt-32 lg:min-h-[min(calc(100svh-65px),820px)] lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+                    {/* ---------- left: copy ---------- */}
+                    <motion.div style={reduce ? undefined : { y: textY }}>
+                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} className="mb-12">
+                            <BracketLabel bn={bn} size="lg">{isBn ? "কোচিং সেন্টারের জন্য" : "For institutes"}</BracketLabel>
                         </motion.div>
 
-                        {/* Heading */}
-                        <h1
-                            className={`text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white leading-[1.1] mb-4 font-poppins uppercase tracking-tight ${bengaliClass}`}
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                            style={{ color: "#fff" }}
+                            className="relative font-bold uppercase leading-[1.08] tracking-[-0.015em] text-[clamp(2.4rem,5.6vw,4.9rem)]"
                         >
-                            {language === "bn" ? (
-                                <>
-                                    আপনার <span className="text-[#FD9A00]">IELTS</span>{" "}
-                                    <span className="relative inline-block">
-                                        <span className="relative z-10">কোচিং সেন্টারের</span>
-                                        <span className="absolute bottom-1 left-0 w-full h-3 bg-[#0CB2A9]/30"></span>
-                                    </span>
-                                    <br />
-                                    জন্য সম্পূর্ণ সমাধান
-                                </>
-                            ) : (
-                                <>
-                                    COMPLETE <span className="text-[#FD9A00]">IELTS</span>{" "}
-                                    <span className="relative inline-block">
-                                        <span className="relative z-10">SOLUTION</span>
-                                        <span className="absolute bottom-1 left-0 w-full h-3 bg-[#0CB2A9]/30"></span>
-                                    </span>
-                                    <br />
-                                    FOR YOUR INSTITUTE
-                                </>
-                            )}
-                        </h1>
+                            <span aria-hidden="true" className="pointer-events-none absolute -top-4 left-0 hidden h-16 w-16 border-l border-t border-white/90 sm:block">
+                                <i className="absolute -left-[5px] -top-[5px] h-2.5 w-2.5 bg-[#F8921C]" />
+                                <i className="absolute -bottom-[5px] -left-[5px] h-2.5 w-2.5 bg-[#F8921C]" />
+                            </span>
 
-                        {/* Description */}
-                        <p className={`text-sm lg:text-base text-gray-600 dark:text-gray-400 mb-5 leading-relaxed max-w-xl ${bengaliClass}`}>
-                            {language === "bn"
-                                ? "British Council এর অনলাইন পরীক্ষার হুবহু ইন্টারফেস। Student Dashboard, Admin Panel, Auto Result, AI Speaking Assessment সহ সম্পূর্ণ প্যাকেজ। আপনার স্টুডেন্টদের দিন আসল পরীক্ষার অভিজ্ঞতা।"
-                                : "Exact replica of British Council online exam interface. Complete package with Student Dashboard, Admin Panel, Auto Result, AI Speaking Assessment. Give your students real exam experience."}
-                        </p>
+                            <span className="block text-white sm:pl-[0.55em]">IELTS</span>
+                            <span className="block">
+                                <span style={outlineStyle}>
+                                    MOCK TE<span style={filledAccent}>S</span>T
+                                </span>
+                            </span>
+                            <span className="block">
+                                <span className="relative inline-block text-white">
+                                    SOFTWARE<span style={filledAccent}>.</span>
+                                    <span aria-hidden="true" className="pointer-events-none absolute -bottom-3 -right-8 hidden h-14 w-14 border-b border-r border-white/90 sm:block">
+                                        <i className="absolute -right-[5px] -top-[5px] h-2.5 w-2.5 bg-[#F8921C]" />
+                                        <i className="absolute -bottom-[5px] -right-[5px] h-2.5 w-2.5 bg-[#F8921C]" />
+                                    </span>
+                                </span>
+                            </span>
+                        </motion.h1>
 
-                        {/* Feature chips */}
-                        <div className="flex flex-wrap gap-2 mb-5">
-                            {features.map((feature, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: 0.35 + index * 0.08, duration: 0.4 }}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 text-xs"
-                                >
-                                    <feature.icon size={13} className="text-[#FD9A00]" />
-                                    <span className={bengaliClass}>{feature.text}</span>
-                                </motion.div>
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                            className={`mt-9 max-w-lg border-l-2 border-[#F8921C] py-0.5 pl-5 text-base leading-relaxed text-white/70 lg:text-lg ${bn}`}
+                        >
+                            {isBn
+                                ? "British Council এর অনলাইন পরীক্ষার হুবহু ইন্টারফেস। Student Dashboard, Admin Panel, Auto Result, AI Speaking Assessment সহ সম্পূর্ণ প্যাকেজ।"
+                                : "An exact replica of the British Council online exam — with Student Dashboard, Admin Panel, Auto Result and AI Speaking Assessment in one package."}
+                        </motion.p>
+
+                        {/* feature chips */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, delay: 0.35 }}
+                            className="mt-6 flex flex-wrap gap-2"
+                        >
+                            {features.map(({ icon: Icon, text }) => (
+                                <span key={text} className={`inline-flex items-center gap-1.5 rounded-full border border-white/12 bg-white/[0.05] px-3.5 py-1.5 text-xs text-white/80 backdrop-blur-sm ${bn}`}>
+                                    <Icon size={13} className="text-[#F8921C]" />
+                                    {text}
+                                </span>
                             ))}
-                        </div>
+                        </motion.div>
 
-                        {/* CTA Buttons */}
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <motion.button
-                                onClick={scrollToPricing}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className={`group flex items-center justify-center gap-2 px-6 py-3 text-sm bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold rounded-xl shadow-lg shadow-[#FD9A00]/30 hover:shadow-[#FD9A00]/50 transition-all ${bengaliClass}`}
-                            >
-                                {language === "bn" ? "লাইসেন্স নিন" : "Get License"}
-                                <LuArrowRight className="group-hover:translate-x-1 transition-transform" size={18} />
-                            </motion.button>
-                            <motion.a
+                        {/* CTAs */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, delay: 0.4 }}
+                            className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4"
+                        >
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={scrollToPricing}
+                                    className={`inline-flex items-center rounded-full bg-[#F8921C] px-8 py-4 text-sm font-semibold uppercase text-black transition-colors hover:bg-[#e07d0a] ${bn ? "tracking-normal" : "tracking-wide"} ${bn}`}
+                                >
+                                    {isBn ? "লাইসেন্স নিন" : "Get License"}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={scrollToPricing}
+                                    aria-label={isBn ? "প্যাকেজ দেখুন" : "See packages"}
+                                    className="grid h-[52px] w-[52px] place-items-center rounded-full bg-white text-[#0a0a0a] transition-colors hover:bg-[#F8921C]"
+                                >
+                                    <LuMoveRight size={22} />
+                                </button>
+                            </div>
+                            <a
                                 href="https://bestieltsbd.com/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className={`group flex items-center justify-center gap-2 px-6 py-3 text-sm bg-[#0CB2A9] hover:bg-[#b3dd10] text-black font-bold rounded-xl shadow-lg shadow-[#0CB2A9]/30 hover:shadow-[#0CB2A9]/50 transition-all ${bengaliClass}`}
+                                className={`inline-flex items-center gap-2 rounded-full border border-white/25 px-8 py-4 text-sm font-semibold uppercase text-white transition-colors hover:border-[#F8921C] hover:text-[#F8921C] ${bn ? "tracking-normal" : "tracking-wide"} ${bn}`}
                             >
-                                <LuPlay size={16} />
-                                {language === "bn" ? "লাইভ ডেমো" : "Live Demo"}
-                            </motion.a>
-                        </div>
+                                <LuPlay size={15} />
+                                {isBn ? "লাইভ ডেমো" : "Live Demo"}
+                            </a>
+                        </motion.div>
 
-                        {/* Trust Badges */}
-                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2.5 mt-6 pt-5 border-t border-gray-200 dark:border-white/10">
-                            <div className="flex items-center gap-2">
-                                <LuBuilding2 className="text-[#0CB2A9]" size={18} />
-                                <span className={`text-gray-600 dark:text-gray-400 text-xs ${bengaliClass}`}>
-                                    {language === "bn" ? "৫০+ কোচিং সেন্টার" : "50+ Coaching Centers"}
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <LuUsers className="text-[#0CB2A9]" size={18} />
-                                <span className={`text-gray-600 dark:text-gray-400 text-xs ${bengaliClass}`}>
-                                    {language === "bn" ? "১০,০০০+ স্টুডেন্ট" : "10,000+ Students"}
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <LuShieldCheck className="text-[#0CB2A9]" size={18} />
-                                <span className={`text-gray-600 dark:text-gray-400 text-xs ${bengaliClass}`}>
-                                    {language === "bn" ? "BC মানের ইন্টারফেস" : "BC Standard Interface"}
-                                </span>
-                            </div>
-                        </div>
+                        {/* trust row */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.7, delay: 0.55 }}
+                            className="mt-10 grid max-w-lg grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-6"
+                        >
+                            {trust.map(({ icon: Icon, value, label }) => (
+                                <div key={label} className="px-3 first:pl-0">
+                                    <div className="flex items-center gap-1.5">
+                                        <Icon size={15} className="text-[#F8921C]" />
+                                        <span className="text-xl font-bold text-white">{value}</span>
+                                    </div>
+                                    <p className={`mt-1 text-[12px] leading-tight text-white/55 ${bn}`}>{label}</p>
+                                </div>
+                            ))}
+                        </motion.div>
                     </motion.div>
 
-                    {/* ============ RIGHT CONTENT — Product Image ============ */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.96 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-                        className="relative flex justify-center"
-                    >
-                        <div className="relative w-full" style={{ maxWidth: "470px" }}>
-                            {/* Static glow halo behind image */}
-                            <div className="absolute -inset-6 bg-gradient-to-tr from-[#FD9A00]/25 via-transparent to-[#0CB2A9]/25 rounded-[2.5rem] blur-3xl pointer-events-none" />
-
-                            {/* Gradient frame */}
-                            <div className="relative rounded-3xl p-[1.5px] bg-gradient-to-br from-[#FD9A00]/50 via-gray-200/40 to-[#0CB2A9]/50 dark:from-[#FD9A00]/40 dark:via-white/10 dark:to-[#0CB2A9]/40 shadow-2xl shadow-black/10 dark:shadow-black/40">
-                                <div className="rounded-3xl overflow-hidden bg-white dark:bg-[#111]">
+                    {/* ---------- right: product preview ---------- */}
+                    <motion.div style={reduce ? undefined : { y: visY }} className="relative mx-auto w-full max-w-[500px] pb-8">
+                        <motion.div
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                            className="relative"
+                        >
+                            <div
+                                aria-hidden="true"
+                                className="pointer-events-none absolute inset-0 translate-x-3 translate-y-3 rounded-[2rem] rounded-tl-[6rem] border border-[#F8921C]/40 sm:translate-x-4 sm:translate-y-4"
+                            />
+                            <div className="relative overflow-hidden rounded-[2rem] rounded-tl-[6rem] border border-white/10 bg-[color:var(--tone-soft)]">
+                                <motion.div style={reduce ? undefined : { x: imgX, y: imgY, scale: 1.04 }}>
                                     <Image
                                         src="/images/IELTSPOST.gif"
                                         alt="IELTS Mock Test Software"
-                                        width={480}
-                                        height={480}
-                                        className="w-full h-auto block"
+                                        width={500}
+                                        height={500}
+                                        className="block h-auto w-full"
                                         unoptimized
                                         priority
                                     />
-                                </div>
+                                </motion.div>
                             </div>
 
-                            {/* Single clean stat badge — bottom, static */}
+                            {/* auto-marking badge */}
                             <motion.div
                                 initial={{ opacity: 0, y: 16 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.6, duration: 0.5 }}
-                                className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-white/90 dark:bg-[#161616]/90 backdrop-blur-md border border-gray-100 dark:border-white/10 shadow-xl whitespace-nowrap"
+                                transition={{ delay: 0.7, duration: 0.5 }}
+                                className="absolute -bottom-6 -left-3 flex items-center gap-3 rounded-2xl border border-white/15 bg-black/60 px-5 py-3.5 shadow-2xl backdrop-blur-md sm:-left-8"
                             >
-                                <div className="w-8 h-8 rounded-lg bg-[#0CB2A9]/20 flex items-center justify-center shrink-0">
-                                    <LuCircleCheck className="text-[#0CB2A9]" size={18} />
-                                </div>
-                                <div className="text-left">
-                                    <p className={`text-gray-900 dark:text-white font-bold text-sm leading-tight ${bengaliClass}`}>
-                                        {language === "bn" ? "অটো রেজাল্ট ও মার্কিং" : "Auto Result & Marking"}
-                                    </p>
-                                    <p className={`text-gray-500 dark:text-gray-400 text-xs ${bengaliClass}`}>
-                                        {language === "bn" ? "Listening · Reading · Writing" : "Listening · Reading · Writing"}
-                                    </p>
-                                </div>
+                                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#F8921C] text-black">
+                                    <LuCircleCheck size={20} />
+                                </span>
+                                <span>
+                                    <span className={`block text-sm font-bold text-white ${bn}`}>{isBn ? "অটো রেজাল্ট ও মার্কিং" : "Auto Result & Marking"}</span>
+                                    <span className="block text-xs text-white/60">Listening · Reading · Writing</span>
+                                </span>
                             </motion.div>
-                        </div>
+                        </motion.div>
                     </motion.div>
                 </div>
             </div>

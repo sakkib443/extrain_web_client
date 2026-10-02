@@ -24,6 +24,9 @@ import {
     LuVideo,
 } from "react-icons/lu";
 import { FaWhatsapp } from "react-icons/fa";
+import BracketLabel from "@/components/Home/BracketLabel";
+import { EdgeDots } from "@/components/Home/Decor";
+import { reveal } from "@/components/Aboutpage/sections/shared";
 
 const IeltsPricing = () => {
     const { language } = useLanguage();
@@ -199,201 +202,146 @@ const IeltsPricing = () => {
         }
     ];
 
-    const colorClasses = {
-        secondary: {
-            bg: "bg-[#0CB2A9]/10",
-            text: "text-[#0CB2A9]",
-            border: "border-[#0CB2A9]/30",
-            button: "bg-[#0CB2A9] hover:bg-[#b3dc15] text-gray-900",
-            gradient: "from-[#0CB2A9] to-[#9fc412]",
-            shadow: "shadow-[#0CB2A9]/30"
-        },
-        primary: {
-            bg: "bg-[#FD9A00]/10",
-            text: "text-[#FD9A00]",
-            border: "border-[#FD9A00]/30",
-            button: "bg-[#FD9A00] hover:bg-[#e68a00]",
-            gradient: "from-[#FD9A00] to-[#e68a00]",
-            shadow: "shadow-[#FD9A00]/30"
-        },
-        tertiary: {
-            bg: "bg-purple-500/10",
-            text: "text-purple-400",
-            border: "border-purple-500/30",
-            button: "bg-purple-600 hover:bg-purple-700",
-            gradient: "from-purple-600 to-purple-600",
-            shadow: "shadow-purple-500/30"
-        }
+    const handleContact = () => {
+        window.open("https://wa.me/8801711946614", "_blank");
     };
 
-    const handleContact = () => {
-        window.open('https://wa.me/8801711946614', '_blank');
-    };
+    const isBn = language === "bn";
+    const bn = bengaliClass;
+    const payLabel = (n) =>
+        n === 1
+            ? (isBn ? "ওয়ান টাইম পেমেন্ট" : "One-time payment")
+            : n === 2
+            ? (isBn ? "দুই কিস্তিতে পেমেন্ট" : "Pay in 2 installments")
+            : (isBn ? "তিন কিস্তিতে পেমেন্ট" : "Pay in 3 installments");
 
     return (
         <>
-        <section id="pricing" className="py-16 lg:py-20 bg-gray-50 dark:bg-[#0A0A0A]">
-            <div className="container mx-auto px-10 lg:px-20">
-                {/* Section Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center max-w-3xl mx-auto mb-16"
-                >
-                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FD9A00]/10 text-[#FD9A00] text-sm font-semibold mb-4">
-                        <LuSparkles size={16} />
-                        {language === 'bn' ? 'ইনস্টিটিউট লাইসেন্সিং' : 'Institute Licensing'}
-                    </span>
-                    <h2 className={`text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-6 ${bengaliClass}`}>
-                        {language === 'bn' ? (
-                            <>
-                                আপনার ইনস্টিটিউটের জন্য{" "}
-                                <span className="text-[#FD9A00]">সঠিক প্ল্যান</span>
-                            </>
+        <section id="pricing" className="relative scroll-mt-16 overflow-hidden bg-[color:var(--tone-soft)] py-24 text-white lg:py-32">
+            <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+                <div className="absolute left-1/2 top-40 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-[#F8921C]/[0.06] blur-3xl" />
+                <EdgeDots />
+            </div>
+
+            <div className="container relative z-10 mx-auto px-6 lg:px-10">
+                {/* ===== heading ===== */}
+                <div className="mx-auto max-w-2xl text-center">
+                    <motion.div {...reveal(0)} className="mb-7">
+                        <BracketLabel bn={bn} size="lg">{isBn ? "ইনস্টিটিউট লাইসেন্সিং" : "Licensing"}</BracketLabel>
+                    </motion.div>
+                    <motion.h2 {...reveal(1)} style={{ color: "#fff" }} className={`text-[1.7rem] font-bold leading-[1.25] sm:text-3xl lg:text-[2.35rem] ${bn}`}>
+                        {isBn ? (
+                            <>আপনার ইনস্টিটিউটের জন্য <i className="font-light">সঠিক প্ল্যান</i></>
                         ) : (
-                            <>
-                                Choose the Right{" "}
-                                <span className="text-[#FD9A00]">Plan</span>{" "}
-                                for Your Institute
-                            </>
+                            <>Choose the Right <i className="font-light">Plan</i> for Your Institute</>
                         )}
-                    </h2>
-                    <p className={`text-lg text-gray-600 dark:text-gray-400 ${bengaliClass}`}>
-                        {language === 'bn'
-                            ? 'আপনার প্রয়োজন অনুযায়ী প্ল্যান বেছে নিন। সব প্ল্যানে Admin Dashboard অন্তর্ভুক্ত।'
-                            : 'Choose a plan based on your needs. All plans include Admin Dashboard.'}
-                    </p>
+                    </motion.h2>
+                    <motion.p {...reveal(2)} className={`mt-4 text-sm leading-7 text-white/60 sm:text-base ${bn}`}>
+                        {isBn
+                            ? "আপনার প্রয়োজন অনুযায়ী প্ল্যান বেছে নিন। সব প্ল্যানে Admin Dashboard অন্তর্ভুক্ত।"
+                            : "Pick the plan that fits your needs. Every plan includes the Admin Dashboard."}
+                    </motion.p>
+                </div>
 
-                </motion.div>
-
-                {/* Pricing Cards */}
-                <div className="grid md:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                {/* ===== cards ===== */}
+                <div className="mx-auto mt-16 grid max-w-7xl items-start gap-6 lg:grid-cols-3">
                     {packages.map((pkg, index) => {
-                        const colors = colorClasses[pkg.color];
+                        const pop = pkg.popular;
+                        const open = expandedPackage === pkg.id;
                         return (
-                            <motion.div
-                                key={pkg.id}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                                className={`relative ${pkg.popular ? 'md:-mt-4 md:mb-4' : ''}`}
-                            >
-                                {/* Popular Badge */}
-                                {pkg.popular && (
-                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                                        <span className={`inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-gradient-to-r ${colors.gradient} text-white text-sm font-bold shadow-lg ${colors.shadow}`}>
-                                            <LuSparkles size={14} />
-                                            {language === 'bn' ? 'সবচেয়ে জনপ্রিয়' : 'Most Popular'}
-                                        </span>
-                                    </div>
+                            <motion.div key={pkg.id} {...reveal(index)} className={`relative ${pop ? "lg:-mt-5" : ""}`}>
+                                {pop && (
+                                    <span className={`absolute -top-3.5 left-1/2 z-10 inline-flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full bg-[#F8921C] px-4 py-1.5 text-xs font-bold uppercase text-black shadow-[0_8px_24px_-8px_rgba(248,146,28,0.9)] ${bn ? "tracking-normal" : "tracking-wider"} ${bn}`}>
+                                        <LuSparkles size={13} />
+                                        {isBn ? "সবচেয়ে জনপ্রিয়" : "Most Popular"}
+                                    </span>
                                 )}
 
-                                <div className={`h-full flex flex-col bg-white dark:bg-[#111] rounded-3xl p-8 border-2 ${pkg.popular ? colors.border : 'border-gray-100 dark:border-white/5'} ${pkg.popular ? `shadow-2xl ${colors.shadow}` : 'shadow-lg shadow-gray-200/50 dark:shadow-black/20'} hover:shadow-2xl transition-all duration-300`}>
-                                    {/* Header */}
-                                    <div className="flex items-center gap-4 mb-6">
-                                        <div className={`w-14 h-14 rounded-xl ${colors.bg} flex items-center justify-center`}>
-                                            <pkg.icon size={24} className={colors.text} />
-                                        </div>
+                                <div
+                                    className={`flex h-full flex-col rounded-[1.5rem] border p-7 transition-all duration-300 sm:p-8 ${
+                                        pop
+                                            ? "border-[#F8921C]/70 bg-gradient-to-b from-[#F8921C]/[0.10] to-[color:var(--tone-deep)] shadow-[0_40px_80px_-40px_rgba(248,146,28,0.55)]"
+                                            : "border-white/10 bg-[color:var(--tone-deep)] hover:border-white/25"
+                                    }`}
+                                >
+                                    {/* header */}
+                                    <div className="flex items-center gap-4">
+                                        <span className={`grid h-14 w-14 shrink-0 place-items-center rounded-xl ${pop ? "bg-[#F8921C] text-black" : "bg-[#F8921C]/10 text-[#F8921C]"}`}>
+                                            <pkg.icon size={24} />
+                                        </span>
                                         <div>
-                                            <h3 className={`text-2xl font-black text-gray-900 dark:text-white ${bengaliClass}`}>{pkg.name}</h3>
-                                            <p className={`text-sm text-gray-600 dark:text-gray-400 font-medium ${bengaliClass}`}>{pkg.subtitle}</p>
+                                            <h3 style={{ color: "#fff" }} className={`text-xl font-bold ${bn}`}>{pkg.name}</h3>
+                                            <p className={`text-[13px] text-white/55 ${bn}`}>{pkg.subtitle}</p>
                                         </div>
+                                        <span className="ml-auto self-start text-sm font-bold tabular-nums text-white/20">0{index + 1}</span>
                                     </div>
 
-                                    {/* Price */}
-                                    <div className="mb-8">
+                                    {/* price */}
+                                    <div className="mt-7 border-y border-white/10 py-6">
                                         {pkg.originalPrice && (
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <span className="text-xl text-gray-400 line-through">৳{pkg.originalPrice.toLocaleString()}</span>
-                                                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-500/20 text-red-500">
+                                            <div className="mb-1 flex items-center gap-2">
+                                                <span className="text-base text-white/35 line-through">৳{pkg.originalPrice.toLocaleString()}</span>
+                                                <span className="rounded-full bg-[#F8921C]/15 px-2 py-0.5 text-[11px] font-bold text-[#F8921C]">
                                                     {Math.round((1 - pkg.oneTimePrice / pkg.originalPrice) * 100)}% OFF
                                                 </span>
                                             </div>
                                         )}
-                                        <div className="flex items-baseline gap-2">
-                                            <span className="text-4xl font-black text-gray-900 dark:text-white">৳{pkg.oneTimePrice.toLocaleString()}</span>
-                                        </div>
+                                        <span className="text-[2.6rem] font-bold leading-none tracking-tight text-white">৳{pkg.oneTimePrice.toLocaleString()}</span>
                                         {pkg.installments && (
-                                            <div className={`inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full ${colors.bg} ${colors.text} text-xs font-bold`}>
-                                                <LuSparkles size={11} />
-                                                {pkg.installments === 1
-                                                    ? (language === 'bn' ? 'ওয়ান টাইম পেমেন্ট' : 'One-Time Payment')
-                                                    : pkg.installments === 2
-                                                    ? (language === 'bn' ? 'টু টাইম পেমেন্ট (কিস্তি সুবিধা)' : 'Two-Time Payment (Installment)')
-                                                    : (language === 'bn' ? 'থ্রি টাইম পেমেন্ট (কিস্তি সুবিধা)' : 'Three-Time Payment (Installment)')}
-                                            </div>
+                                            <p className={`mt-3 flex items-center gap-1.5 text-[13px] text-white/60 ${bn}`}>
+                                                <LuCheck size={14} className="text-[#F8921C]" />
+                                                {payLabel(pkg.installments)}
+                                            </p>
                                         )}
                                     </div>
 
-                                    {/* Features */}
-                                    <div className="flex-1 space-y-3 mb-8">
-                                        {pkg.features.map((feature, idx) => (
-                                            <div key={idx} className="flex items-center gap-3">
-                                                {feature.included ? (
-                                                    <div className={`w-5 h-5 rounded-full ${feature.highlight ? colors.bg : 'bg-green-100 dark:bg-green-500/20'} flex items-center justify-center shrink-0`}>
-                                                        <LuCheck size={12} className={feature.highlight ? colors.text : 'text-green-600 dark:text-green-400'} />
-                                                    </div>
-                                                ) : (
-                                                    <div className="w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center shrink-0">
-                                                        <LuX size={12} className="text-gray-400" />
-                                                    </div>
-                                                )}
-                                                <span className={`text-sm font-medium ${feature.included ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'} ${bengaliClass}`}>
-                                                    {feature.text}
+                                    {/* features */}
+                                    <ul className="mt-6 flex-1 space-y-3">
+                                        {pkg.features.map((f, idx) => (
+                                            <li key={idx} className="flex items-start gap-3">
+                                                <span className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full ${f.highlight ? "bg-[#F8921C] text-black" : "bg-white/[0.07] text-[#F8921C]"}`}>
+                                                    <LuCheck size={11} strokeWidth={3} />
                                                 </span>
-                                            </div>
+                                                <span className={`text-[13.5px] leading-snug ${f.highlight ? "font-medium text-white" : "text-white/70"} ${bn}`}>{f.text}</span>
+                                            </li>
                                         ))}
-                                    </div>
+                                    </ul>
 
-                                    {/* All Features Toggle */}
+                                    {/* all features toggle */}
                                     <button
-                                        onClick={() => setExpandedPackage(expandedPackage === pkg.id ? null : pkg.id)}
-                                        className={`w-full flex items-center justify-between gap-2 py-3 px-4 rounded-xl mb-4 border ${colors.border} ${colors.bg} transition-all duration-300 ${bengaliClass}`}
+                                        type="button"
+                                        onClick={() => setExpandedPackage(open ? null : pkg.id)}
+                                        aria-expanded={open}
+                                        className={`mt-7 flex w-full items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-white/80 transition-colors hover:border-[#F8921C]/50 hover:text-white ${bn}`}
                                     >
-                                        <span className={`text-sm font-semibold ${colors.text}`}>
-                                            {expandedPackage === pkg.id
-                                                ? (language === 'bn' ? 'কম দেখুন' : 'Show Less')
-                                                : (language === 'bn' ? 'সব ফিচার দেখুন' : 'View All Features')}
-                                        </span>
-                                        <LuChevronDown
-                                            size={16}
-                                            className={`${colors.text} transition-transform duration-300 ${expandedPackage === pkg.id ? 'rotate-180' : ''}`}
-                                        />
+                                        {open ? (isBn ? "কম দেখুন" : "Show less") : (isBn ? "সব ফিচার দেখুন" : "View all features")}
+                                        <LuChevronDown size={16} className={`text-[#F8921C] transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
                                     </button>
 
                                     <AnimatePresence>
-                                        {expandedPackage === pkg.id && (
+                                        {open && (
                                             <motion.div
                                                 initial={{ opacity: 0, height: 0 }}
-                                                animate={{ opacity: 1, height: 'auto' }}
+                                                animate={{ opacity: 1, height: "auto" }}
                                                 exit={{ opacity: 0, height: 0 }}
                                                 transition={{ duration: 0.3 }}
-                                                className="overflow-hidden mb-4"
+                                                className="overflow-hidden"
                                             >
-                                                <div className="space-y-4 pt-1">
-                                                    {allFeatureCategories.map((cat, catIdx) => (
-                                                        <div key={catIdx} className="rounded-xl bg-gray-50 dark:bg-white/5 p-4">
-                                                            <div className="flex items-center gap-2 mb-3">
-                                                                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${cat.color}20` }}>
-                                                                    <cat.icon size={14} style={{ color: cat.color }} />
-                                                                </div>
-                                                                <span className={`text-sm font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide ${bengaliClass}`}>
-                                                                    {cat.title}
-                                                                </span>
+                                                <div className="space-y-3 pt-4">
+                                                    {allFeatureCategories.map((cat) => (
+                                                        <div key={cat.title} className="rounded-xl border border-white/[0.07] bg-white/[0.03] p-4">
+                                                            <div className="mb-3 flex items-center gap-2">
+                                                                <cat.icon size={15} className="text-[#F8921C]" />
+                                                                <span className={`text-[12px] font-bold uppercase text-white/85 ${bn ? "tracking-normal" : "tracking-wider"} ${bn}`}>{cat.title}</span>
                                                             </div>
-                                                            <div className="grid grid-cols-1 gap-1.5">
-                                                                {cat.features.map((feat, fIdx) => (
-                                                                    <div key={fIdx} className="flex items-center gap-2">
-                                                                        <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${cat.color}20` }}>
-                                                                            <LuCheck size={10} style={{ color: cat.color }} strokeWidth={3} />
-                                                                        </div>
-                                                                        <span className={`text-sm font-medium text-gray-700 dark:text-gray-300 ${bengaliClass}`}>{feat}</span>
-                                                                    </div>
+                                                            <ul className="space-y-1.5">
+                                                                {cat.features.map((feat) => (
+                                                                    <li key={feat} className={`flex items-start gap-2 text-[13px] text-white/65 ${bn}`}>
+                                                                        <LuCheck size={12} className="mt-1 shrink-0 text-[#F8921C]" strokeWidth={3} />
+                                                                        {feat}
+                                                                    </li>
                                                                 ))}
-                                                            </div>
+                                                            </ul>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -401,41 +349,43 @@ const IeltsPricing = () => {
                                         )}
                                     </AnimatePresence>
 
-                                    {/* CTA Buttons */}
-                                    <div className="mt-auto flex flex-col gap-3">
-                                        <motion.button
+                                    {/* CTAs */}
+                                    <div className="mt-5 flex flex-col gap-2.5">
+                                        <button
+                                            type="button"
                                             onClick={handleContact}
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
-                                            className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl ${colors.button} text-white font-bold shadow-lg ${colors.shadow} transition-all duration-300 ${bengaliClass}`}
+                                            className={`group inline-flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold uppercase transition-colors ${
+                                                pop ? "bg-[#F8921C] text-black hover:bg-[#e07d0a]" : "bg-white text-black hover:bg-[#F8921C]"
+                                            } ${bn ? "tracking-normal" : "tracking-wide"} ${bn}`}
                                         >
-                                            <FaWhatsapp size={18} />
-                                            {language === 'bn' ? 'যোগাযোগ করুন' : 'Contact Us'}
-                                            <LuArrowRight size={18} />
-                                        </motion.button>
-                                        {pkg.demoLink && (
-                                            <motion.a
-                                                href={pkg.demoLink}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                whileHover={{ scale: 1.02 }}
-                                                whileTap={{ scale: 0.98 }}
-                                                className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl border-2 ${colors.border} ${colors.text} font-bold transition-all duration-300 hover:${colors.bg} hover:text-white ${bengaliClass}`}
-                                            >
-                                                <LuPlay size={18} />
-                                                {language === 'bn' ? 'লাইভ ডেমো দেখুন' : 'Live Demo'}
-                                            </motion.a>
-                                        )}
-                                        {pkg.featureVideoUrl && (
-                                            <motion.button
-                                                onClick={() => setFeatureVideoOpen(true)}
-                                                whileHover={{ scale: 1.02 }}
-                                                whileTap={{ scale: 0.98 }}
-                                                className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 font-bold transition-all duration-300 hover:bg-gray-100 dark:hover:bg-white/10 ${bengaliClass}`}
-                                            >
-                                                <LuVideo size={18} />
-                                                {language === 'bn' ? 'ফিচার ভিডিও দেখুন' : 'Feature Video'}
-                                            </motion.button>
+                                            <FaWhatsapp size={17} />
+                                            {isBn ? "যোগাযোগ করুন" : "Contact Us"}
+                                            <LuArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                                        </button>
+                                        {(pkg.demoLink || pkg.featureVideoUrl) && (
+                                            <div className="flex gap-2.5">
+                                                {pkg.demoLink && (
+                                                    <a
+                                                        href={pkg.demoLink}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-white/20 py-3 text-[13px] font-semibold text-white transition-colors hover:border-[#F8921C] hover:text-[#F8921C] ${bn}`}
+                                                    >
+                                                        <LuPlay size={14} />
+                                                        {isBn ? "লাইভ ডেমো" : "Live Demo"}
+                                                    </a>
+                                                )}
+                                                {pkg.featureVideoUrl && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setFeatureVideoOpen(true)}
+                                                        className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-white/20 py-3 text-[13px] font-semibold text-white transition-colors hover:border-[#F8921C] hover:text-[#F8921C] ${bn}`}
+                                                    >
+                                                        <LuVideo size={14} />
+                                                        {isBn ? "ফিচার ভিডিও" : "Feature Video"}
+                                                    </button>
+                                                )}
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -444,53 +394,42 @@ const IeltsPricing = () => {
                     })}
                 </div>
 
-                {/* Contact CTA */}
+                {/* ===== demo strip ===== */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.4 }}
-                    className="mt-12 text-center"
+                    {...reveal(1)}
+                    className="mx-auto mt-14 flex max-w-4xl flex-col items-center gap-6 rounded-[1.5rem] border border-white/10 bg-[color:var(--tone-deep)] p-6 sm:flex-row sm:p-7"
                 >
-                    <div className="inline-flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl bg-[#FD9A00]/10 border border-[#FD9A00]/30">
-                        <div className="w-14 h-14 rounded-full bg-[#FD9A00]/20 flex items-center justify-center">
-                            <LuPhone size={24} className="text-[#FD9A00]" />
-                        </div>
-                        <div className="text-center sm:text-left">
-                            <p className={`font-bold text-gray-900 dark:text-white ${bengaliClass}`}>
-                                {language === 'bn' ? 'ডেমো দেখতে চান?' : 'Want to see a demo?'}
-                            </p>
-                            <p className={`text-sm text-gray-600 dark:text-gray-400 ${bengaliClass}`}>
-                                {language === 'bn' ? 'আমাদের সাথে কথা বলুন, ফ্রি ডেমো পান!' : 'Talk to us for a free demo of the software!'}
-                            </p>
-                            <p className="text-lg font-bold text-[#FD9A00] mt-1">
-                                +880 1711-946614
-                            </p>
-                        </div>
-                        <div className="flex flex-col sm:flex-row gap-3">
-                            <a
-                                href="https://wa.me/8801711946614"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition-colors ${bengaliClass}`}
-                            >
-                                <FaWhatsapp size={20} />
-                                {language === 'bn' ? 'WhatsApp' : 'WhatsApp'}
-                            </a>
-                            <a
-                                href="tel:+8801711946614"
-                                className={`flex items-center gap-2 px-6 py-3 bg-[#FD9A00] hover:bg-[#e68a00] text-white font-bold rounded-xl transition-colors ${bengaliClass}`}
-                            >
-                                <LuPhone size={20} />
-                                {language === 'bn' ? 'কল করুন' : 'Call Now'}
-                            </a>
-                        </div>
+                    <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#F8921C]/10 text-[#F8921C]">
+                        <LuPhone size={22} />
+                    </span>
+                    <div className="text-center sm:text-left">
+                        <p className={`font-semibold text-white ${bn}`}>{isBn ? "ডেমো দেখতে চান?" : "Want to see a demo?"}</p>
+                        <p className={`text-sm text-white/55 ${bn}`}>{isBn ? "আমাদের সাথে কথা বলুন, ফ্রি ডেমো পান!" : "Talk to us for a free demo of the software."}</p>
+                        <a href="tel:+8801711946614" className="mt-1 inline-block text-lg font-bold text-[#F8921C]">+880 1711-946614</a>
+                    </div>
+                    <div className="flex gap-2.5 sm:ml-auto">
+                        <a
+                            href="https://wa.me/8801711946614"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 rounded-full bg-[#F8921C] px-6 py-3 text-sm font-semibold text-black transition-colors hover:bg-[#e07d0a]"
+                        >
+                            <FaWhatsapp size={17} />
+                            WhatsApp
+                        </a>
+                        <a
+                            href="tel:+8801711946614"
+                            className={`inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-[#F8921C] hover:text-[#F8921C] ${bn}`}
+                        >
+                            <LuPhone size={16} />
+                            {isBn ? "কল করুন" : "Call"}
+                        </a>
                     </div>
                 </motion.div>
             </div>
         </section>
 
-        {/* Feature Video Modal */}
+        {/* ===== feature video modal ===== */}
         <AnimatePresence>
             {featureVideoOpen && (
                 <motion.div
@@ -498,35 +437,40 @@ const IeltsPricing = () => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                    className="fixed inset-0 z-[80] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
                     onClick={() => setFeatureVideoOpen(false)}
                 >
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
+                        initial={{ opacity: 0, scale: 0.92 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
+                        exit={{ opacity: 0, scale: 0.92 }}
                         transition={{ duration: 0.25 }}
-                        className="relative w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl"
+                        role="dialog"
+                        aria-modal="true"
+                        className="relative w-full max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-black shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-between px-5 py-3 bg-[#111]">
-                            <span className={`text-white font-bold text-sm flex items-center gap-2 ${bengaliClass}`}>
-                                <LuVideo size={16} className="text-[#FD9A00]" />
-                                {language === 'bn' ? 'ফিচার ভিডিও' : 'Feature Video'}
+                        <div className="flex items-center justify-between bg-[color:var(--tone-soft)] px-5 py-3">
+                            <span className={`flex items-center gap-2 text-sm font-semibold text-white ${bn}`}>
+                                <LuVideo size={16} className="text-[#F8921C]" />
+                                {isBn ? "ফিচার ভিডিও" : "Feature Video"}
                             </span>
                             <button
+                                type="button"
                                 onClick={() => setFeatureVideoOpen(false)}
-                                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+                                aria-label="Close"
+                                className="grid h-8 w-8 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[#F8921C] hover:text-black"
                             >
                                 <LuX size={16} />
                             </button>
                         </div>
-                        <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+                        <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
                             <iframe
                                 src="https://drive.google.com/file/d/1H2eCp2g0CI54kq3Ov72E8otdmwZ0u8wu/preview"
-                                className="absolute inset-0 w-full h-full"
+                                className="absolute inset-0 h-full w-full"
                                 allow="autoplay"
                                 allowFullScreen
+                                title="IELTS software feature video"
                             />
                         </div>
                     </motion.div>

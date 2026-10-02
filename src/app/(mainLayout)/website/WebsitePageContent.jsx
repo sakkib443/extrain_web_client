@@ -61,7 +61,7 @@ function PageHeader({ searchQuery, setSearchQuery, count }) {
     return (
         <section
             ref={sectionRef}
-            className="relative overflow-hidden bg-[color:var(--tone-deep)] pb-14 pt-16 text-white lg:pb-16 lg:pt-20"
+            className="relative overflow-hidden bg-[color:var(--tone-deep)] pb-10 pt-10 text-white lg:pb-12 lg:pt-14"
         >
             {/* ===== background decoration ===== */}
             <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -87,102 +87,92 @@ function PageHeader({ searchQuery, setSearchQuery, count }) {
                 </motion.div>
                 <motion.div
                     style={reduce ? undefined : { x: starX, y: starY }}
-                    className="absolute right-[12%] top-[14%] hidden md:block"
+                    className="absolute left-[48%] top-[16%] hidden xl:block"
                 >
                     <Star4 size={38} filled className="decor-float text-[#F8921C]" style={{ animationDuration: "10s" }} />
                 </motion.div>
             </div>
 
             <div className="container relative z-10 mx-auto px-6 lg:px-10">
-                <motion.div style={reduce ? undefined : { y: headY }} className="mx-auto max-w-3xl text-center">
-                    <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={viewport} className="mb-7">
-                        <BracketLabel bn={bn} size="lg">{isBn ? "প্রিমিয়াম ওয়েবসাইট" : "Premium Websites"}</BracketLabel>
-                    </motion.div>
+                {/* one compact row: title on the left, search + stats on the right */}
+                <motion.div
+                    style={reduce ? undefined : { y: headY }}
+                    className="grid items-end gap-8 lg:grid-cols-[1fr_auto] lg:gap-12"
+                >
+                    <div>
+                        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={viewport} className="mb-5">
+                            <BracketLabel bn={bn}>{isBn ? "প্রিমিয়াম ওয়েবসাইট" : "Premium Websites"}</BracketLabel>
+                        </motion.div>
+                        <motion.h1
+                            variants={fadeUp}
+                            custom={1}
+                            initial="hidden"
+                            whileInView="show"
+                            viewport={viewport}
+                            style={{ color: "#fff" }}
+                            className={`text-[1.8rem] font-bold leading-[1.2] sm:text-[2.2rem] lg:text-[2.6rem] ${bn}`}
+                        >
+                            {isBn ? (
+                                <>আমাদের <i className="font-light">মার্কেটপ্লেস</i></>
+                            ) : (
+                                <>Website <i className="font-light">Marketplace</i></>
+                            )}
+                        </motion.h1>
+                        <motion.p
+                            variants={fadeUp}
+                            custom={2}
+                            initial="hidden"
+                            whileInView="show"
+                            viewport={viewport}
+                            className={`mt-3 max-w-xl text-sm leading-6 text-white/60 sm:text-[15px] ${bn}`}
+                        >
+                            {isBn
+                                ? "রেডি-মেড ওয়েবসাইট, যা আপনার ব্যবসাকে দ্রুত অনলাইনে নিয়ে আসবে।"
+                                : "Ready-to-deploy websites for startups and businesses — get online in days, not months."}
+                        </motion.p>
+                    </div>
 
-                    <motion.h1
-                        variants={fadeUp}
-                        custom={1}
-                        initial="hidden"
-                        whileInView="show"
-                        viewport={viewport}
-                        style={{ color: "#fff" }}
-                        className={`text-[2rem] font-bold leading-[1.2] sm:text-4xl lg:text-[3rem] ${bn}`}
-                    >
-                        {isBn ? (
-                            <>আমাদের <i className="font-light">মার্কেটপ্লেস</i></>
-                        ) : (
-                            <>Our Website <i className="font-light">Marketplace</i></>
-                        )}
-                    </motion.h1>
-
-                    <motion.p
-                        variants={fadeUp}
-                        custom={2}
-                        initial="hidden"
-                        whileInView="show"
-                        viewport={viewport}
-                        className={`mx-auto mt-4 max-w-2xl text-sm leading-7 text-white/60 sm:text-base ${bn}`}
-                    >
-                        {isBn
-                            ? "রেডি-মেড ওয়েবসাইট সমাধান যা আপনার ব্যবসাকে দ্রুত অনলাইনে নিয়ে আসবে। আমাদের মার্কেটপ্লেসে আছে সেরা ডিজাইনের ওয়েবসাইট সমুহ।"
-                            : "Fully functional, ready-to-deploy websites for startups and enterprises. Get online in minutes with our premium templates."}
-                    </motion.p>
-
-                    {/* search */}
                     <motion.div
                         variants={fadeUp}
                         custom={3}
                         initial="hidden"
                         whileInView="show"
                         viewport={viewport}
-                        className="relative mx-auto mt-8 max-w-xl"
+                        className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto"
                     >
-                        <LuSearch className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-white/40" size={18} />
-                        <input
-                            type="text"
-                            aria-label={isBn ? "ওয়েবসাইট খুঁজুন..." : "Search websites..."}
-                            placeholder={isBn ? "ওয়েবসাইট খুঁজুন..." : "Search websites..."}
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className={`block h-14 w-full rounded-full border border-white/10 bg-white/[0.04] pl-12 pr-12 text-sm font-medium text-white placeholder:text-white/40 outline-none transition-all focus:border-[#F8921C] focus:bg-white/[0.07] focus:ring-4 focus:ring-[#F8921C]/15 ${bn}`}
-                        />
-                        {searchQuery && (
-                            <button
-                                type="button"
-                                onClick={() => setSearchQuery("")}
-                                aria-label={isBn ? "ফিল্টার মুছুন" : "Clear"}
-                                className="absolute right-3 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full text-white/50 transition-colors hover:bg-[#F8921C] hover:text-black"
-                            >
-                                <LuX size={16} />
-                            </button>
-                        )}
-                    </motion.div>
+                        {/* search */}
+                        <div className="relative w-full sm:flex-1 lg:w-[22rem] lg:flex-none">
+                            <LuSearch className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={17} />
+                            <input
+                                type="text"
+                                aria-label={isBn ? "ওয়েবসাইট খুঁজুন..." : "Search websites..."}
+                                placeholder={isBn ? "ওয়েবসাইট খুঁজুন..." : "Search websites..."}
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className={`block h-12 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-11 text-sm text-white placeholder:text-white/40 outline-none transition-all focus:border-[#F8921C] focus:bg-white/[0.07] focus:ring-4 focus:ring-[#F8921C]/15 ${bn}`}
+                            />
+                            {searchQuery && (
+                                <button
+                                    type="button"
+                                    onClick={() => setSearchQuery("")}
+                                    aria-label={isBn ? "ফিল্টার মুছুন" : "Clear"}
+                                    className="absolute right-2.5 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-md text-white/50 transition-colors hover:bg-[#F8921C] hover:text-black"
+                                >
+                                    <LuX size={15} />
+                                </button>
+                            )}
+                        </div>
 
-                    {/* stats */}
-                    <motion.div
-                        variants={fadeUp}
-                        custom={4}
-                        initial="hidden"
-                        whileInView="show"
-                        viewport={viewport}
-                        className="mx-auto mt-8 grid max-w-sm grid-cols-2 gap-3 sm:flex sm:max-w-none sm:justify-center sm:gap-4"
-                    >
-                        {stats.map(({ icon: Icon, value, label }) => (
-                            <div
-                                key={label}
-                                className="group flex items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-left transition-all duration-300 hover:-translate-y-1 hover:border-[#F8921C]/60 hover:shadow-[0_24px_50px_-28px_rgba(248,146,28,0.55)] sm:min-w-[11rem] sm:px-5"
-                            >
-                                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#F8921C]/10 text-[#F8921C] transition-colors duration-300 group-hover:bg-[#F8921C] group-hover:text-black">
-                                    <Icon size={20} />
-                                </span>
-                                <span className="min-w-0">
-                                    <span className="block text-2xl font-bold leading-none text-white">{value}</span>
-                                    <span className={`mt-1.5 block font-semibold uppercase text-white/50 ${bn ? "text-[13px] tracking-normal" : "text-[11px] tracking-[0.2em]"} ${bn}`}>
-                                        {label}
-                                    </span>
-                                </span>
-                            </div>
-                        ))}
+                        {/* stats */}
+                        <div className="flex h-12 shrink-0 items-center divide-x divide-white/10 rounded-xl border border-white/10 bg-white/[0.03]">
+                            {stats.map(({ icon: Icon, value, label }) => (
+                                <div key={label} className="flex items-center gap-2 px-4">
+                                    <Icon size={16} className="text-[#F8921C]" />
+                                    <span className="text-[15px] font-bold text-white">{value}</span>
+                                    <span className={`text-[12px] text-white/50 ${bn}`}>{label}</span>
+                                </div>
+                            ))}
+                        </div>
                     </motion.div>
                 </motion.div>
             </div>
@@ -205,7 +195,7 @@ function ListingArea({ searchQuery, setSearchQuery, selectedType }) {
     return (
         <section
             ref={sectionRef}
-            className="relative overflow-hidden border-t border-white/10 bg-[color:var(--tone-soft)] pb-24 pt-10 text-white lg:pb-28 lg:pt-12"
+            className="relative overflow-hidden border-t border-white/10 bg-[color:var(--tone-soft)] pb-24 pt-8 text-white lg:pb-28 lg:pt-10"
         >
             {/* ===== background decoration (only the glow + dots on narrower screens, so nothing runs behind a card) ===== */}
             <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">

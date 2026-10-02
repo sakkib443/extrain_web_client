@@ -8,7 +8,7 @@ import IeltsCTA from "./components/IeltsCTA";
 
 export default function IeltsSoftwarePage() {
     return (
-        <main className="overflow-hidden">
+        <main className="overflow-x-clip bg-[color:var(--tone-deep)] text-white selection:bg-[#F8921C] selection:text-black">
             {/* Hero Section */}
             <IeltsHero />
 
