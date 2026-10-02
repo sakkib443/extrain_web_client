@@ -95,6 +95,35 @@ body .container {
   .clients-dup { display: none; }
 }
 
+/* Testimonial autoplay: the active tab fills up, and when it is full the next client takes the spotlight. */
+@keyframes tmProgress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.tm-progress {
+  animation-name: tmProgress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+/* ---- page transitions ---- */
+/* the greeting preloader only ever shows on the first page of a session (see the script in the root layout) */
+html[data-visited] .site-preloader { display: none !important; }
+
+/* Every page eases in instead of popping (template.js remounts this wrapper on each in-app navigation).
+   It fades BRIGHTNESS, not opacity: an element that goes see-through would show the document's white background behind it.
+   Only after hydration (data-hydrated), so a fresh load / reload paints at once; "backwards" = no filter is left on afterwards. */
+@keyframes pageIn { from { filter: brightness(0); } to { filter: brightness(1); } }
+html[data-hydrated] .page-in { animation: pageIn 0.5s ease-out backwards; }
+
+/* the loading screen's spinner only appears if the page is slow — quick navigations never flash it */
+@keyframes loadingShow { to { opacity: 1; } }
+.loading-delay { opacity: 0; animation: loadingShow 0.3s ease 0.8s forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-hydrated] .page-in { animation: none; }
+}
+
 /* Background decorations of the home sections (rings, sparkles). */
 @keyframes decorSpin {
   to { transform: rotate(360deg); }

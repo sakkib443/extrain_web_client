@@ -55,7 +55,7 @@ const softwareSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchSoftware.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(fetchSoftware.pending, (state) => { state.loading = state.softwareList.length === 0; state.error = null; }) // stale-while-revalidate: only show a skeleton when there is nothing to show yet
             .addCase(fetchSoftware.fulfilled, (state, action) => {
                 state.loading = false;
                 state.softwareList = action.payload;

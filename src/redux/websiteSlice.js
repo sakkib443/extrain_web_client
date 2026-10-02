@@ -65,7 +65,7 @@ const websiteSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchWebsites.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(fetchWebsites.pending, (state) => { state.loading = state.websiteList.length === 0; state.error = null; }) // stale-while-revalidate: only show a skeleton when there is nothing to show yet
             .addCase(fetchWebsites.fulfilled, (state, action) => {
                 state.loading = false;
                 state.websiteList = action.payload;

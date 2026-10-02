@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
             ? `https://extrain-web-server.vercel.app/api/websites/${id}`
             : `https://extrain-web-server.vercel.app/api/websites/slug/${id}`;
 
-        const response = await fetch(apiUrl, { cache: "no-store" });
+        const response = await fetch(apiUrl, { next: { revalidate: 60 } });
         const result = await response.json();
         const website = result.data;
 
@@ -72,7 +72,7 @@ export default async function WebsiteDetailsPage({ params }) {
             ? `https://extrain-web-server.vercel.app/api/websites/${id}`
             : `https://extrain-web-server.vercel.app/api/websites/slug/${id}`;
 
-        const response = await fetch(apiUrl, { cache: "no-store" });
+        const response = await fetch(apiUrl, { next: { revalidate: 60 } });
 
         if (!response.ok) {
             throw new Error("Failed to fetch website data");

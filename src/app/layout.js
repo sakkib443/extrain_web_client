@@ -132,6 +132,12 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <head>
+        {/* Runs before the first paint: a tab that has already seen the greeting never gets the full-screen preloader (no flash on reload) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{if(sessionStorage.getItem('hasVisited'))document.documentElement.setAttribute('data-visited','1')}catch(e){}",
+          }}
+        />
         {/* Google Analytics (GA4) */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-NDYX5VFT6W"

@@ -19,6 +19,7 @@ import {
 import { FaStar } from "react-icons/fa";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/providers/ThemeProvider";
+import { optimizeImage } from "@/lib/optimizeImage";
 
 // theme="dark" → the black site theme (home + website page). The default "light" is unchanged (software page, category pages).
 const ProductCard = ({ product, type, view = "grid", theme = "light" }) => {
@@ -32,7 +33,7 @@ const ProductCard = ({ product, type, view = "grid", theme = "light" }) => {
     const detailUrl = `/${type}/${product._id}`;
 
     // Get first image from images array or fallback
-    const productImage = product.images?.[0] || product.image || "/images/placeholder.png";
+    const productImage = optimizeImage(product.images?.[0] || product.image || "/images/placeholder.png", 800);
 
     // Calculate discount percentage
     const hasDiscount = product.offerPrice && product.offerPrice > 0 && product.offerPrice < product.price;
@@ -160,7 +161,89 @@ const ProductCard = ({ product, type, view = "grid", theme = "light" }) => {
         );
     }
 
-    // Grid View Rendering
+    // Grid View — dark theme (website page + home). Fixed image ratio and title height so every card in a row lines up.
+    if (D) {
+        return (
+            <div className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[color:var(--tone-deep)] transition-all duration-300 hover:-translate-y-1 hover:border-[#F8921C]/60 hover:shadow-[0_24px_50px_-28px_rgba(248,146,28,0.55)]">
+                {/* image */}
+                <Link href={detailUrl} className="relative block aspect-[16/10] w-full shrink-0 overflow-hidden bg-white/[0.04]">
+                    <img
+                        src={productImage}
+                        alt={`${title} - Premium ${type === 'website' ? 'Website Template' : 'Software Solution'} for Business`}
+                        loading="lazy"
+                        className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    <span className={`absolute left-3 top-3 max-w-[60%] truncate rounded-md border border-white/15 bg-black/55 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur-md ${bengaliClass}`}>
+                        {categoryName}
+                    </span>
+                    {hasDiscount && (
+                        <span className="absolute right-3 top-3 rounded-md bg-[#F8921C] px-2 py-1 text-[11px] font-bold text-black">
+                            -{Math.round((1 - displayPrice / originalPrice) * 100)}%
+                        </span>
+                    )}
+                </Link>
+
+                {/* body */}
+                <div className="flex flex-1 flex-col p-5">
+                    <Link href={detailUrl} className="block">
+                        <h3 style={{ color: "#fff" }} className={`line-clamp-2 min-h-[2.9rem] text-[17px] font-semibold leading-snug transition-colors group-hover:text-[#F8921C] ${bengaliClass}`}>
+                            {title}
+                        </h3>
+                    </Link>
+
+                    <div className="mb-5 mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12px] text-white/55">
+                        <span className="inline-flex items-center gap-1">
+                            <FaStar className="text-[#F8921C]" size={11} />
+                            <b className="font-semibold text-white/85">{Number(rating).toFixed(1)}</b>
+                            <span>({reviewsCount})</span>
+                        </span>
+                        <span className="inline-flex items-center gap-1">
+                            <LuUsers size={13} className="text-white/40" />
+                            {sales.toLocaleString()} {language === 'bn' ? 'বিক্রি' : 'sold'}
+                        </span>
+                        <span className="inline-flex items-center gap-1">
+                            <LuLayers size={13} className="text-white/40" />
+                            {version}
+                        </span>
+                    </div>
+
+                    <div className="mt-auto flex items-end justify-between gap-3 border-t border-white/10 pt-4">
+                        <div className="leading-none">
+                            {hasDiscount && (
+                                <span className="mb-1 block text-xs text-white/35 line-through">৳{originalPrice?.toLocaleString()}</span>
+                            )}
+                            <span className="text-[1.45rem] font-bold text-white">৳{displayPrice?.toLocaleString()}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <button
+                                type="button"
+                                onClick={handleAddToCart}
+                                disabled={isAdded}
+                                aria-label={language === 'bn' ? 'কার্টে যোগ করুন' : 'Add to cart'}
+                                title={language === 'bn' ? 'কার্টে যোগ করুন' : 'Add to cart'}
+                                className={`grid h-10 w-10 place-items-center rounded-lg border transition-colors ${isAdded ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-white/15 text-white/75 hover:border-[#F8921C] hover:text-[#F8921C]'}`}
+                            >
+                                {isAdded ? <LuCheck size={17} /> : <LuShoppingCart size={17} />}
+                            </button>
+                            <a
+                                href={product.previewUrl || detailUrl}
+                                target={product.previewUrl ? "_blank" : "_self"}
+                                rel="noopener noreferrer"
+                                className={`inline-flex h-10 items-center gap-1.5 rounded-lg bg-[#F8921C] px-4 text-[13px] font-semibold text-black transition-colors hover:bg-[#e07d0a] ${bengaliClass}`}
+                            >
+                                <LuEye size={16} />
+                                {language === 'bn' ? 'লাইভ প্রিভিউ' : 'Live View'}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Grid View Rendering (light theme)
     return (
         <div className="group w-full h-full flex flex-col">
             <div className={D ? "relative h-full bg-white/[0.03] rounded-2xl border border-white/10 overflow-hidden transition-all duration-300 flex flex-col group-hover:-translate-y-1.5 group-hover:border-[#F8921C]/60 group-hover:shadow-[0_24px_50px_-28px_rgba(248,146,28,0.55)]" : "relative h-full bg-white dark:bg-[#0d0d0d] rounded-xl border border-gray-100 dark:border-white/10 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"}>

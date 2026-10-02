@@ -30,7 +30,7 @@ export default async function WebsitePage() {
 
     try {
         const response = await fetch("https://extrain-web-server.vercel.app/api/websites?limit=100", {
-            cache: "no-store",
+            next: { revalidate: 60 },
         });
         const result = await response.json();
         websites = result.data || [];

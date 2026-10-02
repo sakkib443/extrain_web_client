@@ -36,7 +36,7 @@ const categorySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCategories.pending, (state) => { state.status = "loading"; })
+      .addCase(fetchCategories.pending, (state) => { if (state.items.length === 0) state.status = "loading"; }) // keep showing the cached list while it refreshes
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.items = action.payload;

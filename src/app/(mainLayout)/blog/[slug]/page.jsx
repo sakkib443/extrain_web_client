@@ -6,7 +6,7 @@ export async function generateMetadata({ params }) {
 
     try {
         const response = await fetch(`https://extrain-web-server.vercel.app/api/blogs/slug/${slug}`, {
-            cache: "no-store",
+            next: { revalidate: 60 },
         });
         const result = await response.json();
         const blog = result.data;
@@ -62,7 +62,7 @@ export default async function SingleBlogPage({ params }) {
 
     try {
         const response = await fetch(`https://extrain-web-server.vercel.app/api/blogs/slug/${slug}`, {
-            cache: "no-store",
+            next: { revalidate: 60 },
         });
         const result = await response.json();
         blog = result.data;
