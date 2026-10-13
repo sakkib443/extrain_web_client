@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import toast from 'react-hot-toast';
 import {
     FiPlus, FiTrash2, FiEdit3, FiRefreshCw, FiX, FiSave, FiGlobe,
@@ -114,8 +115,19 @@ export default function DomainsTab({ isDark, month }) {
                 </p>
             )}
 
+            {/* রিনিউ থেকে আসা আয় — কেনার মাস যা-ই হোক, রিনিউয়ের তারিখের মাসে ধরা হয় */}
+            {summary?.renewalCount > 0 && (
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                    এই মাসে <b>{summary.renewalCount}</b> টি রিনিউ হয়েছে — আয় <b>{bdt(summary.renewalRevenue)}</b>,
+                    লাভ <b className={(summary.renewalProfit || 0) >= 0 ? 'text-emerald-500' : 'text-rose-500'}>{bdt(summary.renewalProfit)}</b>
+                    <span className="text-slate-400"> (নিচের তালিকার বাইরে, আলাদা)</span>
+                </p>
+            )}
+
             <div className="flex items-center justify-between">
-                <h3 className={`font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-800'}`}><FiGlobe style={{ color: '#FD9A00' }} /> Domain List</h3>
+                <h3 className={`font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-800'}`}><FiGlobe style={{ color: '#FD9A00' }} /> Domain List
+                    <Link href="/dashboard/admin/domain-hosting/all" className="ml-2 text-xs font-semibold underline" style={{ color: '#FD9A00' }}>Domain &amp; Hosting মেনুতে খুলুন →</Link>
+                </h3>
                 <div className="flex gap-2">
                     <button onClick={load} className={`p-2.5 rounded-xl ${isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
                         <FiRefreshCw size={16} className={loading ? 'animate-spin' : ''} />

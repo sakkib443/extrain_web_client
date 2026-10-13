@@ -36,6 +36,7 @@ import {
   FiEdit3,
   FiInbox,
   FiList,
+  FiServer,
 } from 'react-icons/fi';
 import { useTheme } from '@/providers/ThemeProvider';
 
@@ -107,6 +108,16 @@ const AdminSidebar = () => {
         { title: 'Overview', href: '/dashboard/admin/project-tracker', icon: FiGrid },
         { title: 'Order Requests', href: '/dashboard/admin/project-tracker/requests', icon: FiInbox },
         { title: 'All Projects', href: '/dashboard/admin/project-tracker/all', icon: FiList },
+      ],
+    },
+    {
+      title: 'Domain & Hosting',
+      icon: FiServer,
+      gradient: 'from-sky-500 to-indigo-600',
+      submenu: [
+        { title: 'Overview', href: '/dashboard/admin/domain-hosting', icon: FiGrid },
+        { title: 'All Domains & Hosting', href: '/dashboard/admin/domain-hosting/all', icon: FiList },
+        { title: 'Renewals & Dues', href: '/dashboard/admin/domain-hosting/renewals', icon: FiBell },
       ],
     },
     {

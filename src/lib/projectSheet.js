@@ -175,17 +175,17 @@ const plainValue = (col, r, i, mode) => {
 const csvCell = (v) => (/[",\r\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
 
 // UTF-8 with a BOM, so Excel shows Bengali text correctly
-export const toCSV = (rows) => {
-    const head = SHEET_COLUMNS.map((c) => csvCell(c.label)).join(',');
-    const body = rows.map((r, i) => SHEET_COLUMNS.map((c) => csvCell(plainValue(c, r, i, 'csv'))).join(','));
+export const toCSV = (rows, columns = SHEET_COLUMNS) => {
+    const head = columns.map((c) => csvCell(c.label)).join(',');
+    const body = rows.map((r, i) => columns.map((c) => csvCell(plainValue(c, r, i, 'csv'))).join(','));
     return '﻿' + [head, ...body].join('\r\n');
 };
 
 // Tab-separated, ready to paste straight into a Google Sheet
-export const toTSV = (rows) => {
+export const toTSV = (rows, columns = SHEET_COLUMNS) => {
     const clean = (s) => s.replace(/[\t\r\n]+/g, ' ');
-    const head = SHEET_COLUMNS.map((c) => clean(c.label)).join('\t');
-    const body = rows.map((r, i) => SHEET_COLUMNS.map((c) => clean(plainValue(c, r, i, 'tsv'))).join('\t'));
+    const head = columns.map((c) => clean(c.label)).join('\t');
+    const body = rows.map((r, i) => columns.map((c) => clean(plainValue(c, r, i, 'tsv'))).join('\t'));
     return [head, ...body].join('\n');
 };
 
@@ -371,8 +371,8 @@ const bodyCell = (ref, col, value) => {
     return textCell(ref, value, textStyle);
 };
 
-export const buildXLSX = (rows, sheetName = 'All Projects') => {
-    const cols = SHEET_COLUMNS;
+export const buildXLSX = (rows, sheetName = 'All Projects', columns = SHEET_COLUMNS, totalLabel = (n) => `Total · ${n} projects`) => {
+    const cols = columns;
     const lastCol = colLetter(cols.length - 1);
     const lastDataRow = rows.length + 1; // header is row 1
 
@@ -396,7 +396,7 @@ export const buildXLSX = (rows, sheetName = 'All Projects') => {
                     return `<c r="${ref}" s="${S.totalMoney}"><f>SUM(${colLetter(ci)}2:${colLetter(ci)}${lastDataRow})</f><v>${sum}</v></c>`;
                 }
                 if (ci === 0) return textCell(ref, '', S.totalText);
-                if (c.key === 'name') return textCell(ref, `Total · ${rows.length} projects`, S.totalText);
+                if (c.key === 'name') return textCell(ref, totalLabel(rows.length), S.totalText);
                 return `<c r="${ref}" s="${S.totalText}"/>`;
             })
             .join('');
@@ -470,17 +470,17 @@ export const downloadBlob = (blob, filename) => {
     setTimeout(() => URL.revokeObjectURL(url), 2000);
 };
 
-export const downloadXLSX = (rows, filename) =>
+export const downloadXLSX = (rows, filename, columns = SHEET_COLUMNS, sheetName = 'All Projects', totalLabel) =>
     downloadBlob(
-        new Blob([buildXLSX(rows)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }),
+        new Blob([buildXLSX(rows, sheetName, columns, totalLabel)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }),
         filename
     );
 
-export const downloadCSV = (rows, filename) =>
-    downloadBlob(new Blob([toCSV(rows)], { type: 'text/csv;charset=utf-8' }), filename);
+export const downloadCSV = (rows, filename, columns = SHEET_COLUMNS) =>
+    downloadBlob(new Blob([toCSV(rows, columns)], { type: 'text/csv;charset=utf-8' }), filename);
 
-export const copyForSheets = async (rows) => {
-    const text = toTSV(rows);
+export const copyForSheets = async (rows, columns = SHEET_COLUMNS) => {
+    const text = toTSV(rows, columns);
     if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(text);
         return;

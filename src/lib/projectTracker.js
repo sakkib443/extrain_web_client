@@ -190,7 +190,12 @@ export const domainProfit = (d) => (Number(d?.sellPrice) || 0) - (Number(d?.buyP
 
 // ডোমেইন বাবদ ক্লায়েন্টের কাছে কত বাকি
 export const domainDue = (d) =>
-    Math.max(0, (Number(d?.sellPrice) || 0) - (Number(d?.clientPaid) || 0));
+    Math.max(
+        0,
+        (Number(d?.sellPrice) || 0) +
+            (d?.renewals || []).reduce((s, r) => s + (Number(r.sellPrice) || 0), 0) -
+            (Number(d?.clientPaid) || 0)
+    );
 
 // মাসের মোট লাভে এই রেকর্ড কতটা যোগ করে (server এর domainRevenueImpact এর মিরর)।
 // included হলে Sell টা প্রজেক্টের Total এ ধরা — Tracker এর collection থেকে clientPaid বাদ
