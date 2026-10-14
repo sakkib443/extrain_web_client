@@ -152,6 +152,9 @@ export const SHEET_COLUMNS = [
     { key: 'status', label: 'Status', width: 12, type: 'text', center: true, get: (r) => r.status },
 ];
 
+// What an editor may download: the same sheet without Price / Paid / Due / Price History
+export const SHEET_COLUMNS_NO_MONEY = SHEET_COLUMNS.filter((c) => c.type !== 'money' && c.key !== 'history');
+
 // ---------------------------------------------------------------
 // CSV / "copy for Google Sheets"
 // ---------------------------------------------------------------

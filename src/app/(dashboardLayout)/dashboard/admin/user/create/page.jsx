@@ -39,8 +39,8 @@ export default function CreateUserPage() {
 
         try {
             const token = localStorage.getItem('token');
-            // Use auth/register endpoint for creating users
-            const res = await fetch(`${BASE_URL}/auth/register`, {
+            // admin-only endpoint: public sign-up can only create students
+            const res = await fetch(`${BASE_URL}/users/admin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -163,6 +163,7 @@ export default function CreateUserPage() {
                         >
                             <option value="student">Student</option>
                             <option value="mentor">Mentor</option>
+                            <option value="editor">Editor (orders + domain &amp; hosting, no money)</option>
                             <option value="admin">Admin</option>
                         </select>
                     </div>

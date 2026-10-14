@@ -18,6 +18,7 @@ import SendReceiptDialog from '@/components/ProjectTracker/SendReceiptDialog';
 import ProjectDetailModal from '@/components/ProjectTracker/ProjectDetailModal';
 import ExpensesTab from '@/components/ProjectTracker/ExpensesTab';
 import DomainsTab from '@/components/ProjectTracker/DomainsTab';
+import { isEditor } from '@/lib/access';
 
 const SummaryTile = ({ isDark, label, value, cls, accent }) => (
     <div className={`relative rounded-xl pl-5 pr-4 py-3.5 border ${isDark ? 'bg-slate-800/50 border-slate-700/60' : 'bg-white border-slate-200/70'}`}>
@@ -39,11 +40,12 @@ export default function MonthlyTrackerPage() {
     const [receipt, setReceipt] = useState(null);
     const [viewing, setViewing] = useState(null); // read-only detail view
     const [tab, setTab] = useState('projects'); // projects | expenses | domains
+    const editor = isEditor(); // an editor sees no amount, receipt, expense or delete button
 
     const load = useCallback(async () => {
         setLoading(true);
         try {
-            const [s, p] = await Promise.all([ptApi.getSummary(month), ptApi.getProjects(month)]);
+            const [s, p] = await Promise.all([editor ? null : ptApi.getSummary(month), ptApi.getProjects(month)]);
             setSummary(s);
             setProjects(p);
         } catch (e) {
@@ -51,7 +53,7 @@ export default function MonthlyTrackerPage() {
         } finally {
             setLoading(false);
         }
-    }, [month]);
+    }, [month, editor]);
     useEffect(() => { load(); }, [load]);
 
     const remove = async (id) => {
@@ -92,16 +94,16 @@ export default function MonthlyTrackerPage() {
             </div>
 
             {/* Summary block — সবসময় উপরে (সব tab এ দেখা যায়) */}
-            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
+            {!editor && <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
                 <SummaryTile isDark={isDark} label="Total Project Value" value={bdt(summary?.totalProjectValue)} accent="#6366f1" />
                 <SummaryTile isDark={isDark} label="Collection" value={bdt(summary?.totalCollection)} cls="text-emerald-500" accent="#10b981" />
                 <SummaryTile isDark={isDark} label="Due" value={bdt(summary?.totalDue)} cls="text-amber-500" accent="#f59e0b" />
                 <SummaryTile isDark={isDark} label="Expenses" value={bdt(summary?.totalExpenses)} cls="text-rose-500" accent="#f43f5e" />
                 <SummaryTile isDark={isDark} label="Total Profit" value={bdt(summary?.totalProfit)} cls={summary?.totalProfit >= 0 ? 'text-emerald-500' : 'text-rose-500'} accent={summary?.totalProfit >= 0 ? '#10b981' : '#f43f5e'} />
-            </div>
+            </div>}
 
             {/* Tabs — summary এর নিচে */}
-            <div className={`inline-flex gap-1 p-1 rounded-xl ${isDark ? 'bg-slate-800/60' : 'bg-slate-100'}`}>
+            {!editor && <div className={`inline-flex gap-1 p-1 rounded-xl ${isDark ? 'bg-slate-800/60' : 'bg-slate-100'}`}>
                 {[
                     { k: 'projects', label: 'Projects' },
                     { k: 'expenses', label: 'Expenses' },
@@ -115,7 +117,7 @@ export default function MonthlyTrackerPage() {
                         {t.label}
                     </button>
                 ))}
-            </div>
+            </div>}
 
             {/* ===== EXPENSES TAB ===== */}
             {tab === 'expenses' && <ExpensesTab isDark={isDark} month={month} onChanged={load} />}
@@ -138,11 +140,13 @@ export default function MonthlyTrackerPage() {
                                 <th className={th}>Company</th>
                                 <th className={th}>Phone</th>
                                 <th className={th}>Type</th>
-                                <th className={th}>Total</th>
-                                <th className={th}>Paid</th>
-                                <th className={th}>Due</th>
-                                <th className={th}>Due%</th>
-                                <th className={th}>Next Pay</th>
+                                {!editor && <>
+                                    <th className={th}>Total</th>
+                                    <th className={th}>Paid</th>
+                                    <th className={th}>Due</th>
+                                    <th className={th}>Due%</th>
+                                    <th className={th}>Next Pay</th>
+                                </>}
                                 <th className={th}>Delivery</th>
                                 <th className={th}>Status</th>
                                 <th className={th + ' text-right'}>Actions</th>
@@ -150,9 +154,9 @@ export default function MonthlyTrackerPage() {
                         </thead>
                         <tbody className={isDark ? 'divide-y divide-slate-700/50' : 'divide-y divide-slate-100'}>
                             {loading ? (
-                                <tr><td colSpan={15} className={`text-center py-16 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>লোড হচ্ছে...</td></tr>
+                                <tr><td colSpan={editor ? 10 : 15} className={`text-center py-16 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>লোড হচ্ছে...</td></tr>
                             ) : projects.length === 0 ? (
-                                <tr><td colSpan={15} className={`text-center py-16 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>এই মাসে কোনো প্রজেক্ট নেই।</td></tr>
+                                <tr><td colSpan={editor ? 10 : 15} className={`text-center py-16 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>এই মাসে কোনো প্রজেক্ট নেই।</td></tr>
                             ) : projects.map((p, i) => (
                                 <tr key={p._id} className={isDark ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50/70'}>
                                     <td className={td + ' text-slate-400'}>{i + 1}</td>
@@ -163,6 +167,7 @@ export default function MonthlyTrackerPage() {
                                     <td className={td}>{p.phone}</td>
                                     <td className={td}>{p.websiteType}</td>
                                     {/* Total/Paid/Due — ডোমেইনের অংশ বাদ দিয়ে শুধু ওয়েবসাইটের টাকা */}
+                                    {!editor && <>
                                     <td className={td + ' font-semibold'}>
                                         {bdt(p.websiteAmount ?? p.totalProjectAmount)}
                                         {p.domainSellIncluded > 0 && (
@@ -175,6 +180,7 @@ export default function MonthlyTrackerPage() {
                                     <td className={td + ' text-amber-500 font-semibold'}>{bdt(p.websiteDue ?? p.totalDue)}</td>
                                     <td className={td}>{p.websiteDuePercentage ?? p.duePercentage}%</td>
                                     <td className={td}>{fmtDate(p.nextPayDate)}</td>
+                                    </>}
                                     <td className={td}>{fmtDate(p.projectDeliveryDate)}</td>
                                     <td className={td}>
                                         <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${statusStyle(p.status)}`}>{p.status}</span>
@@ -182,9 +188,9 @@ export default function MonthlyTrackerPage() {
                                     <td className={td + ' text-right'}>
                                         <div className="inline-flex items-center gap-1">
                                             <button onClick={() => setViewing(p)} title="View Details" className="p-2 rounded-lg text-slate-500 hover:bg-slate-500/10 transition"><FiEye size={15} /></button>
-                                            <button onClick={() => setReceipt({ project: p })} title="Money Receipt" className="p-2 rounded-lg text-emerald-500 hover:bg-emerald-500/10 transition"><FiFileText size={15} /></button>
+                                            {!editor && <button onClick={() => setReceipt({ project: p })} title="Money Receipt" className="p-2 rounded-lg text-emerald-500 hover:bg-emerald-500/10 transition"><FiFileText size={15} /></button>}
                                             <button onClick={() => setEditing(p)} title="Edit" className="p-2 rounded-lg text-blue-500 hover:bg-blue-500/10 transition"><FiEdit3 size={15} /></button>
-                                            <button onClick={() => remove(p._id)} title="Delete" className="p-2 rounded-lg text-rose-500 hover:bg-rose-500/10 transition"><FiTrash2 size={15} /></button>
+                                            {!editor && <button onClick={() => remove(p._id)} title="Delete" className="p-2 rounded-lg text-rose-500 hover:bg-rose-500/10 transition"><FiTrash2 size={15} /></button>}
                                         </div>
                                     </td>
                                 </tr>
@@ -195,7 +201,7 @@ export default function MonthlyTrackerPage() {
             </div>
 
             {/* ওয়েবসাইট থেকে মাসের লাভ — ডোমেইন/হোস্টিং এই হিসাবের বাইরে (ওটা নিজের ট্যাবে) */}
-            <div className="flex justify-end">
+            {!editor && <div className="flex justify-end">
                 <div className={`w-full sm:w-[340px] rounded-xl border overflow-hidden ${isDark ? 'bg-slate-800/50 border-slate-700/60' : 'bg-white border-slate-200/70'}`}>
                     <div className={`px-5 py-3 border-b ${isDark ? 'border-slate-700/60' : 'border-slate-100'}`}>
                         <p className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-400'}`}>
@@ -222,7 +228,7 @@ export default function MonthlyTrackerPage() {
                         </p>
                     </div>
                 </div>
-            </div>
+            </div>}
             </>}
 
             {editing && (
@@ -255,7 +261,7 @@ export default function MonthlyTrackerPage() {
                     project={viewing}
                     onClose={() => setViewing(null)}
                     onEdit={(p) => { setViewing(null); setEditing(p); }}
-                    onReceipt={(p) => { setViewing(null); setReceipt({ project: p }); }}
+                    onReceipt={editor ? undefined : (p) => { setViewing(null); setReceipt({ project: p }); }}
                 />
             )}
         </div>

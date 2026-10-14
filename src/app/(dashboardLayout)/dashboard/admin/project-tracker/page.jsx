@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fi';
 import { useTheme } from '@/providers/ThemeProvider';
 import { ptApi, bdt, monthLabel } from '@/lib/projectTracker';
+import { isEditor } from '@/lib/access';
 
 const StatCard = ({ isDark, icon: Icon, label, value, tone = 'default' }) => {
     const tones = {
@@ -37,11 +38,15 @@ export default function ProjectTrackerOverview() {
     const [summary, setSummary] = useState(null);
     const [months, setMonths] = useState([]);
     const [loading, setLoading] = useState(true);
+    const editor = isEditor(); // an editor sees folders and counts only — never an amount
 
     const load = async () => {
         setLoading(true);
         try {
-            const [s, m] = await Promise.all([ptApi.getSummary(), ptApi.getMonths()]);
+            const [s, m] = await Promise.all([
+                editor ? ptApi.getRequests().then((r) => ({ pendingRequests: r.length })) : ptApi.getSummary(),
+                ptApi.getMonths(),
+            ]);
             setSummary(s);
             setMonths(m);
         } catch (e) {
@@ -58,7 +63,7 @@ export default function ProjectTrackerOverview() {
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>Project Tracker</h1>
-                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>কাস্টম প্রজেক্ট অর্ডার ও মান্থলি হিসাব</p>
+                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{editor ? 'কাস্টম প্রজেক্ট অর্ডার' : 'কাস্টম প্রজেক্ট অর্ডার ও মান্থলি হিসাব'}</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <Link href="/dashboard/admin/project-tracker/requests"
@@ -74,10 +79,12 @@ export default function ProjectTrackerOverview() {
                         className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition ${isDark ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'}`}>
                         <FiList size={16} /> All Projects
                     </Link>
-                    <Link href="/dashboard/admin/project-tracker/expenses"
-                        className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition ${isDark ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'}`}>
-                        <FiCreditCard size={16} /> Expenses
-                    </Link>
+                    {!editor && (
+                        <Link href="/dashboard/admin/project-tracker/expenses"
+                            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition ${isDark ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'}`}>
+                            <FiCreditCard size={16} /> Expenses
+                        </Link>
+                    )}
                     <button onClick={load} className={`p-2.5 rounded-xl transition ${isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
                         <FiRefreshCw size={16} className={loading ? 'animate-spin' : ''} />
                     </button>
@@ -85,13 +92,13 @@ export default function ProjectTrackerOverview() {
             </div>
 
             {/* Overall summary */}
-            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            {!editor && <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                 <StatCard isDark={isDark} icon={FiDollarSign} label="Total Project Value" value={bdt(summary?.totalProjectValue)} tone="blue" />
                 <StatCard isDark={isDark} icon={FiTrendingUp} label="Total Collection" value={bdt(summary?.totalCollection)} tone="green" />
                 <StatCard isDark={isDark} icon={FiClock} label="Total Due" value={bdt(summary?.totalDue)} tone="amber" />
                 <StatCard isDark={isDark} icon={FiTrendingDown} label="Total Expenses" value={bdt(summary?.totalExpenses)} tone="red" />
                 <StatCard isDark={isDark} icon={summary?.totalProfit >= 0 ? FiTrendingUp : FiTrendingDown} label="Total Profit" value={bdt(summary?.totalProfit)} tone={summary?.totalProfit >= 0 ? 'green' : 'red'} />
-            </div>
+            </div>}
 
             {/* Monthly folders */}
             <div>
@@ -125,12 +132,14 @@ export default function ProjectTrackerOverview() {
                                     </div>
                                     <FiChevronRight className={`${isDark ? 'text-slate-500' : 'text-slate-400'} group-hover:translate-x-1 transition`} />
                                 </div>
-                                <div className="grid grid-cols-2 gap-2 text-sm">
-                                    <Row isDark={isDark} label="Value" value={bdt(m.totalValue)} />
-                                    <Row isDark={isDark} label="Collected" value={bdt(m.totalPaid)} cls="text-emerald-500" />
-                                    <Row isDark={isDark} label="Due" value={bdt(m.totalDue)} cls="text-amber-500" />
-                                    <Row isDark={isDark} label="Expenses" value={bdt(m.totalExpenses)} cls="text-rose-500" />
-                                </div>
+                                {!editor && (
+                                    <div className="grid grid-cols-2 gap-2 text-sm">
+                                        <Row isDark={isDark} label="Value" value={bdt(m.totalValue)} />
+                                        <Row isDark={isDark} label="Collected" value={bdt(m.totalPaid)} cls="text-emerald-500" />
+                                        <Row isDark={isDark} label="Due" value={bdt(m.totalDue)} cls="text-amber-500" />
+                                        <Row isDark={isDark} label="Expenses" value={bdt(m.totalExpenses)} cls="text-rose-500" />
+                                    </div>
+                                )}
                             </button>
                         ))}
                     </div>

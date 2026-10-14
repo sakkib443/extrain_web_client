@@ -17,6 +17,7 @@ import { useTheme } from '@/providers/ThemeProvider';
 import useDomainHosting from '@/components/DomainHosting/useDomainHosting';
 import { useDomainModals } from '@/components/DomainHosting/Modals';
 import { BRAND, useCx, Kpi, StatePill, DaysText, BarRow } from '@/components/DomainHosting/ui';
+import { isEditor } from '@/lib/access';
 import {
     totals, monthlySeries, expiryBuckets, groupTop, clientsDue, needsAttention, taka, monthName, waLink, reminderText, dueText, fmtKey, addDaysKey,
 } from '@/lib/domainLogic';
@@ -39,6 +40,7 @@ export default function DomainHostingOverview() {
     const { isDark } = useTheme();
     const cx = useCx(isDark);
     const router = useRouter();
+    const editor = isEditor(); // an editor sees counts and dates only — no revenue, profit or dues
     const { items, projects, loading, reload, today } = useDomainHosting();
     const { open, element } = useDomainModals({ isDark, items, projects, today, onChanged: reload });
 
@@ -80,11 +82,11 @@ export default function DomainHostingOverview() {
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <h1 className={`text-2xl font-bold ${cx.strong}`}>Domain &amp; Hosting</h1>
-                    <p className={`text-sm ${cx.muted}`}>ডোমেইন ও হোস্টিং বিক্রির হিসাব, মেয়াদ আর বকেয়া — এক জায়গায়</p>
+                    <p className={`text-sm ${cx.muted}`}>{editor ? 'ডোমেইন ও হোস্টিংয়ের মেয়াদ আর রিনিউ — এক জায়গায়' : 'ডোমেইন ও হোস্টিং বিক্রির হিসাব, মেয়াদ আর বকেয়া — এক জায়গায়'}</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                     <button onClick={reload} title="Refresh" className={cx.iconBtn}><FiRefreshCw size={16} className={loading ? 'animate-spin' : ''} /></button>
-                    <Link href="/dashboard/admin/domain-hosting/renewals" className={cx.ghostBtn}><FiBell size={16} /> Renewals &amp; Dues</Link>
+                    <Link href="/dashboard/admin/domain-hosting/renewals" className={cx.ghostBtn}><FiBell size={16} /> {editor ? 'Renewals' : <>Renewals &amp; Dues</>}</Link>
                     <Link href="/dashboard/admin/domain-hosting/all" className={cx.ghostBtn}><FiList size={16} /> All records</Link>
                     <button onClick={open.create} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-white font-semibold shadow hover:opacity-90 transition" style={{ background: BRAND }}>
                         <FiPlus size={16} /> Add new
@@ -93,17 +95,19 @@ export default function DomainHostingOverview() {
             </div>
 
             {/* The numbers that matter today */}
-            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+            <div className={`grid grid-cols-2 gap-3 ${editor ? 'md:grid-cols-3' : 'md:grid-cols-3 xl:grid-cols-6'}`}>
                 <Kpi isDark={isDark} icon={FiGlobe} label="Live" value={activeOk} tone="emerald" sub={`${domains} domain · ${hostings} hosting`} />
                 <Kpi isDark={isDark} icon={FiClock} label="Expiring ≤ 30 days" value={expiring} tone={expiring > 0 ? 'amber' : 'slate'} sub="রিনিউ করাতে হবে" onClick={() => router.push('/dashboard/admin/domain-hosting/all?state=expiring')} />
                 <Kpi isDark={isDark} icon={FiAlertTriangle} label="Expired" value={expired} tone={expired > 0 ? 'rose' : 'slate'} sub="মেয়াদ শেষ" onClick={() => router.push('/dashboard/admin/domain-hosting/all?state=expired')} />
+                {!editor && <>
                 <Kpi isDark={isDark} icon={FiDollarSign} label="Unpaid dues" value={taka(sum.due)} tone={sum.due > 0 ? 'amber' : 'slate'} sub={`${owing}টা রেকর্ডে বাকি`} onClick={() => router.push('/dashboard/admin/domain-hosting/all?pay=due')} />
                 <Kpi isDark={isDark} icon={FiTrendingUp} label={`${monthName(today.slice(0, 7)).split(' ')[0]} revenue`} value={taka(thisMonth?.revenue)} tone="sky" sub={`profit ${taka(thisMonth?.profit)}`} />
                 <Kpi isDark={isDark} icon={FiServer} label="All-time profit" value={taka(sum.profit)} tone={sum.profit >= 0 ? 'emerald' : 'rose'} sub={`revenue ${taka(sum.revenue)}`} />
+                </>}
             </div>
 
             <div className="grid xl:grid-cols-3 gap-5">
-                <Card cx={cx} title="Revenue & profit — last 12 months" className="xl:col-span-2"
+                {!editor && <Card cx={cx} title="Revenue & profit — last 12 months" className="xl:col-span-2"
                     action={<span className={`text-xs ${cx.muted}`}>নতুন বিক্রি + রিনিউ, তারিখ অনুযায়ী</span>}>
                     <div className="h-[19.5rem]">
                         <ResponsiveContainer width="100%" height="100%">
@@ -123,9 +127,9 @@ export default function DomainHostingOverview() {
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
-                </Card>
+                </Card>}
 
-                <Card cx={cx} title="When things expire" action={<MoreLink href="/dashboard/admin/domain-hosting/all">Filter</MoreLink>}>
+                <Card cx={cx} title="When things expire" className={editor ? 'xl:col-span-3' : ''} action={<MoreLink href="/dashboard/admin/domain-hosting/all">Filter</MoreLink>}>
                     <div className="space-y-3.5">
                         {buckets.map((b) => (
                             <BarRow key={b.key} isDark={isDark} label={b.label} value={b.count} max={maxBucket} tone={b.tone}
@@ -137,8 +141,8 @@ export default function DomainHostingOverview() {
             </div>
 
             <div className="grid xl:grid-cols-3 gap-5">
-                <Card cx={cx} title="Needs attention" className="xl:col-span-2"
-                    action={<MoreLink href="/dashboard/admin/domain-hosting/renewals">Renewals &amp; Dues</MoreLink>}>
+                <Card cx={cx} title="Needs attention" className={editor ? 'xl:col-span-3' : 'xl:col-span-2'}
+                    action={<MoreLink href="/dashboard/admin/domain-hosting/renewals">{editor ? 'Renewals' : <>Renewals &amp; Dues</>}</MoreLink>}>
                     {attention.length === 0 ? (
                         <p className={`text-sm py-6 text-center ${cx.muted}`}>{loading ? 'লোড হচ্ছে…' : '✅ এখন কোনো মেয়াদ শেষ বা শেষ হওয়ার কাছাকাছি নেই।'}</p>
                     ) : (
@@ -168,7 +172,7 @@ export default function DomainHostingOverview() {
                     {attention.length > 8 && <p className={`text-xs mt-3 ${cx.muted}`}>আরও {attention.length - 8}টা — <Link className="underline" href="/dashboard/admin/domain-hosting/renewals">সব দেখুন</Link></p>}
                 </Card>
 
-                <Card cx={cx} title="Who owes money" action={<MoreLink href="/dashboard/admin/domain-hosting/renewals?tab=dues">All dues</MoreLink>}>
+                {!editor && <Card cx={cx} title="Who owes money" action={<MoreLink href="/dashboard/admin/domain-hosting/renewals?tab=dues">All dues</MoreLink>}>
                     {dues.length === 0 ? (
                         <p className={`text-sm py-6 text-center ${cx.muted}`}>{loading ? 'লোড হচ্ছে…' : '✅ কারও কাছে বকেয়া নেই।'}</p>
                     ) : (
@@ -185,17 +189,17 @@ export default function DomainHostingOverview() {
                             ))}
                         </ul>
                     )}
-                </Card>
+                </Card>}
             </div>
 
-            <div className="grid md:grid-cols-3 gap-5">
+            <div className={`grid gap-5 ${editor ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}>
                 <Card cx={cx} title="By provider">
                     {providers.length === 0 ? <p className={`text-sm ${cx.muted}`}>প্রোভাইডার দেওয়া নেই।</p> : (
                         <ul className="space-y-3">
                             {providers.map((p) => (
                                 <li key={p.key} className="flex items-center justify-between text-sm gap-3">
                                     <span className={`${cx.text} truncate`}>{p.key}</span>
-                                    <span className={cx.muted}><b className={cx.strong}>{p.count}</b> · profit <span className={p.profit >= 0 ? 'text-emerald-500' : 'text-rose-500'}>{taka(p.profit)}</span></span>
+                                    <span className={cx.muted}><b className={cx.strong}>{p.count}</b>{!editor && <> · profit <span className={p.profit >= 0 ? 'text-emerald-500' : 'text-rose-500'}>{taka(p.profit)}</span></>}</span>
                                 </li>
                             ))}
                         </ul>
@@ -207,13 +211,13 @@ export default function DomainHostingOverview() {
                             {tlds.map((p) => (
                                 <li key={p.key} className="flex items-center justify-between text-sm gap-3">
                                     <Link href={`/dashboard/admin/domain-hosting/all?tld=${encodeURIComponent(p.key)}`} className={`${cx.text} hover:underline font-mono`}>{p.key}</Link>
-                                    <span className={cx.muted}><b className={cx.strong}>{p.count}</b> · revenue {taka(p.revenue)}</span>
+                                    <span className={cx.muted}><b className={cx.strong}>{p.count}</b>{!editor && <> · revenue {taka(p.revenue)}</>}</span>
                                 </li>
                             ))}
                         </ul>
                     )}
                 </Card>
-                <Card cx={cx} title="Revenue split">
+                {!editor && <Card cx={cx} title="Revenue split">
                     <div className="space-y-3 text-sm">
                         {[
                             ['Domain', live.filter((i) => i.type === 'domain')],
@@ -230,7 +234,7 @@ export default function DomainHostingOverview() {
                         })}
                         <p className={`text-[11px] pt-1 ${cx.muted}`}>Revenue · Profit (বাতিল বাদে)</p>
                     </div>
-                </Card>
+                </Card>}
             </div>
 
             {element}
