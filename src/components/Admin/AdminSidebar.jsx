@@ -39,6 +39,10 @@ import {
   FiServer,
 } from 'react-icons/fi';
 import { useTheme } from '@/providers/ThemeProvider';
+import { isEditor } from '@/lib/access';
+
+// an editor sees only these two menus (the pages themselves are guarded in dashboard/admin/layout.js)
+const EDITOR_MENUS = ['Project Tracker', 'Domain & Hosting'];
 
 const AdminSidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -73,7 +77,7 @@ const AdminSidebar = () => {
 
   const isMenuOpen = (menu) => openMenus.includes(menu);
 
-  const menuItems = [
+  const allMenuItems = [
     {
       title: 'Dashboard',
       href: '/dashboard/admin',
@@ -180,6 +184,11 @@ const AdminSidebar = () => {
       gradient: 'from-slate-500 to-slate-700'
     },
   ];
+  const menuItems = isEditor()
+    ? allMenuItems
+        .filter((m) => EDITOR_MENUS.includes(m.title))
+        .map((m) => ({ ...m, submenu: m.submenu.map((s) => (s.title === 'Renewals & Dues' ? { ...s, title: 'Renewals' } : s)) }))
+    : allMenuItems;
 
   return (
     <>

@@ -17,6 +17,7 @@ import { useTheme } from '@/providers/ThemeProvider';
 import useDomainHosting from '@/components/DomainHosting/useDomainHosting';
 import { useDomainModals } from '@/components/DomainHosting/Modals';
 import { BRAND, useCx, Kpi, TypePill, DaysText } from '@/components/DomainHosting/ui';
+import { isEditor } from '@/lib/access';
 import {
     renewalBuckets, clientsDue, distinct, taka, fmtKey, waLink, reminderText, dueText, dayKey, diffDays, relDays,
 } from '@/lib/domainLogic';
@@ -32,10 +33,11 @@ function Renewals() {
     const { isDark } = useTheme();
     const cx = useCx(isDark);
     const sp = useSearchParams();
+    const editor = isEditor(); // renewal dates only — no expected amounts, no dues tab, no payment button
     const { items, projects, loading, reload, today } = useDomainHosting();
     const { open, element } = useDomainModals({ isDark, items, projects, today, onChanged: reload });
 
-    const [tab, setTab] = useState(sp.get('tab') === 'dues' ? 'dues' : 'renewals');
+    const [tab, setTab] = useState(!editor && sp.get('tab') === 'dues' ? 'dues' : 'renewals');
     const [horizon, setHorizon] = useState(60);
     const [overdueWindow, setOverdueWindow] = useState('all'); // how far back "overdue" reaches
     const [type, setType] = useState('all');
@@ -85,8 +87,8 @@ function Renewals() {
                 <div className="flex items-center gap-3">
                     <Link href="/dashboard/admin/domain-hosting" className={cx.iconBtn}><FiArrowLeft size={16} /></Link>
                     <div>
-                        <h1 className={`text-2xl font-bold ${cx.strong}`}>Renewals &amp; Dues</h1>
-                        <p className={`text-sm ${cx.muted}`}>কার কবে পেমেন্ট দেওয়ার কথা — রিমাইন্ডার, রিনিউ আর বকেয়া আদায়</p>
+                        <h1 className={`text-2xl font-bold ${cx.strong}`}>{editor ? 'Renewals' : <>Renewals &amp; Dues</>}</h1>
+                        <p className={`text-sm ${cx.muted}`}>{editor ? 'কার ডোমেইন/হোস্টিংয়ের মেয়াদ কবে শেষ — রিমাইন্ডার আর রিনিউ' : 'কার কবে পেমেন্ট দেওয়ার কথা — রিমাইন্ডার, রিনিউ আর বকেয়া আদায়'}</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -96,17 +98,17 @@ function Renewals() {
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                <Kpi isDark={isDark} label="Overdue" value={overdue.length} tone={overdue.length ? 'rose' : 'slate'} sub={`${taka(expected(overdue))} পাওনা রিনিউ`} />
-                <Kpi isDark={isDark} label="Due within 7 days" value={week.length} tone={week.length ? 'amber' : 'slate'} sub={`${taka(expected(week))} আসার কথা`} />
-                <Kpi isDark={isDark} label="Due within 30 days" value={month.length} tone="sky" sub={`${taka(expected(month))} আসার কথা`} />
-                <Kpi isDark={isDark} label="Unpaid balances" value={taka(totalDue)} tone={totalDue ? 'amber' : 'slate'} sub={`${dues.length}জনের কাছে`} onClick={() => setTab('dues')} />
+                <Kpi isDark={isDark} label="Overdue" value={overdue.length} tone={overdue.length ? 'rose' : 'slate'} sub={editor ? 'রিনিউ বাকি' : `${taka(expected(overdue))} পাওনা রিনিউ`} />
+                <Kpi isDark={isDark} label="Due within 7 days" value={week.length} tone={week.length ? 'amber' : 'slate'} sub={editor ? 'রিনিউ করাতে হবে' : `${taka(expected(week))} আসার কথা`} />
+                <Kpi isDark={isDark} label="Due within 30 days" value={month.length} tone="sky" sub={editor ? 'রিনিউ করাতে হবে' : `${taka(expected(month))} আসার কথা`} />
+                {!editor && <Kpi isDark={isDark} label="Unpaid balances" value={taka(totalDue)} tone={totalDue ? 'amber' : 'slate'} sub={`${dues.length}জনের কাছে`} onClick={() => setTab('dues')} />}
             </div>
 
             {/* Tabs + filters */}
             <div className={`rounded-xl border p-4 space-y-3 ${cx.card}`}>
                 <div className="flex flex-wrap items-center gap-2">
                     <div className={`inline-flex gap-1 p-1 rounded-xl ${isDark ? 'bg-slate-800/60' : 'bg-slate-100'}`}>
-                        {[['renewals', 'Renewals'], ['dues', 'Unpaid dues']].map(([k, label]) => (
+                        {[['renewals', 'Renewals'], ['dues', 'Unpaid dues']].filter(([k]) => !(editor && k === 'dues')).map(([k, label]) => (
                             <button key={k} onClick={() => setTab(k)}
                                 className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${tab === k ? 'text-white shadow' : isDark ? 'text-slate-300 hover:bg-slate-700/50' : 'text-slate-600 hover:bg-white'}`}
                                 style={tab === k ? { background: BRAND } : {}}>{label}</button>
@@ -158,7 +160,7 @@ function Renewals() {
                                             <span className={cx.strong}>{b.label}</span>
                                             <span className={`text-sm font-normal ${cx.muted}`}>· {b.hint}</span>
                                         </h2>
-                                        <p className={`text-sm ${cx.muted}`}><b className={cx.strong}>{b.items.length}</b>টা · আসার কথা <b className={tone.text}>{taka(expected(b.items))}</b></p>
+                                        <p className={`text-sm ${cx.muted}`}><b className={cx.strong}>{b.items.length}</b>টা{!editor && <> · আসার কথা <b className={tone.text}>{taka(expected(b.items))}</b></>}</p>
                                     </header>
                                     <ul className={`divide-y ${cx.divide}`}>
                                         {b.items.map((it) => {
@@ -177,10 +179,10 @@ function Renewals() {
                                                         <p className="whitespace-nowrap"><DaysText days={it.dueIn} /></p>
                                                         <p className={`${cx.sub} whitespace-nowrap`}>{fmtKey(it.dueKey)}{it.nextPay ? ' (payment)' : ''}</p>
                                                     </div>
-                                                    <div className="w-36 text-sm">
+                                                    {!editor && <div className="w-36 text-sm">
                                                         <p className={`font-bold whitespace-nowrap ${cx.strong}`}>{taka(it.renewPrice)}</p>
                                                         <p className={`${cx.sub} whitespace-nowrap`}>{it.due > 0 ? <span className="text-amber-500">+ {taka(it.due)} বকেয়া</span> : 'renewal fee'}</p>
-                                                    </div>
+                                                    </div>}
                                                     <p className="w-32 text-xs hidden xl:block">{remindedText(it)}</p>
                                                     <div className="inline-flex items-center gap-1 ml-auto">
                                                         {wa ? (
@@ -192,7 +194,7 @@ function Renewals() {
                                                         )}
                                                         {it.phone && <a href={`tel:${it.phone}`} title="Call" className="p-2 rounded-lg text-sky-500 hover:bg-sky-500/10"><FiPhone size={16} /></a>}
                                                         <button onClick={() => open.renew(it)} title="Renew" className="p-2 rounded-lg text-emerald-500 hover:bg-emerald-500/10"><FiRefreshCw size={16} /></button>
-                                                        <button onClick={() => open.pay(it)} title="Add payment" className="p-2 rounded-lg text-orange-500 hover:bg-orange-500/10"><FiDollarSign size={16} /></button>
+                                                        {!editor && <button onClick={() => open.pay(it)} title="Add payment" className="p-2 rounded-lg text-orange-500 hover:bg-orange-500/10"><FiDollarSign size={16} /></button>}
                                                         <button onClick={() => open.detail(it)} title="Details" className="p-2 rounded-lg text-slate-400 hover:bg-slate-500/10"><FiEye size={16} /></button>
                                                     </div>
                                                 </li>

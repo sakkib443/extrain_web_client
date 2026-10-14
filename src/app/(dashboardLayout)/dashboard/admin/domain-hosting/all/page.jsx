@@ -20,10 +20,11 @@ import useDomainHosting from '@/components/DomainHosting/useDomainHosting';
 import { useDomainModals } from '@/components/DomainHosting/Modals';
 import { BRAND, useCx, Kpi, StatePill, TypePill, DaysText } from '@/components/DomainHosting/ui';
 import {
-    DEFAULT_FILTERS, EXPIRY_PRESETS, DUE_PRESETS, SORTS, STATE, DOMAIN_COLUMNS,
+    DEFAULT_FILTERS, EXPIRY_PRESETS, DUE_PRESETS, SORTS, SORTS_NO_MONEY, STATE, DOMAIN_COLUMNS, DOMAIN_COLUMNS_NO_MONEY,
     applyFilters, activeFilterCount, distinct, totals, taka, fmtKey, monthName, waLink, reminderText, dayKey, relDays,
 } from '@/lib/domainLogic';
 import { downloadXLSX, downloadCSV, copyForSheets } from '@/lib/projectSheet';
+import { isEditor } from '@/lib/access';
 
 const PAGE = 50;
 
@@ -43,6 +44,8 @@ function Registry() {
     const cx = useCx(isDark);
     const sp = useSearchParams();
     const { items, projects, loading, reload, today } = useDomainHosting();
+    const editor = isEditor(); // no money column, no payment filter, no payment / delete button
+    const columns = editor ? DOMAIN_COLUMNS_NO_MONEY : DOMAIN_COLUMNS;
 
     const [f, setF] = useState(() => initialFilters(sp));
     const [showMore, setShowMore] = useState(() => {
@@ -72,16 +75,17 @@ function Registry() {
     const base = () => `Domain-Hosting_${today}`;
     const guard = () => { if (!filtered.length) { toast.error('ডাউনলোড করার মতো কিছু নেই'); return false; } return true; };
     const totalLabel = (n) => `Total · ${n} records`;
-    const doExcel = () => { if (!guard()) return; downloadXLSX(filtered, `${base()}.xlsx`, DOMAIN_COLUMNS, 'Domain & Hosting', totalLabel); toast.success(`${filtered.length}টা রেকর্ড Excel এ নামছে`); };
-    const doCsv = () => { if (!guard()) return; downloadCSV(filtered, `${base()}.csv`, DOMAIN_COLUMNS); toast.success(`${filtered.length}টা রেকর্ড CSV এ নামছে`); };
+    const doExcel = () => { if (!guard()) return; downloadXLSX(filtered, `${base()}.xlsx`, columns, 'Domain & Hosting', totalLabel); toast.success(`${filtered.length}টা রেকর্ড Excel এ নামছে`); };
+    const doCsv = () => { if (!guard()) return; downloadCSV(filtered, `${base()}.csv`, columns); toast.success(`${filtered.length}টা রেকর্ড CSV এ নামছে`); };
     const doCopy = async () => {
         if (!guard()) return;
-        try { await copyForSheets(filtered, DOMAIN_COLUMNS); toast.success('কপি হয়েছে ✅ Google Sheet এ গিয়ে Ctrl+V করুন', { duration: 5000 }); }
+        try { await copyForSheets(filtered, columns); toast.success('কপি হয়েছে ✅ Google Sheet এ গিয়ে Ctrl+V করুন', { duration: 5000 }); }
         catch { toast.error('কপি করা যায়নি — Excel/CSV ব্যবহার করুন'); }
     };
 
     const sel = `${cx.ctrl} min-w-0`;
-    const COLS = 8;
+    const COLS = editor ? 7 : 8;
+    const widths = editor ? [3, 22, 15, 14, 21, 15, 10] : [3, 20, 14, 12, 18, 12, 10, 11];
     const iconBtn = (extra) => `p-1.5 rounded-lg transition ${extra}`;
 
     return (
@@ -118,11 +122,11 @@ function Registry() {
                         <option value="all">All status</option>
                         {Object.entries(STATE).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
                     </select>
-                    <select value={f.pay} onChange={set('pay')} className={sel} aria-label="Payment">
+                    {!editor && <select value={f.pay} onChange={set('pay')} className={sel} aria-label="Payment">
                         <option value="all">All payments</option><option value="paid">Fully paid</option><option value="due">Has due</option><option value="partial">Partly paid</option><option value="unpaid">Nothing paid</option>
-                    </select>
+                    </select>}
                     <select value={f.sort} onChange={set('sort')} className={sel} aria-label="Sort">
-                        {SORTS.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
+                        {(editor ? SORTS_NO_MONEY : SORTS).map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
                     </select>
                     <button onClick={() => setShowMore((v) => !v)} className={`inline-flex items-center gap-1.5 ${cx.ctrl} hover:opacity-80`}>
                         <FiFilter size={14} /> More filters{nFilters > 0 ? <span className="ml-0.5 px-1.5 rounded-full text-[11px] font-bold text-white" style={{ background: BRAND }}>{nFilters}</span> : null}
@@ -154,8 +158,8 @@ function Registry() {
                             <select value={f.tld} onChange={set('tld')} className={`${sel} w-full`}><option value="all">All</option>{tlds.map((p) => <option key={p}>{p}</option>)}</select></div>
                         <div><label className={cx.label}>Project link</label>
                             <select value={f.link} onChange={set('link')} className={`${sel} w-full`}><option value="all">All</option><option value="project">Linked to a project</option><option value="standalone">Standalone</option><option value="auto">Came from a project form</option></select></div>
-                        <div><label className={cx.label}>Billing (linked only)</label>
-                            <select value={f.billing} onChange={set('billing')} className={`${sel} w-full`}><option value="all">All</option><option value="included">Inside project price</option><option value="separate">Separate payment</option></select></div>
+                        {!editor && <div><label className={cx.label}>Billing (linked only)</label>
+                            <select value={f.billing} onChange={set('billing')} className={`${sel} w-full`}><option value="all">All</option><option value="included">Inside project price</option><option value="separate">Separate payment</option></select></div>}
 
                         <div><label className={cx.label}>Auto-renew</label>
                             <select value={f.auto} onChange={set('auto')} className={`${sel} w-full`}><option value="all">All</option><option value="on">On</option><option value="off">Off</option></select></div>
@@ -179,17 +183,19 @@ function Registry() {
             {/* What is on screen, added up */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                 <Kpi isDark={isDark} label="Records" value={sum.count} tone="indigo" />
+                {!editor && <>
                 <Kpi isDark={isDark} label="Revenue" value={taka(sum.revenue)} tone="sky" />
                 <Kpi isDark={isDark} label="Paid" value={taka(sum.paid)} tone="emerald" />
                 <Kpi isDark={isDark} label="Due" value={taka(sum.due)} tone={sum.due > 0 ? 'amber' : 'slate'} />
                 <Kpi isDark={isDark} label="Profit" value={taka(sum.profit)} tone={sum.profit >= 0 ? 'emerald' : 'rose'} sub={`cost ${taka(sum.cost)}`} />
+                </>}
             </div>
 
             {/* Table */}
             <div className={`rounded-xl border overflow-hidden ${isDark ? 'bg-slate-900 border-slate-700/60' : 'bg-white border-slate-200/70'}`}>
                 <div className="overflow-auto max-h-[72vh]">
                     <table className="w-full min-w-[1040px] table-fixed">
-                        <colgroup>{[3, 20, 14, 12, 18, 12, 10, 11].map((w, i) => <col key={i} style={{ width: `${w}%` }} />)}</colgroup>
+                        <colgroup>{widths.map((w, i) => <col key={i} style={{ width: `${w}%` }} />)}</colgroup>
                         <thead>
                             <tr>
                                 <th className={cx.th}>#</th>
@@ -197,7 +203,7 @@ function Registry() {
                                 <th className={cx.th}>Owner<span className="block text-[10px] font-medium normal-case tracking-normal text-slate-400">name · phone</span></th>
                                 <th className={cx.th}>Project<span className="block text-[10px] font-medium normal-case tracking-normal text-slate-400">link · billing</span></th>
                                 <th className={cx.th}>Term<span className="block text-[10px] font-medium normal-case tracking-normal text-slate-400">bought → expires</span></th>
-                                <th className={cx.th}>Money<span className="block text-[10px] font-medium normal-case tracking-normal text-slate-400">revenue · due</span></th>
+                                {!editor && <th className={cx.th}>Money<span className="block text-[10px] font-medium normal-case tracking-normal text-slate-400">revenue · due</span></th>}
                                 <th className={cx.th}>Status<span className="block text-[10px] font-medium normal-case tracking-normal text-slate-400">renewals</span></th>
                                 <th className={cx.th + ' text-right'}>&nbsp;</th>
                             </tr>
@@ -237,7 +243,7 @@ function Registry() {
                                             {it.projectCode ? (
                                                 <>
                                                     <p className="font-mono font-semibold truncate" style={{ color: BRAND }} title={it.linkedClientName}>{it.projectCode}</p>
-                                                    <p className={`${cx.sub} mt-0.5 truncate`}>{it.billing === 'included' ? 'দামের ভিতরে' : 'আলাদা পেমেন্ট'}{it.fromProject ? ' · auto' : ''}</p>
+                                                    <p className={`${cx.sub} mt-0.5 truncate`}>{!editor && (it.billing === 'included' ? 'দামের ভিতরে' : 'আলাদা পেমেন্ট')}{it.fromProject ? (editor ? 'প্রজেক্ট থেকে auto' : ' · auto') : ''}</p>
                                                 </>
                                             ) : (
                                                 <p className="text-slate-400">Standalone</p>
@@ -252,12 +258,12 @@ function Registry() {
                                             </p>
                                         </td>
 
-                                        <td className={cx.td}>
+                                        {!editor && <td className={cx.td}>
                                             <p className="font-bold whitespace-nowrap">{taka(it.revenue)}</p>
                                             <p className={`${cx.sub} mt-0.5 whitespace-nowrap`}>
                                                 {it.revenue <= 0 ? <span className="text-slate-400">free</span> : it.due > 0 ? <span className="text-amber-500 font-semibold">{taka(it.due)} due</span> : <span className="text-emerald-500">paid in full</span>}
                                             </p>
-                                        </td>
+                                        </td>}
 
                                         <td className={cx.td}>
                                             <StatePill state={it.state} />
@@ -267,9 +273,9 @@ function Registry() {
                                         <td className={`${cx.td} !px-1.5 text-right whitespace-nowrap`}>
                                             <div className="inline-flex items-center">
                                                 <button onClick={() => open.renew(it)} disabled={it.status === 'cancelled'} title="Renew" className={iconBtn('text-emerald-500 hover:bg-emerald-500/10 disabled:opacity-30')}><FiRefreshCw size={15} /></button>
-                                                <button onClick={() => open.pay(it)} title="Add payment" className={iconBtn('text-orange-500 hover:bg-orange-500/10')}><FiDollarSign size={15} /></button>
+                                                {!editor && <button onClick={() => open.pay(it)} title="Add payment" className={iconBtn('text-orange-500 hover:bg-orange-500/10')}><FiDollarSign size={15} /></button>}
                                                 <button onClick={() => open.edit(it)} title="Edit" className={iconBtn('text-blue-500 hover:bg-blue-500/10')}><FiEdit3 size={15} /></button>
-                                                <button onClick={() => open.remove(it)} title="Delete" className={iconBtn('text-rose-500 hover:bg-rose-500/10')}><FiTrash2 size={15} /></button>
+                                                {!editor && <button onClick={() => open.remove(it)} title="Delete" className={iconBtn('text-rose-500 hover:bg-rose-500/10')}><FiTrash2 size={15} /></button>}
                                             </div>
                                         </td>
                                     </tr>

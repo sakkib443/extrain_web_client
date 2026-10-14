@@ -10,6 +10,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { auth, googleProvider } from "@/lib/firebase";
 import { signInWithPopup } from "firebase/auth";
 import { API_BASE_URL } from "@/config/api";
+import { homeForRole } from "@/lib/access";
 
 const Login = () => {
   const router = useRouter();
@@ -67,6 +68,9 @@ const Login = () => {
           switch (userRole) {
             case "admin":
               router.push("/dashboard/admin");
+              break;
+            case "editor":
+              router.push(homeForRole("editor"));
               break;
             case "mentor":
               router.push("/dashboard/mentor");
@@ -130,7 +134,7 @@ const Login = () => {
         if (finalRedirect && !finalRedirect.includes('/login') && !finalRedirect.includes('/register')) {
           router.push(finalRedirect);
         } else {
-          router.push(userData.role === "admin" ? "/dashboard/admin" : "/dashboard/user");
+          router.push(homeForRole(userData.role));
         }
       }
     } catch (err) {

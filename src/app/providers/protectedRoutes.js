@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiLoader } from "react-icons/fi";
+import { homeForRole } from "@/lib/access";
 
 const ProtectedRoute = ({ children, role, allowedRoles = [] }) => {
   const router = useRouter();
@@ -37,16 +38,10 @@ const ProtectedRoute = ({ children, role, allowedRoles = [] }) => {
 
       if (normalizedRequiredRoles.length > 0 && !normalizedRequiredRoles.includes(normalizedUserRole)) {
         // Redirect to user's own dashboard
-        switch (userRole) {
-          case "mentor":
-            router.replace("/dashboard/mentor");
-            break;
-          case "user":
-          case "student":
-            router.replace("/dashboard/user");
-            break;
-          default:
-            router.replace("/login");
+        if (["mentor", "user", "student", "editor"].includes(userRole)) {
+          router.replace(homeForRole(userRole));
+        } else {
+          router.replace("/login");
         }
         return;
       }

@@ -18,8 +18,9 @@ import { useTheme } from '@/providers/ThemeProvider';
 import { TEAM } from '@/data/team';
 import { ptApi, bdt, fmtDate, monthLabel, statusStyle } from '@/lib/projectTracker';
 import {
-    buildSheetRows, isoDay, shortDate, toUrl, downloadXLSX, downloadCSV, copyForSheets,
+    buildSheetRows, isoDay, shortDate, toUrl, downloadXLSX, downloadCSV, copyForSheets, SHEET_COLUMNS, SHEET_COLUMNS_NO_MONEY,
 } from '@/lib/projectSheet';
+import { isEditor } from '@/lib/access';
 import ProjectModal from '@/components/ProjectTracker/ProjectModal';
 import SendReceiptDialog from '@/components/ProjectTracker/SendReceiptDialog';
 import ProjectDetailModal from '@/components/ProjectTracker/ProjectDetailModal';
@@ -265,6 +266,8 @@ function PriceCell({ r, isDark }) {
 // ---------------------------------------------------------------
 export default function AllProjectsPage() {
     const { isDark } = useTheme();
+    const editor = isEditor(); // an editor gets the same sheet without any price / paid / due column
+    const sheetCols = editor ? SHEET_COLUMNS_NO_MONEY : SHEET_COLUMNS;
 
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -365,12 +368,12 @@ export default function AllProjectsPage() {
     // ---- export (what you see is what you get) ----
     const fileBase = () => `All-Projects_${from || to ? `${from || 'start'}_to_${to || 'today'}` : isoDay(new Date())}`;
     const guard = () => { if (!filtered.length) { toast.error('ডাউনলোড করার মতো কোনো প্রজেক্ট নেই'); return false; } return true; };
-    const doExcel = () => { if (!guard()) return; downloadXLSX(filtered, `${fileBase()}.xlsx`); toast.success(`${filtered.length}টা প্রজেক্ট Excel এ নামানো হচ্ছে`); };
-    const doCsv = () => { if (!guard()) return; downloadCSV(filtered, `${fileBase()}.csv`); toast.success(`${filtered.length}টা প্রজেক্ট CSV এ নামানো হচ্ছে`); };
+    const doExcel = () => { if (!guard()) return; downloadXLSX(filtered, `${fileBase()}.xlsx`, sheetCols); toast.success(`${filtered.length}টা প্রজেক্ট Excel এ নামানো হচ্ছে`); };
+    const doCsv = () => { if (!guard()) return; downloadCSV(filtered, `${fileBase()}.csv`, sheetCols); toast.success(`${filtered.length}টা প্রজেক্ট CSV এ নামানো হচ্ছে`); };
     const doCopy = async () => {
         if (!guard()) return;
         try {
-            await copyForSheets(filtered);
+            await copyForSheets(filtered, sheetCols);
             toast.success('কপি হয়েছে ✅ এবার Google Sheet এ গিয়ে Ctrl+V করুন', { duration: 5000 });
         } catch {
             toast.error('কপি করা যায়নি — Excel/CSV ব্যবহার করুন');
@@ -394,7 +397,8 @@ export default function AllProjectsPage() {
     const tag = 'text-[10px] font-bold uppercase tracking-wide text-slate-400';
     const link = 'inline-flex min-w-0 max-w-full items-center gap-1 text-sky-500 hover:underline';
 
-    const COLS = 9;
+    const COLS = editor ? 8 : 9;
+    const widths = editor ? [3, 15, 11, 15, 22, 17, 9, 8] : [3, 14, 10, 13, 19, 10, 16, 8, 7];
 
     return (
         <div className="space-y-5">
@@ -489,9 +493,11 @@ export default function AllProjectsPage() {
             {/* Summary of what is on screen */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <SummaryTile isDark={isDark} label="Projects" value={filtered.length} accent="#6366f1" />
-                <SummaryTile isDark={isDark} label="Total Price" value={bdt(totals.price)} accent="#0ea5e9" />
-                <SummaryTile isDark={isDark} label="Paid" value={bdt(totals.paid)} cls="text-emerald-500" accent="#10b981" />
-                <SummaryTile isDark={isDark} label="Due" value={bdt(totals.due)} cls="text-amber-500" accent="#f59e0b" />
+                {!editor && <>
+                    <SummaryTile isDark={isDark} label="Total Price" value={bdt(totals.price)} accent="#0ea5e9" />
+                    <SummaryTile isDark={isDark} label="Paid" value={bdt(totals.paid)} cls="text-emerald-500" accent="#10b981" />
+                    <SummaryTile isDark={isDark} label="Due" value={bdt(totals.due)} cls="text-amber-500" accent="#f59e0b" />
+                </>}
             </div>
 
             {/* Sheet — every project is a two-line row, so the whole table fits the screen without sideways scrolling.
@@ -500,7 +506,7 @@ export default function AllProjectsPage() {
                 <div className="overflow-auto max-h-[72vh]">
                     <table className="w-full min-w-[900px] table-fixed">
                         <colgroup>
-                            {[3, 14, 10, 13, 19, 10, 16, 8, 7].map((w, i) => <col key={i} style={{ width: `${w}%` }} />)}
+                            {widths.map((w, i) => <col key={i} style={{ width: `${w}%` }} />)}
                         </colgroup>
                         <thead>
                             <tr>
@@ -509,7 +515,7 @@ export default function AllProjectsPage() {
                                 <th className={th}>Owner<span className={hsub}>name · phone</span></th>
                                 <th className={th}>Company<span className={hsub}>company · website link</span></th>
                                 <th className={th}>Domain / Hosting<span className={hsub}>domain · hosting · by us?</span></th>
-                                <th className={th}>Price<span className={hsub}>hover for history</span></th>
+                                {!editor && <th className={th}>Price<span className={hsub}>hover for history</span></th>}
                                 <th className={th}>People<span className={hsub}>submitted by · employee</span></th>
                                 <th className={th}>Status<span className={hsub}>submit date</span></th>
                                 <th className={th + ' text-right'}>&nbsp;</th>
@@ -582,7 +588,7 @@ export default function AllProjectsPage() {
                                         <p className={`${sub} mt-0.5 truncate`} title={r.hostingText}>{r.hostingText || '—'}</p>
                                     </td>
 
-                                    <td className={td}><PriceCell r={r} isDark={isDark} /></td>
+                                    {!editor && <td className={td}><PriceCell r={r} isDark={isDark} /></td>}
 
                                     {/* People: submitted by / employee (both editable) */}
                                     <td className={td}>
@@ -622,7 +628,7 @@ export default function AllProjectsPage() {
             <datalist id="pt-people-list">{people.map((n) => <option key={n} value={n} />)}</datalist>
 
             <p className={`flex items-center gap-1.5 text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-                <FiClock size={12} /> Price এর উপর মাউস নিলে (বা ক্লিক করলে) দামের ইতিহাস দেখা যায়। &quot;Website Link&quot;, &quot;Submitted By&quot;, &quot;Employee&quot; ঘরে ক্লিক করে সরাসরি লিখুন।
+                <FiClock size={12} /> {editor ? '' : 'Price এর উপর মাউস নিলে (বা ক্লিক করলে) দামের ইতিহাস দেখা যায়। '}&quot;Website Link&quot;, &quot;Submitted By&quot;, &quot;Employee&quot; ঘরে ক্লিক করে সরাসরি লিখুন।
                 Excel / CSV / Google Sheet এ ঠিক যা দেখছেন (ফিল্টার সহ) সেটাই নামবে।
             </p>
 
@@ -653,7 +659,7 @@ export default function AllProjectsPage() {
                     project={viewing}
                     onClose={() => setViewing(null)}
                     onEdit={(p) => { setViewing(null); setEditing(p); }}
-                    onReceipt={(p) => { setViewing(null); setReceipt({ project: p }); }}
+                    onReceipt={editor ? undefined : (p) => { setViewing(null); setReceipt({ project: p }); }}
                 />
             )}
         </div>

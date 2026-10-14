@@ -90,6 +90,7 @@ const UserManagement = () => {
       admin: 'bg-gradient-to-r from-rose-500 to-pink-500 text-white',
       mentor: 'bg-gradient-to-r from-amber-500 to-orange-500 text-white',
       student: 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white',
+      editor: 'bg-gradient-to-r from-teal-500 to-emerald-500 text-white',
     };
     return styles[role] || 'bg-slate-200 text-slate-600';
   };
@@ -192,6 +193,7 @@ const UserManagement = () => {
                       >
                         <option value="student">Student</option>
                         <option value="mentor">Mentor</option>
+                        <option value="editor">Editor</option>
                         <option value="admin">Admin</option>
                       </select>
                     ) : (

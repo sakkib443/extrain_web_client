@@ -5,6 +5,19 @@ import toast from 'react-hot-toast';
 import { FiX, FiSave, FiPlus, FiTrash2, FiCheck, FiCheckCircle, FiCreditCard, FiCornerUpLeft, FiFileText, FiGlobe } from 'react-icons/fi';
 import { TEAM } from '@/data/team';
 import { ptApi, bdt, WEBSITE_TYPES, STATUS_OPTIONS, PACKAGE_TYPES, BILLING_MODES, domainProfit, domainDue } from '@/lib/projectTracker';
+import { isEditor } from '@/lib/access';
+
+// An editor's form has no money fields at all. These are never sent for an editor (the server drops them as well).
+const MONEY_KEYS = ['totalProjectAmount', 'domainClientPaid', 'domainOurCost', 'installments', 'installmentCount', 'nextPayDate', 'adminNote'];
+const withoutMoney = (body) => {
+    const out = { ...body };
+    MONEY_KEYS.forEach((k) => delete out[k]);
+    if (out.domainHosting) {
+        out.domainHosting = { ...out.domainHosting };
+        ['billing', 'buyPrice', 'sellPrice', 'clientPaid'].forEach((k) => delete out.domainHosting[k]);
+    }
+    return out;
+};
 
 const toInput = (d) => (d ? new Date(d).toISOString().slice(0, 10) : '');
 const today = () => new Date().toISOString().slice(0, 10);
@@ -21,6 +34,7 @@ const balanceLast = (rows, total) => {
 
 export default function ProjectModal({ isDark, project, defaultMonth, onClose, onSaved }) {
     const init = project || {};
+    const editor = isEditor();
     const [f, setF] = useState({
         projectId: init.projectId || '', // Order Number — editable, ফাঁকা রাখলে confirm এ auto
         clientName: init.clientName || '',
@@ -235,7 +249,8 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                     }
                     : null,
             };
-            const saved = project?._id ? await ptApi.updateProject(project._id, body) : await ptApi.createProject(body);
+            const payload = editor ? withoutMoney(body) : body;
+            const saved = project?._id ? await ptApi.updateProject(project._id, payload) : await ptApi.createProject(payload);
             toast.success(confirm ? 'অর্ডার কনফার্ম হয়েছে ✅' : (project ? 'সেভ হয়েছে' : 'যোগ হয়েছে'));
             onSaved(saved, { confirmed: confirm, receiptInstallmentNo });
         } catch (e) {
@@ -265,7 +280,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
 
                 <div className="p-5 md:p-6 space-y-4">
                     {/* Request হলে info note — আসল Confirm বাটন নিচে footer এ */}
-                    {init.status === 'request' && (
+                    {init.status === 'request' && !editor && (
                         <div className="rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm font-medium text-orange-800">
                             এটি এখনো একটি <b>Request</b> — সব তথ্য দিয়ে নিচে <b>Confirm Order</b> চাপলে Tracker এ চলে যাবে (Total Amount দিতে হবে)। শুধু edit সেভ করতে <b>Save Draft</b> চাপুন।
                         </div>
@@ -288,7 +303,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                         <div>
                             <label className={label}>Package Type *</label>
                             <select className={input} value={f.packageType} onChange={set('packageType')}>
-                                {PACKAGE_TYPES.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+                                {PACKAGE_TYPES.filter((p) => !(editor && init.packageType && init.packageType !== 'without_domain_hosting' && p.value === 'without_domain_hosting')).map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
                             </select>
                             <p className="text-[11px] mt-1 text-slate-400">
                                 {hasPackage
@@ -311,7 +326,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                             </div>
 
                             {/* দাম প্রজেক্টের ভিতরে না আলাদা — Total Revenue এর হিসাব এটার উপর নির্ভর করে */}
-                            <div>
+                            {!editor && <div>
                                 <label className={label}>ডোমেইন/হোস্টিংয়ের পেমেন্ট</label>
                                 <div className="grid sm:grid-cols-2 gap-2">
                                     {BILLING_MODES.map((b) => (
@@ -330,7 +345,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                                         ? <>Tracker এ Total দেখাবে <b>{bdt(Math.max(0, (Number(f.totalProjectAmount) || 0) - (Number(dh.sellPrice) || 0)))}</b> — মোট {bdt(Number(f.totalProjectAmount) || 0)} থেকে ডোমেইনের {bdt(Number(dh.sellPrice) || 0)} বাদ।</>
                                         : <>প্রজেক্টের টাকার বাইরে — Tracker এর Total এ এই টাকা ঢুকবে না।</>}
                                 </p>
-                            </div>
+                            </div>}
 
                             <div className="grid md:grid-cols-3 gap-4">
                                 <div className={needsHostingGB ? '' : 'md:col-span-2'}>
@@ -343,6 +358,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                                 <div><label className={label}>Provider</label><input className={input} placeholder="Namecheap ইত্যাদি" value={dh.provider} onChange={setD('provider')} /></div>
                             </div>
 
+                            {!editor && <>
                             <div className="grid md:grid-cols-4 gap-4">
                                 <div><label className={label}>আমাদের খরচ / Buy (৳)</label><input type="number" className={input} value={dh.buyPrice} onChange={setD('buyPrice')} /></div>
                                 <div><label className={label}>ক্লায়েন্টের দাম / Sell (৳)</label><input type="number" className={input} value={dh.sellPrice} onChange={setD('sellPrice')} /></div>
@@ -370,6 +386,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                                     Due <b className="text-amber-500">{bdt(Math.max(0, Math.max(0, (Number(f.totalProjectAmount) || 0) - (Number(dh.sellPrice) || 0)) - Math.max(0, totalPaid - (Number(dh.clientPaid) || 0))))}</b>।
                                 </div>
                             )}
+                            </>}
 
                             <div className="grid md:grid-cols-3 gap-4">
                                 <div><label className={label}>Owner (মালিক)</label><input className={input} value={dh.owner} onChange={setD('owner')} /></div>
@@ -392,6 +409,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                         <div><label className={label}>Details / Brief</label><textarea rows={2} className={input} value={f.projectDetails} onChange={set('projectDetails')} /></div>
                     </div>
 
+                    {!editor && <>
                     {/* Money (Domain/Hosting আপাতত frontend এ নেই — backend এ আছে) */}
                     <div className={`rounded-xl p-4 ${isDark ? 'bg-slate-800/50' : 'bg-slate-50'}`}>
                         <div className="grid md:grid-cols-3 gap-4">
@@ -467,6 +485,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                             <span>Due: <span className="text-amber-500">{bdt(due)}</span></span>
                         </div>
                     </div>
+                    </>}
 
                     {/* Order Number — editable; request এ ফাঁকা রাখলে confirm এ auto বসে */}
                     <div className="grid md:grid-cols-3 gap-4">
@@ -480,7 +499,7 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                     {/* Dates + status */}
                     <div className="grid md:grid-cols-3 gap-4">
                         <div><label className={label}>Order Date</label><input type="date" className={input} value={f.orderDate} onChange={set('orderDate')} /></div>
-                        <div><label className={label}>Next Pay Date</label><input type="date" className={input} value={f.nextPayDate} onChange={set('nextPayDate')} /></div>
+                        {!editor && <div><label className={label}>Next Pay Date</label><input type="date" className={input} value={f.nextPayDate} onChange={set('nextPayDate')} /></div>}
                         <div>
                             <label className={label}>Status</label>
                             <select className={input} value={f.status} onChange={set('status')}>
@@ -511,13 +530,13 @@ export default function ProjectModal({ isDark, project, defaultMonth, onClose, o
                         </datalist>
                     </div>
 
-                    <div><label className={label}>Admin Note</label><input className={input} value={f.adminNote} onChange={set('adminNote')} /></div>
+                    {!editor && <div><label className={label}>Admin Note</label><input className={input} value={f.adminNote} onChange={set('adminNote')} /></div>}
                 </div>
 
                 {/* Footer — context aware */}
                 <div className={`sticky bottom-0 flex flex-wrap justify-end gap-3 px-6 py-4 border-t ${isDark ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-100'}`}>
                     <button onClick={onClose} className={`px-5 py-2.5 rounded-xl font-semibold ${isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>Cancel</button>
-                    {init.status === 'request' ? (
+                    {init.status === 'request' && !editor ? (
                         <>
                             <button onClick={() => save(false)} disabled={saving} className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold ${isDark ? 'bg-slate-700 text-slate-200 hover:bg-slate-600' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}>
                                 <FiSave size={16} /> Save Draft

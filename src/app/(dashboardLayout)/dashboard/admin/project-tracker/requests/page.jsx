@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fi';
 import { useTheme } from '@/providers/ThemeProvider';
 import { ptApi, fmtDate, packageLabel, bdt } from '@/lib/projectTracker';
+import { isEditor } from '@/lib/access';
 import ProjectModal from '@/components/ProjectTracker/ProjectModal';
 import SendReceiptDialog from '@/components/ProjectTracker/SendReceiptDialog';
 import GenerateBillDialog from '@/components/ProjectTracker/GenerateBillDialog';
@@ -21,6 +22,7 @@ export default function RequestsPage() {
     const [editing, setEditing] = useState(null);   // edit + confirm modal (single flow)
     const [receiptFor, setReceiptFor] = useState(null); // confirm এর পর receipt popup
     const [billFor, setBillFor] = useState(null);   // Generate Bill (পেমেন্ট ছাড়া, শুধু বিল ডকুমেন্ট)
+    const editor = isEditor(); // an editor approves / edits / rejects orders — prices, bills and receipts are admin-only
 
     const load = async () => {
         setLoading(true);
@@ -41,6 +43,16 @@ export default function RequestsPage() {
         finally { setBusy(null); }
     };
 
+    const approve = async (id) => {
+        setBusy(id);
+        try {
+            await ptApi.approveRequest(id);
+            toast.success('Approved — প্রজেক্ট ট্র্যাকারে চলে গেছে');
+            setRequests(requests.filter((r) => r._id !== id));
+        } catch (e) { toast.error(e.message); }
+        finally { setBusy(null); }
+    };
+
     const card = isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white border-slate-200';
     const muted = isDark ? 'text-slate-400' : 'text-slate-500';
 
@@ -55,7 +67,7 @@ export default function RequestsPage() {
                         <h1 className={`text-2xl font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-800'}`}>
                             <FiInbox style={{ color: '#FD9A00' }} /> Order Requests
                         </h1>
-                        <p className={`text-sm ${muted}`}>ক্লায়েন্ট ফর্ম থেকে আসা নতুন অর্ডার — Confirm করলে Tracker এ যাবে</p>
+                        <p className={`text-sm ${muted}`}>{editor ? 'ক্লায়েন্ট ফর্ম থেকে আসা নতুন অর্ডার — Approve করলে Tracker এ যাবে' : 'ক্লায়েন্ট ফর্ম থেকে আসা নতুন অর্ডার — Confirm করলে Tracker এ যাবে'}</p>
                     </div>
                 </div>
                 <button onClick={load} className={`p-2.5 rounded-xl transition ${isDark ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
@@ -91,22 +103,35 @@ export default function RequestsPage() {
                                 <p className="flex items-center gap-1.5"><FiPhone size={13} /> {r.phone}</p>
                                 <p className="flex items-center gap-1.5 truncate"><FiGlobe size={13} /> {r.websiteType}</p>
                                 <p className="flex items-center gap-1.5 truncate"><FiPackage size={13} /> {packageLabel(r.packageType)}</p>
-                                {r.paymentInfo?.transactionId && (
+                                {!editor && r.paymentInfo?.transactionId && (
                                     <p className="flex items-center gap-1.5 text-emerald-500"><FiCreditCard size={13} /> পেমেন্ট claim আছে</p>
                                 )}
                             </div>
 
                             {/* actions — Confirm/Edit + Generate Bill (পেমেন্ট ছাড়া শুধু বিল) + Reject */}
                             <div className="mt-auto space-y-2">
-                                <button onClick={() => setBillFor(r)} disabled={busy === r._id}
+                                {!editor && <button onClick={() => setBillFor(r)} disabled={busy === r._id}
                                     className={`w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm border transition disabled:opacity-60 ${isDark ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}>
                                     <FiFileText size={15} style={{ color: '#FD9A00' }} /> Generate Bill
-                                </button>
-                                <div className="grid grid-cols-3 gap-2">
-                                    <button onClick={() => setEditing(r)} disabled={busy === r._id}
-                                        className="col-span-2 inline-flex items-center justify-center gap-2 py-2.5 rounded-xl text-white font-semibold shadow hover:opacity-90 transition disabled:opacity-60" style={{ background: '#FD9A00' }}>
-                                        <FiCheckCircle size={16} /> Confirm / Edit
-                                    </button>
+                                </button>}
+                                <div className={`grid gap-2 ${editor ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                                    {editor ? (
+                                        <>
+                                            <button onClick={() => approve(r._id)} disabled={busy === r._id}
+                                                className="col-span-2 inline-flex items-center justify-center gap-2 py-2.5 rounded-xl text-white font-semibold shadow hover:opacity-90 transition disabled:opacity-60" style={{ background: '#FD9A00' }}>
+                                                <FiCheckCircle size={16} /> Approve
+                                            </button>
+                                            <button onClick={() => setEditing(r)} disabled={busy === r._id}
+                                                className={`inline-flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm border transition disabled:opacity-60 ${isDark ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}>
+                                                <FiEdit3 size={14} /> Edit
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <button onClick={() => setEditing(r)} disabled={busy === r._id}
+                                            className="col-span-2 inline-flex items-center justify-center gap-2 py-2.5 rounded-xl text-white font-semibold shadow hover:opacity-90 transition disabled:opacity-60" style={{ background: '#FD9A00' }}>
+                                            <FiCheckCircle size={16} /> Confirm / Edit
+                                        </button>
+                                    )}
                                     <button onClick={() => reject(r._id)} disabled={busy === r._id}
                                         className="inline-flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm text-rose-500 hover:bg-rose-500/10 transition disabled:opacity-60">
                                         <FiX size={14} /> Reject

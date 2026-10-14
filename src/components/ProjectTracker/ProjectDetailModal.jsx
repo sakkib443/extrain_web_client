@@ -6,6 +6,7 @@ import {
     FiGlobe, FiPackage, FiCalendar, FiCheckCircle, FiClock,
 } from 'react-icons/fi';
 import { bdt, fmtDate, packageLabel, statusStyle } from '@/lib/projectTracker';
+import { isEditor } from '@/lib/access';
 
 const BRAND = '#FD9A00';
 
@@ -30,6 +31,7 @@ const Stat = ({ isDark, label, value, cls }) => (
 );
 
 export default function ProjectDetailModal({ isDark, project: p, onClose, onEdit, onReceipt }) {
+    const editor = isEditor(); // no amounts for an editor
     const section = `rounded-xl p-4 ${isDark ? 'bg-slate-800/40' : 'bg-slate-50/70'}`;
     const heading = `text-xs font-bold uppercase tracking-wide mb-3 ${isDark ? 'text-slate-400' : 'text-slate-500'}`;
 
@@ -54,12 +56,12 @@ export default function ProjectDetailModal({ isDark, project: p, onClose, onEdit
 
                 <div className="p-6 space-y-4">
                     {/* Money summary — full width */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {!editor && <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <Stat isDark={isDark} label="Total" value={bdt(p.totalProjectAmount)} />
                         <Stat isDark={isDark} label="Paid" value={bdt(p.totalPaid)} cls="text-emerald-500" />
                         <Stat isDark={isDark} label="Due" value={bdt(p.totalDue)} cls="text-amber-500" />
                         <Stat isDark={isDark} label="Due %" value={`${p.duePercentage || 0}%`} />
-                    </div>
+                    </div>}
 
                     {/* বাকি section গুলো 2-column এ flow করে — স্ক্রল কমাতে */}
                     <div className="lg:columns-2 lg:gap-4 [&>*]:mb-4 [&>*]:break-inside-avoid">
@@ -85,9 +87,9 @@ export default function ProjectDetailModal({ isDark, project: p, onClose, onEdit
                                             <span className="font-semibold">{d.domainName}</span>
                                             <span className="text-xs ml-1">({d.type === 'both' ? 'Domain + Hosting' : d.type === 'hosting' ? 'Hosting' : 'Domain'}{d.hostingGB ? ` ${d.hostingGB}GB` : ''})</span>
                                         </span>
-                                        <span className="shrink-0 text-xs">
+                                        {!editor && <span className="shrink-0 text-xs">
                                             buy {bdt(d.buyPrice)} • sell {bdt(d.sellPrice)} • <b className={(d.profit || 0) >= 0 ? 'text-emerald-500' : 'text-rose-500'}>{bdt(d.profit)}</b>
-                                        </span>
+                                        </span>}
                                     </div>
                                 ))}
                             </div>
@@ -108,7 +110,7 @@ export default function ProjectDetailModal({ isDark, project: p, onClose, onEdit
                     )}
 
                     {/* Installments */}
-                    {p.installments?.length > 0 && (
+                    {!editor && p.installments?.length > 0 && (
                         <div>
                             <p className={heading}>Payment Installments {p.installmentCount ? `(${p.installmentCount})` : ''}</p>
                             <div className={`rounded-xl border overflow-hidden ${isDark ? 'border-slate-700' : 'border-slate-200'}`}>
@@ -145,7 +147,7 @@ export default function ProjectDetailModal({ isDark, project: p, onClose, onEdit
                         <p className={heading}>Timeline</p>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                             <Row isDark={isDark} icon={FiCalendar} label="Order Date" value={fmtDate(p.orderDate)} />
-                            <Row isDark={isDark} icon={FiClock} label="Next Pay Date" value={p.nextPayDate ? fmtDate(p.nextPayDate) : null} />
+                            {!editor && <Row isDark={isDark} icon={FiClock} label="Next Pay Date" value={p.nextPayDate ? fmtDate(p.nextPayDate) : null} />}
                             <Row isDark={isDark} icon={FiCheckCircle} label="Delivery Date" value={p.projectDeliveryDate ? fmtDate(p.projectDeliveryDate) : null} />
                             <Row isDark={isDark} icon={FiCalendar} label="Project Start" value={p.projectStartDate ? fmtDate(p.projectStartDate) : null} />
                             <Row isDark={isDark} icon={FiCalendar} label="Message Date" value={p.messageDate ? fmtDate(p.messageDate) : null} />
@@ -157,14 +159,14 @@ export default function ProjectDetailModal({ isDark, project: p, onClose, onEdit
                     </div>
 
                     {/* Payment claim (if any) */}
-                    {p.paymentInfo && (p.paymentInfo.transactionId || p.paymentInfo.senderNumber) && (
+                    {!editor && p.paymentInfo && (p.paymentInfo.transactionId || p.paymentInfo.senderNumber) && (
                         <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
                             <p className="font-semibold mb-1">Client Payment Claim</p>
                             <p>{(p.paymentInfo.method || '').toUpperCase()} • {p.paymentInfo.senderNumber} {p.paymentInfo.amount ? `• ${bdt(p.paymentInfo.amount)}` : ''} {p.paymentInfo.transactionId ? `• TrxID: ${p.paymentInfo.transactionId}` : ''}</p>
                         </div>
                     )}
 
-                    {p.adminNote && (
+                    {!editor && p.adminNote && (
                         <div className={section}>
                             <p className={heading}>Admin Note</p>
                             <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{p.adminNote}</p>
@@ -172,7 +174,7 @@ export default function ProjectDetailModal({ isDark, project: p, onClose, onEdit
                     )}
 
                     {/* Receipts sent */}
-                    {p.receipts?.length > 0 && (
+                    {!editor && p.receipts?.length > 0 && (
                         <div className={section}>
                             <p className={heading}>Receipts Sent ({p.receipts.length})</p>
                             <div className="space-y-1">

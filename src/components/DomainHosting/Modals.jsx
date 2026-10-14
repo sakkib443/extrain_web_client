@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fi';
 import { dhApi } from '@/lib/domainHosting';
 import { BILLING_MODES } from '@/lib/projectTracker';
+import { isEditor } from '@/lib/access';
 import {
     TYPE_LABEL, METHODS, CYCLES, PROVIDERS, addMonthsKey, dayKey, diffDays, fmtKey, taka, waLink, reminderText, relDays,
 } from '@/lib/domainLogic';
@@ -24,6 +25,7 @@ const projectLabel = (p) => `${p.projectId} · ${p.clientName}${p.companyBrand ?
 // ---------------------------------------------------------------
 export function DomainFormModal({ isDark, item, projects, today, onClose, onSaved }) {
     const cx = useCx(isDark);
+    const editor = isEditor(); // an editor's form has no price, payment or billing fields
     const editing = !!item?.id;
     const expTouched = useRef(editing && !!item?.expiry);
 
@@ -117,6 +119,7 @@ export function DomainFormModal({ isDark, item, projects, today, onClose, onSave
             ...(editing ? { status: f.status } : { clientPaid: f.clientPaid }),
             ...(force ? { force: true } : {}),
         };
+        if (editor) ['billing', 'buyPrice', 'sellPrice', 'clientPaid', 'renewalSellPrice', 'renewalBuyPrice'].forEach((k) => delete body[k]);
         setSaving(true);
         try {
             const saved = editing ? await dhApi.update(item.id, body) : await dhApi.create(body);
@@ -194,7 +197,7 @@ export function DomainFormModal({ isDark, item, projects, today, onClose, onSave
                     <p className="text-[11px] mt-1.5 text-amber-500">তালিকা থেকে বেছে নিন (লেখা মিলছে না)</p>
                 ) : null}
             </div>
-            {keptCode && (
+            {!editor && keptCode && (
                 <div>
                     <label className={cx.label}>পেমেন্ট</label>
                     <div className="grid sm:grid-cols-2 gap-2">
@@ -234,6 +237,7 @@ export function DomainFormModal({ isDark, item, projects, today, onClose, onSave
                 <span className={cx.text}>Auto-renew চালু আছে (প্রোভাইডার নিজে রিনিউ করে)</span>
             </label>
 
+            {!editor && <>
             <SectionTitle isDark={isDark}>Money · টাকা</SectionTitle>
             <div className="grid md:grid-cols-4 gap-4">
                 <div><label className={cx.label}>Buy cost (৳)</label><input type="number" min="0" className={cx.input} value={f.buyPrice} onChange={set('buyPrice')} /></div>
@@ -261,6 +265,7 @@ export function DomainFormModal({ isDark, item, projects, today, onClose, onSave
                 <div><label className={cx.label}>Renewal price for client (৳) <span className="font-normal text-slate-400">ঐচ্ছিক</span></label><input type="number" min="0" className={cx.input} placeholder="ফাঁকা থাকলে Sell price" value={f.renewalSellPrice} onChange={set('renewalSellPrice')} /></div>
                 <div><label className={cx.label}>Renewal cost (৳) <span className="font-normal text-slate-400">ঐচ্ছিক</span></label><input type="number" min="0" className={cx.input} placeholder="ফাঁকা থাকলে Buy cost" value={f.renewalBuyPrice} onChange={set('renewalBuyPrice')} /></div>
             </div>
+            </>}
 
             {editing && (
                 <div>
@@ -284,6 +289,7 @@ export function DomainFormModal({ isDark, item, projects, today, onClose, onSave
 // ---------------------------------------------------------------
 export function RenewModal({ isDark, item, today, onClose, onSaved }) {
     const cx = useCx(isDark);
+    const editor = isEditor(); // dates and a note only — no price, no payment
     const [months, setMonths] = useState(item.cycleMonths || 12);
     const [date, setDate] = useState(today);
     const [manualExpiry, setManualExpiry] = useState('');
@@ -306,7 +312,7 @@ export function RenewModal({ isDark, item, today, onClose, onSaved }) {
         if (bad) { toast.error('নতুন মেয়াদ আগের মেয়াদের পরে হতে হবে'); return; }
         setSaving(true);
         try {
-            await dhApi.renew(item.id, { months, date, newExpiry, sellPrice: num(sell), buyPrice: num(buy), paidNow: num(paidNow), method, note });
+            await dhApi.renew(item.id, editor ? { months, date, newExpiry, note } : { months, date, newExpiry, sellPrice: num(sell), buyPrice: num(buy), paidNow: num(paidNow), method, note });
             toast.success('রিনিউ হয়েছে ✅');
             onSaved();
         } catch (e) { toast.error(e.message); } finally { setSaving(false); }
@@ -347,15 +353,18 @@ export function RenewModal({ isDark, item, today, onClose, onSaved }) {
             {stillPast && !bad && <p className="text-xs text-amber-500">নতুন মেয়াদও আজকের আগের তারিখ — আরও লম্বা মেয়াদ বেছে নিন বা তারিখ ঠিক করুন।</p>}
             {bad && <p className="text-xs text-rose-500">নতুন মেয়াদ আগের মেয়াদের ({fmtKey(item.expiry)}) পরে হতে হবে।</p>}
 
-            <div className="grid sm:grid-cols-3 gap-4">
+            {!editor && <div className="grid sm:grid-cols-3 gap-4">
                 <div><label className={cx.label}>Client price (৳)</label><input type="number" min="0" className={cx.input} value={sell} onChange={(e) => setSell(e.target.value)} /></div>
                 <div><label className={cx.label}>Our cost (৳)</label><input type="number" min="0" className={cx.input} value={buy} onChange={(e) => setBuy(e.target.value)} /></div>
                 <div>
                     <label className={cx.label}>Profit</label>
                     <div className={`px-3 py-2.5 rounded-lg border text-sm font-bold ${cx.soft} ${profit >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>{taka(profit)}</div>
                 </div>
-            </div>
+            </div>}
 
+            {editor ? (
+                <div><label className={cx.label}>Note</label><input className={cx.input} value={note} onChange={(e) => setNote(e.target.value)} /></div>
+            ) : (
             <div className="grid sm:grid-cols-3 gap-4">
                 <div><label className={cx.label}>Paid now (৳)</label><input type="number" min="0" className={cx.input} placeholder="0" value={paidNow} onChange={(e) => setPaidNow(e.target.value)} /></div>
                 <div>
@@ -364,15 +373,18 @@ export function RenewModal({ isDark, item, today, onClose, onSaved }) {
                 </div>
                 <div><label className={cx.label}>Note</label><input className={cx.input} value={note} onChange={(e) => setNote(e.target.value)} /></div>
             </div>
+            )}
 
             <div className={`rounded-xl border p-3.5 text-sm ${cx.soft}`}>
                 <p className={cx.text}>
                     মেয়াদ <b>{item.expiry ? fmtKey(item.expiry) : '—'}</b> → <b style={{ color: '#16a34a' }}>{fmtKey(newExpiry)}</b>
                     <span className={`ml-2 ${cx.muted}`}>({relDays(diffDays(newExpiry, today))})</span>
                 </p>
-                <p className={`mt-1 ${cx.muted}`}>
-                    রিনিউয়ের পর মোট বাকি থাকবে <b className={dueAfter > 0 ? 'text-amber-500' : 'text-emerald-500'}>{taka(dueAfter)}</b>
-                </p>
+                {!editor && (
+                    <p className={`mt-1 ${cx.muted}`}>
+                        রিনিউয়ের পর মোট বাকি থাকবে <b className={dueAfter > 0 ? 'text-amber-500' : 'text-emerald-500'}>{taka(dueAfter)}</b>
+                    </p>
+                )}
             </div>
         </Modal>
     );
@@ -451,6 +463,7 @@ function Fact({ isDark, label, children }) {
 
 export function DetailModal({ isDark, item, today, onClose, onEdit, onRenew, onPay, onRemind, onDelete, onChanged }) {
     const cx = useCx(isDark);
+    const editor = isEditor(); // no money tiles, no payments, no delete
     const [busy, setBusy] = useState(false);
 
     const timeline = useMemo(() => {
@@ -481,9 +494,9 @@ export function DetailModal({ isDark, item, today, onClose, onEdit, onRenew, onP
             onClose={onClose}
             footer={
                 <>
-                    <button onClick={() => onDelete(item)} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-rose-500 hover:bg-rose-500/10 mr-auto"><FiTrash2 size={15} /> Delete</button>
+                    {!editor && <button onClick={() => onDelete(item)} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-rose-500 hover:bg-rose-500/10 mr-auto"><FiTrash2 size={15} /> Delete</button>}
                     <button onClick={() => onEdit(item)} className={cx.ghostBtn}><FiEdit3 size={15} /> Edit</button>
-                    <button onClick={() => onPay(item)} className={cx.ghostBtn}><FiDollarSign size={15} /> Payment</button>
+                    {!editor && <button onClick={() => onPay(item)} className={cx.ghostBtn}><FiDollarSign size={15} /> Payment</button>}
                     <button onClick={() => onRenew(item)} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-white font-semibold" style={{ background: '#16a34a' }}><FiRefreshCw size={15} /> Renew</button>
                 </>
             }
@@ -496,11 +509,11 @@ export function DetailModal({ isDark, item, today, onClose, onEdit, onRenew, onP
                 {item.expiry && <span className={`text-sm ${cx.muted}`}>মেয়াদ <b className={cx.strong}>{fmtKey(item.expiry)}</b> · <DaysText days={item.daysLeft} inactive={item.status !== 'active'} /></span>}
             </div>
 
-            <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 rounded-xl border p-4 ${cx.soft}`}>
+            {!editor && <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 rounded-xl border p-4 ${cx.soft}`}>
                 {[['Revenue', item.revenue, ''], ['Cost', item.cost, 'text-rose-500'], ['Profit', item.profit, item.profit >= 0 ? 'text-emerald-500' : 'text-rose-500'], ['Due', item.due, item.due > 0 ? 'text-amber-500' : '']].map(([k, v, c]) => (
                     <div key={k}><p className="text-[10px] uppercase tracking-wide text-slate-400">{k}</p><p className={`text-lg font-bold ${c || cx.strong}`}>{taka(v)}</p></div>
                 ))}
-            </div>
+            </div>}
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <Fact isDark={isDark} label="Owner">{item.owner}</Fact>
@@ -517,7 +530,7 @@ export function DetailModal({ isDark, item, today, onClose, onEdit, onRenew, onP
                         <span className="inline-flex flex-wrap items-center gap-1.5">
                             {projectHref ? <Link href={projectHref} className="font-mono font-semibold underline" style={{ color: BRAND }}>{item.projectCode}</Link> : <span className="font-mono font-semibold" style={{ color: BRAND }}>{item.projectCode}</span>}
                             <span className={cx.muted}>{item.linkedClientName}</span>
-                            <span className={`text-[10px] px-1.5 py-0.5 rounded ${item.billing === 'included' ? 'bg-amber-500/15 text-amber-600' : 'bg-teal-500/15 text-teal-600'}`}>{item.billing === 'included' ? 'দামের ভিতরে' : 'আলাদা পেমেন্ট'}</span>
+                            {!editor && <span className={`text-[10px] px-1.5 py-0.5 rounded ${item.billing === 'included' ? 'bg-amber-500/15 text-amber-600' : 'bg-teal-500/15 text-teal-600'}`}>{item.billing === 'included' ? 'দামের ভিতরে' : 'আলাদা পেমেন্ট'}</span>}
                         </span>
                     ) : 'Standalone (কোনো প্রজেক্ট নেই)'}
                 </Fact>
@@ -545,7 +558,7 @@ export function DetailModal({ isDark, item, today, onClose, onEdit, onRenew, onP
                                     {t.kind === 'renewal' ? (
                                         <>
                                             <p className={`font-semibold ${cx.strong}`}>Renewed · {t.r.months} months → {fmtKey(dayKey(t.r.toExpiry))}</p>
-                                            <p className={`text-xs ${cx.muted}`}>{fmtKey(t.key)} · client {taka(t.r.sellPrice)} · cost {taka(t.r.buyPrice)} · profit {taka((t.r.sellPrice || 0) - (t.r.buyPrice || 0))}{t.r.note ? ` · ${t.r.note}` : ''}</p>
+                                            <p className={`text-xs ${cx.muted}`}>{fmtKey(t.key)}{!editor && <> · client {taka(t.r.sellPrice)} · cost {taka(t.r.buyPrice)} · profit {taka((t.r.sellPrice || 0) - (t.r.buyPrice || 0))}</>}{t.r.note ? ` · ${t.r.note}` : ''}</p>
                                         </>
                                     ) : (
                                         <>
@@ -554,7 +567,7 @@ export function DetailModal({ isDark, item, today, onClose, onEdit, onRenew, onP
                                         </>
                                     )}
                                 </div>
-                                {t.kind === 'renewal' && t.id === lastRenewalId && (
+                                {!editor && t.kind === 'renewal' && t.id === lastRenewalId && (
                                     <button disabled={busy} onClick={() => undoRenewal(t.id)} title="এই রিনিউ বাতিল" className="p-2 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-amber-500/10"><FiRotateCcw size={14} /></button>
                                 )}
                                 {t.kind === 'payment' && (

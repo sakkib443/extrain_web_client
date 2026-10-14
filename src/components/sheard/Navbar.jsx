@@ -14,6 +14,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { getStoredUser } from "@/lib/authUser";
 import { motion, AnimatePresence } from "framer-motion";
 import useIntroReady from "@/hooks/useIntroReady";
+import { homeForRole } from "@/lib/access";
 
 // the orange "you are here" pill and the soft hover pill glide between menu items with this spring
 const PILL = { type: "spring", stiffness: 420, damping: 34 };
@@ -142,7 +143,7 @@ const Navbar = () => {
                   {user ? (
                     <div className="grid grid-cols-2 gap-3">
                       <Link
-                        href={user.role === "admin" ? "/dashboard/admin" : user.role === "mentor" ? "/dashboard/mentor" : "/dashboard/user"}
+                        href={homeForRole(user.role)}
                         onClick={closeMobileMenu}
                         className="flex flex-col items-center gap-2 py-4 rounded-xl bg-white/5 border border-white/10 text-white/80 hover:text-[#F8921C] transition-all"
                       >
@@ -291,7 +292,7 @@ const Navbar = () => {
                       >
                         <div className="p-2">
                           <Link
-                            href={user.role === "admin" ? "/dashboard/admin" : user.role === "mentor" ? "/dashboard/mentor" : "/dashboard/user"}
+                            href={homeForRole(user.role)}
                             onClick={() => setIsProfileDropdownOpen(false)}
                             className="flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-white/5 hover:text-white transition-all"
                           >

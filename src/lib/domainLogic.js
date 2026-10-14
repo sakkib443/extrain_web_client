@@ -238,6 +238,8 @@ export const SORTS = [
     { key: 'profit', label: 'Highest profit' },
     { key: 'revenue', label: 'Highest revenue' },
 ];
+// an editor cannot sort by money
+export const SORTS_NO_MONEY = SORTS.filter((s) => !['due', 'profit', 'revenue'].includes(s.key));
 
 const monthOf = (today, add = 0) => addMonthsKey(today.slice(0, 7) + '-01', add).slice(0, 7);
 
@@ -486,3 +488,6 @@ export const DOMAIN_COLUMNS = [
     { key: 'lastRenewed', label: 'Last Renewed', width: 14, type: 'date', get: (r) => (r.lastRenewal ? dayKey(r.lastRenewal.date) : '') },
     { key: 'note', label: 'Note', width: 30, type: 'wrap', get: (r) => r.note },
 ];
+
+// What an editor may download: the same sheet without Cost / Revenue / Profit / Paid / Due / Billing
+export const DOMAIN_COLUMNS_NO_MONEY = DOMAIN_COLUMNS.filter((c) => c.type !== 'money' && c.key !== 'billing');
