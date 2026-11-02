@@ -39,10 +39,17 @@ import {
   FiServer,
 } from 'react-icons/fi';
 import { useTheme } from '@/providers/ThemeProvider';
-import { isEditor } from '@/lib/access';
+import { getRole } from '@/lib/access';
 
-// an editor sees only these two menus (the pages themselves are guarded in dashboard/admin/layout.js)
-const EDITOR_MENUS = ['Project Tracker', 'Domain & Hosting'];
+// a limited role sees only its own menus (the pages themselves are guarded in dashboard/admin/layout.js)
+const EDITOR_MARKETPLACE = ['/dashboard/admin/website', '/dashboard/admin/website/create', '/dashboard/admin/category', '/dashboard/admin/category/create'];
+const ROLE_MENUS = {
+  editor: (items) => items
+    .filter((m) => ['Marketplace', 'Project Tracker', 'Domain & Hosting'].includes(m.title))
+    .map((m) => (m.title === 'Marketplace'
+      ? { ...m, title: 'Websites', submenu: m.submenu.filter((s) => EDITOR_MARKETPLACE.includes(s.href)) }
+      : { ...m, submenu: m.submenu.map((s) => (s.title === 'Renewals & Dues' ? { ...s, title: 'Renewals' } : s)) })),
+};
 
 const AdminSidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -184,11 +191,7 @@ const AdminSidebar = () => {
       gradient: 'from-slate-500 to-slate-700'
     },
   ];
-  const menuItems = isEditor()
-    ? allMenuItems
-        .filter((m) => EDITOR_MENUS.includes(m.title))
-        .map((m) => ({ ...m, submenu: m.submenu.map((s) => (s.title === 'Renewals & Dues' ? { ...s, title: 'Renewals' } : s)) }))
-    : allMenuItems;
+  const menuItems = ROLE_MENUS[getRole()]?.(allMenuItems) || allMenuItems;
 
   return (
     <>

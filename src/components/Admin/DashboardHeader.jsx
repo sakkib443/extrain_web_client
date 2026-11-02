@@ -22,7 +22,7 @@ const DashboardHeader = () => {
   const [showProfile, setShowProfile] = useState(false);
   const { toggleTheme, isDark } = useTheme();
   const [user, setUser] = useState(null);
-  const editor = user?.role === 'editor';
+  const limited = user?.role === 'editor'; // only their own pages
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -104,10 +104,10 @@ const DashboardHeader = () => {
           </button>
 
           {/* Notifications */}
-          {!editor && <NotificationDropdown />}
+          {!limited && <NotificationDropdown />}
 
           {/* Settings */}
-          {!editor && <Link
+          {!limited && <Link
             href="/dashboard/admin/settings"
             className={`p-2.5 rounded-xl transition-colors ${isDark
               ? 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200'
@@ -137,7 +137,7 @@ const DashboardHeader = () => {
                   {user?.firstName || 'Admin'}
                 </p>
                 <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  {editor ? 'Editor' : user?.role || 'Super Admin'}
+                  {limited ? 'Editor' : user?.role || 'Super Admin'}
                 </p>
               </div>
               <FiChevronDown className={`transition-transform ${isDark ? 'text-slate-400' : 'text-slate-400'} ${showProfile ? 'rotate-180' : ''}`} />
@@ -179,7 +179,7 @@ const DashboardHeader = () => {
                     <FiUser size={16} />
                     My Profile
                   </Link>
-                  {!editor && <Link
+                  {!limited && <Link
                     href="/dashboard/admin/notifications"
                     onClick={handleMenuClick}
                     className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${isDark
@@ -190,7 +190,7 @@ const DashboardHeader = () => {
                     <FiBell size={16} />
                     All Notifications
                   </Link>}
-                  {!editor && <Link
+                  {!limited && <Link
                     href="/dashboard/admin/settings"
                     onClick={handleMenuClick}
                     className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${isDark
@@ -201,7 +201,7 @@ const DashboardHeader = () => {
                     <FiSettings size={16} />
                     Settings
                   </Link>}
-                  {!editor && <Link
+                  {!limited && <Link
                     href="/dashboard/admin/messages"
                     onClick={handleMenuClick}
                     className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${isDark

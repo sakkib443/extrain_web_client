@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { FiPlus, FiEdit3, FiTrash2, FiLoader, FiCheck, FiX, FiGrid, FiSearch, FiImage, FiRefreshCw, FiCode, FiLayout, FiFolder, FiChevronRight, FiChevronDown } from 'react-icons/fi';
 import Link from 'next/link';
 import { API_BASE_URL } from "@/config/api";
+import { isEditor } from "@/lib/access";
 
 const CategoryPage = () => {
   const [categories, setCategories] = useState([]);
@@ -15,6 +16,7 @@ const CategoryPage = () => {
   const [viewMode, setViewMode] = useState('tree'); // 'tree' or 'flat'
   const [expandedParents, setExpandedParents] = useState([]);
   const [parentCategories, setParentCategories] = useState([]);
+  const canDelete = !isEditor(); // an editor adds and edits, only an admin deletes
 
   const fetchCategories = async () => {
     const BASE_URL = process.env.NEXT_PUBLIC_API_URL || API_BASE_URL;
@@ -300,9 +302,11 @@ const CategoryPage = () => {
                     <button onClick={() => setEditData(parent)} className="p-2.5 bg-slate-100 hover:bg-slate-800 hover:text-white text-slate-500 rounded-xl transition-all">
                       <FiEdit3 size={14} />
                     </button>
-                    <button onClick={() => handleDelete(parent._id)} className="p-2.5 bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-400 rounded-xl transition-all">
-                      <FiTrash2 size={14} />
-                    </button>
+                    {canDelete && (
+                      <button onClick={() => handleDelete(parent._id)} className="p-2.5 bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-400 rounded-xl transition-all">
+                        <FiTrash2 size={14} />
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -325,9 +329,11 @@ const CategoryPage = () => {
                           <button onClick={() => setEditData(child)} className="p-2 bg-white hover:bg-slate-800 hover:text-white text-slate-400 rounded-lg border border-slate-200 transition-all">
                             <FiEdit3 size={12} />
                           </button>
-                          <button onClick={() => handleDelete(child._id)} className="p-2 bg-white hover:bg-rose-500 hover:text-white text-rose-300 rounded-lg border border-slate-200 transition-all">
-                            <FiTrash2 size={12} />
-                          </button>
+                          {canDelete && (
+                            <button onClick={() => handleDelete(child._id)} className="p-2 bg-white hover:bg-rose-500 hover:text-white text-rose-300 rounded-lg border border-slate-200 transition-all">
+                              <FiTrash2 size={12} />
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -375,9 +381,11 @@ const CategoryPage = () => {
                   <button onClick={() => setEditData(cat)} className="flex-1 py-2 bg-slate-100 hover:bg-slate-800 hover:text-white text-slate-600 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1">
                     <FiEdit3 size={12} /> Edit
                   </button>
-                  <button onClick={() => handleDelete(cat._id)} className="p-2 bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-400 rounded-lg transition-all">
-                    <FiTrash2 size={14} />
-                  </button>
+                  {canDelete && (
+                    <button onClick={() => handleDelete(cat._id)} className="p-2 bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-400 rounded-lg transition-all">
+                      <FiTrash2 size={14} />
+                    </button>
+                  )}
                 </div>
               </div>
             ))

@@ -70,7 +70,7 @@ const Login = () => {
               router.push("/dashboard/admin");
               break;
             case "editor":
-              router.push(homeForRole("editor"));
+              router.push(homeForRole(userRole));
               break;
             case "mentor":
               router.push("/dashboard/mentor");

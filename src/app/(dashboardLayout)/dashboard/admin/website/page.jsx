@@ -8,12 +8,14 @@ import {
 } from 'react-icons/fi';
 
 import { API_BASE_URL } from '@/config/api';
+import { isEditor } from '@/lib/access';
 
 export default function WebsiteAdminPage() {
     const [websites, setWebsites] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
+    const canDelete = !isEditor(); // an editor adds and edits, only an admin deletes
 
     const fetchWebsites = async () => {
         const token = localStorage.getItem('token');
@@ -287,9 +289,11 @@ export default function WebsiteAdminPage() {
                                             <p className="text-lg font-bold text-slate-800">৳{w.price?.toLocaleString()}</p>
                                         )}
                                     </div>
-                                    <button onClick={() => handleDelete(w._id)} className="p-2 bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-400 rounded-lg transition-all">
-                                        <FiTrash2 size={16} />
-                                    </button>
+                                    {canDelete && (
+                                        <button onClick={() => handleDelete(w._id)} className="p-2 bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-400 rounded-lg transition-all">
+                                            <FiTrash2 size={16} />
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </div>

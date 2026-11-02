@@ -163,7 +163,7 @@ export default function CreateUserPage() {
                         >
                             <option value="student">Student</option>
                             <option value="mentor">Mentor</option>
-                            <option value="editor">Editor (orders + domain &amp; hosting, no money)</option>
+                            <option value="editor">Editor (orders, domain &amp; hosting, websites, categories — no delete)</option>
                             <option value="admin">Admin</option>
                         </select>
                     </div>

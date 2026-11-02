@@ -7,7 +7,7 @@ import DashboardHeader from '@/components/Admin/DashboardHeader';
 import ProtectedRoute from '@/app/providers/protectedRoutes';
 import { ThemeProvider, useTheme } from '@/providers/ThemeProvider';
 import { API_BASE_URL } from '@/config/api';
-import { EDITOR_HOME, editorMayOpen, getStoredUser, isEditor } from '@/lib/access';
+import { getRole, getStoredUser, homeForRole, isLimitedRole, roleMayOpen } from '@/lib/access';
 
 // Import dashboard-specific CSS (separate from frontend)
 import '@/app/dashboard.css';
@@ -39,17 +39,18 @@ const AdminLayoutContent = ({ children }) => {
 
 const STAFF_ROLES = ['admin', 'editor'];
 
-// An editor may only open Project Tracker and Domain & Hosting — every other admin page sends them back to the
-// orders page. The saved role is also re-checked against the server once per visit, so a role an admin changed
-// takes effect without the person having to log in again.
+// A limited role only opens its own pages (editor: Project Tracker, Domain & Hosting, Websites, Categories) — any
+// other admin page sends them back to their home page. The saved role is also re-checked against the server once per visit,
+// so a role an admin changed takes effect without the person having to log in again.
 const RoleGuard = ({ children }) => {
   const pathname = usePathname();
   const router = useRouter();
-  const blocked = isEditor() && !editorMayOpen(pathname);
+  const role = getRole();
+  const blocked = isLimitedRole(role) && !roleMayOpen(role, pathname);
 
   useEffect(() => {
-    if (blocked) router.replace(EDITOR_HOME);
-  }, [blocked, router]);
+    if (blocked) router.replace(homeForRole(role));
+  }, [blocked, role, router]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');

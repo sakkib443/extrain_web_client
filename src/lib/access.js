@@ -1,9 +1,10 @@
 // ===================================================================
 // Who is logged in, and what each role may open.
 //
-// "editor" = a staff member who handles orders and domain & hosting only, and never sees an amount of money.
-// The server enforces that on its own (an editor's API responses carry no price at all, and money / delete
-// routes answer 403) — the helpers here only decide what the screens show.
+// "editor" = handles orders and domain & hosting (never sees an amount of money there), and adds / edits the
+// marketplace websites and their categories — but never deletes anything.
+// The server enforces all of this on its own (an editor's order / domain responses carry no price at all, and every
+// delete answers 403) — the helpers here only decide what the screens show.
 // ===================================================================
 
 export const getStoredUser = () => {
@@ -22,28 +23,42 @@ export const isEditor = () => getRole() === 'editor';
 
 export const EDITOR_HOME = '/dashboard/admin/project-tracker/requests';
 
-const EDITOR_AREAS = [
-    '/dashboard/admin/project-tracker',
-    '/dashboard/admin/domain-hosting',
-    '/dashboard/admin/profile',
-];
-const EDITOR_BLOCKED = ['/dashboard/admin/project-tracker/expenses'];
+// the admin-dashboard areas a limited role may open (anything else sends them to their home page)
+const AREAS = {
+    editor: {
+        home: EDITOR_HOME,
+        allow: [
+            '/dashboard/admin/project-tracker',
+            '/dashboard/admin/domain-hosting',
+            '/dashboard/admin/website',
+            '/dashboard/admin/category',
+            '/dashboard/admin/profile',
+        ],
+        block: ['/dashboard/admin/project-tracker/expenses'],
+    },
+};
+
+// roles that use the admin dashboard but only part of it
+export const isLimitedRole = (role) => !!AREAS[role];
 
 const under = (path, base) => path === base || path.startsWith(base + '/');
 
-export const editorMayOpen = (pathname) => {
+export const roleMayOpen = (role, pathname) => {
+    const area = AREAS[role];
+    if (!area) return true;
     const p = (pathname || '').replace(/\/+$/, '') || '/';
-    if (EDITOR_BLOCKED.some((b) => under(p, b))) return false;
-    return EDITOR_AREAS.some((a) => under(p, a));
+    if (area.block.some((b) => under(p, b))) return false;
+    return area.allow.some((a) => under(p, a));
 };
+
+export const editorMayOpen = (pathname) => roleMayOpen('editor', pathname);
 
 // where a person lands after login / when they open a page that is not theirs
 export const homeForRole = (role) => {
+    if (AREAS[role]) return AREAS[role].home;
     switch (role) {
         case 'admin':
             return '/dashboard/admin';
-        case 'editor':
-            return EDITOR_HOME;
         case 'mentor':
             return '/dashboard/mentor';
         default:
