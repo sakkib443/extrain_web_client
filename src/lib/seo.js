@@ -1,6 +1,8 @@
 // SEO Metadata Utility - সব pages এ use করার জন্য
 // This generates comprehensive metadata for better SEO
 
+import { FACEBOOK_URL } from '@/config/site';
+
 export function generateMetadata({
     title,
     description,
@@ -194,7 +196,7 @@ export function generateOrganizationSchema() {
         },
         sameAs: [
             // আপনার social media links add করবেন
-            'https://facebook.com/extrainweb',
+            FACEBOOK_URL,
             'https://linkedin.com/company/extrainweb',
             // 'https://twitter.com/extrainweb',
             // 'https://youtube.com/@extrainweb',

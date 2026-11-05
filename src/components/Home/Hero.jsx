@@ -21,6 +21,7 @@ import {
 import { FaFacebookF, FaStar } from "react-icons/fa";
 import { useLanguage } from "@/context/LanguageContext";
 import { useHomeMedia } from "./HomeMediaContext";
+import { FACEBOOK_URL } from "@/config/site";
 import { TEAM } from "@/data/team";
 import useIntroReady from "@/hooks/useIntroReady";
 
@@ -28,7 +29,7 @@ import useIntroReady from "@/hooks/useIntroReady";
 const socials = [
     { label: "Email", icon: LuMail, href: "mailto:info.extrainweb@gmail.com" },
     { label: "Phone", icon: LuPhone, href: "tel:+8801711946614" },
-    { label: "Facebook", icon: FaFacebookF, href: "https://www.facebook.com/Extrain%20Web" },
+    { label: "Facebook", icon: FaFacebookF, href: FACEBOOK_URL },
 ];
 
 // Text reads bottom-to-top, like the reference rail.

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { LuSave, LuRefreshCw, LuEye, LuMail, LuPhone, LuMapPin, LuClock, LuGlobe, LuMessageCircle } from 'react-icons/lu';
 import { FaFacebookF, FaYoutube, FaLinkedinIn, FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import { useTheme } from '@/providers/ThemeProvider';
+import { FACEBOOK_URL } from '@/config/site';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://extrain-web-server.vercel.app/api';
 
@@ -31,7 +32,7 @@ const ContactDesignPage = () => {
             officeHoursBn: 'শনি - বৃহস্পতি: সকাল ১০টা - সন্ধ্যা ৬টা'
         },
         socialLinks: {
-            facebook: 'https://www.facebook.com/Extrain Web',
+            facebook: FACEBOOK_URL,
             youtube: 'https://www.youtube.com/@Extrain Web',
             linkedin: 'https://www.linkedin.com/company/Extrain Web',
             whatsapp: 'https://wa.me/8801711946614',
@@ -73,7 +74,7 @@ const ContactDesignPage = () => {
             const res = await fetch(`${API_URL}/design/contact`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
-                body: JSON.stringify({ contactContent })
+                body: JSON.stringify({ contactContent: { ...contactContent, socialLinks: { ...contactContent.socialLinks, facebook: FACEBOOK_URL } } })
             });
             const data = await res.json();
             if (data.success) {
@@ -325,10 +326,10 @@ const ContactDesignPage = () => {
                             </div>
                             <input
                                 type="url"
-                                value={contactContent.socialLinks?.facebook || ''}
-                                onChange={(e) => updateSocialLinks('facebook', e.target.value)}
-                                className={`flex-1 px-4 py-2.5 rounded-lg ${isDark ? 'bg-slate-700 text-white border-slate-600' : 'bg-gray-50 text-gray-900 border-gray-200'} border focus:ring-2 focus:ring-rose-600`}
-                                placeholder="Facebook URL"
+                                value={FACEBOOK_URL}
+                                readOnly
+                                title="পুরো সাইটের Facebook লিংক এক জায়গায় ঠিক করা আছে (config/site.js)"
+                                className={`flex-1 cursor-not-allowed px-4 py-2.5 rounded-lg opacity-70 ${isDark ? 'bg-slate-700 text-white border-slate-600' : 'bg-gray-50 text-gray-900 border-gray-200'} border`}
                             />
                         </div>
                         <div className="flex items-center gap-3">

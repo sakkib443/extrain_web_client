@@ -9,6 +9,7 @@ import { LuSend, LuHeart } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 import PaymentMethods from "@/components/sheard/PaymentMethods";
 import { EdgeDots } from "@/components/Home/Decor";
+import { FACEBOOK_URL } from "@/config/site";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -29,7 +30,7 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: FaFacebook, href: "https://www.facebook.com/Extrain Web", label: "Facebook" },
+    { icon: FaFacebook, href: FACEBOOK_URL, label: "Facebook" },
     { icon: FaLinkedin, href: "https://www.linkedin.com/company/Extrain Web/", label: "LinkedIn" },
     { icon: FaYoutube, href: "https://www.youtube.com/@Extrain Web", label: "YouTube" },
     { icon: FaInstagram, href: "https://www.instagram.com/Extrain Web/", label: "Instagram" },

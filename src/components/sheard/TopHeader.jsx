@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { LuMail, LuPhone, LuMapPin } from "react-icons/lu";
 import { FaFacebookF, FaLinkedinIn, FaYoutube, FaWhatsapp } from "react-icons/fa";
+import { FACEBOOK_URL } from "@/config/site";
 
 const TopHeader = () => {
   const [isDark, setIsDark] = useState(false);
@@ -95,7 +96,7 @@ const TopHeader = () => {
           {/* Right - Social Links */}
           <div className="hidden md:flex items-center gap-3">
             {[
-              { Icon: FaFacebookF, href: "https://facebook.com/extrainweb" },
+              { Icon: FaFacebookF, href: FACEBOOK_URL },
               { Icon: FaLinkedinIn, href: "https://linkedin.com/company/extrainweb" },
               { Icon: FaYoutube, href: "https://youtube.com/@extrainweb" },
               { Icon: FaWhatsapp, href: "https://wa.me/8801711946614" },

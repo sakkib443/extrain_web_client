@@ -11,6 +11,7 @@ import useSectionMotion from "@/hooks/useSectionMotion";
 import BracketLabel from "@/components/Home/BracketLabel";
 import { Star4, EdgeDots, OrbitRing } from "@/components/Home/Decor";
 import { outlineStyle, filledAccent, reveal } from "@/components/Aboutpage/sections/shared";
+import { FACEBOOK_URL } from "@/config/site";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://extrain-web-server.vercel.app/api";
 
@@ -31,7 +32,7 @@ const DEFAULT_CONTENT = {
         officeHoursBn: "শনি - বৃহস্পতি: সকাল ১০টা - সন্ধ্যা ৬টা",
     },
     socialLinks: {
-        facebook: "https://www.facebook.com/Extrain Web",
+        facebook: FACEBOOK_URL,
         youtube: "https://www.youtube.com/@Extrain Web",
         linkedin: "https://www.linkedin.com/company/Extrain Web",
         whatsapp: "https://wa.me/8801711946614",
@@ -71,7 +72,8 @@ export default function ContactContent() {
                         ...c,
                         hero: { ...prev.hero, ...c.hero },
                         contactInfo: { ...prev.contactInfo, ...c.contactInfo },
-                        socialLinks: { ...prev.socialLinks, ...c.socialLinks },
+                        // the Facebook link is fixed (config/site.js), whatever an older save left in the database
+                        socialLinks: { ...prev.socialLinks, ...c.socialLinks, facebook: FACEBOOK_URL },
                     }));
                 }
             } catch (error) {
