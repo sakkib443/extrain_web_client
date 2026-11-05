@@ -11,8 +11,9 @@ import ClientsSection from "@/components/Home/ClientsSection";
 import DigitalProducts from "@/components/Home/DigitalProducts";
 import TestimonialSection from "@/components/Home/TestimonialSection";
 import TeamSection from "@/components/Home/TeamSection";
+import { HomeMediaProvider } from "@/components/Home/HomeMediaContext";
 
-export default function HomeContent() {
+export default function HomeContent({ media = null }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -20,6 +21,7 @@ export default function HomeContent() {
     }, [dispatch]);
 
     return (
+        <HomeMediaProvider initial={media}>
         <div className="relative min-h-screen bg-white dark:bg-black selection:bg-rose-600 selection:text-black font-poppins antialiased">
             <main className="relative">
                 {/* Hero Section */}
@@ -39,5 +41,6 @@ export default function HomeContent() {
                 </section>
             </main>
         </div>
+        </HomeMediaProvider>
     );
 }

@@ -5,12 +5,13 @@ import Link from "next/link";
 import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { LuArrowUpRight, LuMegaphone, LuCamera, LuCode, LuZap, LuBadgeCheck } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
+import { useHomeMedia } from "./HomeMediaContext";
 import useSectionMotion from "@/hooks/useSectionMotion";
 import BracketLabel from "./BracketLabel";
 import { Star4, EdgeDots } from "./Decor";
 import SolarSystem from "./SolarSystem";
 
-// Order on screen: left · centre (featured, bigger) · right.
+// Order on screen: left · centre (featured, bigger) · right. The photos come from useHomeMedia() (same order).
 const services = [
     {
         id: "marketing",
@@ -208,6 +209,7 @@ function ServiceCard({ s, index, isBn, bn, reduce, parallaxY }) {
 
 const HomeCategory = () => {
     const { language } = useLanguage();
+    const media = useHomeMedia(); // the three card photos
     const isBn = language === "bn";
     const bn = isBn ? "hind-siliguri" : "";
     const { ref: sectionRef, p, mx, my, reduce } = useSectionMotion();
@@ -311,7 +313,7 @@ const HomeCategory = () => {
                     {services.map((s, i) => (
                         <ServiceCard
                             key={s.id}
-                            s={s}
+                            s={{ ...s, image: media.services[i]?.src || s.image, pos: media.services[i]?.pos || s.pos }}
                             index={i}
                             isBn={isBn}
                             bn={bn}

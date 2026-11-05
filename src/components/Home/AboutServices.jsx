@@ -10,6 +10,7 @@ import {
 import { useLanguage } from "@/context/LanguageContext";
 import useSectionMotion from "@/hooks/useSectionMotion";
 import BracketLabel from "./BracketLabel";
+import { useHomeMedia } from "./HomeMediaContext";
 import TiltCard from "./TiltCard";
 
 const avatars = [
@@ -18,7 +19,7 @@ const avatars = [
     "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100&q=80",
 ];
 
-// The three services — each one owns an image in the collage and a card on the right.
+// The three services — each one owns an image in the collage (photo from useHomeMedia(), same order) and a card on the right.
 const services = [
     {
         id: "web",
@@ -99,6 +100,7 @@ const viewport = { once: true, amount: 0.2 };
 
 const AboutServices = () => {
     const { language } = useLanguage();
+    const media = useHomeMedia(); // the three collage photos
     const isBn = language === "bn";
     const bn = isBn ? "hind-siliguri" : "";
     const [hovered, setHovered] = useState(null);
@@ -126,7 +128,7 @@ const AboutServices = () => {
     // One collage tile: image + small "01 · Title" pill. Lights up when its card is hovered.
     // (plain function, not a component, so hovering never remounts the images)
     const renderTile = (index, className = "") => {
-        const s = services[index];
+        const s = { ...services[index], image: media.roadmap[index]?.src || services[index].image, pos: media.roadmap[index]?.pos || services[index].pos };
         const on = hovered === index;
         return (
             <div

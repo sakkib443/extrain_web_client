@@ -1,80 +1,18 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, useScroll, useSpring, useTransform, useVelocity } from "framer-motion";
 import { LuX, LuChevronLeft, LuChevronRight, LuMaximize2 } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
-import { CLIENTS } from "@/data/clients";
 import useSectionMotion from "@/hooks/useSectionMotion";
 import BracketLabel from "./BracketLabel";
+import { useHomeMedia } from "./HomeMediaContext";
 
-const U = (id, w = 900) => `https://images.unsplash.com/${id}?w=${w}&q=80`;
-const photo = (id, label, labelBn) => ({ src: U(id), full: U(id, 1600), label, labelBn });
-const local = (path, label, labelBn) => ({ src: path, full: path, label, labelBn });
-
-// The photos of the clients (same files as the "Our Clients" cards, so changing one changes both).
-const CLIENT_SHOTS = CLIENTS.filter((c) => c.image)
-    .slice(0, 3)
-    .map((c) => ({ src: c.image, full: c.image, label: c.name, labelBn: c.nameBn || c.name }));
-
-// Every tile shares ONE shape (same rounded rectangle). Only the size changes.
-// A row is a list of columns: a column is either one tall tile or two tiles stacked.
-// All columns in a row have the same height, so the top and bottom edges line up.
-const ROW_H = 340; // desktop px, scaled on smaller screens via --gal-s
+// The photos, their order, each column's width and the row height come from Dashboard → Design → Home Page → Photos
+// (defaults in data/homeMedia.js). A row is a list of columns: a column is either one tall tile or two tiles stacked.
+// All columns in a row have the same height, so the top and bottom edges line up. Every tile shares ONE shape.
 const GAP = 16;
-
-const COLS_A = [
-    { w: 440, items: [local("/hero-office.webp", "Our team", "আমাদের টিম")] },
-    {
-        w: 280,
-        items: [
-            photo("photo-1522542550221-31fd19575a2d", "Web design", "ওয়েব ডিজাইন"),
-            photo("photo-1581291518857-4e27b48ff24e", "Wireframing", "ওয়্যারফ্রেম"),
-        ],
-    },
-    ...(CLIENT_SHOTS[0] ? [{ w: 380, items: [CLIENT_SHOTS[0]] }] : []),
-    { w: 270, items: [photo("photo-1516035069371-29a1b244cc32", "Photography", "ফটোগ্রাফি")] },
-    { w: 380, items: [photo("photo-1521737711867-e3b97375f902", "Team at work", "কাজের মুহূর্ত")] },
-    {
-        w: 300,
-        items: [
-            photo("photo-1600880292203-757bb62b4baf", "Celebrating wins", "সফলতার উদযাপন"),
-            photo("photo-1556761175-5973dc0f32e7", "Team sessions", "টিম সেশন"),
-        ],
-    },
-];
-
-const COLS_B = [
-    { w: 400, items: [local("/hero-team.webp", "Creative sessions", "ক্রিয়েটিভ সেশন")] },
-    ...(CLIENT_SHOTS[1] ? [{ w: 400, items: [CLIENT_SHOTS[1]] }] : []),
-    {
-        w: 300,
-        items: [
-            photo("photo-1552664730-d307ca884978", "Brainstorming", "ব্রেইনস্টর্মিং"),
-            photo("photo-1499750310107-5fef28a66643", "Where ideas begin", "যেখানে আইডিয়ার শুরু"),
-        ],
-    },
-    { w: 280, items: [photo("photo-1531482615713-2afd69097998", "Development", "ডেভেলপমেন্ট")] },
-    { w: 420, items: [photo("photo-1542744173-8e7e53415bb0", "Client presentations", "ক্লায়েন্ট প্রেজেন্টেশন")] },
-    ...(CLIENT_SHOTS[2] ? [{ w: 380, items: [CLIENT_SHOTS[2]] }] : []),
-    {
-        w: 290,
-        items: [
-            photo("photo-1522202176988-66273c2fd55f", "Collaboration", "একসাথে কাজ"),
-            photo("photo-1557804506-669a67965ba0", "Planning", "প্ল্যানিং"),
-        ],
-    },
-];
-
-// give every tile a running index (used by the lightbox)
-const withIndex = (cols, start) => {
-    let n = start;
-    return cols.map((c) => ({ ...c, items: c.items.map((it) => ({ ...it, idx: n++ })) }));
-};
-const ROW_A = withIndex(COLS_A, 0);
-const ROW_B = withIndex(COLS_B, ROW_A.flatMap((c) => c.items).length);
-const ALL = [...ROW_A, ...ROW_B].flatMap((c) => c.items);
 
 // Endless loop: a row is drawn twice and slides by exactly one set (-50%), so ONE set must be wider than the
 // screen (plus the scroll-linked shift, 90px) or the row runs out on the right at the end of every cycle.
@@ -86,8 +24,6 @@ const loopInfo = (cols, speed) => {
     const reps = Math.max(1, Math.ceil(MIN_SET / setW));
     return { reps, dur: Math.round((setW * reps) / speed) };
 };
-const LOOP_A = loopInfo(COLS_A, SPEED.a);
-const LOOP_B = loopInfo(COLS_B, SPEED.b);
 
 const fadeUp = {
     hidden: { opacity: 0, y: 28 },
@@ -103,6 +39,18 @@ const GallerySection = () => {
     const { language } = useLanguage();
     const isBn = language === "bn";
     const bn = isBn ? "hind-siliguri" : "";
+
+    const { gallery } = useHomeMedia();
+    const ROW_H = gallery.rowHeight; // desktop px, scaled on smaller screens via --gal-s
+    const { rows, ALL } = useMemo(() => {
+        let n = 0;
+        const built = gallery.rows.map((r, i) => ({
+            cols: r.columns.map((c) => ({ ...c, items: c.items.map((it) => ({ ...it, idx: n++ })) })),
+            loop: loopInfo(r.columns, i % 2 ? SPEED.b : SPEED.a),
+            reverse: i % 2 === 1, // rows slide in opposite directions
+        }));
+        return { rows: built, ALL: built.flatMap((r) => r.cols.flatMap((c) => c.items)) };
+    }, [gallery]);
 
     const [open, setOpen] = useState(null); // index into ALL, or null
     const closeRef = useRef(null);
@@ -121,7 +69,8 @@ const GallerySection = () => {
     const headY = useTransform(p, [0, 1], [26, -26]);
 
     const close = useCallback(() => setOpen(null), []);
-    const step = useCallback((dir) => setOpen((i) => (i === null ? i : (i + dir + ALL.length) % ALL.length)), []);
+    const total = ALL.length;
+    const step = useCallback((dir) => setOpen((i) => (i === null ? i : (i + dir + total) % total)), [total]);
 
     // lightbox: keyboard, scroll lock, focus
     useEffect(() => {
@@ -223,7 +172,7 @@ const GallerySection = () => {
         );
     };
 
-    const current = open !== null ? ALL[open] : null;
+    const current = open !== null ? ALL[open] || null : null;
 
     return (
         <section
@@ -280,8 +229,9 @@ const GallerySection = () => {
 
             {/* ===== full-width rows: edge to edge, opposite directions ===== */}
             <div className="relative z-10 space-y-1">
-                {renderRow(ROW_A, false, LOOP_A)}
-                {renderRow(ROW_B, true, LOOP_B)}
+                {rows.map((r, i) => (
+                    <React.Fragment key={i}>{renderRow(r.cols, r.reverse, r.loop)}</React.Fragment>
+                ))}
             </div>
 
             {/* ===== lightbox ===== */}

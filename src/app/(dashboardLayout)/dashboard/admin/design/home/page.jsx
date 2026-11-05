@@ -2,9 +2,16 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { FiImage, FiCode, FiStar, FiArrowRight } from 'react-icons/fi';
+import { FiImage, FiCode, FiStar, FiArrowRight, FiCamera } from 'react-icons/fi';
 
 const sections = [
+    {
+        title: 'Home Photos',
+        description: 'Hero, Digital Growth, Growth Roadmap and Gallery — every photo, its size and position',
+        href: '/dashboard/admin/design/home/photos',
+        icon: FiCamera,
+        gradient: 'from-amber-500 to-orange-600'
+    },
     {
         title: 'Hero Section',
         description: 'Main banner with headline, description, and search',

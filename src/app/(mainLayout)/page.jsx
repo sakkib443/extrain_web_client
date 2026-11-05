@@ -1,4 +1,6 @@
 import HomeContent from "./HomeContent";
+import { API_BASE_URL } from "@/config/api";
+import { fetchHomeMedia } from "@/lib/homeMedia";
 import { generateMetadata as seoGenerateMetadata, commonKeywords, generateOrganizationSchema } from "@/lib/seo";
 
 // ==================== SEO METADATA ====================
@@ -21,8 +23,10 @@ export async function generateMetadata() {
 }
 
 // ==================== HOME PAGE ====================
-export default function HomePage() {
+export default async function HomePage() {
   const organizationSchema = generateOrganizationSchema();
+  // the photos saved in Dashboard → Design → Home Page → Photos (null = the built-in ones)
+  const media = await fetchHomeMedia(API_BASE_URL);
 
   return (
     <>
@@ -33,7 +37,7 @@ export default function HomePage() {
       />
 
       {/* Home Content Component */}
-      <HomeContent />
+      <HomeContent media={media} />
     </>
   );
 }

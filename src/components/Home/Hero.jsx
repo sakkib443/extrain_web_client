@@ -20,6 +20,7 @@ import {
 } from "react-icons/lu";
 import { FaFacebookF, FaStar } from "react-icons/fa";
 import { useLanguage } from "@/context/LanguageContext";
+import { useHomeMedia } from "./HomeMediaContext";
 import { TEAM } from "@/data/team";
 import useIntroReady from "@/hooks/useIntroReady";
 
@@ -53,11 +54,8 @@ const faceStyle = (id) => {
     return { transformOrigin: `${x * 100}% ${y * 100}%`, transform: `translate(${tx}%, ${ty}%) scale(${z})` };
 };
 
-// Big hero image options — switch with the arrows. `pos` keeps faces / logo in frame when cropped.
-const HERO_IMAGES = [
-    { src: "/hero-office.webp", alt: "Extrain Web team in our office", pos: "92% 25%" },
-    { src: "/hero-team.webp", alt: "Our creative team at work", pos: "50% 25%" },
-];
+// The big hero image(s), the background and its darkness come from Dashboard → Design → Home Page → Photos
+// (defaults in data/homeMedia.js). `pos` keeps faces / logo in frame when cropped.
 
 // Outlined "CREATIVE" — hollow letters, only the A is filled orange.
 const outlineStyle = {
@@ -110,13 +108,16 @@ const Hero = () => {
     const bn = isBn ? "hind-siliguri" : "";
     const reduce = useReducedMotion();
     const ready = useIntroReady();
+    const { hero } = useHomeMedia();
+    const slides = hero.slides;
 
     const heroRef = useRef(null);
     const bandRef = useRef(null);
 
     // image switcher
-    const [slide, setSlide] = useState(0);
-    const go = (dir) => setSlide((i) => (i + dir + HERO_IMAGES.length) % HERO_IMAGES.length);
+    const [slideRaw, setSlide] = useState(0);
+    const slide = slideRaw % slides.length; // stays valid when the number of slides changes
+    const go = (dir) => setSlide((i) => (i + dir + slides.length) % slides.length);
 
     // ---- mouse (smoothed, no re-renders) ----
     const mx = useMotionValue(0);
@@ -170,10 +171,10 @@ const Hero = () => {
                 {/* Background image (green + purple glow, diagonal streaks) */}
                 <div
                     className="absolute inset-0 pointer-events-none bg-cover bg-center"
-                    style={{ backgroundImage: "url('/hero-bg.webp')" }}
+                    style={{ backgroundImage: `url('${hero.background}')` }}
                 />
                 {/* subtle dark overlay for text contrast */}
-                <div className="absolute inset-0 pointer-events-none bg-black/25" />
+                <div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: `rgba(0,0,0,${hero.overlay / 100})` }} />
 
                 {/* ===== Left social rail (xl and up) ===== */}
                 <motion.aside
@@ -348,12 +349,12 @@ const Hero = () => {
                     style={reduce ? undefined : { x: imgX, y: imgY, scale: 1.05 }}
                     className="absolute inset-0"
                 >
-                    {HERO_IMAGES.map((img, i) => (
+                    {slides.map((img, i) => (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
                             key={img.src}
                             src={img.src}
-                            alt={img.alt}
+                            alt={img.alt || img.label || "Extrain Web"}
                             aria-hidden={i !== slide}
                             style={{ objectPosition: img.pos }}
                             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out ${i === slide ? "opacity-100" : "opacity-0"}`}
@@ -362,6 +363,7 @@ const Hero = () => {
                 </motion.div>
 
                 {/* small switch arrows, one on each side */}
+                {slides.length > 1 && <>
                 <button
                     type="button"
                     onClick={() => go(-1)}
@@ -378,6 +380,7 @@ const Hero = () => {
                 >
                     <LuChevronRight size={20} />
                 </button>
+                </>}
             </motion.div>
 
             {/* ================= B. Band: client panel beside the image ================= */}
