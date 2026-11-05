@@ -38,7 +38,7 @@ const AboutGlobalDesignPage = () => {
             setSaving(true);
             const res = await fetch(`${API_URL}/design/aboutGlobal`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ aboutGlobalContent: content })
             });
             const data = await res.json();

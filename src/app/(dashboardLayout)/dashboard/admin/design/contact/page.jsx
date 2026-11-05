@@ -72,7 +72,7 @@ const ContactDesignPage = () => {
             setSaving(true);
             const res = await fetch(`${API_URL}/design/contact`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ contactContent })
             });
             const data = await res.json();

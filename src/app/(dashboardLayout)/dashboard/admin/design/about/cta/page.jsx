@@ -37,7 +37,7 @@ const AboutCTADesignPage = () => {
             setSaving(true);
             const res = await fetch(`${API_URL}/design/aboutCTA`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ aboutCTAContent: content })
             });
             const data = await res.json();

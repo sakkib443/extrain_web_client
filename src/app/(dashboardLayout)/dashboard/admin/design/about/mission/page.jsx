@@ -38,7 +38,7 @@ const AboutMissionDesignPage = () => {
             setSaving(true);
             const res = await fetch(`${API_URL}/design/aboutMission`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ aboutMissionContent: content })
             });
             const data = await res.json();

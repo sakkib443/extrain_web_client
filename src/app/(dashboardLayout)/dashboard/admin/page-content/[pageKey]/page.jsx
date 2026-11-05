@@ -74,7 +74,9 @@ const PageContentEditor = ({ params }) => {
             console.log('Fetching page data for:', pageKey);
             console.log('API URL:', `${API_URL}/page-content/${pageKey}`);
 
-            const res = await fetch(`${API_URL}/page-content/${pageKey}`);
+            const res = await fetch(`${API_URL}/page-content/${pageKey}`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            });
             const data = await res.json();
 
             console.log('API Response:', data);
@@ -168,7 +170,7 @@ const PageContentEditor = ({ params }) => {
 
             const res = await fetch(`${API_URL}/page-content/${pageKey}/${sectionKey}`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ content: contentToSave })
             });
             const data = await res.json();
@@ -203,7 +205,7 @@ const PageContentEditor = ({ params }) => {
 
             const res = await fetch(`${API_URL}/page-content/${pageKey}`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ sections })
             });
             const data = await res.json();

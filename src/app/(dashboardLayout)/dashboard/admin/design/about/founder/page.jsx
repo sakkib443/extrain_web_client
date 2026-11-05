@@ -40,7 +40,7 @@ const AboutFounderDesignPage = () => {
             setSaving(true);
             const res = await fetch(`${API_URL}/design/aboutFounder`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ aboutFounderContent: content })
             });
             const data = await res.json();

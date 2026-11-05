@@ -53,7 +53,9 @@ const PageContentDashboard = () => {
             setLoading(true);
             console.log('Fetching overview from:', `${API_URL}/page-content/overview`);
 
-            const res = await fetch(`${API_URL}/page-content/overview`);
+            const res = await fetch(`${API_URL}/page-content/overview`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            });
             const data = await res.json();
 
             console.log('Overview API Response:', data);

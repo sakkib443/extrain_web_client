@@ -50,7 +50,7 @@ const AboutHeroDesignPage = () => {
             setSaving(true);
             const res = await fetch(`${API_URL}/design/aboutHero`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ aboutHeroContent: content })
             });
             const data = await res.json();

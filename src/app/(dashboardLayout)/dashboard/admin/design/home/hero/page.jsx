@@ -47,7 +47,7 @@ const HeroDesignPage = () => {
             setSaving(true);
             const res = await fetch(`${API_URL}/design/hero`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ heroContent })
             });
             const data = await res.json();
@@ -207,7 +207,7 @@ const HeroDesignPage = () => {
                                 onChange={(e) => setHeroContent(prev => ({ ...prev, badge: { ...prev.badge, showNew: e.target.checked } }))}
                                 className="w-5 h-5 rounded-lg text-rose-600 focus:ring-rose-600"
                             />
-                            <label className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Show "NEW" badge</label>
+                            <label className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Show &quot;NEW&quot; badge</label>
                         </div>
                     </div>
                 </div>

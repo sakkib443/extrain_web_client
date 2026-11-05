@@ -38,7 +38,7 @@ const AboutFeaturesDesignPage = () => {
             setSaving(true);
             const res = await fetch(`${API_URL}/design/aboutFeatures`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
                 body: JSON.stringify({ aboutFeaturesContent: content })
             });
             const data = await res.json();
