@@ -17,8 +17,16 @@ const cartSlice = createSlice({
                 try {
                     const savedItems = localStorage.getItem('cartItems');
                     const savedTotal = localStorage.getItem('cartTotal');
-                    state.items = savedItems ? JSON.parse(savedItems) : [];
-                    state.totalAmount = savedTotal ? Number(savedTotal) : 0;
+                    const saved = savedItems ? JSON.parse(savedItems) : [];
+                    // websites are ordered with the form now: drop any left in a cart saved before that
+                    state.items = saved.filter((item) => item.type !== 'website');
+                    state.totalAmount = state.items.length === saved.length
+                        ? (savedTotal ? Number(savedTotal) : 0)
+                        : state.items.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+                    if (state.items.length !== saved.length) {
+                        localStorage.setItem('cartItems', JSON.stringify(state.items));
+                        localStorage.setItem('cartTotal', String(state.totalAmount));
+                    }
                     state.isHydrated = true;
                 } catch (error) {
                     console.error('Error hydrating cart:', error);

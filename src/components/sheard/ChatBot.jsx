@@ -97,9 +97,9 @@ function getBotResponse(raw, lang) {
     if (has(t, ["order", "buy", "purchase", "checkout", "অর্ডার", "কিনব", "কিনতে", "কেনা"])) {
         return {
             message: bn
-                ? "অর্ডার করা সহজ 🛍️\n১. টেমপ্লেট পছন্দ করে কার্টে যোগ করুন\n২. চেকআউটে পেমেন্ট দিন (বিকাশ/নগদ/কার্ড)\n\nকাস্টম প্রজেক্টের জন্য সরাসরি WhatsApp-এ যোগাযোগ করুন।"
-                : "Ordering is easy 🛍️\n1. Pick a template & add to cart\n2. Pay at checkout (bKash/Nagad/card)\n\nFor custom projects, reach us on WhatsApp.",
-            links: [{ text: "WhatsApp", url: WA }],
+                ? "অর্ডার করা সহজ 🛍️\n১. ওয়েবসাইট পেজ থেকে পছন্দের ডিজাইন বেছে নিন, লাইভ প্রিভিউ দেখুন\n২. \"অর্ডার করুন\" চেপে ফর্মটি পূরণ করুন\n৩. আমরা আপনার সাথে যোগাযোগ করব\n\nকোনো প্রশ্ন থাকলে সরাসরি WhatsApp-এ যোগাযোগ করুন।"
+                : "Ordering is easy 🛍️\n1. Pick a design on the Websites page and check the live preview\n2. Press \"Confirm Order\" and fill in the form\n3. We will get in touch with you\n\nAny questions? Reach us on WhatsApp.",
+            links: [{ text: bn ? "ওয়েবসাইট দেখুন" : "View websites", url: "/website" }, { text: "WhatsApp", url: WA }],
         };
     }
 

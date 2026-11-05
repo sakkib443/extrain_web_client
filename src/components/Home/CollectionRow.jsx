@@ -9,6 +9,7 @@ import { addToCart } from "@/redux/cartSlice";
 import { LuShoppingCart, LuCheck, LuArrowRight, LuLayers, LuUsers, LuGlobe, LuCode, LuEye } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 import { optimizeImage } from "@/lib/optimizeImage";
+import { orderUrl } from "@/lib/orderLink";
 
 // Home "Our Collection" row. Wide panel: image + sale badge | category, name, facts, price, buttons | vertical index tab.
 // Odd rows are mirrored (flex-row-reverse on the same DOM order). The focused row (`active` — the hovered one, otherwise the one
@@ -16,6 +17,7 @@ import { optimizeImage } from "@/lib/optimizeImage";
 const CollectionRow = ({ product, index, reverse, active = false, zoom = 1.03, type = "website" }) => {
     const dispatch = useDispatch();
     const { language } = useLanguage();
+    const isWebsite = type === "website"; // websites are ordered with the form, not bought through the cart
     const isBn = language === "bn";
     const bn = isBn ? "hind-siliguri" : "";
     const [isAdded, setIsAdded] = useState(false);
@@ -46,7 +48,7 @@ const CollectionRow = ({ product, index, reverse, active = false, zoom = 1.03, t
     const facts = [
         platform && { icon: LuLayers, text: platform },
         tech && { icon: LuCode, text: tech },
-        sales > 0
+        !isWebsite && sales > 0
             ? { icon: LuUsers, text: `${sales.toLocaleString()} ${isBn ? "বিক্রি" : "sold"}` }
             : product.previewUrl && { icon: LuGlobe, text: isBn ? "লাইভ ডেমো আছে" : "Live demo available" },
     ].filter(Boolean);
@@ -136,20 +138,22 @@ const CollectionRow = ({ product, index, reverse, active = false, zoom = 1.03, t
                 )}
 
                 <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
-                    <div>
+                    {(!isWebsite || price > 0) && <div>
                         <div className="flex items-baseline gap-2">
                             <span className="text-[1.6rem] font-extrabold leading-none text-white">৳{price?.toLocaleString()}</span>
                             {hasDiscount && (
                                 <span className="text-xs font-medium text-white/40 line-through">৳{product.price?.toLocaleString()}</span>
                             )}
                         </div>
-                        <span className={`mt-1.5 block text-[11px] text-white/45 ${bn}`}>
-                            {isBn ? "এককালীন পেমেন্ট" : "One-time payment"}
-                        </span>
-                    </div>
+                        {!isWebsite && (
+                            <span className={`mt-1.5 block text-[11px] text-white/45 ${bn}`}>
+                                {isBn ? "এককালীন পেমেন্ট" : "One-time payment"}
+                            </span>
+                        )}
+                    </div>}
 
                     <div className="flex items-center gap-2">
-                        <button
+                        {!isWebsite && <button
                             type="button"
                             onClick={handleAddToCart}
                             disabled={isAdded}
@@ -160,7 +164,7 @@ const CollectionRow = ({ product, index, reverse, active = false, zoom = 1.03, t
                                 : "border-white/15 bg-white/[0.04] text-white/75 hover:border-[#F8921C] hover:text-[#F8921C]"}`}
                         >
                             {isAdded ? <LuCheck size={18} /> : <LuShoppingCart size={18} />}
-                        </button>
+                        </button>}
 
                         {/* pill + round arrow, same pairing as the site's other buttons */}
                         <div className="flex items-center gap-1">
@@ -168,11 +172,19 @@ const CollectionRow = ({ product, index, reverse, active = false, zoom = 1.03, t
                                 href={product.previewUrl || detailUrl}
                                 target={product.previewUrl ? "_blank" : "_self"}
                                 rel="noopener noreferrer"
-                                className={`inline-flex h-11 items-center gap-2 rounded-full bg-[#F8921C] px-6 text-[13px] font-bold text-black transition-colors duration-300 hover:bg-[#e07d0a] ${focusRing} ${isBn ? "" : "uppercase tracking-[0.04em]"} ${bn}`}
+                                className={`inline-flex h-11 items-center gap-2 rounded-full px-5 text-[13px] font-bold transition-colors duration-300 ${isWebsite ? "border border-white/20 text-white hover:border-[#F8921C] hover:text-[#F8921C]" : "bg-[#F8921C] text-black hover:bg-[#e07d0a]"} ${focusRing} ${isBn ? "" : "uppercase tracking-[0.04em]"} ${bn}`}
                             >
                                 <LuEye size={16} />
                                 {isBn ? "লাইভ প্রিভিউ" : "Live Preview"}
                             </a>
+                            {isWebsite && (
+                                <Link
+                                    href={orderUrl(title)}
+                                    className={`inline-flex h-11 items-center rounded-full bg-[#F8921C] px-5 text-[13px] font-bold text-black transition-colors duration-300 hover:bg-[#e07d0a] ${focusRing} ${isBn ? "" : "uppercase tracking-[0.04em]"} ${bn}`}
+                                >
+                                    {isBn ? "অর্ডার করুন" : "Confirm Order"}
+                                </Link>
+                            )}
                             <Link
                                 href={detailUrl}
                                 aria-label={isBn ? "বিস্তারিত দেখুন" : "View details"}

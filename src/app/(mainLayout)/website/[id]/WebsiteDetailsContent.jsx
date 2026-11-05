@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWebsites, toggleWebsiteLike } from "@/redux/websiteSlice";
 import { useLanguage } from "@/context/LanguageContext";
-import { addToCart } from "@/redux/cartSlice";
+import { orderUrl } from "@/lib/orderLink";
 import {
-    LuDownload, LuExternalLink, LuClock, LuLayoutGrid, LuEye, LuPackage, LuShieldCheck, LuSettings,
-    LuFileCode, LuCheck, LuSparkles, LuZap, LuX, LuChevronLeft, LuChevronRight, LuShoppingCart,
+    LuDownload, LuExternalLink, LuClock, LuLayoutGrid, LuEye, LuShieldCheck, LuSettings,
+    LuFileCode, LuCheck, LuSparkles, LuZap, LuX, LuChevronLeft, LuChevronRight,
     LuArrowUpRight, LuMonitorSmartphone, LuLayers, LuPlay,
 } from "react-icons/lu";
 import { FaHeart, FaRegHeart, FaStar, FaWhatsapp } from "react-icons/fa";
@@ -19,7 +19,7 @@ import { EdgeDots } from "@/components/Home/Decor";
 import { reveal } from "@/components/Aboutpage/sections/shared";
 
 // Black theme, same look as the website listing page.
-//   top (deep):    breadcrumb · gallery (main image + thumbnails) | purchase panel (sticky)
+//   top (deep):    breadcrumb · gallery (main image + thumbnails) | order panel (sticky)
 //   bottom (soft): tabs (overview / features / technical / reviews) | similar websites
 
 const EASE = [0.16, 1, 0.3, 1];
@@ -42,7 +42,6 @@ export default function WebsiteDetailsContent({ initialWebsite }) {
     const [lightbox, setLightbox] = useState(null); // index of the image open full-screen
     const [showVideoModal, setShowVideoModal] = useState(false);
     const [isLiking, setIsLiking] = useState(false);
-    const [added, setAdded] = useState(false);
 
     useEffect(() => {
         if (initialWebsite) {
@@ -65,27 +64,6 @@ export default function WebsiteDetailsContent({ initialWebsite }) {
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
     }, [lightbox, website?.images?.length]);
-
-    const handleAddToCart = () => {
-        if (!website) return;
-        dispatch(addToCart({
-            id: website._id,
-            title: website.title,
-            price: website.offerPrice || website.price,
-            image: website.images?.[0] || website.image || "/images/placeholder.png",
-            type: "website",
-            productType: "website",
-            isBookingAllowed: website.isBookingAllowed,
-            bookingAmount: website.bookingAmount,
-        }));
-        setAdded(true);
-        setTimeout(() => setAdded(false), 2000);
-    };
-
-    const handleBuyNow = () => {
-        handleAddToCart();
-        router.push("/cart");
-    };
 
     const handleToggleLike = async () => {
         const token = localStorage.getItem("token");
@@ -153,14 +131,14 @@ export default function WebsiteDetailsContent({ initialWebsite }) {
 
     const perks = [
         { icon: LuFileCode, en: "Full source code", bn: "সম্পূর্ণ সোর্স কোড" },
-        { icon: LuDownload, en: "Instant delivery", bn: "দ্রুত ডেলিভারি" },
+        { icon: LuDownload, en: "Fast delivery", bn: "দ্রুত ডেলিভারি" },
         { icon: LuClock, en: "6 months of updates", bn: "৬ মাস আপডেট" },
         { icon: LuShieldCheck, en: "Premium support", bn: "প্রিমিয়াম সাপোর্ট" },
     ];
 
     return (
         <div className="relative min-h-screen overflow-x-clip bg-[color:var(--tone-deep)] text-white selection:bg-[#F8921C] selection:text-black">
-            {/* ======================= TOP: gallery + purchase ======================= */}
+            {/* ======================= TOP: gallery + order ======================= */}
             <section className="relative overflow-hidden pb-14 pt-8 lg:pb-20 lg:pt-10">
                 <div className="pointer-events-none absolute inset-0" aria-hidden="true">
                     <div className="absolute left-1/4 top-0 h-80 w-[36rem] -translate-x-1/2 rounded-full bg-[#F8921C]/[0.06] blur-3xl" />
@@ -272,7 +250,7 @@ export default function WebsiteDetailsContent({ initialWebsite }) {
                             )}
                         </motion.div>
 
-                        {/* ---------- purchase panel ---------- */}
+                        {/* ---------- order panel ---------- */}
                         <motion.aside
                             initial={{ opacity: 0, y: 24 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -295,7 +273,7 @@ export default function WebsiteDetailsContent({ initialWebsite }) {
                                 <p className={`mt-3 line-clamp-3 text-[15px] leading-7 text-white/60 ${bn}`}>{website.description}</p>
                             )}
 
-                            {/* rating · sold · likes */}
+                            {/* rating · likes */}
                             <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-white/60">
                                 <span className="inline-flex items-center gap-1.5">
                                     <span className="flex gap-0.5 text-[#F8921C]">
@@ -303,10 +281,6 @@ export default function WebsiteDetailsContent({ initialWebsite }) {
                                     </span>
                                     <b className="font-semibold text-white">{rating}</b>
                                     <span>({website.reviewCount || 0})</span>
-                                </span>
-                                <span className="inline-flex items-center gap-1.5">
-                                    <LuPackage size={14} className="text-white/40" />
-                                    {fmtCount(website.salesCount || 0)} {isBn ? "বিক্রি" : "sold"}
                                 </span>
                                 <button
                                     type="button"
@@ -320,41 +294,43 @@ export default function WebsiteDetailsContent({ initialWebsite }) {
                                 </button>
                             </div>
 
-                            {/* price + actions */}
+                            {/* price (if there is one) + order */}
                             <div className="mt-6 rounded-2xl border border-white/10 bg-[color:var(--tone-soft)] p-5 sm:p-6">
-                                <div className="flex items-end justify-between gap-3">
-                                    <div>
-                                        {hasDiscount && (
-                                            <div className="mb-1 flex items-center gap-2">
-                                                <span className="text-sm text-white/35 line-through">৳{website.price?.toLocaleString()}</span>
-                                                <span className="rounded-md bg-[#F8921C] px-1.5 py-0.5 text-[11px] font-bold text-black">-{off}%</span>
-                                            </div>
-                                        )}
-                                        <span className="text-[2.3rem] font-bold leading-none tracking-tight text-white">৳{price?.toLocaleString()}</span>
+                                {price > 0 && (
+                                    <div className="mb-5 flex items-end justify-between gap-3">
+                                        <div>
+                                            {hasDiscount && (
+                                                <div className="mb-1 flex items-center gap-2">
+                                                    <span className="text-sm text-white/35 line-through">৳{website.price?.toLocaleString()}</span>
+                                                    <span className="rounded-md bg-[#F8921C] px-1.5 py-0.5 text-[11px] font-bold text-black">-{off}%</span>
+                                                </div>
+                                            )}
+                                            <span className="text-[2.3rem] font-bold leading-none tracking-tight text-white">৳{price?.toLocaleString()}</span>
+                                        </div>
+                                        <span className={`text-right text-[12px] text-white/45 ${bn}`}>{isBn ? "শুরুর মূল্য" : "Starting price"}</span>
                                     </div>
-                                    <span className={`text-right text-[12px] text-white/45 ${bn}`}>{isBn ? "এককালীন মূল্য" : "One-time price"}</span>
-                                </div>
+                                )}
 
-                                <div className="mt-5 grid gap-2.5">
-                                    <button
-                                        type="button"
-                                        onClick={handleBuyNow}
+                                <div className="grid gap-2.5">
+                                    <Link
+                                        href={orderUrl(website.title)}
                                         className={`inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#F8921C] text-sm font-semibold uppercase text-black transition-colors hover:bg-[#e07d0a] ${bn ? "tracking-normal" : "tracking-wide"} ${bn}`}
                                     >
-                                        {isBn ? "এখনই কিনুন" : "Buy Now"}
+                                        {isBn ? "অর্ডার করুন" : "Confirm Order"}
                                         <LuArrowUpRight size={17} />
-                                    </button>
-                                    <div className="grid grid-cols-2 gap-2.5">
-                                        <button
-                                            type="button"
-                                            onClick={handleAddToCart}
-                                            className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl border text-[13px] font-semibold transition-colors ${
-                                                added ? "border-emerald-500 bg-emerald-500 text-white" : "border-white/15 text-white hover:border-[#F8921C] hover:text-[#F8921C]"
-                                            } ${bn}`}
-                                        >
-                                            {added ? <LuCheck size={16} /> : <LuShoppingCart size={16} />}
-                                            {added ? (isBn ? "যোগ হয়েছে" : "Added") : (isBn ? "কার্টে যোগ" : "Add to Cart")}
-                                        </button>
+                                    </Link>
+                                    <div className={`grid gap-2.5 ${website.previewUrl ? "grid-cols-2" : "grid-cols-1"}`}>
+                                        {website.previewUrl && (
+                                            <a
+                                                href={website.previewUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/15 text-[13px] font-semibold text-white transition-colors hover:border-[#F8921C] hover:text-[#F8921C] ${bn}`}
+                                            >
+                                                <LuEye size={16} />
+                                                {isBn ? "লাইভ প্রিভিউ" : "Live Preview"}
+                                            </a>
+                                        )}
                                         <a
                                             href={waLink}
                                             target="_blank"

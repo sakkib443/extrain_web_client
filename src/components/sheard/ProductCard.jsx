@@ -20,6 +20,7 @@ import { FaStar } from "react-icons/fa";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/providers/ThemeProvider";
 import { optimizeImage } from "@/lib/optimizeImage";
+import WebsiteCard from "@/components/sheard/WebsiteCard";
 
 // theme="dark" → the black site theme (home + website page). The default "light" is unchanged (software page, category pages).
 const ProductCard = ({ product, type, view = "grid", theme = "light" }) => {
@@ -29,6 +30,9 @@ const ProductCard = ({ product, type, view = "grid", theme = "light" }) => {
     const { language } = useLanguage();
     const bengaliClass = language === "bn" ? "hind-siliguri" : "";
     const D = theme === "dark";
+
+    // websites are ordered with the form, not bought through the cart
+    if (type === 'website') return <WebsiteCard product={product} view={view} theme={theme} />;
 
     const detailUrl = `/${type}/${product._id}`;
 

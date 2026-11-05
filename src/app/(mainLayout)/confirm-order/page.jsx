@@ -27,6 +27,12 @@ export default function ConfirmOrderPage() {
         ptApi.getOurWebsites().then((list) => setOurWebsites(list || [])).catch(() => { });
     }, []);
 
+    // ওয়েবসাইটের কার্ড থেকে এলে (/confirm-order?website=<title>) সেই সাইটটাই আগে থেকে বাছা থাকে
+    useEffect(() => {
+        const chosen = new URLSearchParams(window.location.search).get('website');
+        if (chosen) setForm((prev) => ({ ...prev, similarToWebsite: chosen.slice(0, 200) }));
+    }, []);
+
     // Logged-in user থাকলে নাম/ইমেইল/ফোন auto-fill (editable থাকে)
     useEffect(() => {
         try {
@@ -159,6 +165,13 @@ export default function ConfirmOrderPage() {
                     {/* Section label */}
                     <p className="text-xs font-bold uppercase tracking-wide text-slate-400">ক্লায়েন্ট ও প্রজেক্ট তথ্য</p>
 
+                    {form.similarToWebsite && (
+                        <div className="flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-2.5 text-[13px] leading-relaxed text-emerald-800">
+                            <FiCheckCircle className="mt-0.5 shrink-0" />
+                            <span>আপনি যে ডিজাইনের মতো ওয়েবসাইট চাইছেন: <b>{form.similarToWebsite}</b> (নিচের প্রজেক্ট ব্রিফে বদলাতে পারবেন)</span>
+                        </div>
+                    )}
+
                     {/* ইংরেজিতে লেখার সুপারিশ — অনেকে বাংলায় লেখেন, কিন্তু নাম/কোম্পানি ইংরেজিতে হলে রিসিট-ডকুমেন্টে প্রফেশনাল দেখায় */}
                     <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-[13px] leading-relaxed text-amber-800">
                         <FiInfo className="mt-0.5 shrink-0" style={{ color: BRAND }} />
@@ -211,6 +224,9 @@ export default function ConfirmOrderPage() {
                                 <FiCopy className={iconCls} />
                                 <select className={inputCls + ' appearance-none'} value={form.similarToWebsite} onChange={set('similarToWebsite')}>
                                     <option value="">আমাদের কোন সাইটের মতো?</option>
+                                    {form.similarToWebsite && !ourWebsites.some((w) => w.title === form.similarToWebsite) && (
+                                        <option value={form.similarToWebsite}>{form.similarToWebsite}</option>
+                                    )}
                                     {ourWebsites.map((w) => (
                                         <option key={w._id || w.slug || w.title} value={w.title}>{w.title}</option>
                                     ))}

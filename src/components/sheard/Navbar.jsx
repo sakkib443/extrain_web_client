@@ -249,15 +249,15 @@ const Navbar = () => {
                 <LanguageSwitcher />
               </div>
 
-              {/* cart */}
-              <Link href="/cart" aria-label="Cart" className={roundBtn}>
-                <LuShoppingCart size={19} />
-                {mounted && items.length > 0 && (
+              {/* cart: only when something is in it (websites are ordered with the form, not through the cart) */}
+              {mounted && items.length > 0 && (
+                <Link href="/cart" aria-label="Cart" className={roundBtn}>
+                  <LuShoppingCart size={19} />
                   <span className="absolute -right-0.5 -top-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-[#F8921C] px-1 text-[10px] font-extrabold text-black ring-2 ring-[#0e0f11]">
                     {items.length}
                   </span>
-                )}
-              </Link>
+                </Link>
+              )}
 
               {/* profile / get a quote */}
               {mounted && user ? (
