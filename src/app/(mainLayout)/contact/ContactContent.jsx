@@ -12,6 +12,7 @@ import BracketLabel from "@/components/Home/BracketLabel";
 import { Star4, EdgeDots, OrbitRing } from "@/components/Home/Decor";
 import { outlineStyle, filledAccent, reveal } from "@/components/Aboutpage/sections/shared";
 import { FACEBOOK_URL } from "@/config/site";
+import { BUSINESS, ADDRESS_LINE, ADDRESS_LINE_BN, MAP_EMBED_URL } from "@/config/business";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://extrain-web-server.vercel.app/api";
 
@@ -24,12 +25,12 @@ const DEFAULT_CONTENT = {
         subtitleBn: "কোনো প্রশ্ন আছে? আমাদের মেসেজ পাঠান, আমরা যত তাড়াতাড়ি সম্ভব উত্তর দেব।",
     },
     contactInfo: {
-        email: "info.extrainweb@gmail.com",
-        phone: "+88 01711946614",
-        address: "Road - 11, DIT Project, Marul Badda, Badda, Dhaka -1214, Bangladesh",
-        addressBn: "রোড - ১১, ডিআইটি প্রজেক্ট, মারুল বাড্ডা, বাড্ডা, ঢাকা -১২১৪, বাংলাদেশ",
-        officeHours: "Sat - Thu: 10:00 AM - 6:00 PM",
-        officeHoursBn: "শনি - বৃহস্পতি: সকাল ১০টা - সন্ধ্যা ৬টা",
+        email: BUSINESS.email,
+        phone: BUSINESS.phoneDisplay,
+        address: `${ADDRESS_LINE}, Bangladesh`,
+        addressBn: `${ADDRESS_LINE_BN}, বাংলাদেশ`,
+        officeHours: BUSINESS.hoursText,
+        officeHoursBn: BUSINESS.hoursTextBn,
     },
     socialLinks: {
         facebook: FACEBOOK_URL,
@@ -40,10 +41,7 @@ const DEFAULT_CONTENT = {
     },
 };
 
-// Office location: Progoti Tower, Pragati Sarani, Merul Badda. Kept in code on purpose — the map URL
-// stored in the admin panel pointed at another company's office.
-const MAP_EMBED_URL =
-    "https://maps.google.com/maps?q=" + encodeURIComponent("Pragati Tower, Kha-214/E, Pragati Sarani, Merul Badda, Dhaka 1212") + "&z=17&output=embed";
+// Office location and map come from config/business.js (one place for the whole site).
 
 const inputCls =
     "w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-white placeholder-white/30 outline-none transition-colors focus:border-[#F8921C] focus:bg-white/[0.06]";
@@ -71,7 +69,8 @@ export default function ContactContent() {
                         ...prev,
                         ...c,
                         hero: { ...prev.hero, ...c.hero },
-                        contactInfo: { ...prev.contactInfo, ...c.contactInfo },
+                        // name, address, phone, email and hours are fixed in config/business.js — Google needs them identical everywhere
+                        contactInfo: { ...prev.contactInfo, ...c.contactInfo, ...DEFAULT_CONTENT.contactInfo },
                         // the Facebook link is fixed (config/site.js), whatever an older save left in the database
                         socialLinks: { ...prev.socialLinks, ...c.socialLinks, facebook: FACEBOOK_URL },
                     }));

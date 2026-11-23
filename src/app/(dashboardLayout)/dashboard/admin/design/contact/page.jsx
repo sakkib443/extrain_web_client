@@ -26,7 +26,7 @@ const ContactDesignPage = () => {
         contactInfo: {
             email: 'info.extrainweb@gmail.com',
             phone: '+88 01711946614',
-            address: 'Road - 11, DIT Project, Marul Badda, Badda, Dhaka -1214, Bangladesh',
+            address: 'Pragati Tower, Kha-214/E, Pragati Sarani, Merul Badda, Dhaka 1212, Bangladesh',
             addressBn: 'রোড - ১১, ডিআইটি প্রজেক্ট, মারুল বাড্ডা, বাড্ডা, ঢাকা -১২১৪, বাংলাদেশ',
             officeHours: 'Sat - Thu: 10:00 AM - 6:00 PM',
             officeHoursBn: 'শনি - বৃহস্পতি: সকাল ১০টা - সন্ধ্যা ৬টা'

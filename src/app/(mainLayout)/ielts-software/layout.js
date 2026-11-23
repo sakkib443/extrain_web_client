@@ -1,4 +1,4 @@
-import { generateMetadata as seoGenerateMetadata, commonKeywords } from '@/lib/seo';
+import { generateMetadata as seoGenerateMetadata, commonKeywords, BUSINESS_ID } from '@/lib/seo';
 
 export async function generateMetadata() {
     return seoGenerateMetadata({
@@ -59,7 +59,7 @@ export async function generateMetadata() {
             "IELTS institute management software",
             "online IELTS test platform Bangladesh",
         ],
-        canonicalUrl: 'https://extrainweb.com/ielts-software',
+        canonicalUrl: 'https://www.extrainweb.com/ielts-software',
     });
 }
 
@@ -153,28 +153,9 @@ export default function IeltsSoftwareLayout({ children }) {
             "priceCurrency": "BDT",
             "offerCount": 3
         },
-        "provider": {
-            "@type": "Organization",
-            "name": "Extrain Web",
-            "url": "https://extrainweb.com",
-            "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "Road - 11, DIT Project, Marul Badda, Badda",
-                "addressLocality": "Dhaka",
-                "postalCode": "1214",
-                "addressCountry": "BD"
-            },
-            "telephone": "+8801711946614",
-            "email": "info.extrainweb@gmail.com"
-        },
+        "provider": { "@id": BUSINESS_ID },
         "featureList": "British Council Interface, Auto Marking, AI Speaking Assessment, AI Writing Assessment, Admin Dashboard, Student Dashboard, Mock Tests, Practice Module, Band Score Calculator, Batch Management, Progress Reports, White-label Solution",
-        "screenshot": "https://extrainweb.com/images/logo.png",
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.9",
-            "reviewCount": "50",
-            "bestRating": "5"
-        }
+        // no aggregateRating here: Google only allows ratings collected from real customers on the page
     };
 
     // Breadcrumb Schema
@@ -182,46 +163,12 @@ export default function IeltsSoftwareLayout({ children }) {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://extrainweb.com" },
-            { "@type": "ListItem", "position": 2, "name": "IELTS Software", "item": "https://extrainweb.com/ielts-software" }
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.extrainweb.com" },
+            { "@type": "ListItem", "position": 2, "name": "IELTS Software", "item": "https://www.extrainweb.com/ielts-software" }
         ]
     };
 
-    // LocalBusiness Schema - Dhaka specific
-    const localBusinessSchema = {
-        "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        "name": "Extrain Web - IELTS Software Development Company",
-        "description": "Best IELTS software development company in Dhaka, Bangladesh. We build custom IELTS practice software with British Council-style interface, AI marking, and complete institute management system.",
-        "url": "https://extrainweb.com/ielts-software",
-        "telephone": "+8801711946614",
-        "email": "info.extrainweb@gmail.com",
-        "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Road - 11, DIT Project, Marul Badda, Badda",
-            "addressLocality": "Dhaka",
-            "postalCode": "1214",
-            "addressRegion": "Dhaka Division",
-            "addressCountry": "BD"
-        },
-        "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": "23.7808",
-            "longitude": "90.4261"
-        },
-        "priceRange": "৳42,999 - ৳2,50,000",
-        "openingHoursSpecification": {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
-            "opens": "10:00",
-            "closes": "18:00"
-        },
-        "areaServed": [
-            { "@type": "Country", "name": "Bangladesh" },
-            { "@type": "City", "name": "Dhaka" }
-        ],
-        "serviceType": ["IELTS Software Development", "Education Software", "Custom Software Development"]
-    };
+    // (the business itself — address, phone, hours — is in the site-wide schema in app/layout.js)
 
     return (
         <>
@@ -236,10 +183,6 @@ export default function IeltsSoftwareLayout({ children }) {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
             />
             {children}
         </>

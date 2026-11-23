@@ -1,5 +1,6 @@
 export const metadata = {
-    title: "Register",
+    title: "Register | Extrain Web",
+    robots: { index: false, follow: true },
     description: "Create your Extrain Web account.",
 };
 

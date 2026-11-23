@@ -1,5 +1,5 @@
 export const metadata = {
-    title: "Software",
+    title: "Software | Extrain Web",
     description: "Browse premium ready-made software and scripts at Extrain Web.",
 };
 

@@ -17,5 +17,5 @@ export const metadata = generateSEOMetadata({
         'leading digital agency Bangladesh',
     ],
     image: '/images/about-og.jpg',
-    canonicalUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://extrainweb.com'}/about`,
+    canonicalUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.extrainweb.com'}/about`,
 });

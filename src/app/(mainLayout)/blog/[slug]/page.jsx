@@ -14,22 +14,24 @@ export async function generateMetadata({ params }) {
         if (!blog) {
             return {
                 title: "Blog Not Found | Extrain Web",
+                robots: { index: false, follow: true },
                 description: "The requested blog post could not be found.",
             };
         }
 
         return {
-            title: blog.title,
+            title: `${blog.title} | Extrain Web Blog`,
             description: blog.excerpt || blog.description?.substring(0, 160),
+            alternates: { canonical: `https://www.extrainweb.com/blog/${slug}` },
             keywords: blog.tags?.join(', ') || 'web development blog, tech news, Extrain Web',
             openGraph: {
                 title: blog.title,
                 description: blog.excerpt,
-                url: `https://extrainweb.com/blog/${slug}`,
+                url: `https://www.extrainweb.com/blog/${slug}`,
                 siteName: "Extrain Web",
                 images: [
                     {
-                        url: blog.thumbnail || "/images/logo.png",
+                        url: blog.thumbnail || "/og-image.jpg",
                         width: 1200,
                         height: 630,
                         alt: blog.title,
@@ -44,7 +46,7 @@ export async function generateMetadata({ params }) {
                 card: "summary_large_image",
                 title: blog.title,
                 description: blog.excerpt,
-                images: [blog.thumbnail || "/images/logo.png"],
+                images: [blog.thumbnail || "/og-image.jpg"],
             },
         };
     } catch (error) {
@@ -86,14 +88,8 @@ export default async function SingleBlogPage({ params }) {
                                 "@type": "Person",
                                 "name": `${blog.author?.firstName} ${blog.author?.lastName}`
                             },
-                            "publisher": {
-                                "@type": "Organization",
-                                "name": "Extrain Web",
-                                "logo": {
-                                    "@type": "ImageObject",
-                                    "url": "https://extrainweb.com/images/logo.png"
-                                }
-                            },
+                            "publisher": { "@id": "https://www.extrainweb.com/#business" },
+                            "mainEntityOfPage": `https://www.extrainweb.com/blog/${slug}`,
                             "datePublished": blog.publishedAt || blog.createdAt,
                             "dateModified": blog.updatedAt || blog.createdAt
                         })

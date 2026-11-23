@@ -5,6 +5,7 @@ import TopHeader from "@/components/sheard/TopHeader";
 export const metadata = {
   title: "Authentication | Extrain Web",
   description: "Login or Register to access your Extrain Web account.",
+  robots: { index: false, follow: true },
 };
 
 export default function AuthLayout({ children }) {

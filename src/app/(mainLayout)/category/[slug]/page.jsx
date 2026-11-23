@@ -7,9 +7,15 @@ export async function generateMetadata({ params }) {
     if (!KNOWN_SLUGS.includes(slug)) return {};
     const cat = getCategory(slug);
     return {
-        title: `${cat.name} Website Development & Templates | Extrain Web`,
+        title: `${cat.name} Website Development in Bangladesh | Extrain Web`,
         description: cat.description,
-        alternates: { canonical: `https://extrainweb.com/category/${slug}` },
+        alternates: { canonical: `https://www.extrainweb.com/category/${slug}` },
+        openGraph: {
+            title: `${cat.name} Website Development in Bangladesh | Extrain Web`,
+            description: cat.description,
+            url: `https://www.extrainweb.com/category/${slug}`,
+            images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
+        },
     };
 }
 

@@ -243,13 +243,13 @@ const Hero = () => {
                                 {/* the three lines rise in one after another */}
                                 <Line ready={ready} delay={0.15} className="pl-0 text-white tracking-[-0.015em] sm:pl-[0.55em] md:whitespace-nowrap" style={{ fontSize: "1.1em" }}>
                                     WE ARE BEST WEB
-                                </Line>
+                                </Line>{" "}
                                 <Line ready={ready} delay={0.3} className="tracking-[-0.015em] md:whitespace-nowrap" style={{ fontSize: "0.9em" }}>
                                     <span className="text-white">&amp; DIGITAL</span>{" "}
                                     <span style={outlineStyle}>
                                         CRE<span style={filledA}>A</span>TIVE
                                     </span>
-                                </Line>
+                                </Line>{" "}
                                 <Line ready={ready} delay={0.45} className="text-white tracking-[-0.015em] md:whitespace-nowrap" style={{ fontSize: "0.74em" }}>
                                     AGENCY{" "}
                                     <span className="relative inline-block">
@@ -265,7 +265,15 @@ const Hero = () => {
                                             <i className="absolute -bottom-[5px] -right-[5px] w-2.5 h-2.5 bg-[#F8921C]" />
                                         </motion.span>
                                     </span>
-                                </Line>
+                                </Line>{" "}
+                                {/* what Google reads first: the service + the place, in the page's main heading */}
+                                <motion.span
+                                    {...intro(ready, 0.6, { opacity: 0, y: 10 }, 0.7)}
+                                    className="mt-5 block text-[13px] font-semibold normal-case tracking-[0.12em] text-[#F8921C] sm:mt-7 sm:text-[15px]"
+                                >
+                                    {/* kept in English in both languages: it matches the page title and what people type into Google */}
+                                    Web Development Company in Badda, Dhaka
+                                </motion.span>
                             </h1>
 
                             {/* phones only: a short divider between headline and copy */}

@@ -1,5 +1,5 @@
 export const metadata = {
-    title: "Website Templates",
+    title: "Website Templates | Extrain Web",
     description: "Browse premium website templates and themes at Extrain Web.",
 };
 

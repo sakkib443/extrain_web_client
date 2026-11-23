@@ -83,7 +83,7 @@ const AboutCTA = () => {
                                 },
                                 {
                                     icon: LuMapPin,
-                                    text: 'Marul Badda, Badda, Dhaka -1214, Bangladesh',
+                                    text: 'Pragati Tower, Merul Badda, Dhaka 1212, Bangladesh',
                                     label: 'HEADQUARTERS',
                                     action: '#'
                                 }

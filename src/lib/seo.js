@@ -1,13 +1,13 @@
 // SEO Metadata Utility - সব pages এ use করার জন্য
 // This generates comprehensive metadata for better SEO
 
-import { FACEBOOK_URL } from '@/config/site';
+import { BUSINESS, SITE_URL, OG_IMAGE, LOGO_URL, MAP_URL } from '@/config/business';
 
 export function generateMetadata({
     title,
     description,
     keywords = [],
-    image = '/images/logo.png',
+    image = OG_IMAGE,
     type = 'website',
     locale = 'en_US',
     alternateLocales = ['bn_BD'],
@@ -19,14 +19,15 @@ export function generateMetadata({
     noIndex = false,
     canonicalUrl,
 }) {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://extrainweb.com';
+    const baseUrl = SITE_URL;
     const fullImageUrl = image.startsWith('http') ? image : `${baseUrl}${image}`;
-    const canonical = canonicalUrl || baseUrl;
+    // canonical is always a full URL; '/' → https://www.extrainweb.com/
+    const canonical = !canonicalUrl ? `${baseUrl}/` : canonicalUrl.startsWith('http') ? canonicalUrl : `${baseUrl}${canonicalUrl}`;
 
     const metadata = {
         title,
         description,
-        keywords: keywords.join(', '),
+        ...(keywords.length && { keywords: keywords.join(', ') }),
         authors: [{ name: author }],
         creator: 'Extrain Web',
         publisher: 'Extrain Web',
@@ -41,13 +42,8 @@ export function generateMetadata({
                 'max-snippet': -1,
             },
         },
-        alternates: {
-            canonical: canonical,
-            languages: {
-                'en-US': canonical,
-                'bn-BD': canonical,
-            },
-        },
+        // English and Bangla are the same URL (switched on the page), so there is no hreflang — just one canonical
+        alternates: { canonical },
         openGraph: {
             type,
             locale,
@@ -59,8 +55,7 @@ export function generateMetadata({
             images: [
                 {
                     url: fullImageUrl,
-                    width: 1200,
-                    height: 630,
+                    ...(image === OG_IMAGE && { width: 1200, height: 630 }),
                     alt: title,
                 },
             ],
@@ -70,10 +65,6 @@ export function generateMetadata({
             title,
             description,
             images: [fullImageUrl],
-            creator: '@extrainweb', // আপনার Twitter handle দিয়ে replace করবেন
-        },
-        verification: {
-            google: 'yxl3yWdFkrclIR7zzpyfjc5mCC0AmjTpeaii_z6yUVg', // Google Search Console verification code
         },
     };
 
@@ -166,63 +157,106 @@ export const commonKeywords = {
 };
 
 // Schema.org JSON-LD generators
-export function generateOrganizationSchema() {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://extrainweb.com';
 
+// The whole business as Google should understand it: a local web-design company in Merul Badda, Dhaka.
+// Rendered once on every page from the root layout (app/layout.js). Other schemas point to it by @id.
+export const BUSINESS_ID = `${SITE_URL}/#business`;
+export const WEBSITE_ID = `${SITE_URL}/#website`;
+
+export function generateBusinessSchema() {
+    const a = BUSINESS.address;
     return {
         '@context': 'https://schema.org',
-        '@type': 'Organization',
-        '@id': `${baseUrl}/#organization`,
-        name: 'Extrain Web',
-        alternateName: 'Extra in Web',
-        url: baseUrl,
-        logo: `${baseUrl}/images/logo.png`,
-        description: 'Professional website development company in Bangladesh. We specialize in custom web development, ready-made website templates, and business software solutions.',
-        foundingDate: '2019',
-        slogan: 'Your Digital Success Partner',
-        address: {
-            '@type': 'PostalAddress',
-            streetAddress: 'Road - 11, DIT Project, Marul Badda, Badda',
-            addressLocality: 'Dhaka',
-            postalCode: '1214',
-            addressCountry: 'BD',
-        },
-        contactPoint: {
-            '@type': 'ContactPoint',
-            contactType: 'Customer Service',
-            telephone: '+8801711946614',
-            email: 'info.extrainweb@gmail.com',
-            availableLanguage: ['English', 'Bengali'],
-        },
-        sameAs: [
-            // আপনার social media links add করবেন
-            FACEBOOK_URL,
-            'https://linkedin.com/company/extrainweb',
-            // 'https://twitter.com/extrainweb',
-            // 'https://youtube.com/@extrainweb',
+        '@graph': [
+            {
+                '@type': ['ProfessionalService', 'Organization'],
+                '@id': BUSINESS_ID,
+                name: BUSINESS.name,
+                alternateName: BUSINESS.alternateName,
+                url: `${SITE_URL}/`,
+                logo: { '@type': 'ImageObject', url: LOGO_URL, width: 600, height: 105 },
+                image: `${SITE_URL}${OG_IMAGE}`,
+                description:
+                    'Extrain Web is a web development and website design company in Merul Badda, Dhaka, Bangladesh. We build custom websites, e-commerce sites, business software and run digital marketing for businesses across Bangladesh.',
+                slogan: 'Your Complete Business Solution Partner',
+                foundingDate: BUSINESS.foundingDate,
+                founder: { '@type': 'Person', name: BUSINESS.founder },
+                telephone: BUSINESS.phone,
+                email: BUSINESS.email,
+                priceRange: '৳৳',
+                currenciesAccepted: 'BDT',
+                address: {
+                    '@type': 'PostalAddress',
+                    streetAddress: a.street,
+                    addressLocality: `${a.area}, ${a.city}`,
+                    addressRegion: a.region,
+                    postalCode: a.postalCode,
+                    addressCountry: a.country,
+                },
+                hasMap: MAP_URL,
+                openingHoursSpecification: [
+                    {
+                        '@type': 'OpeningHoursSpecification',
+                        dayOfWeek: BUSINESS.hours.days,
+                        opens: BUSINESS.hours.opens,
+                        closes: BUSINESS.hours.closes,
+                    },
+                ],
+                areaServed: [
+                    { '@type': 'Place', name: 'Badda, Dhaka' },
+                    { '@type': 'City', name: 'Dhaka' },
+                    { '@type': 'Country', name: 'Bangladesh' },
+                ],
+                contactPoint: {
+                    '@type': 'ContactPoint',
+                    contactType: 'customer service',
+                    telephone: BUSINESS.phone,
+                    email: BUSINESS.email,
+                    areaServed: 'BD',
+                    availableLanguage: ['English', 'Bengali'],
+                },
+                knowsAbout: [
+                    'Web development',
+                    'Website design',
+                    'E-commerce website development',
+                    'Custom software development',
+                    'Search engine optimization',
+                    'Digital marketing',
+                ],
+                sameAs: BUSINESS.sameAs,
+            },
+            {
+                '@type': 'WebSite',
+                '@id': WEBSITE_ID,
+                url: `${SITE_URL}/`,
+                name: BUSINESS.name,
+                alternateName: BUSINESS.alternateName,
+                publisher: { '@id': BUSINESS_ID },
+                inLanguage: ['en', 'bn'],
+            },
         ],
     };
 }
 
+// Old name, kept so nothing that imports it breaks
+export const generateOrganizationSchema = generateBusinessSchema;
+
 // Service Schema for Web Development Services
 export function generateServiceSchema(service) {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://extrainweb.com';
+    const baseUrl = SITE_URL;
 
     return {
         '@context': 'https://schema.org',
         '@type': 'Service',
         serviceType: service.title,
         description: service.description,
-        provider: {
-            '@type': 'Organization',
-            name: 'Extrain Web',
-            url: baseUrl,
-        },
-        areaServed: {
-            '@type': 'Country',
-            name: 'Bangladesh',
-        },
-        image: service.image || `${baseUrl}/images/logo.png`,
+        provider: { '@id': BUSINESS_ID },
+        areaServed: service.areaServed || [
+            { '@type': 'City', name: 'Dhaka' },
+            { '@type': 'Country', name: 'Bangladesh' },
+        ],
+        ...(service.url && { url: service.url.startsWith('http') ? service.url : `${baseUrl}${service.url}` }),
+        image: service.image || `${baseUrl}${OG_IMAGE}`,
         ...(service.price && {
             offers: {
                 '@type': 'Offer',
@@ -234,14 +268,14 @@ export function generateServiceSchema(service) {
 }
 
 export function generateProductSchema(product) {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://extrainweb.com';
+    const baseUrl = SITE_URL;
 
     return {
         '@context': 'https://schema.org',
         '@type': 'Product',
         name: product.title,
         description: product.description,
-        image: product.image || `${baseUrl}/images/logo.png`,
+        image: product.image || `${baseUrl}${OG_IMAGE}`,
         brand: {
             '@type': 'Brand',
             name: 'Extrain Web',
@@ -266,7 +300,7 @@ export function generateProductSchema(product) {
 }
 
 export function generateBreadcrumbSchema(items) {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://extrainweb.com';
+    const baseUrl = SITE_URL;
 
     return {
         '@context': 'https://schema.org',

@@ -1,5 +1,8 @@
 import React from 'react'
 
+// placeholder page — keep it out of Google until it has real content
+export const metadata = { title: 'Phoenix | Extrain Web', robots: { index: false, follow: true } };
+
 const PhoenixPage = () => {
   return (
     <div> 

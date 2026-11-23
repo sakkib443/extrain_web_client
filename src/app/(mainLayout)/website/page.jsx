@@ -3,19 +3,19 @@ import WebsitePageContent from "./WebsitePageContent";
 
 // SEO - Metadata for the listing page
 export const metadata = {
-    title: "Premium Website Marketplace | Ready-to-use Websites",
+    title: "Ready-Made Websites & Templates in Bangladesh | Extrain Web",
     description: "Browse our collection of premium, fully-functional websites. Get your business online instantly with our high-quality website templates and custom solutions. Best website marketplace in Bangladesh.",
     keywords: "website marketplace, buy websites, premium website templates, ready-made websites, website development Bangladesh, portfolio, e-commerce, real estate websites",
     alternates: {
-        canonical: "https://extrainweb.com/website",
+        canonical: "https://www.extrainweb.com/website",
     },
     openGraph: {
         title: "Extrain Web Marketplace - Premium Websites",
         description: "Explore the best collection of ready-to-deploy websites for startups and enterprises.",
-        url: "https://extrainweb.com/website",
+        url: "https://www.extrainweb.com/website",
         images: [
             {
-                url: "/images/logo.png",
+                url: "/og-image.jpg",
                 width: 1200,
                 height: 630,
                 alt: "Extrain Web Marketplace",
@@ -49,14 +49,14 @@ export default async function WebsitePage() {
                         "@type": "CollectionPage",
                         "name": "Extrain Web Marketplace - Premium Websites",
                         "description": "A curated collection of professional websites for sale.",
-                        "url": "https://extrainweb.com/website",
+                        "url": "https://www.extrainweb.com/website",
                         "mainEntity": {
                             "@type": "ItemList",
                             "numberOfItems": websites.length,
                             "itemListElement": websites.slice(0, 10).map((site, index) => ({
                                 "@type": "ListItem",
                                 "position": index + 1,
-                                "url": `https://extrainweb.com/website/${site._id}`,
+                                "url": `https://www.extrainweb.com/website/${site.slug || site._id}`,
                                 "name": site.title,
                                 "image": site.images?.[0] || site.image
                             }))

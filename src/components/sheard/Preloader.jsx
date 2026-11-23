@@ -20,11 +20,13 @@ const amiri = Amiri({ subsets: ["arabic"], weight: ["700"], display: "swap", var
 
 const GREETING = "Assalamu Alaikum";
 const SPLIT = GREETING.indexOf("Alaikum");            // letters from here on are gold
-const T_TYPE = 550;                                    // typing starts (after the Arabic line settles)
-const TYPE_MS = 55;                                    // per letter — each letter also fades in over 0.38s, so it flows
-const T_BRAND = T_TYPE + GREETING.length * TYPE_MS + 850; // typing done + time to enjoy it
-const T_TAGLINE = T_BRAND + 1700;
-const T_EXIT = T_TAGLINE + 1800;
+// Kept short on purpose: the page underneath is hidden until the curtain opens, and Google measures
+// how fast the main content appears (Largest Contentful Paint). ~3 s in total instead of ~6.5 s.
+const T_TYPE = 250;                                    // typing starts (after the Arabic line settles)
+const TYPE_MS = 35;                                    // per letter — each letter also fades in, so it flows
+const T_BRAND = T_TYPE + GREETING.length * TYPE_MS + 350; // typing done + a short pause
+const T_TAGLINE = T_BRAND + 800;
+const T_EXIT = T_TAGLINE + 1000;
 
 const EASE = [0.16, 1, 0.3, 1];
 

@@ -1,5 +1,5 @@
 export const metadata = {
-    title: "Contact",
+    title: "Contact | Extrain Web",
     description: "Contact Extrain Web - Get in touch with us for any queries, support or business inquiries.",
 };
 

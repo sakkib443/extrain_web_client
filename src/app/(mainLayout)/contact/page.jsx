@@ -1,11 +1,12 @@
 import ContactContent from "./ContactContent";
-import { generateMetadata as seoGenerateMetadata, commonKeywords } from "@/lib/seo";
+import { generateMetadata as seoGenerateMetadata, commonKeywords, BUSINESS_ID } from "@/lib/seo";
+import { SITE_URL } from "@/config/business";
 
 // ==================== SEO METADATA ====================
 export async function generateMetadata() {
   return seoGenerateMetadata({
-    title: "Contact Us | Extrain Web - Top Website Development Agency",
-    description: "Get in touch with Extrain Web (Extra in Web) for custom website development, ready-made templates, and business software in Bangladesh. We are located in Marul Badda, Badda, Dhaka.",
+    title: "Contact Extrain Web | Web Development Company in Merul Badda, Dhaka",
+    description: "Visit or call Extrain Web — Pragati Tower, Pragati Sarani, Merul Badda, Dhaka 1212. Phone / WhatsApp +880 1711-946614. Open Sat–Thu, 10 AM – 6 PM.",
     keywords: [
       ...commonKeywords.brand,
       "contact extrain web",
@@ -22,20 +23,10 @@ export default function ContactPage() {
   const contactSchema = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    "name": "Contact Extrain Web",
-    "description": "Contact page of Extrain Web, a professional website development company in Bangladesh.",
-    "url": "https://extrainweb.com/contact",
-    "mainEntity": {
-      "@type": "Organization",
-      "name": "Extrain Web",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+8801711946614",
-        "contactType": "customer service",
-        "areaServed": "BD",
-        "availableLanguage": ["English", "Bengali"]
-      }
-    }
+    name: "Contact Extrain Web",
+    url: `${SITE_URL}/contact`,
+    description: "Contact Extrain Web, a web development company in Merul Badda, Dhaka.",
+    about: { "@id": BUSINESS_ID },
   };
 
   return (

@@ -1,13 +1,13 @@
 import HomeContent from "./HomeContent";
 import { API_BASE_URL } from "@/config/api";
 import { fetchHomeMedia } from "@/lib/homeMedia";
-import { generateMetadata as seoGenerateMetadata, commonKeywords, generateOrganizationSchema } from "@/lib/seo";
+import { generateMetadata as seoGenerateMetadata, commonKeywords } from "@/lib/seo";
 
 // ==================== SEO METADATA ====================
 export async function generateMetadata() {
   const metadata = seoGenerateMetadata({
-    title: "Best Website Development Company in Bangladesh | Extrain Web",
-    description: "Extrain Web (Extra in Web) — Top-rated website development agency in Bangladesh. We build high-performance custom websites, premium templates, and business software in Dhaka.",
+    title: "Web Development Company in Dhaka, Bangladesh | Extrain Web",
+    description: "Extrain Web is a web development & website design company in Merul Badda, Dhaka. Custom websites, e-commerce, software and digital marketing. Call +880 1711-946614.",
     keywords: [
       ...commonKeywords.brand,
       ...commonKeywords.bestKeywords,
@@ -24,18 +24,12 @@ export async function generateMetadata() {
 
 // ==================== HOME PAGE ====================
 export default async function HomePage() {
-  const organizationSchema = generateOrganizationSchema();
   // the photos saved in Dashboard → Design → Home Page → Photos (null = the built-in ones)
   const media = await fetchHomeMedia(API_BASE_URL);
 
   return (
     <>
-      {/* Schema.org Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
-
+      {/* the business schema (address, phone, hours) is in app/layout.js, on every page */}
       {/* Home Content Component */}
       <HomeContent media={media} />
     </>

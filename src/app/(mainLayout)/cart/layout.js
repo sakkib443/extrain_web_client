@@ -1,5 +1,6 @@
 export const metadata = {
-    title: "Cart",
+    title: "Cart | Extrain Web",
+    robots: { index: false, follow: true },
     description: "Your shopping cart at Extrain Web.",
 };
 

@@ -1,5 +1,5 @@
 export const metadata = {
-    title: "About",
+    title: "About | Extrain Web",
     description: "Learn about Extrain Web - a premium website and software marketplace in Bangladesh providing digital solutions.",
 };
 

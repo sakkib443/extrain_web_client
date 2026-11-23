@@ -27,6 +27,9 @@ const Footer = () => {
     { to: "/blog", label: language === "bn" ? "ব্লগ" : "Blog" },
     { to: "/about", label: language === "bn" ? "আমাদের সম্পর্কে" : "About Us" },
     { to: "/contact", label: language === "bn" ? "যোগাযোগ" : "Contact" },
+    // local pages — internal links tell Google these pages matter
+    { to: "/web-development-company-dhaka", label: language === "bn" ? "ঢাকায় ওয়েব ডেভেলপমেন্ট" : "Web Development in Dhaka" },
+    { to: "/web-development-company-badda", label: language === "bn" ? "বাড্ডায় ওয়েব ডেভেলপমেন্ট" : "Web Development in Badda" },
   ];
 
   const socialLinks = [
@@ -168,7 +171,7 @@ const Footer = () => {
                   <div>
                     <p className={`mb-1 text-xs font-bold uppercase text-white/40 ${language === "bn" ? "tracking-normal" : "tracking-widest"} ${bengaliClass}`}>{t("footer.address") || "Address"}</p>
                     <p className={`text-sm leading-relaxed text-white/75 ${bengaliClass}`}>
-                      {t("footer.addressValue") || "Road - 11, DIT Project, Marul Badda, Badda, Dhaka -1214"}
+                      {t("footer.addressValue") || "Pragati Tower, Kha-214/E, Pragati Sarani, Merul Badda, Dhaka 1212"}
                     </p>
                   </div>
                 </div>

@@ -21,22 +21,24 @@ export async function generateMetadata({ params }) {
         if (!website) {
             return {
                 title: "Website Not Found | Extrain Web",
+                robots: { index: false, follow: true },
                 description: "The requested website project could not be found.",
             };
         }
 
         return {
-            title: website.title,
-            description: website.description || `Explore ${website.title} - A premium website project by Extrain Web.`,
+            title: `${website.title} | Extrain Web`,
+            description: (website.description || `${website.title} — a ready website by Extrain Web, web development company in Dhaka.`).slice(0, 160),
+            alternates: { canonical: `https://www.extrainweb.com/website/${website.slug || id}` },
             keywords: `${website.title}, website development, project template, ${website.projectType}, Extrain Web`,
             openGraph: {
                 title: `${website.title} | Extrain Web`,
                 description: website.description,
-                url: `https://extrainweb.com/website/${website.slug || id}`,
+                url: `https://www.extrainweb.com/website/${website.slug || id}`,
                 siteName: "Extrain Web",
                 images: [
                     {
-                        url: website.images?.[0] || website.image || "/images/logo.png",
+                        url: website.images?.[0] || website.image || "/og-image.jpg",
                         width: 1200,
                         height: 630,
                         alt: website.title,
@@ -48,7 +50,7 @@ export async function generateMetadata({ params }) {
                 card: "summary_large_image",
                 title: website.title,
                 description: website.description,
-                images: [website.images?.[0] || website.image || "/images/logo.png"],
+                images: [website.images?.[0] || website.image || "/og-image.jpg"],
             },
         };
     } catch (error) {
@@ -106,13 +108,18 @@ export default async function WebsiteDetailsPage({ params }) {
                                 "@type": "Offer",
                                 "price": website.offerPrice || website.price,
                                 "priceCurrency": "BDT",
-                                "availability": "https://schema.org/InStock"
+                                "availability": "https://schema.org/InStock",
+                                "url": `https://www.extrainweb.com/website/${website.slug || id}`,
+                                "seller": { "@id": "https://www.extrainweb.com/#business" }
                             },
-                            "aggregateRating": {
-                                "@type": "AggregateRating",
-                                "ratingValue": website.rating || "5.0",
-                                "reviewCount": website.reviewCount || "1"
-                            }
+                            // only real reviews — a made-up rating can get the whole site a Google penalty
+                            ...(website.rating > 0 && website.reviewCount > 0 && {
+                                "aggregateRating": {
+                                    "@type": "AggregateRating",
+                                    "ratingValue": website.rating,
+                                    "reviewCount": website.reviewCount
+                                }
+                            })
                         })
                     }}
                 />

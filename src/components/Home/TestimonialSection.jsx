@@ -211,7 +211,7 @@ const TestimonialSection = () => {
                                         <img
                                             key={x.name}
                                             src={x.image}
-                                            alt=""
+                                            alt={`${x.name}, Extrain Web client`}
                                             className="h-10 w-10 rounded-full border-2 border-[color:var(--tone-soft)] object-cover"
                                         />
                                     ))}

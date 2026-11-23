@@ -1,20 +1,21 @@
 import React from "react";
 import AboutContent from "./AboutContent";
+import { BUSINESS_ID } from "@/lib/seo";
 
 export const metadata = {
-  title: "About Us | Extrain Web - Digital Architects",
-  description: "Extrain Web is a leading digital agency in Bangladesh specializing in custom web development, premium templates, IELTS software, and business software solutions. Discover our mission and services.",
+  title: "About Extrain Web | Web Development Company in Dhaka Since 2019",
+  description: "Extrain Web is a web development company in Merul Badda, Dhaka, founded in 2019 by Sheikh Sakibul Hasan. Custom websites, e-commerce, IELTS software and business software for clients across Bangladesh.",
   keywords: "about extrain web, digital agency Bangladesh, web development team, mission and vision, premium web solutions, software development company Dhaka",
   alternates: {
-    canonical: "https://extrainweb.com/about",
+    canonical: "https://www.extrainweb.com/about",
   },
   openGraph: {
     title: "About Extrain Web - Building the Digital Future",
     description: "We are the architects of the digital age. Blending cutting-edge technology with artistic vision to craft exceptional digital experiences.",
-    url: "https://extrainweb.com/about",
+    url: "https://www.extrainweb.com/about",
     images: [
       {
-        url: "/images/logo.png",
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "About Extrain Web",
@@ -33,22 +34,8 @@ export default function AboutPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "AboutPage",
-            "mainEntity": {
-              "@type": "Organization",
-              "name": "Extrain Web",
-              "alternateName": "Extra in Web",
-              "url": "https://extrainweb.com",
-              "logo": "https://extrainweb.com/images/logo.png",
-              "foundingDate": "2019",
-              "description": "Leading website and software development company in Bangladesh specializing in custom web development, premium templates, IELTS software, and business solutions.",
-              "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "Road - 11, DIT Project, Marul Badda, Badda",
-                "addressLocality": "Dhaka",
-                "postalCode": "1214",
-                "addressCountry": "BD"
-              }
-            }
+            "url": "https://www.extrainweb.com/about",
+            "mainEntity": { "@id": BUSINESS_ID }
           })
         }}
       />
