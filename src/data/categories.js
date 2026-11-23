@@ -8,6 +8,10 @@ export const CATEGORIES = {
     ecommerce: {
         name: "E-Commerce",
         nameBn: "ই-কমার্স",
+        // SEO: target keyword "ecommerce website development in Dhaka" (page title + a line in the H1)
+        metaTitle: "E-commerce Website Development in Dhaka | Extrain Web",
+        metaDescription: "E-commerce website development in Dhaka: online store with cart, stock, bKash, Nagad, card and cash on delivery. Starts from ৳12,500. Extrain Web, Merul Badda.",
+        keywordLine: "E-commerce Website Development in Dhaka",
         tagline: "Start selling online & grow your revenue",
         taglineBn: "অনলাইনে বিক্রি শুরু করুন, আয় বাড়ান",
         description:

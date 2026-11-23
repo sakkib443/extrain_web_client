@@ -6,8 +6,8 @@ import { generateMetadata as seoGenerateMetadata, commonKeywords } from "@/lib/s
 // ==================== SEO METADATA ====================
 export async function generateMetadata() {
   const metadata = seoGenerateMetadata({
-    title: "Web Development Company in Dhaka, Bangladesh | Extrain Web",
-    description: "Extrain Web is a web development & website design company in Merul Badda, Dhaka. Custom websites, e-commerce, software and digital marketing. Call +880 1711-946614.",
+    title: "Website Design & Web Development Company in Bangladesh | Extrain Web",
+    description: "Extrain Web is a website design and web development company in Bangladesh, based in Merul Badda, Dhaka. Custom websites, e-commerce, software and SEO. Call +880 1711-946614.",
     keywords: [
       ...commonKeywords.brand,
       ...commonKeywords.bestKeywords,

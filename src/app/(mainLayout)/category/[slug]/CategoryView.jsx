@@ -43,6 +43,12 @@ export default function CategoryView({ slug }) {
                         <h1 className={`text-4xl lg:text-6xl font-black uppercase font-poppins ${isBn ? "leading-[1.1]" : "leading-[0.9]"} tracking-tight text-gray-900 dark:text-white mb-4 ${bn}`}>
                             <span className="block text-3xl lg:text-4xl text-gray-700 dark:text-gray-300">{name} {t("Website", "ওয়েবসাইট")}</span>
                             <span className="text-[#FD9A00]">{tagline}</span>
+                            {/* SEO keyword line — English in both languages, matches the page title */}
+                            {cat.keywordLine && (
+                                <span className="mt-4 block text-base font-semibold normal-case tracking-normal leading-snug text-gray-600 dark:text-gray-300 lg:text-lg">
+                                    {cat.keywordLine}
+                                </span>
+                            )}
                         </h1>
 
                         <p className={`text-gray-500 dark:text-gray-400 text-base lg:text-lg leading-relaxed max-w-2xl mb-8 ${bn}`}>

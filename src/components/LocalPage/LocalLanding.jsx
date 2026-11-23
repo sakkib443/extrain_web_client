@@ -223,8 +223,13 @@ export default function LocalLanding({ page }) {
                             </Link>
                         </div>
                         <p className="mt-8 text-sm text-white/50">
-                            Also see: <Link href={page.related.href} className="underline hover:text-white">{page.related.label}</Link>
-                            {" · "}
+                            Also see:{" "}
+                            {page.related.map((r) => (
+                                <span key={r.href}>
+                                    <Link href={r.href} className="underline hover:text-white">{r.label}</Link>
+                                    {" · "}
+                                </span>
+                            ))}
                             <Link href="/happy-clients" className="underline hover:text-white">Our happy clients</Link>
                             {" · "}
                             <Link href="/website" className="underline hover:text-white">Ready-made websites</Link>

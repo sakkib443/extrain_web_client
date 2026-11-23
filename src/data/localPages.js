@@ -1,6 +1,8 @@
 // Content for the two local landing pages:
-//   /web-development-company-badda   → "web development company in Badda", "website design company Badda"
-//   /web-development-company-dhaka   → "web development company in Dhaka", "website design company Dhaka"
+//   /web-development-company-badda                → "website development company in Badda", "web development company in Merul Badda"
+//   /web-development-company-dhaka                → "web development company in Dhaka"
+//   /web-development-company-near-brac-university → "best web development company beside BRAC University"
+// (Home page → "website design company in Bangladesh"; /category/ecommerce → "ecommerce website development in Dhaka")
 // Rendered by components/LocalPage/LocalLanding.jsx. Edit text here, not in the component.
 // Keep every claim true — Google and customers both check.
 
@@ -8,13 +10,13 @@ export const LOCAL_PAGES = {
     badda: {
         slug: "web-development-company-badda",
         place: "Badda",
-        metaTitle: "Web Development Company in Badda, Dhaka | Extrain Web",
+        metaTitle: "Website Development Company in Badda, Merul Badda | Extrain Web",
         metaDescription:
-            "Looking for a web development company in Badda? Extrain Web builds websites, e-commerce sites and software from Pragati Tower, Merul Badda. Visit us or call +880 1711-946614.",
+            "Looking for a website development company in Badda? Extrain Web is a web development company in Merul Badda (Pragati Tower). Websites, e-commerce and software. Call +880 1711-946614.",
         eyebrow: "Merul Badda · Dhaka 1212",
-        h1: "Web Development Company in Badda, Dhaka",
+        h1: "Website & Web Development Company in Merul Badda, Dhaka",
         intro:
-            "Extrain Web is a website design and web development company based in Merul Badda. Businesses in Badda, Rampura, Banasree, Aftabnagar and Gulshan come to our office, sit with our team and get a fast, mobile-friendly website that brings them customers.",
+            "Extrain Web is a website development company in Badda — our team works from Pragati Tower in Merul Badda. Businesses in Badda, Rampura, Banasree, Aftabnagar and Gulshan come to our office, sit with our team and get a fast, mobile-friendly website that brings them customers.",
         introBn:
             "এক্সট্রেইন ওয়েব মেরুল বাড্ডার একটি ওয়েব ডেভেলপমেন্ট ও ওয়েবসাইট ডিজাইন কোম্পানি। বাড্ডা, রামপুরা, বনশ্রী, আফতাবনগর ও গুলশানের ব্যবসাগুলো আমাদের অফিসে এসে সরাসরি কথা বলে নিজের ওয়েবসাইট বানিয়ে নেয়।",
         whyTitle: "Why businesses in Badda choose us",
@@ -24,7 +26,7 @@ export const LOCAL_PAGES = {
             { title: "Local payments built in", desc: "Online stores take bKash, Nagad, Rocket, card or cash on delivery, so your customers in Dhaka can pay the way they already do." },
             { title: "Support on WhatsApp", desc: "After launch you reach the same team on WhatsApp or by phone. Small changes, questions and updates are handled quickly." },
         ],
-        areasTitle: "Areas near our Badda office we serve",
+        areasTitle: "Web development company in Merul Badda — areas we serve",
         areas: ["Merul Badda", "Uttar Badda", "Madhya Badda", "Notun Bazar", "Rampura", "Banasree", "Aftabnagar", "Hatirjheel", "Gulshan", "Baridhara", "Bashundhara R/A"],
         faqs: [
             { q: "Where is your office in Badda?", a: "Our office is at Pragati Tower, Kha-214/E, Pragati Sarani, Merul Badda, Dhaka 1212. We are open Saturday to Thursday, 10 AM to 6 PM. Please call +880 1711-946614 before you come." },
@@ -33,13 +35,16 @@ export const LOCAL_PAGES = {
             { q: "Will my website show up on Google?", a: "Every site we build is SEO-ready: fast loading, mobile-friendly, proper titles and descriptions, a sitemap and Google Search Console setup. We also offer ongoing SEO and Google Business Profile setup." },
             { q: "Do you only work with businesses in Badda?", a: "No. Our office is in Badda, but we build websites for clients all over Dhaka and Bangladesh, and we work online with clients abroad too." },
         ],
-        related: { href: "/web-development-company-dhaka", label: "Web development company in Dhaka" },
+        related: [
+            { href: "/web-development-company-near-brac-university", label: "Web development company near BRAC University" },
+            { href: "/web-development-company-dhaka", label: "Web development company in Dhaka" },
+        ],
     },
 
     dhaka: {
         slug: "web-development-company-dhaka",
         place: "Dhaka",
-        metaTitle: "Web Development & Website Design Company in Dhaka | Extrain Web",
+        metaTitle: "Best Web Development Company in Dhaka | Extrain Web",
         metaDescription:
             "Extrain Web is a web development company in Dhaka. Custom websites, e-commerce, business software and SEO for companies across Dhaka and Bangladesh. Free quote: +880 1711-946614.",
         eyebrow: "Dhaka · Bangladesh",
@@ -64,7 +69,44 @@ export const LOCAL_PAGES = {
             { q: "Can I update the website myself?", a: "Yes. Most sites come with an admin dashboard where you can change text, photos, products and prices without any coding." },
             { q: "Where is your office?", a: "Pragati Tower, Kha-214/E, Pragati Sarani, Merul Badda, Dhaka 1212 — open Saturday to Thursday, 10 AM to 6 PM." },
         ],
-        related: { href: "/web-development-company-badda", label: "Web development company in Badda" },
+        related: [
+            { href: "/web-development-company-badda", label: "Website development company in Badda" },
+            { href: "/category/ecommerce", label: "E-commerce website development in Dhaka" },
+        ],
+    },
+
+    brac: {
+        slug: "web-development-company-near-brac-university",
+        place: "Merul Badda",
+        metaTitle: "Best Web Development Company Beside BRAC University | Extrain Web",
+        metaDescription:
+            "Extrain Web is a web development company beside BRAC University's Merul Badda campus, in Pragati Tower on Pragati Sarani. Websites for startups, clubs and businesses. Call +880 1711-946614.",
+        eyebrow: "Near BRAC University · Merul Badda",
+        h1: "Web Development Company Beside BRAC University, Merul Badda",
+        intro:
+            "Our office is in Pragati Tower on Pragati Sarani — a short walk from BRAC University's Merul Badda campus. Students, teachers, campus clubs, young startups and the shops and offices around the university come to us for websites, online stores and software.",
+        introBn:
+            "আমাদের অফিস প্রগতি সরণির প্রগতি টাওয়ারে — ব্র্যাক ইউনিভার্সিটির মেরুল বাড্ডা ক্যাম্পাস থেকে হাঁটা দূরত্বে। শিক্ষার্থী, শিক্ষক, ক্লাব, নতুন স্টার্টআপ আর আশেপাশের দোকান ও অফিস আমাদের কাছে ওয়েবসাইট, অনলাইন শপ ও সফটওয়্যার বানায়।",
+        whyTitle: "Why people around BRAC University work with us",
+        why: [
+            { title: "Walk over between classes", desc: "No long trips across Dhaka traffic — come to Pragati Tower, sit with the developers and plan your website in person." },
+            { title: "Startup-friendly websites", desc: "Launch an idea fast with a ready-made website or a simple custom site, then grow it into a full product when you are ready." },
+            { title: "Portfolio & club websites", desc: "Personal portfolio sites for graduates and job seekers, and websites for clubs, events and research groups." },
+            { title: "Real technology, real support", desc: "Next.js and Node.js websites that load fast and rank on Google — with support on WhatsApp after launch." },
+        ],
+        areasTitle: "Around BRAC University we serve",
+        areas: ["BRAC University area", "Merul Badda", "Pragati Sarani", "Aftabnagar", "Rampura", "Banasree", "Notun Bazar", "Uttar Badda", "Gulshan", "Bashundhara R/A"],
+        faqs: [
+            { q: "How far is your office from BRAC University?", a: "Very close. We are in Pragati Tower, Kha-214/E, Pragati Sarani, Merul Badda — a short walk from BRAC University's Merul Badda campus. Call +880 1711-946614 and we will guide you." },
+            { q: "Do you build websites for students and student startups?", a: "Yes. We build portfolio websites, startup landing pages, e-commerce stores and web apps, and we can start small and grow the site as your idea grows." },
+            { q: "Can you build a website for a university club or event?", a: "Yes — event pages, registration forms, club websites and galleries. Tell us the date of your event and we will plan the timeline around it." },
+            { q: "How much does a website cost?", a: "It depends on the pages and features. Our e-commerce websites start from ৳12,500 and simpler sites can cost less. Send your idea on WhatsApp for an exact quote." },
+            { q: "When is the office open?", a: "Saturday to Thursday, 10 AM to 6 PM. Friday is closed." },
+        ],
+        related: [
+            { href: "/web-development-company-badda", label: "Website development company in Badda" },
+            { href: "/web-development-company-dhaka", label: "Web development company in Dhaka" },
+        ],
     },
 };
 

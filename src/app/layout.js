@@ -40,7 +40,7 @@ export const metadata = {
   // Each page writes its full title (keyword first, brand last), so no template is added here.
   title: {
     template: "%s",
-    default: "Web Development Company in Dhaka, Bangladesh | Extrain Web",
+    default: "Website Design & Web Development Company in Bangladesh | Extrain Web",
   },
   description:
     "Extrain Web is a web development company in Merul Badda, Dhaka. Custom websites, e-commerce, business software and digital marketing for businesses across Bangladesh. Call +880 1711-946614.",
@@ -66,13 +66,13 @@ export const metadata = {
     locale: "bn_BD",
     alternateLocale: ["en_US"],
     siteName: "Extrain Web",
-    title: "Web Development Company in Dhaka, Bangladesh | Extrain Web",
+    title: "Website Design & Web Development Company in Bangladesh | Extrain Web",
     description: "Custom websites, e-commerce, business software and digital marketing — from our office in Merul Badda, Dhaka.",
     images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Extrain Web — Web Development Company in Dhaka" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Web Development Company in Dhaka, Bangladesh | Extrain Web",
+    title: "Website Design & Web Development Company in Bangladesh | Extrain Web",
     description: "Custom websites, e-commerce, business software and digital marketing — Merul Badda, Dhaka.",
     images: [OG_IMAGE],
   },

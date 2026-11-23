@@ -272,7 +272,7 @@ const Hero = () => {
                                     className="mt-5 block text-[13px] font-semibold normal-case tracking-[0.12em] text-[#F8921C] sm:mt-7 sm:text-[15px]"
                                 >
                                     {/* kept in English in both languages: it matches the page title and what people type into Google */}
-                                    Web Development Company in Badda, Dhaka
+                                    Website Design &amp; Web Development Company in Bangladesh
                                 </motion.span>
                             </h1>
 

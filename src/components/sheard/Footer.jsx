@@ -30,6 +30,7 @@ const Footer = () => {
     // local pages — internal links tell Google these pages matter
     { to: "/web-development-company-dhaka", label: language === "bn" ? "ঢাকায় ওয়েব ডেভেলপমেন্ট" : "Web Development in Dhaka" },
     { to: "/web-development-company-badda", label: language === "bn" ? "বাড্ডায় ওয়েব ডেভেলপমেন্ট" : "Web Development in Badda" },
+    { to: "/web-development-company-near-brac-university", label: language === "bn" ? "ব্র্যাক ইউনিভার্সিটির পাশে" : "Near BRAC University" },
   ];
 
   const socialLinks = [

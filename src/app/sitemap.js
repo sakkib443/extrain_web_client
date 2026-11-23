@@ -32,6 +32,7 @@ export default async function sitemap() {
     // local landing pages — the pages that should rank for "web development company in Dhaka / Badda"
     page("/web-development-company-dhaka", 0.95, "monthly"),
     page("/web-development-company-badda", 0.95, "monthly"),
+    page("/web-development-company-near-brac-university", 0.9, "monthly"),
     page("/website", 0.9, "weekly"),
     page("/digital-marketing", 0.8),
     page("/media-content", 0.8),
