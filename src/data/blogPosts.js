@@ -118,7 +118,7 @@ export const STATIC_POSTS = [
 
 <h2>Why businesses choose Extrain Web</h2>
 <p>Extrain Web is a custom website and software development company in Merul Badda, Dhaka. We build business websites, <a href="/category/ecommerce">e-commerce websites in Dhaka</a>, web software and run <a href="/digital-marketing">SEO and digital marketing</a> for clients across Bangladesh. Every site is built SEO-ready, works on every phone and comes with support on WhatsApp after launch.</p>
-<p>Looking for a <a href="/web-development-company-badda">web development company in Badda</a> or a <a href="/web-development-company-dhaka">web development agency in Dhaka</a>? Call or WhatsApp <a href="tel:+8801711946614">+880 1711-946614</a> (Saturday–Thursday, 11 AM – 8 PM) or <a href="/contact">contact us</a> for a free consultation.</p>
+<p>Looking for a <a href="/web-development-company-badda">web development company in Badda</a> or a <a href="/web-development-company-dhaka">web development agency in Dhaka</a>? Call or WhatsApp <a href="tel:+8801711946614">+880 1711-946614</a> (every day, 10 AM – 8 PM) or <a href="/contact">contact us</a> for a free consultation.</p>
 `,
     },
     {

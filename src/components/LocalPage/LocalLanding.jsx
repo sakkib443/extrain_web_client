@@ -183,7 +183,7 @@ export default async function LocalLanding({ page }) {
                             <p className="mt-1 text-white/75">
                                 Email: <a href={`mailto:${BUSINESS.email}`} className="text-white hover:text-[#F8921C]">{BUSINESS.email}</a>
                             </p>
-                            <p className="mt-1 text-white/75">Open: {BUSINESS.hoursText} (Friday closed)</p>
+                            <p className="mt-1 text-white/75">Open: {BUSINESS.hoursText}</p>
                             <a href={MAP_URL} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold" style={{ color: ORANGE }}>
                                 Get directions on Google Maps <Arrow />
                             </a>

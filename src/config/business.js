@@ -27,10 +27,10 @@ export const BUSINESS = {
         region: "Dhaka Division",
         country: "BD",
     },
-    // Sat–Thu, 11 AM – 8 PM (Friday off) — same as the Google Business Profile
-    hours: { days: ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"], opens: "11:00", closes: "20:00" },
-    hoursText: "Sat – Thu: 11:00 AM – 8:00 PM",
-    hoursTextBn: "শনি – বৃহস্পতি: সকাল ১১টা – রাত ৮টা",
+    // Every day, 10 AM – 8 PM (open 7 days) — same as the Google Business Profile
+    hours: { days: ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "10:00", closes: "20:00" },
+    hoursText: "Every day: 10:00 AM – 8:00 PM",
+    hoursTextBn: "প্রতিদিন: সকাল ১০টা – রাত ৮টা",
     // Only profiles that really exist. Add LinkedIn / YouTube / Google Business Profile links here once they are live.
     // the same business on other sites — tells Google the website, Maps profile and pages are one company
     sameAs: [FACEBOOK_URL, YOUTUBE_URL, GOOGLE_MAPS_URL],

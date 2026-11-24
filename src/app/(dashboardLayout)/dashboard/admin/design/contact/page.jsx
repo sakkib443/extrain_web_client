@@ -28,8 +28,8 @@ const ContactDesignPage = () => {
             phone: '+88 01711946614',
             address: 'Pragati Tower, Kha-214/E, Pragati Sarani, Merul Badda, Dhaka 1212, Bangladesh',
             addressBn: 'রোড - ১১, ডিআইটি প্রজেক্ট, মারুল বাড্ডা, বাড্ডা, ঢাকা -১২১৪, বাংলাদেশ',
-            officeHours: 'Sat - Thu: 11:00 AM - 8:00 PM',
-            officeHoursBn: 'শনি - বৃহস্পতি: সকাল ১১টা - রাত ৮টা'
+            officeHours: 'Every day: 10:00 AM - 8:00 PM',
+            officeHoursBn: 'প্রতিদিন: সকাল ১০টা - রাত ৮টা'
         },
         socialLinks: {
             facebook: FACEBOOK_URL,
