@@ -117,6 +117,10 @@ function PageHeader({ searchQuery, setSearchQuery, count }) {
                             ) : (
                                 <>Website <i className="font-light">Marketplace</i></>
                             )}
+                            {/* SEO keyword line — English in both languages, matches the page title */}
+                            <span className="mt-3 block text-[13px] font-semibold not-italic leading-snug tracking-[0.12em] text-[#F8921C] sm:text-[15px]">
+                                Custom Website Development in Bangladesh
+                            </span>
                         </motion.h1>
                         <motion.p
                             variants={fadeUp}
@@ -262,7 +266,18 @@ export default function WebsitePageContent({ initialWebsites = [] }) {
         dispatch(fetchCategories({ type: 'website' }));
     }, [dispatch]);
 
-    if (!mounted) return <LoadingFallback />;
+    // before the page is interactive: still show the heading, so Google and visitors see what the page is about
+    if (!mounted) return (
+        <div className="bg-[color:var(--tone-deep)] px-5 pt-32 text-white sm:px-8">
+            <div className="mx-auto max-w-[1280px]">
+                <h1 style={{ color: "#fff" }} className="text-[1.8rem] font-bold leading-[1.2] sm:text-[2.2rem] lg:text-[2.6rem]">
+                    Website Marketplace
+                    <span className="mt-3 block text-[13px] font-semibold leading-snug tracking-[0.12em] text-[#F8921C] sm:text-[15px]">Custom Website Development in Bangladesh</span>
+                </h1>
+            </div>
+            <LoadingFallback bare />
+        </div>
+    );
 
     return (
         <div className="relative min-h-screen bg-[color:var(--tone-deep)] text-white selection:bg-[#F8921C] selection:text-black">

@@ -98,6 +98,10 @@ function Hero({ d, isBn, bn }) {
                                     </span>
                                 </span>
                             </span>
+                            {/* SEO keyword line — English in both languages, matches the page title */}
+                            <span className="mt-5 block text-[13px] font-semibold normal-case leading-snug tracking-[0.12em] text-[#F8921C] sm:mt-7 sm:text-[15px]">
+                                {d.seoLine}
+                            </span>
                         </motion.h1>
 
                         <motion.p

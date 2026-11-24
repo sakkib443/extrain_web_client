@@ -9,6 +9,7 @@ export const DIGITAL_MARKETING = {
     label: "Digital marketing",
     labelBn: "ডিজিটাল মার্কেটিং",
     // headline: line1 is solid white, line2 is outlined with one orange letter (accentIndex)
+    seoLine: "Digital Marketing Agency in Dhaka — SEO & Facebook Ads",
     line1: "GROW",
     line2: "ONLINE",
     accentIndex: 2,
@@ -87,6 +88,7 @@ export const MEDIA_CONTENT = {
     slug: "media-content",
     label: "Media & content",
     labelBn: "মিডিয়া ও কন্টেন্ট",
+    seoLine: "Photo, Video & Content Production in Dhaka",
     line1: "TELL YOUR",
     line2: "STORY",
     accentIndex: 2,

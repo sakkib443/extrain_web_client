@@ -102,6 +102,10 @@ const HappyClientsPage = () => {
                 className={`text-5xl lg:text-7xl font-black text-gray-950 dark:text-white mb-6 uppercase leading-[0.85] tracking-tighter font-poppins ${bengaliClass}`}
               >
                 {language === 'bn' ? 'আমাদের সন্তুষ্ট' : 'Our Happy '}<span className="text-[#FD9A00]">{language === 'bn' ? 'ক্লায়েন্ট' : 'Clients'}</span>
+                  {/* SEO keyword line — English in both languages, matches the page title */}
+                  <span className="mt-5 block text-[13px] font-semibold normal-case leading-snug tracking-[0.12em] text-[#F8921C] sm:mt-7 sm:text-[15px]">
+                      Client Reviews of Our Web Development Company in Bangladesh
+                  </span>
               </motion.h1>
 
               <p className={`text-gray-500 dark:text-gray-400 text-sm lg:text-base max-w-2xl leading-relaxed mb-10 ${bengaliClass}`}>

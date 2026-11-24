@@ -44,9 +44,9 @@ export default function CategoryView({ slug }) {
                             <span className="block text-3xl lg:text-4xl text-gray-700 dark:text-gray-300">{name} {t("Website", "ওয়েবসাইট")}</span>
                             <span className="text-[#FD9A00]">{tagline}</span>
                             {/* SEO keyword line — English in both languages, matches the page title */}
-                            {cat.keywordLine && (
+                            {(cat.keywordLine || cat.name) && (
                                 <span className="mt-4 block text-base font-semibold normal-case tracking-normal leading-snug text-gray-600 dark:text-gray-300 lg:text-lg">
-                                    {cat.keywordLine}
+                                    {cat.keywordLine || `${cat.name} Website Development in Bangladesh`}
                                 </span>
                             )}
                         </h1>

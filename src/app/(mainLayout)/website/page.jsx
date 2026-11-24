@@ -3,8 +3,8 @@ import WebsitePageContent from "./WebsitePageContent";
 
 // SEO - Metadata for the listing page
 export const metadata = {
-    title: "Ready-Made Websites & Templates in Bangladesh | Extrain Web",
-    description: "Browse our collection of premium, fully-functional websites. Get your business online instantly with our high-quality website templates and custom solutions. Best website marketplace in Bangladesh.",
+    title: "Website Development in Bangladesh — Our Websites | Extrain Web",
+    description: "See the websites Extrain Web builds — e-commerce, business, real-estate, education and more. Custom website development in Bangladesh, ready to launch fast. Call +880 1711-946614.",
     keywords: "website marketplace, buy websites, premium website templates, ready-made websites, website development Bangladesh, portfolio, e-commerce, real estate websites",
     alternates: {
         canonical: "https://www.extrainweb.com/website",

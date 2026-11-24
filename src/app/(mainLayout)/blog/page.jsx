@@ -101,7 +101,12 @@ export default function BlogPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
+            <div className="min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center gap-8 px-4">
+                {/* the heading shows while posts load, so Google and visitors see what the page is about */}
+                <h1 className="text-center text-4xl font-black uppercase tracking-tighter text-gray-950 dark:text-white font-poppins">
+                    Blog
+                    <span className="mt-3 block text-[13px] font-semibold normal-case leading-snug tracking-[0.12em] text-[#F8921C] sm:text-[15px]">Web Development, Design &amp; Marketing Tips</span>
+                </h1>
                 <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
@@ -153,6 +158,8 @@ export default function BlogPage() {
                         <h1 className={`text-5xl lg:text-7xl font-black text-gray-950 dark:text-white mb-6 uppercase leading-[0.85] tracking-tighter font-poppins ${bengaliClass}`}>
                             {language === 'bn' ? 'জ্ঞান ও ' : 'Knowledge & '}
                             <span className="text-[#FD9A00]">{language === 'bn' ? 'অনুপ্রেরণা' : 'Inspiration'}</span>
+                            {/* SEO keyword line — English in both languages, matches the page title */}
+                            <span className="mt-5 block text-[13px] font-semibold normal-case leading-snug tracking-[0.12em] text-[#F8921C] sm:text-[15px]">Web Development, Design &amp; Marketing Tips</span>
                         </h1>
 
                         {/* Description - Compact */}
