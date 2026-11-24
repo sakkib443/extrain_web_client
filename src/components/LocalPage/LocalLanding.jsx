@@ -72,8 +72,8 @@ export default function LocalLanding({ page }) {
                     <div className="relative">
                         <div className="relative aspect-[3/2] overflow-hidden rounded-[2rem] border border-white/10">
                             <Image
-                                src="/hero-office.webp"
-                                alt={`Extrain Web team working on client websites at our office in Merul Badda, ${page.place === "Badda" ? "Badda" : "Dhaka"}`}
+                                src="/extrain-web-team-demo-dhaka-expo.webp" // real photo: our team showing our software to visitors at a tech expo in Dhaka
+                                alt="Extrain Web team demonstrating website and software solutions to visitors at a tech expo in Dhaka, Bangladesh"
                                 fill
                                 priority
                                 sizes="(min-width: 1024px) 45vw, 100vw"
@@ -255,9 +255,9 @@ export function localMetadata(page) {
             description: page.metaDescription,
             siteName: "Extrain Web",
             locale: "en_US",
-            images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: page.h1 }],
+            images: [{ url: "/og-extrain-web-team-dhaka.jpg", width: 1200, height: 630, alt: "Extrain Web team at a tech expo in Dhaka" }],
         },
-        twitter: { card: "summary_large_image", title: page.metaTitle, description: page.metaDescription, images: ["/og-image.jpg"] },
+        twitter: { card: "summary_large_image", title: page.metaTitle, description: page.metaDescription, images: ["/og-extrain-web-team-dhaka.jpg"] },
     };
 }
 
@@ -277,6 +277,8 @@ export function LocalSchema({ page }) {
                 about: business,
                 inLanguage: "en",
                 breadcrumb: { "@id": `${url}#breadcrumb` },
+                // the photo Google should show next to this page in search results
+                primaryImageOfPage: { "@type": "ImageObject", url: "https://www.extrainweb.com/extrain-web-team-demo-dhaka-expo.webp", width: 1200, height: 900 },
             },
             {
                 "@type": "BreadcrumbList",
