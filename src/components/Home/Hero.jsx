@@ -21,6 +21,7 @@ import {
 import { FaFacebookF, FaStar } from "react-icons/fa";
 import { useLanguage } from "@/context/LanguageContext";
 import { useHomeMedia } from "./HomeMediaContext";
+import Image from "next/image";
 import { FACEBOOK_URL } from "@/config/site";
 import { TEAM } from "@/data/team";
 import useIntroReady from "@/hooks/useIntroReady";
@@ -86,6 +87,7 @@ const Line = ({ ready, delay, className = "", style, children }) => (
         className={`block ${className}`}
         style={style}
         {...intro(ready, delay, { opacity: 0, y: "0.55em", filter: "blur(12px)" }, 1)}
+        initial={false} // headline is the page's main content: visible from the first paint (Google's LCP)
     >
         {children}
     </motion.span>
@@ -351,6 +353,7 @@ const Hero = () => {
                     1.3
                 )}
                 animate={ready ? { opacity: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)" } : { opacity: 0.4, y: 120, clipPath: "inset(100% 0% 0% 0%)" }}
+                initial={false} // the big photo shows at first paint too (no entrance animation) — page speed
                 className="group relative z-[5] order-2 lg:order-none w-full aspect-[3/2] lg:aspect-auto lg:w-[52%] lg:absolute lg:right-0 lg:bottom-0 lg:h-[min(calc(38vh+306px),37.6vw)] overflow-hidden rounded-t-[48px] lg:rounded-t-none lg:rounded-tl-[140px] bg-[color:var(--tone-deep)]"
             >
                 {/* inner layer carries the parallax; slightly oversized so edges never show */}
@@ -359,17 +362,19 @@ const Hero = () => {
                     className="absolute inset-0"
                 >
                     {slides.map((img, i) => (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
+                        // next/image sends a phone-sized copy to phones (page speed); unoptimized for photos from unknown hosts
+                        <Image
                             key={img.src}
                             src={img.src}
                             alt={img.alt || img.label || "Extrain Web"}
                             aria-hidden={i !== slide}
-                            fetchPriority={i === 0 ? "high" : "low"}
-                            loading={i === 0 ? "eager" : "lazy"}
-                            decoding="async"
+                            fill
+                            sizes="(min-width: 1024px) 52vw, 100vw"
+                            quality={70}
+                            priority={i === 0}
+                            unoptimized={!img.src?.startsWith("/")}
                             style={{ objectPosition: img.pos }}
-                            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out ${i === slide ? "opacity-100" : "opacity-0"}`}
+                            className={`object-cover transition-opacity duration-700 ease-out ${i === slide ? "opacity-100" : "opacity-0"}`}
                         />
                     ))}
                 </motion.div>
