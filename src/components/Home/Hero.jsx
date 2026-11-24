@@ -72,7 +72,7 @@ const SCROLL_SPRING = { stiffness: 110, damping: 28, mass: 0.4 };
 // Plays when the page is first visible: right after the greeting preloader starts opening (or at once on later visits).
 // `delay` is seconds after that moment; INTRO_LEAD lets the curtain get out of the way first.
 const EASE = [0.16, 1, 0.3, 1];
-const INTRO_LEAD = 0.35;
+const INTRO_LEAD = 0; // no preloader curtain any more
 const SHOWN = { opacity: 1, x: 0, y: 0, scale: 1, rotate: 0, filter: "blur(0px)" };
 const intro = (ready, delay, from = { opacity: 0, y: 30 }, duration = 0.9) => ({
     initial: from,
@@ -365,6 +365,9 @@ const Hero = () => {
                             src={img.src}
                             alt={img.alt || img.label || "Extrain Web"}
                             aria-hidden={i !== slide}
+                            fetchPriority={i === 0 ? "high" : "low"}
+                            loading={i === 0 ? "eager" : "lazy"}
+                            decoding="async"
                             style={{ objectPosition: img.pos }}
                             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out ${i === slide ? "opacity-100" : "opacity-0"}`}
                         />
