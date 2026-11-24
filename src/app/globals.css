@@ -1370,3 +1370,11 @@ nav[class*="sticky"] {
 .blog-content li + li { margin-top: 0.45em; }
 .blog-content a { color: #e07d0a; text-decoration: underline; text-underline-offset: 3px; }
 .blog-content strong { color: inherit; font-weight: 700; }
+
+/* Blog article on the dark page */
+.blog-content-dark { color: rgba(255,255,255,0.75); font-size: 1.08rem; line-height: 1.85; }
+.blog-content-dark h2 { color: #fff; font-size: 1.65rem; margin-top: 2.2em; }
+.blog-content-dark h3 { color: #fff; }
+.blog-content-dark strong { color: #fff; }
+.blog-content-dark a { color: #F8921C; }
+.blog-content-dark li::marker { color: #F8921C; }

@@ -1,6 +1,8 @@
 import { getStaticPost } from '@/data/blogPosts';
 import React from 'react';
-import BlogDetailsContent from './BlogDetailsContent';
+import { notFound } from 'next/navigation';
+import BlogArticle from '@/components/Blog/BlogArticle';
+import { STATIC_POSTS } from '@/data/blogPosts';
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
@@ -77,6 +79,8 @@ export default async function SingleBlogPage({ params }) {
         console.error('Failed to fetch blog:', error);
     }
 
+    if (!blog) notFound();
+
     return (
         <>
             {blog && (
@@ -101,7 +105,7 @@ export default async function SingleBlogPage({ params }) {
                     }}
                 />
             )}
-            <BlogDetailsContent initialBlog={blog} />
+            <BlogArticle blog={blog} related={STATIC_POSTS.filter((p) => p.slug !== slug).slice(0, 3)} />
         </>
     );
 }

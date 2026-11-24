@@ -121,6 +121,120 @@ export const STATIC_POSTS = [
 <p>Looking for a <a href="/web-development-company-badda">web development company in Badda</a> or a <a href="/web-development-company-dhaka">web development agency in Dhaka</a>? Call or WhatsApp <a href="tel:+8801711946614">+880 1711-946614</a> (Saturday–Thursday, 11 AM – 8 PM) or <a href="/contact">contact us</a> for a free consultation.</p>
 `,
     },
+    {
+        _id: "static-website-development-cost-bangladesh",
+        slug: "website-development-cost-in-bangladesh-2026",
+        title: "Website Development Cost in Bangladesh 2026: What a Website Really Costs in Dhaka",
+        excerpt:
+            "How much does a website cost in Bangladesh in 2026? What changes the price, our real package prices for business and e-commerce websites, hidden costs to ask about, and how to get a fair quote in Dhaka.",
+        thumbnail: "/blog/website-development-cost-bangladesh-2026.jpg",
+        category: { name: "Web Development" },
+        tags: ["website development cost in Bangladesh", "website price in Dhaka", "e-commerce website cost Bangladesh", "web development company in Dhaka", "Merul Badda"],
+        readingTime: 6,
+        author: AUTHOR,
+        createdAt: "2026-11-25T15:00:00+06:00",
+        publishedAt: "2026-11-25T15:00:00+06:00",
+        updatedAt: "2026-11-25T15:00:00+06:00",
+        content: `
+<p>"How much does a website cost?" is the first question almost every client asks us. The honest answer is: it depends on what the website has to do. A five-page company website and an online store with bKash payments and stock management are very different projects. This guide explains what changes the price of <strong>website development in Bangladesh</strong>, shows our own package prices, and lists the questions to ask so you get a fair quote in Dhaka.</p>
+
+<h2>What decides the cost of a website?</h2>
+<ul>
+  <li><strong>Number of pages.</strong> A simple company profile needs a few pages; a corporate or real-estate site may need many.</li>
+  <li><strong>Custom design or ready layout.</strong> A design made only for your brand takes more time than adapting an existing layout.</li>
+  <li><strong>Features.</strong> Online payment, product search, booking, user accounts, a blog, multiple languages — every feature adds work.</li>
+  <li><strong>Admin dashboard.</strong> If you want to change text, photos, products and prices yourself, the site needs a proper dashboard.</li>
+  <li><strong>Content.</strong> Do you already have text and photos, or do you need writing, product photography and graphics?</li>
+  <li><strong>SEO and speed.</strong> A site built to rank on Google — fast pages, proper titles, structured data, Search Console — takes more care than a site that only looks nice.</li>
+  <li><strong>Support after launch.</strong> How long the company will fix problems and help you after the site goes live.</li>
+</ul>
+
+<h2>Our website packages (at the time of writing)</h2>
+<p>To make this concrete, here are the packages listed on our own site for a business website. Prices can change, so always ask for a current quote.</p>
+<ul>
+  <li><strong>Basic — ৳12,000:</strong> up to 5 pages, responsive design, basic SEO, contact form, 1 month support.</li>
+  <li><strong>Standard — ৳25,000:</strong> up to 12 pages, admin dashboard, advanced SEO, custom design, 3 months support.</li>
+  <li><strong>Premium — ৳50,000:</strong> unlimited pages, custom features, premium design, priority support, 1 year support.</li>
+</ul>
+<p>For an online store, our <a href="/category/ecommerce">e-commerce website packages</a> start from <strong>৳12,500</strong>, with Standard at ৳30,000 and Premium at ৳80,000 for larger stores with more features.</p>
+
+<h2>Costs people forget to ask about</h2>
+<ol>
+  <li><strong>Domain name</strong> — renewed every year.</li>
+  <li><strong>Hosting</strong> — where your website lives; also a yearly cost.</li>
+  <li><strong>Payment gateway charges</strong> — bKash, Nagad and card payments usually take a small percentage per transaction.</li>
+  <li><strong>SMS or email</strong> — order confirmations and OTPs can have their own small costs.</li>
+  <li><strong>Changes after launch</strong> — ask what is free and what is charged once the support period ends.</li>
+</ol>
+<p>A good <strong>web development company in Dhaka</strong> tells you all of these before you pay — not after.</p>
+
+<h2>Cheap website vs. a website that brings customers</h2>
+<p>A very cheap website can cost more in the end if it is slow, breaks on mobile, can't be found on Google or has to be rebuilt after a year. When you compare quotes, compare what you get: custom design, mobile speed, SEO setup, an admin dashboard you can actually use, and real support on WhatsApp.</p>
+
+<h2>How to get an accurate quote</h2>
+<p>Send the company a short list: what your business does, which pages you need, the features you want (payments, booking, blog…), two or three websites you like, and your deadline. With this, a serious agency can give you a fixed price and a timeline instead of a guess.</p>
+
+<h2>Get a free quote from Extrain Web</h2>
+<p>Extrain Web is a custom website and software development company in Merul Badda, Dhaka. We build business websites, online stores and web software for clients across Bangladesh, with SEO included from day one. Visit our <a href="/web-development-company-badda">Badda page</a> or <a href="/web-development-company-dhaka">Dhaka page</a>, read <a href="/blog/best-web-development-company-in-badda-dhaka-how-to-choose">how to choose the right web development company</a>, or call / WhatsApp <a href="tel:+8801711946614">+880 1711-946614</a> for a free quote.</p>
+`,
+    },
+    {
+        _id: "static-ecommerce-bkash-nagad-cod-guide",
+        slug: "ecommerce-website-bangladesh-bkash-nagad-cod-guide",
+        title: "E-commerce Website in Bangladesh: bKash, Nagad & Cash on Delivery Setup Guide",
+        excerpt:
+            "Starting an online store in Bangladesh? How bKash, Nagad, card and cash on delivery work on an e-commerce website, what you need to apply, delivery and stock tips, and how to choose an e-commerce developer in Dhaka.",
+        thumbnail: "/blog/ecommerce-website-bangladesh-bkash-nagad.jpg",
+        category: { name: "E-commerce" },
+        tags: ["ecommerce website development in Dhaka", "bKash payment gateway website", "Nagad payment website", "cash on delivery online store Bangladesh", "online shop Bangladesh"],
+        readingTime: 7,
+        author: AUTHOR,
+        createdAt: "2026-11-25T16:00:00+06:00",
+        publishedAt: "2026-11-25T16:00:00+06:00",
+        updatedAt: "2026-11-25T16:00:00+06:00",
+        content: `
+<p>Many shops in Bangladesh start selling on Facebook — and then hit a wall: too many messages, orders lost in the inbox, and no easy way to take payment. A proper <strong>e-commerce website</strong> fixes this. Customers browse, add to cart and pay with the method they already use. This guide explains how payments work on an online store in Bangladesh and what to plan before you build one.</p>
+
+<h2>The payment methods your customers expect</h2>
+<ul>
+  <li><strong>Cash on delivery (COD)</strong> — still the most trusted option for many first-time buyers. Your website should make COD easy and let you confirm orders before shipping.</li>
+  <li><strong>bKash</strong> — the most familiar mobile wallet for many customers. On a website it works through a merchant payment gateway, so the customer pays without leaving the checkout.</li>
+  <li><strong>Nagad</strong> — another popular mobile wallet; offering it next to bKash means fewer customers drop off at checkout.</li>
+  <li><strong>Cards</strong> — Visa and Mastercard through a payment gateway, useful for corporate and higher-value orders.</li>
+</ul>
+<p>The best setup for most stores is simple: COD plus at least one or two digital options.</p>
+
+<h2>What you need before adding online payments</h2>
+<p>Payment providers have their own requirements and approval steps, and they can change, so check the latest with each provider. Typically you should be ready with:</p>
+<ul>
+  <li>a trade licence and business details;</li>
+  <li>a bank account in the business name;</li>
+  <li>a live website with clear product, price, delivery and refund information;</li>
+  <li>contact details and a privacy policy on the site.</li>
+</ul>
+<p>Your web developer should build the website so it is ready for approval, and then connect the gateway once your merchant account is active.</p>
+
+<h2>Features every online store in Bangladesh should have</h2>
+<ol>
+  <li><strong>Fast mobile pages</strong> — most customers shop on their phone, often on mobile data.</li>
+  <li><strong>Clear delivery charges</strong> inside and outside Dhaka, shown before checkout.</li>
+  <li><strong>Order management</strong> — see new orders, confirm them, print invoices and update status.</li>
+  <li><strong>Stock tracking</strong> with alerts before a product runs out.</li>
+  <li><strong>Courier-friendly invoices</strong> with the customer's phone and address.</li>
+  <li><strong>SEO-ready product pages</strong> so people can find your products on Google, not only on Facebook.</li>
+  <li><strong>Facebook Pixel and Google Analytics</strong> so your ads reach the right people.</li>
+</ol>
+
+<h2>Reduce fake and cancelled COD orders</h2>
+<p>COD brings sales, but also orders that never get accepted. Simple steps help: phone or OTP confirmation, a small advance for high-value items, and blocking repeated fake numbers from the admin dashboard.</p>
+
+<h2>How much does an e-commerce website cost?</h2>
+<p>It depends on the number of products and features. At Extrain Web our <a href="/category/ecommerce">e-commerce website packages</a> start from ৳12,500. Read our full guide on <a href="/blog/website-development-cost-in-bangladesh-2026">website development cost in Bangladesh</a> for what changes the price and which costs to ask about.</p>
+
+<h2>Build your online store with an e-commerce developer in Dhaka</h2>
+<p>Extrain Web builds custom e-commerce websites with bKash, Nagad, card and cash on delivery, from our office in Merul Badda, Dhaka, for shops across Bangladesh. Every store comes with an admin dashboard, stock and order management, and SEO from day one. See our <a href="/web-development-company-dhaka">web development services in Dhaka</a> or call / WhatsApp <a href="tel:+8801711946614">+880 1711-946614</a> to plan your store.</p>
+`,
+    },
 ];
 
 export const getStaticPost = (slug) => STATIC_POSTS.find((p) => p.slug === slug) || null;
