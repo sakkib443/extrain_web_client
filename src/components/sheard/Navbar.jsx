@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import TextLogo from "@/components/sheard/TextLogo";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { BiMenu, BiX } from "react-icons/bi";
@@ -115,8 +116,7 @@ const Navbar = () => {
             >
               <div className="flex items-center justify-between p-6 border-b border-white/10">
                 <Link href="/" onClick={closeMobileMenu} className="flex items-center gap-2.5">
-                  <span className="grid place-items-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#FFB04A] to-[#F8921C] text-black text-lg font-extrabold">A</span>
-                  <span className="text-[1.45rem] font-extrabold text-white tracking-tight">Extrain</span>
+                  <TextLogo size="sm" />
                 </Link>
                 <button onClick={closeMobileMenu} className="w-10 h-10 grid place-items-center rounded-full bg-white/10 text-white/70 hover:text-white" aria-label="Close menu">
                   <BiX className="text-2xl" />
@@ -195,11 +195,8 @@ const Navbar = () => {
           <div className="flex items-center justify-between gap-4">
 
             {/* Logo */}
-            <Link href="/" className="group flex shrink-0 items-center gap-3" aria-label="Extrain Web home">
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#FFB04A] to-[#F8921C] text-[1.25rem] font-extrabold leading-none text-black shadow-[0_8px_20px_-10px_rgba(248,146,28,0.6)] transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105">
-                A
-              </span>
-              <span className="text-[1.6rem] font-extrabold leading-none tracking-tight text-white">Extrain</span>
+            <Link href="/" className="group flex shrink-0 items-center" aria-label="Extrain Web home">
+              <TextLogo size="md" />
             </Link>
 
             {/* Center menu: a glass track, an orange pill for the current page, a soft pill that follows the mouse */}

@@ -12,7 +12,7 @@ const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
   // Default language is Bengali; user can toggle to English via the switcher.
-  const [language, setLanguageState] = useState("bn");
+  const [language, setLanguageState] = useState("en"); // the site opens in English; visitors can switch to Bangla
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load language preference from localStorage on mount
@@ -31,10 +31,10 @@ export const LanguageProvider = ({ children }) => {
             document.body.classList.remove("font-bengali");
           }
         } else {
-          // No saved preference → default to Bengali
-          setLanguageState("bn");
-          document.documentElement.lang = "bn";
-          document.body.classList.add("font-bengali");
+          // No saved preference → English
+          setLanguageState("en");
+          document.documentElement.lang = "en";
+          document.body.classList.remove("font-bengali");
         }
       }
     } catch (error) {

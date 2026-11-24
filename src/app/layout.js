@@ -88,7 +88,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html
-      lang="bn"
+      lang="en"
       className={`${jakarta.variable} ${poppins.variable} ${hindSiliguri.variable}`}
       suppressHydrationWarning
     >

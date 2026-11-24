@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import TextLogo from "@/components/sheard/TextLogo";
 import React, { useState } from "react";
 import { FaFacebook, FaYoutube } from "react-icons/fa";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
@@ -66,8 +67,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="space-y-5 lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2.5" aria-label="Extrain Web home">
-              <span className="grid h-10 w-10 place-items-center rounded-lg bg-[#F8921C] text-xl font-extrabold text-black">A</span>
-              <span className="text-[1.7rem] font-extrabold tracking-tight text-white">Extrain</span>
+              <TextLogo size="lg" />
             </Link>
             <p className={`max-w-sm text-sm leading-relaxed text-white/60 ${bengaliClass}`}>
               {t("footer.brandDescription") || "Extrain Web is a premium website and software marketplace in Bangladesh, providing high-quality digital products and custom development services."}
