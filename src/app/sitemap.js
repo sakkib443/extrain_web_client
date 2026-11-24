@@ -3,6 +3,7 @@
 
 import { SITE_URL } from "@/config/business";
 import { KNOWN_SLUGS } from "@/data/categories";
+import { STATIC_POSTS } from "@/data/blogPosts";
 
 const API = "https://extrain-web-server.vercel.app/api";
 
@@ -68,5 +69,13 @@ export default async function sitemap() {
       priority: 0.6,
     }));
 
-  return [...staticPages, ...categoryPages, ...websitePages, ...blogPages];
+  // posts written into the site (data/blogPosts.js)
+  const staticPosts = STATIC_POSTS.map((b) => ({
+    url: `${SITE_URL}/blog/${b.slug}`,
+    lastModified: new Date(b.updatedAt || b.createdAt),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...categoryPages, ...websitePages, ...staticPosts, ...blogPages];
 }

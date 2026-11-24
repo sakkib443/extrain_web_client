@@ -84,6 +84,7 @@ const Navbar = () => {
     { href: "/ielts-software", label: language === "bn" ? "সফটওয়্যার" : "Software" },
     { href: "/digital-marketing", label: language === "bn" ? "মার্কেটিং" : "Marketing" },
     { href: "/media-content", label: language === "bn" ? "মিডিয়া" : "Media" },
+    { href: "/blog", label: language === "bn" ? "ব্লগ" : "Blog" },
     { href: "/contact", label: language === "bn" ? "যোগাযোগ" : "Contact" },
   ];
 

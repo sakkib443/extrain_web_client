@@ -47,7 +47,7 @@ export default function BlogDetailsContent({ initialBlog }) {
         window.addEventListener('scroll', handleScroll);
 
         // Fetch comments
-        if (blog?._id) {
+        if (blog?._id && !String(blog._id).startsWith('static-')) {
             fetch(`${API_BASE_URL}/blogs/${blog._id}/comments`)
                 .then(res => res.json())
                 .then(data => { if (data.success) setComments(data.data || []); });
@@ -107,7 +107,7 @@ export default function BlogDetailsContent({ initialBlog }) {
             <div className="container mx-auto px-4 py-20">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                     <article className="lg:col-span-8">
-                        <div className="prose prose-lg dark:prose-invert max-w-none 
+                        <div className="blog-content prose prose-lg dark:prose-invert max-w-none 
                             prose-headings:font-outfit prose-headings:text-slate-900
                             prose-p:text-slate-600 dark:prose-p:text-slate-300
                             prose-a:text-teal-600"

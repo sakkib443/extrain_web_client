@@ -1358,3 +1358,15 @@ nav[class*="sticky"] {
 .dark section [class*="bg-gray-100"] {
   background: rgba(71, 85, 105, 0.3) !important;
 }
+/* Blog article text (the typography plugin isn't installed, so the post HTML gets its styles here) */
+.blog-content { color: #334155; font-size: 1.075rem; line-height: 1.8; }
+.dark .blog-content { color: #cbd5e1; }
+.blog-content > * + * { margin-top: 1.1em; }
+.blog-content h2 { font-size: 1.6rem; line-height: 1.3; font-weight: 700; margin-top: 2em; color: #0f172a; }
+.blog-content h3 { font-size: 1.25rem; line-height: 1.35; font-weight: 700; margin-top: 1.6em; color: #0f172a; }
+.dark .blog-content h2, .dark .blog-content h3 { color: #fff; }
+.blog-content ul { list-style: disc; padding-left: 1.4em; }
+.blog-content ol { list-style: decimal; padding-left: 1.4em; }
+.blog-content li + li { margin-top: 0.45em; }
+.blog-content a { color: #e07d0a; text-decoration: underline; text-underline-offset: 3px; }
+.blog-content strong { color: inherit; font-weight: 700; }

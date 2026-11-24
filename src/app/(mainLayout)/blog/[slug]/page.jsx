@@ -1,3 +1,4 @@
+import { getStaticPost } from '@/data/blogPosts';
 import React from 'react';
 import BlogDetailsContent from './BlogDetailsContent';
 
@@ -5,11 +6,15 @@ export async function generateMetadata({ params }) {
     const { slug } = await params;
 
     try {
-        const response = await fetch(`https://extrain-web-server.vercel.app/api/blogs/slug/${slug}`, {
-            next: { revalidate: 60 },
-        });
-        const result = await response.json();
-        const blog = result.data;
+        // posts written into the site first, then the database
+        let blog = getStaticPost(slug);
+        if (!blog) {
+            const response = await fetch(`https://extrain-web-server.vercel.app/api/blogs/slug/${slug}`, {
+                next: { revalidate: 60 },
+            });
+            const result = await response.json();
+            blog = result.data;
+        }
 
         if (!blog) {
             return {
@@ -60,9 +65,9 @@ export async function generateMetadata({ params }) {
 export default async function SingleBlogPage({ params }) {
     const { slug } = await params;
 
-    let blog = null;
+    let blog = getStaticPost(slug);
 
-    try {
+    if (!blog) try {
         const response = await fetch(`https://extrain-web-server.vercel.app/api/blogs/slug/${slug}`, {
             next: { revalidate: 60 },
         });
@@ -83,7 +88,7 @@ export default async function SingleBlogPage({ params }) {
                             "@type": "BlogPosting",
                             "headline": blog.title,
                             "description": blog.excerpt,
-                            "image": blog.thumbnail,
+                            "image": blog.thumbnail?.startsWith("/") ? `https://www.extrainweb.com${blog.thumbnail}` : blog.thumbnail,
                             "author": {
                                 "@type": "Person",
                                 "name": `${blog.author?.firstName} ${blog.author?.lastName}`

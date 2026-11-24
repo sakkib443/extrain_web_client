@@ -13,13 +13,15 @@ import {
     FiChevronRight,
 } from 'react-icons/fi';
 import { API_BASE_URL } from '@/config/api';
+import { STATIC_POSTS } from '@/data/blogPosts';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function BlogPage() {
     const { language } = useLanguage();
-    const [blogs, setBlogs] = useState([]);
-    const [featuredBlogs, setFeaturedBlogs] = useState([]);
-    const [popularBlogs, setPopularBlogs] = useState([]);
+    // posts written into the site (data/blogPosts.js) show at once — also in the server HTML Google reads
+    const [blogs, setBlogs] = useState(STATIC_POSTS);
+    const [featuredBlogs, setFeaturedBlogs] = useState(STATIC_POSTS);
+    const [popularBlogs, setPopularBlogs] = useState(STATIC_POSTS);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -71,17 +73,17 @@ export default function BlogPage() {
                 const res = await fetch(url);
                 const data = await res.json();
                 if (data.success) {
-                    setBlogs(data.data || []);
+                    setBlogs([...(currentPage === 1 ? STATIC_POSTS : []), ...(data.data || [])]);
                     setTotalPages(data.meta?.totalPages || 1);
                 }
 
                 const featuredRes = await fetch(`${API_BASE_URL}/blogs/featured?limit=5`);
                 const featuredData = await featuredRes.json();
-                if (featuredData.success) setFeaturedBlogs(featuredData.data || []);
+                if (featuredData.success) setFeaturedBlogs([...STATIC_POSTS, ...(featuredData.data || [])]);
 
                 const popularRes = await fetch(`${API_BASE_URL}/blogs/popular?limit=5`);
                 const popularData = await popularRes.json();
-                if (popularData.success) setPopularBlogs(popularData.data || []);
+                if (popularData.success) setPopularBlogs([...STATIC_POSTS, ...(popularData.data || [])]);
             } catch (error) {
                 console.error('Failed to fetch blogs:', error);
             } finally {
@@ -99,7 +101,7 @@ export default function BlogPage() {
         });
     };
 
-    if (loading) {
+    if (loading && blogs.length === 0) {
         return (
             <div className="min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center gap-8 px-4">
                 {/* the heading shows while posts load, so Google and visitors see what the page is about */}
