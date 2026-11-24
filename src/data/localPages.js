@@ -77,6 +77,41 @@ export const LOCAL_PAGES = {
         ],
     },
 
+    bangladesh: {
+        slug: "web-development-company-bangladesh",
+        heroLines: ["Best Web Development Company in Bangladesh", "Website & Software Development Agency — Serving All of Bangladesh"], // the two lines under the home-style headline (inside the H1)
+        place: "Bangladesh",
+        metaTitle: "Best Web Development Company & Agency in Bangladesh | Extrain Web",
+        metaDescription:
+            "Looking for the best web development company in Bangladesh? Extrain Web builds custom websites, e-commerce and software for businesses in every division — Dhaka, Chattogram, Sylhet, Rajshahi, Khulna and more. Call +880 1711-946614.",
+        eyebrow: "All of Bangladesh · Online & in person",
+        h1: "Web Development Agency for Businesses Across Bangladesh",
+        intro:
+            "Extrain Web is a custom website and software development agency based in Merul Badda, Dhaka, working with businesses all over Bangladesh. Wherever you are — Chattogram, Sylhet, Rajshahi, Khulna, Barishal, Rangpur, Mymensingh or a district town — we plan, design and build your website with you on Google Meet, WhatsApp and phone, and hand it over ready to sell.",
+        introBn:
+            "এক্সট্রেইন ওয়েব ঢাকার মেরুল বাড্ডা থেকে সারা বাংলাদেশের ব্যবসার জন্য কাস্টম ওয়েবসাইট ও সফটওয়্যার বানায়। চট্টগ্রাম, সিলেট, রাজশাহী, খুলনা, বরিশাল, রংপুর, ময়মনসিংহ বা যেকোনো জেলা থেকে — Google Meet, WhatsApp ও ফোনে কথা বলে আমরা আপনার ওয়েবসাইট তৈরি করে দিই।",
+        whyTitle: "Why businesses across Bangladesh work with us",
+        why: [
+            { title: "Work with us from anywhere", desc: "Meetings on Google Meet, updates on WhatsApp and a clear plan for every step — you don't need to travel to Dhaka to get a professional website." },
+            { title: "Built for Bangladeshi customers", desc: "Bangla and English content, bKash, Nagad, card and cash on delivery, and delivery charges inside and outside Dhaka — set up the way your customers buy." },
+            { title: "Custom, not copy-paste", desc: "Every website and software is designed around your business, your brand and your customers, then built with modern technology like Next.js and Node.js." },
+            { title: "SEO from day one", desc: "Fast mobile pages, proper titles, structured data, a sitemap, Search Console and Google Business Profile setup — so customers in your area can find you." },
+        ],
+        areasTitle: "We build websites for businesses in every division",
+        areas: ["Dhaka", "Chattogram", "Sylhet", "Rajshahi", "Khulna", "Barishal", "Rangpur", "Mymensingh", "Gazipur", "Narayanganj", "Cumilla", "Bogura"],
+        faqs: [
+            { q: "Which is the best web development company in Bangladesh?", a: "The best company for you is the one that understands your business, shows real live work, explains its technology and price clearly, and supports you after launch. Compare a few agencies on these points — and you are welcome to see our work and talk to our team before you decide." },
+            { q: "Do you work with clients outside Dhaka?", a: "Yes. Our office is in Merul Badda, Dhaka, and we work with businesses all over Bangladesh. Most of the planning happens on Google Meet and WhatsApp, and you can visit our office whenever you are in Dhaka." },
+            { q: "How much does a website cost in Bangladesh?", a: "It depends on the pages and features. Our business website packages start from ৳12,000 and e-commerce websites from ৳12,500. Read our guide to website development cost in Bangladesh, or send your requirements on WhatsApp for an exact quote." },
+            { q: "Can you build custom software, not only websites?", a: "Yes. We build web software and dashboards for businesses — for example order and stock management, coaching-centre software and admin panels — designed around how your team works." },
+            { q: "How do meetings and payments work if I am not in Dhaka?", a: "We meet on Google Meet (Saturday to Thursday, 11 AM to 8 PM), share designs and progress online, and agree a clear payment plan before work starts." },
+        ],
+        related: [
+            { href: "/web-development-company-dhaka", label: "Web development company in Dhaka" },
+            { href: "/blog/website-development-cost-in-bangladesh-2026", label: "Website development cost in Bangladesh" },
+        ],
+    },
+
     brac: {
         slug: "web-development-company-near-brac-university",
         heroLines: ["Best Web Development Company Beside BRAC University", "Website & Software Agency in Merul Badda, Dhaka"], // the two lines under the home-style headline (inside the H1)

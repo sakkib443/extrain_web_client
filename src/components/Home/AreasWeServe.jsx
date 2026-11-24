@@ -3,6 +3,7 @@ import Link from "next/link";
 // A small band near the bottom of the home page that links to the local landing pages.
 // Internal links from the home page tell Google these pages matter (SEO), and visitors from those areas find their page.
 const LINKS = [
+    { href: "/web-development-company-bangladesh", label: "Best Web Development Company in Bangladesh" },
     { href: "/web-development-company-dhaka", label: "Web Development Company in Dhaka" },
     { href: "/web-development-company-badda", label: "Website Development in Merul Badda" },
     { href: "/web-development-company-near-brac-university", label: "Web Development near BRAC University" },

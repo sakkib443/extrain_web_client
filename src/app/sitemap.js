@@ -31,6 +31,7 @@ export default async function sitemap() {
   const staticPages = [
     page("/", 1.0, "weekly"),
     // local landing pages — the pages that should rank for "web development company in Dhaka / Badda"
+    page("/web-development-company-bangladesh", 0.95, "monthly"),
     page("/web-development-company-dhaka", 0.95, "monthly"),
     page("/web-development-company-badda", 0.95, "monthly"),
     page("/web-development-company-near-brac-university", 0.9, "monthly"),
