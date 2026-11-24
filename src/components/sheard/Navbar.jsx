@@ -27,6 +27,10 @@ const Navbar = () => {
   const [mounted, setMounted] = useState(false);
   const [hovered, setHovered] = useState(null);
   const pathname = usePathname();
+  // the menu item you click lights up at once and stays lit while the next page loads
+  // (before, the orange pill waited for the new page, so it went off and came back)
+  const [clicked, setClicked] = useState(null);
+  useEffect(() => { setClicked(null); }, [pathname]);
   const router = useRouter();
   const { items = [] } = useSelector((state) => state.cart || {});
   const { language } = useLanguage();
@@ -126,7 +130,7 @@ const Navbar = () => {
 
                 <nav className="space-y-1">
                   {menu.map(({ href, label }) => {
-                    const active = isActive(href);
+                    const active = clicked ? clicked === href : isActive(href);
                     return (
                       <Link
                         key={href} href={href} onClick={closeMobileMenu}
@@ -203,13 +207,14 @@ const Navbar = () => {
               className="hidden xl:flex items-center rounded-full border border-white/10 bg-black/25 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md"
             >
               {menu.map(({ href, label }) => {
-                const active = isActive(href);
+                const active = clicked ? clicked === href : isActive(href);
                 const hot = hovered === href && !active;
                 return (
                   <Link
                     key={href}
                     href={href}
                     aria-current={active ? "page" : undefined}
+                    onClick={() => { setClicked(href); setHovered(null); }}
                     onMouseEnter={() => setHovered(href)}
                     onFocus={() => setHovered(href)}
                     onBlur={() => setHovered(null)}
