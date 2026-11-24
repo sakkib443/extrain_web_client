@@ -372,6 +372,7 @@ const Hero = () => {
                             sizes="(min-width: 1024px) 52vw, 100vw"
                             quality={70}
                             priority={i === 0}
+                            fetchPriority={i === 0 ? "high" : "low"}
                             unoptimized={!img.src?.startsWith("/")}
                             style={{ objectPosition: img.pos }}
                             className={`object-cover transition-opacity duration-700 ease-out ${i === slide ? "opacity-100" : "opacity-0"}`}
@@ -447,7 +448,9 @@ const Hero = () => {
                                         >
                                             {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img
-                                                src={m.photo}
+                                                src={m.photo.replace(/\.webp$/, "-220.webp")} // small copy for the little circle (page speed)
+                                                loading="lazy"
+                                                decoding="async"
                                                 alt={m.name}
                                                 style={faceStyle(m.id)}
                                                 className="absolute inset-0 h-full w-full object-cover"
