@@ -274,7 +274,7 @@ const Navbar = () => {
                     <div className="h-8 w-8 overflow-hidden rounded-full border border-[#F8921C]/50 bg-black">
                       {user.image ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={user.image} alt="profile" className="h-full w-full object-cover" />
+                        <img src={user.image} alt={user?.name ? `${user.name} profile photo` : "Profile photo"} className="h-full w-full object-cover" />
                       ) : (
                         <div className="grid h-full w-full place-items-center text-sm font-bold uppercase text-[#F8921C]">
                           {(user.name || "U").charAt(0)}

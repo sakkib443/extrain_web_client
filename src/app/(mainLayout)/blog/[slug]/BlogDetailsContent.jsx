@@ -81,7 +81,7 @@ export default function BlogDetailsContent({ initialBlog }) {
             </div>
 
             <div className="relative h-[40vh] overflow-hidden">
-                <Image src={blog.thumbnail || "/images/logo.png"} alt={blog.title} fill className="object-cover" priority />
+                <Image src={blog.thumbnail || "/og-image.jpg"} alt={blog.title} fill className="object-cover" priority />
                 <div className="absolute inset-0 bg-black/60" />
                 <div className="relative h-full container mx-auto px-4 flex flex-col justify-end pb-12">
                     <Link href="/blog" className="absolute top-8 left-8 flex items-center gap-2 text-white/80 hover:text-white transition-colors">
@@ -133,6 +133,18 @@ export default function BlogDetailsContent({ initialBlog }) {
                                 <h3 className="text-xl font-bold mb-4">{text.summary}</h3>
                                 <p className="text-slate-500 italic">"{blog.excerpt}"</p>
                             </div>
+
+                            {/* links to our service pages — every article sends readers (and Google) to what we sell */}
+                            <nav aria-label="Our services" className="p-8 bg-slate-50 dark:bg-slate-900 rounded-3xl">
+                                <h3 className="text-xl font-bold mb-4">Our services</h3>
+                                <ul className="space-y-2 text-sm">
+                                    <li><Link href="/web-development-company-dhaka" className="hover:text-[#F8921C]">Web development company in Dhaka</Link></li>
+                                    <li><Link href="/category/ecommerce" className="hover:text-[#F8921C]">E-commerce website development</Link></li>
+                                    <li><Link href="/website" className="hover:text-[#F8921C]">Custom websites we build</Link></li>
+                                    <li><Link href="/digital-marketing" className="hover:text-[#F8921C]">SEO &amp; digital marketing</Link></li>
+                                    <li><Link href="/contact" className="hover:text-[#F8921C]">Get a free quote</Link></li>
+                                </ul>
+                            </nav>
                         </div>
                     </aside>
                 </div>

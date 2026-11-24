@@ -137,7 +137,7 @@ function ServiceCard({ s, index, isBn, bn, reduce, parallaxY }) {
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     src={s.image}
-                                    alt={s.title}
+                                    alt={`${s.title} — Extrain Web, Dhaka`}
                                     loading="lazy"
                                     decoding="async"
                                     style={{ objectPosition: s.pos || "50% 50%" }}

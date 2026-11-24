@@ -331,8 +331,9 @@ const Hero = () => {
                                 <div className="orb-float w-full h-full">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
-                                        src="/hero-1rightimg1-233x244.webp"
-                                        alt="Golden 3D orb"
+                                        src="/golden-3d-orb.webp"
+                                        alt="" // decoration only
+                                        aria-hidden="true"
                                         className="orb-spin w-full h-full object-contain drop-shadow-[0_30px_60px_rgba(245,184,20,0.35)]"
                                     />
                                 </div>

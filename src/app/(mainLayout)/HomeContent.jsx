@@ -13,6 +13,7 @@ const ClientsSection = dynamic(() => import("@/components/Home/ClientsSection"))
 const DigitalProducts = dynamic(() => import("@/components/Home/DigitalProducts"));
 const TestimonialSection = dynamic(() => import("@/components/Home/TestimonialSection"));
 const TeamSection = dynamic(() => import("@/components/Home/TeamSection"));
+import AreasWeServe from "@/components/Home/AreasWeServe";
 import { HomeMediaProvider } from "@/components/Home/HomeMediaContext";
 
 export default function HomeContent({ media = null }) {
@@ -40,6 +41,7 @@ export default function HomeContent({ media = null }) {
                     <TeamSection />
                     <DigitalProducts />
                     <TestimonialSection />
+                    <AreasWeServe />
                 </section>
             </main>
         </div>

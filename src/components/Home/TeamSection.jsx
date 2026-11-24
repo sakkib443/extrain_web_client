@@ -128,7 +128,7 @@ const TeamSection = () => {
                                                     // eslint-disable-next-line @next/next/no-img-element
                                                     <img
                                                         src={m.photo}
-                                                        alt={m.name}
+                                                        alt={`${m.name}${m.role ? ", " + m.role : ""} — Extrain Web`}
                                                         loading="lazy"
                                                         style={{ objectPosition: m.pos || "50% 20%" }}
                                                         className="h-full w-full object-cover grayscale-[30%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"

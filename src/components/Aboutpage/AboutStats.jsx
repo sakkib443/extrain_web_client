@@ -106,7 +106,7 @@ const AboutStats = () => {
                     >
                         <img
                             src="/images/aboutah.jpg"
-                            alt="Our Story"
+                            alt="Extrain Web team at work — web development company in Merul Badda, Dhaka"
                             className="absolute inset-0 w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />

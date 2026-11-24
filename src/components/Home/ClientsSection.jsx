@@ -397,7 +397,7 @@ const ClientsSection = () => {
                                 <img loading="lazy" decoding="async"
                                     key={i}
                                     src={url}
-                                    alt="Happy client"
+                                    alt="Happy client of Extrain Web"
                                     className="h-10 w-10 rounded-full border-2 border-[color:var(--tone-deep)] object-cover"
                                 />
                             ))}

@@ -195,8 +195,8 @@ const IeltsHero = () => {
                             <div className="relative overflow-hidden rounded-[2rem] rounded-tl-[6rem] border border-white/10 bg-[color:var(--tone-soft)]">
                                 <motion.div style={reduce ? undefined : { x: imgX, y: imgY, scale: 1.04 }}>
                                     <Image
-                                        src="/images/IELTSPOST.gif"
-                                        alt="IELTS Mock Test Software"
+                                        src="/images/ielts-mock-test-software-bangladesh.webp"
+                                        alt="IELTS mock test software for coaching centres in Bangladesh — Extrain Web"
                                         width={500}
                                         height={500}
                                         className="block h-auto w-full"

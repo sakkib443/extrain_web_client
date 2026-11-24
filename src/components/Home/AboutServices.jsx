@@ -137,7 +137,7 @@ const AboutServices = () => {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img loading="lazy" decoding="async"
                     src={s.image}
-                    alt={s.title}
+                    alt={`${s.title} — Extrain Web, Dhaka`}
                     style={{ objectPosition: s.pos }}
                     className={`h-full w-full object-cover transition-transform duration-700 ease-out ${on ? "scale-110" : "scale-100"}`}
                 />
@@ -385,7 +385,7 @@ const AboutServices = () => {
                                         <img loading="lazy" decoding="async"
                                             key={i}
                                             src={url}
-                                            alt="Happy client"
+                                            alt="Happy client of Extrain Web"
                                             className="h-8 w-8 rounded-full border-2 border-[color:var(--tone-deep)] object-cover"
                                         />
                                     ))}
