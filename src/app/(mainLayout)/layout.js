@@ -14,7 +14,8 @@ const MainLayout = ({ children }) => {
     return (
         <>
             <RouteProgress />
-            <div>
+            {/* dark behind every page: while one page swaps to the next, the browser's white never shows (the white flash) */}
+            <div className="min-h-screen bg-[#0e0f11]">
                 <Navbar />
                 {children}
                 <Footer />
