@@ -103,7 +103,10 @@ const Words = ({ ready, delay, text }) =>
         </motion.span>
     ));
 
-const Hero = () => {
+// keywordLines: the two small lines under the headline (inside the H1). The home page uses the default;
+// the local pages (Badda, Dhaka, BRAC University) pass their own keyword.
+const HOME_KEYWORD = ["The Best Custom Website & Software", "Development Company in Bangladesh"];
+const Hero = ({ keywordLines = HOME_KEYWORD }) => {
     const { language } = useLanguage();
     const isBn = language === "bn";
     const bn = isBn ? "hind-siliguri" : "";
@@ -273,8 +276,8 @@ const Hero = () => {
                                 >
                                     {/* kept in English in both languages: it matches the page title and what people type into Google.
                                         Soft white so it doesn't shout; first line a little bigger than the second. */}
-                                    <span className="block text-[15px] sm:text-[19px]">The Best Custom Website &amp; Software</span>
-                                    <span className="block text-[12px] sm:text-[14px] text-white/60">Development Company in Bangladesh</span>
+                                    <span className="block text-[15px] sm:text-[19px]">{keywordLines[0]}</span>
+                                    <span className="block text-[12px] sm:text-[14px] text-white/60">{keywordLines[1]}</span>
                                 </motion.span>
                             </h1>
 

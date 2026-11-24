@@ -6,6 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { BUSINESS, ADDRESS_LINE, ADDRESS_LINE_BN, MAP_URL, MAP_EMBED_URL } from "@/config/business";
 import { LOCAL_SERVICES, LOCAL_STEPS } from "@/data/localPages";
+import LocalHomeBlocks from "./LocalHomeBlocks";
+import { API_BASE_URL } from "@/config/api";
+import { fetchHomeMedia } from "@/lib/homeMedia";
 
 const ORANGE = "#F8921C";
 
@@ -22,15 +25,20 @@ const SectionTitle = ({ kicker, children }) => (
     </div>
 );
 
-export default function LocalLanding({ page }) {
+export default async function LocalLanding({ page }) {
+    // same photos as the home page (Dashboard → Design → Home Page → Photos)
+    const media = await fetchHomeMedia(API_BASE_URL);
     const waText = encodeURIComponent(`Hello Extrain Web! I want a website. (from the ${page.place} page)`);
 
     return (
         <main className="bg-[color:var(--tone-deep)] text-white">
-            {/* ============ HERO ============ */}
+            {/* ============ HOME-STYLE HERO (the page's H1: home headline + this page's keyword lines) ============ */}
+            <LocalHomeBlocks part="hero" media={media} keywordLines={page.heroLines} />
+
+            {/* ============ INTRO (this page's own text) ============ */}
             <section className="relative overflow-hidden">
                 <div aria-hidden="true" className="pointer-events-none absolute -top-40 right-[-10%] h-[36rem] w-[36rem] rounded-full blur-[120px]" style={{ background: "rgba(248,146,28,0.12)" }} />
-                <div className="container relative mx-auto grid items-center gap-12 px-6 pb-16 pt-32 lg:grid-cols-[1.1fr_0.9fr] lg:px-10 lg:pb-24 lg:pt-36">
+                <div className="container relative mx-auto grid items-center gap-12 px-6 pb-16 pt-20 lg:grid-cols-[1.1fr_0.9fr] lg:px-10 lg:pb-24 lg:pt-24">
                     <div>
                         <nav aria-label="Breadcrumb" className="mb-6 text-[13px] text-white/50">
                             <Link href="/" className="hover:text-white">Home</Link>
@@ -41,9 +49,9 @@ export default function LocalLanding({ page }) {
                             <span className="h-2 w-2 rounded-full" style={{ background: ORANGE }} />
                             {page.eyebrow}
                         </p>
-                        <h1 style={{ color: "#fff" }} className="text-[clamp(2.1rem,4.4vw,3.8rem)] font-bold leading-[1.1] tracking-[-0.01em]">
+                        <h2 style={{ color: "#fff" }} className="text-[clamp(2.1rem,4.4vw,3.8rem)] font-bold leading-[1.1] tracking-[-0.01em]">
                             {page.h1}
-                        </h1>
+                        </h2>
                         <p className="mt-6 max-w-xl text-base leading-relaxed text-white/70 lg:text-lg">{page.intro}</p>
                         <p className="hind-siliguri mt-4 max-w-xl text-[15px] leading-relaxed text-white/55" lang="bn">{page.introBn}</p>
 
@@ -88,6 +96,9 @@ export default function LocalLanding({ page }) {
                     </div>
                 </div>
             </section>
+
+            {/* ============ HOME SECTIONS: services grid + about our services ============ */}
+            <LocalHomeBlocks part="top" media={media} />
 
             {/* ============ SERVICES ============ */}
             <section className="bg-[color:var(--tone-soft)] py-20 lg:py-24">
@@ -146,6 +157,9 @@ export default function LocalLanding({ page }) {
                     </ol>
                 </div>
             </section>
+
+            {/* ============ HOME SECTIONS: gallery, clients, testimonials ============ */}
+            <LocalHomeBlocks part="proof" media={media} />
 
             {/* ============ AREAS + OFFICE + MAP ============ */}
             <section className="py-20 lg:py-24">

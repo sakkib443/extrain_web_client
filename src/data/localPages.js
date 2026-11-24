@@ -9,6 +9,7 @@
 export const LOCAL_PAGES = {
     badda: {
         slug: "web-development-company-badda",
+        heroLines: ["Best Web Development Company in Badda", "Website & Software Development Agency in Merul Badda, Dhaka"], // the two lines under the home-style headline (inside the H1)
         place: "Badda",
         metaTitle: "Website Development Company in Badda, Merul Badda | Extrain Web",
         metaDescription:
@@ -43,6 +44,7 @@ export const LOCAL_PAGES = {
 
     dhaka: {
         slug: "web-development-company-dhaka",
+        heroLines: ["Best Web Development Company in Dhaka", "Website & Software Development Agency in Bangladesh"], // the two lines under the home-style headline (inside the H1)
         place: "Dhaka",
         metaTitle: "Best Web Development Company in Dhaka | Extrain Web",
         metaDescription:
@@ -77,6 +79,7 @@ export const LOCAL_PAGES = {
 
     brac: {
         slug: "web-development-company-near-brac-university",
+        heroLines: ["Best Web Development Company Beside BRAC University", "Website & Software Agency in Merul Badda, Dhaka"], // the two lines under the home-style headline (inside the H1)
         place: "Merul Badda",
         metaTitle: "Best Web Development Company Beside BRAC University | Extrain Web",
         metaDescription:
