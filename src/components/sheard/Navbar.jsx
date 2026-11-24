@@ -183,7 +183,7 @@ const Navbar = () => {
 
         {/* a little wider than the page content (1280) so the header has room to breathe on big screens */}
         <motion.div
-          initial={{ opacity: 0, y: -24 }}
+          initial={false} // header is visible at once and never re-animates between pages
           animate={introReady ? { opacity: 1, y: 0 } : { opacity: 0, y: -24 }}
           transition={{ duration: 0.9, delay: introReady ? 0.25 : 0, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto w-full max-w-[1480px] px-5 sm:px-8">
