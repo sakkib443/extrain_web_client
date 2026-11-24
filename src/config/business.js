@@ -14,7 +14,7 @@ export const BUSINESS = {
     name: "Extrain Web",
     alternateName: "Extra in Web",
     founder: "Sheikh Sakibul Hasan",
-    foundingDate: "2019",
+    foundingDate: "2023",
     phone: "+8801711946614",
     phoneDisplay: "+880 1711-946614",
     whatsapp: "https://wa.me/8801711946614",
@@ -27,10 +27,10 @@ export const BUSINESS = {
         region: "Dhaka Division",
         country: "BD",
     },
-    // Sat–Thu, 10 AM – 6 PM (Friday off) — same as the contact page
-    hours: { days: ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"], opens: "10:00", closes: "18:00" },
-    hoursText: "Sat – Thu: 10:00 AM – 6:00 PM",
-    hoursTextBn: "শনি – বৃহস্পতি: সকাল ১০টা – সন্ধ্যা ৬টা",
+    // Sat–Thu, 11 AM – 8 PM (Friday off) — same as the Google Business Profile
+    hours: { days: ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"], opens: "11:00", closes: "20:00" },
+    hoursText: "Sat – Thu: 11:00 AM – 8:00 PM",
+    hoursTextBn: "শনি – বৃহস্পতি: সকাল ১১টা – রাত ৮টা",
     // Only profiles that really exist. Add LinkedIn / YouTube / Google Business Profile links here once they are live.
     sameAs: [FACEBOOK_URL],
 };

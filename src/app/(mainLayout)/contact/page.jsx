@@ -6,7 +6,7 @@ import { SITE_URL } from "@/config/business";
 export async function generateMetadata() {
   return seoGenerateMetadata({
     title: "Contact Extrain Web | Web Development Company in Merul Badda, Dhaka",
-    description: "Visit or call Extrain Web — Pragati Tower, Pragati Sarani, Merul Badda, Dhaka 1212. Phone / WhatsApp +880 1711-946614. Open Sat–Thu, 10 AM – 6 PM.",
+    description: "Visit or call Extrain Web — Pragati Tower, Pragati Sarani, Merul Badda, Dhaka 1212. Phone / WhatsApp +880 1711-946614. Open Sat–Thu, 11 AM – 8 PM.",
     keywords: [
       ...commonKeywords.brand,
       "contact extrain web",

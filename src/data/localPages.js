@@ -29,7 +29,7 @@ export const LOCAL_PAGES = {
         areasTitle: "Web development company in Merul Badda — areas we serve",
         areas: ["Merul Badda", "Uttar Badda", "Madhya Badda", "Notun Bazar", "Rampura", "Banasree", "Aftabnagar", "Hatirjheel", "Gulshan", "Baridhara", "Bashundhara R/A"],
         faqs: [
-            { q: "Where is your office in Badda?", a: "Our office is at Pragati Tower, Kha-214/E, Pragati Sarani, Merul Badda, Dhaka 1212. We are open Saturday to Thursday, 10 AM to 6 PM. Please call +880 1711-946614 before you come." },
+            { q: "Where is your office in Badda?", a: "Our office is at Pragati Tower, Kha-214/E, Pragati Sarani, Merul Badda, Dhaka 1212. We are open Saturday to Thursday, 11 AM to 8 PM. Please call +880 1711-946614 before you come." },
             { q: "How much does a website cost in Badda?", a: "It depends on what you need. A business or portfolio website costs less than an online store with payments and stock management. Our e-commerce websites start from ৳12,500. Send us your requirements on WhatsApp and we will give you an exact price." },
             { q: "How long does it take to build a website?", a: "A ready-made template website can be live within a few days. A custom business website or online store usually takes two to four weeks, depending on the pages and features." },
             { q: "Will my website show up on Google?", a: "Every site we build is SEO-ready: fast loading, mobile-friendly, proper titles and descriptions, a sitemap and Google Search Console setup. We also offer ongoing SEO and Google Business Profile setup." },
@@ -50,9 +50,9 @@ export const LOCAL_PAGES = {
         eyebrow: "Dhaka · Bangladesh",
         h1: "Web Development Company in Dhaka",
         intro:
-            "Since 2019 Extrain Web has built websites, online stores and business software for companies across Dhaka — from shops and coaching centres to real-estate and corporate companies. One team designs, builds, launches and supports your site.",
+            "Since 2023 Extrain Web has built websites, online stores and business software for companies across Dhaka — from shops and coaching centres to real-estate and corporate companies. One team designs, builds, launches and supports your site.",
         introBn:
-            "২০১৯ সাল থেকে এক্সট্রেইন ওয়েব ঢাকার বিভিন্ন ব্যবসার জন্য ওয়েবসাইট, অনলাইন শপ ও বিজনেস সফটওয়্যার বানাচ্ছে। ডিজাইন থেকে শুরু করে লঞ্চ ও সাপোর্ট — সব এক টিম করে।",
+            "২০২৩ সাল থেকে এক্সট্রেইন ওয়েব ঢাকার বিভিন্ন ব্যবসার জন্য ওয়েবসাইট, অনলাইন শপ ও বিজনেস সফটওয়্যার বানাচ্ছে। ডিজাইন থেকে শুরু করে লঞ্চ ও সাপোর্ট — সব এক টিম করে।",
         whyTitle: "What you get from a Dhaka web development team",
         why: [
             { title: "Custom design, not a copy", desc: "Your website is designed around your brand and your customers, and it looks right on every phone, tablet and laptop." },
@@ -67,7 +67,7 @@ export const LOCAL_PAGES = {
             { q: "How much does a website cost in Dhaka?", a: "Prices depend on the number of pages and features. Our e-commerce websites start from ৳12,500, and we give a fixed quote after hearing your requirements — there are no hidden charges." },
             { q: "Do you also handle domain, hosting and SEO?", a: "Yes. We can register your domain, set up hosting, and run SEO, Google Business Profile and Facebook / Google ads, so everything is handled in one place." },
             { q: "Can I update the website myself?", a: "Yes. Most sites come with an admin dashboard where you can change text, photos, products and prices without any coding." },
-            { q: "Where is your office?", a: "Pragati Tower, Kha-214/E, Pragati Sarani, Merul Badda, Dhaka 1212 — open Saturday to Thursday, 10 AM to 6 PM." },
+            { q: "Where is your office?", a: "Pragati Tower, Kha-214/E, Pragati Sarani, Merul Badda, Dhaka 1212 — open Saturday to Thursday, 11 AM to 8 PM." },
         ],
         related: [
             { href: "/web-development-company-badda", label: "Website development company in Badda" },
@@ -101,7 +101,7 @@ export const LOCAL_PAGES = {
             { q: "Do you build websites for students and student startups?", a: "Yes. We build portfolio websites, startup landing pages, e-commerce stores and web apps, and we can start small and grow the site as your idea grows." },
             { q: "Can you build a website for a university club or event?", a: "Yes — event pages, registration forms, club websites and galleries. Tell us the date of your event and we will plan the timeline around it." },
             { q: "How much does a website cost?", a: "It depends on the pages and features. Our e-commerce websites start from ৳12,500 and simpler sites can cost less. Send your idea on WhatsApp for an exact quote." },
-            { q: "When is the office open?", a: "Saturday to Thursday, 10 AM to 6 PM. Friday is closed." },
+            { q: "When is the office open?", a: "Saturday to Thursday, 11 AM to 8 PM. Friday is closed." },
         ],
         related: [
             { href: "/web-development-company-badda", label: "Website development company in Badda" },
