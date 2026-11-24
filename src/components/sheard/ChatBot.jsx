@@ -384,7 +384,7 @@ const ChatBot = () => {
                                     className="ebot-input"
                                     disabled={isTyping}
                                 />
-                                <button type="submit" disabled={!inputValue.trim() || isTyping} className="ebot-send-btn">
+                                <button type="submit" aria-label="Send message" disabled={!inputValue.trim() || isTyping} className="ebot-send-btn">
                                     <LuSend size={16} />
                                 </button>
                             </div>

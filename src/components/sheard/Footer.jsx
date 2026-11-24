@@ -110,6 +110,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/70 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#F8921C] hover:bg-[#F8921C] hover:text-black"
                   title={social.label}
+                  aria-label={social.label}
                 >
                   <social.icon size={17} />
                 </a>

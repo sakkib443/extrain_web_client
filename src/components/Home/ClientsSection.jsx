@@ -13,9 +13,9 @@ import TiltCard from "./TiltCard";
 import { Star4, OrbitRing } from "./Decor";
 
 const avatars = [
-    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80",
-    "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100&q=80",
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100&q=80&auto=format&fit=crop",
 ];
 
 const fadeUp = {
@@ -48,7 +48,7 @@ const Mark = ({ client, name, className = "" }) => (
     >
         {client.logo ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={client.logo} alt={name} className="h-full w-full object-contain p-1.5" />
+            <img loading="lazy" decoding="async" src={client.logo} alt={name} className="h-full w-full object-contain p-1.5" />
         ) : (
             <span aria-hidden="true">{firstLetter(name)}</span>
         )}
@@ -394,7 +394,7 @@ const ClientsSection = () => {
                         <div className="flex -space-x-2.5">
                             {avatars.map((url, i) => (
                                 // eslint-disable-next-line @next/next/no-img-element
-                                <img
+                                <img loading="lazy" decoding="async"
                                     key={i}
                                     src={url}
                                     alt="Happy client"

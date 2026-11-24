@@ -11,6 +11,7 @@ const nextConfig = {
     ];
   },
   images: {
+    minimumCacheTTL: 31536000, // resized photos stay cached for a year (page speed)
     remotePatterns: [
       {
         protocol: "https",

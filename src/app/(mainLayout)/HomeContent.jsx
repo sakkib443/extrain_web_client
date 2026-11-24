@@ -1,16 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
+import dynamic from "next/dynamic";
+// sections below the first screen come in their own JS chunks (page speed); still rendered on the server for Google
 import { useDispatch } from "react-redux";
 import { fetchCategories } from "@/redux/categorySlice";
 import Hero from "@/components/Home/Hero";
 import HomeCategory from "@/components/Home/HomeCategory";
-import AboutServices from "@/components/Home/AboutServices";
-import GallerySection from "@/components/Home/GallerySection";
-import ClientsSection from "@/components/Home/ClientsSection";
-import DigitalProducts from "@/components/Home/DigitalProducts";
-import TestimonialSection from "@/components/Home/TestimonialSection";
-import TeamSection from "@/components/Home/TeamSection";
+const AboutServices = dynamic(() => import("@/components/Home/AboutServices"));
+const GallerySection = dynamic(() => import("@/components/Home/GallerySection"));
+const ClientsSection = dynamic(() => import("@/components/Home/ClientsSection"));
+const DigitalProducts = dynamic(() => import("@/components/Home/DigitalProducts"));
+const TestimonialSection = dynamic(() => import("@/components/Home/TestimonialSection"));
+const TeamSection = dynamic(() => import("@/components/Home/TeamSection"));
 import { HomeMediaProvider } from "@/components/Home/HomeMediaContext";
 
 export default function HomeContent({ media = null }) {

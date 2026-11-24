@@ -208,7 +208,7 @@ const TestimonialSection = () => {
                                 <div className="flex -space-x-2.5">
                                     {TESTIMONIALS.map((x) => (
                                         // eslint-disable-next-line @next/next/no-img-element
-                                        <img
+                                        <img loading="lazy" decoding="async"
                                             key={x.name}
                                             src={x.image}
                                             alt={`${x.name}, Extrain Web client`}
@@ -254,7 +254,7 @@ const TestimonialSection = () => {
                                         }`}
                                     >
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img
+                                        <img loading="lazy" decoding="async"
                                             src={x.image}
                                             alt=""
                                             className={`h-12 w-12 shrink-0 rounded-full object-cover ring-2 transition-all duration-300 ${on ? "ring-[#F8921C]" : "ring-white/10 grayscale-[40%] group-hover:grayscale-0"}`}
@@ -323,7 +323,7 @@ const TestimonialSection = () => {
 
                                             <div className="mt-8 flex items-center gap-4 border-t border-white/10 pt-6">
                                                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                <img
+                                                <img loading="lazy" decoding="async"
                                                     src={t.image}
                                                     alt={isBn ? t.nameBn : t.name}
                                                     className="h-14 w-14 rounded-full object-cover ring-2 ring-[#F8921C]/70"

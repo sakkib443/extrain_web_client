@@ -274,7 +274,7 @@ const GallerySection = () => {
 
                         <figure className="flex max-h-full max-w-full flex-col items-center" onClick={(e) => e.stopPropagation()}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
+                            <img loading="lazy" decoding="async"
                                 key={current.full}
                                 src={current.full}
                                 alt={isBn ? current.labelBn : current.label}

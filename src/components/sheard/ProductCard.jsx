@@ -76,7 +76,7 @@ const ProductCard = ({ product, type, view = "grid", theme = "light" }) => {
                 {/* Left: Image (35%) */}
                 <div className="relative w-full md:w-[35%] h-56 md:h-auto shrink-0 overflow-hidden p-3">
                     <Link href={detailUrl} className="block h-full w-full">
-                        <img
+                        <img loading="lazy" decoding="async"
                             src={productImage}
                             alt={`${title} - Professional ${type === 'website' ? 'Website Design' : 'Software Application'} in Bangladesh`}
                             className="h-full w-full object-cover rounded-lg transition-transform duration-700 group-hover:scale-105"
@@ -255,7 +255,7 @@ const ProductCard = ({ product, type, view = "grid", theme = "light" }) => {
                 {/* Image Section */}
                 <div className="relative h-48 w-full overflow-hidden shrink-0">
                     <Link href={detailUrl} className="block h-full w-full">
-                        <img
+                        <img loading="lazy" decoding="async"
                             src={productImage}
                             alt={`${title} - Premium ${type === 'website' ? 'Website Template' : 'Software Solution'} for Business`}
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

@@ -6,7 +6,7 @@
 
 import { CLIENTS } from "@/data/clients";
 
-const U = (id, w = 900) => `https://images.unsplash.com/${id}?w=${w}&q=80`;
+const U = (id, w = 900) => `https://images.unsplash.com/${id}?w=${w}&q=80&auto=format&fit=crop`;
 const stock = (id, label, labelBn) => ({ src: U(id), full: U(id, 1600), label, labelBn });
 const local = (src, label, labelBn, pos) => ({ src, full: src, label, labelBn, ...(pos ? { pos } : {}) });
 // our own event photos: a small file for the tile, the big one for the lightbox

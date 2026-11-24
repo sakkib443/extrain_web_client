@@ -14,9 +14,9 @@ import { useHomeMedia } from "./HomeMediaContext";
 import TiltCard from "./TiltCard";
 
 const avatars = [
-    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80",
-    "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100&q=80",
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100&q=80&auto=format&fit=crop",
 ];
 
 // The three services — each one owns an image in the collage (photo from useHomeMedia(), same order) and a card on the right.
@@ -24,7 +24,7 @@ const services = [
     {
         id: "web",
         icon: LuCode,
-        image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1000&q=80",
+        image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1000&q=80&auto=format&fit=crop",
         pos: "50% 50%",
         title: "Web Design & Development",
         titleBn: "ওয়েব ডিজাইন ও ডেভেলপমেন্ট",
@@ -35,7 +35,7 @@ const services = [
     {
         id: "marketing",
         icon: LuMegaphone,
-        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&q=80",
+        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&q=80&auto=format&fit=crop",
         pos: "50% 45%",
         title: "Digital Marketing",
         titleBn: "ডিজিটাল মার্কেটিং",
@@ -46,7 +46,7 @@ const services = [
     {
         id: "media",
         icon: LuCamera,
-        image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1000&q=80",
+        image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1000&q=80&auto=format&fit=crop",
         pos: "38% 50%",
         title: "Content & Media",
         titleBn: "কন্টেন্ট ও মিডিয়া",
@@ -135,7 +135,7 @@ const AboutServices = () => {
                 className={`relative overflow-hidden rounded-[2rem] ring-2 transition-all duration-500 ${on ? "ring-[#F8921C]/80" : "ring-transparent"} ${className}`}
             >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <img loading="lazy" decoding="async"
                     src={s.image}
                     alt={s.title}
                     style={{ objectPosition: s.pos }}
@@ -382,7 +382,7 @@ const AboutServices = () => {
                                 <div className="flex -space-x-2">
                                     {avatars.map((url, i) => (
                                         // eslint-disable-next-line @next/next/no-img-element
-                                        <img
+                                        <img loading="lazy" decoding="async"
                                             key={i}
                                             src={url}
                                             alt="Happy client"
