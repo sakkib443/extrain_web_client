@@ -21,7 +21,6 @@ import {
 import { FaFacebookF, FaStar } from "react-icons/fa";
 import { useLanguage } from "@/context/LanguageContext";
 import { useHomeMedia } from "./HomeMediaContext";
-import Image from "next/image";
 import { FACEBOOK_URL } from "@/config/site";
 import { TEAM } from "@/data/team";
 import useIntroReady from "@/hooks/useIntroReady";
@@ -73,7 +72,7 @@ const SCROLL_SPRING = { stiffness: 110, damping: 28, mass: 0.4 };
 // Plays when the page is first visible: right after the greeting preloader starts opening (or at once on later visits).
 // `delay` is seconds after that moment; INTRO_LEAD lets the curtain get out of the way first.
 const EASE = [0.16, 1, 0.3, 1];
-const INTRO_LEAD = 0; // no preloader curtain any more
+const INTRO_LEAD = 0.35;
 const SHOWN = { opacity: 1, x: 0, y: 0, scale: 1, rotate: 0, filter: "blur(0px)" };
 const intro = (ready, delay, from = { opacity: 0, y: 30 }, duration = 0.9) => ({
     initial: from,
@@ -87,7 +86,6 @@ const Line = ({ ready, delay, className = "", style, children }) => (
         className={`block ${className}`}
         style={style}
         {...intro(ready, delay, { opacity: 0, y: "0.55em", filter: "blur(12px)" }, 1)}
-        initial={false} // headline is the page's main content: visible from the first paint (Google's LCP)
     >
         {children}
     </motion.span>
@@ -209,7 +207,7 @@ const Hero = () => {
                 </motion.aside>
 
                 <div className="relative z-10 container mx-auto px-6 lg:px-10">
-                    <div className="home-rail-offset relative grid lg:grid-cols-[1.4fr_0.6fr] items-center gap-10 pt-32 pb-14 lg:pb-20 lg:min-h-[calc(100vh-130px)]">
+                    <div className="home-rail-offset relative grid lg:grid-cols-[1.4fr_0.6fr] items-center gap-10 pt-40 pb-14 lg:pb-20 lg:min-h-[calc(100vh-130px)]">
 
                         {/* ---------- Left: copy ---------- */}
                         <motion.div style={reduce ? undefined : { y: textY, opacity: textOpacity }}>
@@ -271,10 +269,12 @@ const Hero = () => {
                                 {/* what Google reads first: the service + the place, in the page's main heading */}
                                 <motion.span
                                     {...intro(ready, 0.6, { opacity: 0, y: 10 }, 0.7)}
-                                    className="mt-5 block text-[13px] font-semibold normal-case tracking-[0.12em] text-[#F8921C] sm:mt-7 sm:text-[15px]"
+                                    className="mt-7 block font-semibold normal-case leading-snug tracking-[0.01em] text-white/80 sm:mt-10"
                                 >
-                                    {/* kept in English in both languages: it matches the page title and what people type into Google */}
-                                    The Best Custom Website &amp; Software Development Company in Bangladesh
+                                    {/* kept in English in both languages: it matches the page title and what people type into Google.
+                                        Soft white so it doesn't shout; first line a little bigger than the second. */}
+                                    <span className="block text-[15px] sm:text-[19px]">The Best Custom Website &amp; Software</span>
+                                    <span className="block text-[12px] sm:text-[14px] text-white/60">Development Company in Bangladesh</span>
                                 </motion.span>
                             </h1>
 
@@ -284,23 +284,11 @@ const Hero = () => {
                                 <i className="h-[2px] w-24 rounded-full bg-gradient-to-r from-white/40 to-transparent" />
                             </span>
 
-                            {/* description */}
-                            <p className={`mt-5 sm:mt-9 max-w-md text-white/70 text-base lg:text-lg leading-relaxed ${bn}`}>
-                                <Words
-                                    ready={ready}
-                                    delay={0.65}
-                                    text={
-                                        isBn
-                                            ? "ওয়েব ডেভেলপমেন্ট, ডিজিটাল মার্কেটিং ও ক্রিয়েটিভ কন্টেন্ট — আমরা আপনার ব্যবসাকে অনলাইনে এগিয়ে নিই, দ্রুত ও আধুনিকভাবে।"
-                                            : "Web development, digital marketing and creative content — we help your business grow online, fast and modern."
-                                    }
-                                />
-                            </p>
 
                             {/* CTA: pill + round arrow */}
                             <motion.div
                                 {...intro(ready, 1.0, { opacity: 0, y: 24 }, 0.8)}
-                                className="mt-8 flex items-center gap-2"
+                                className="mt-10 flex items-center gap-2"
                             >
                                 <Link
                                     href="#services"
@@ -331,9 +319,8 @@ const Hero = () => {
                                 <div className="orb-float w-full h-full">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
-                                        src="/golden-3d-orb.webp"
-                                        alt="" // decoration only
-                                        aria-hidden="true"
+                                        src="/hero-1rightimg1-233x244.png"
+                                        alt="Golden 3D orb"
                                         className="orb-spin w-full h-full object-contain drop-shadow-[0_30px_60px_rgba(245,184,20,0.35)]"
                                     />
                                 </div>
@@ -354,7 +341,6 @@ const Hero = () => {
                     1.3
                 )}
                 animate={ready ? { opacity: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)" } : { opacity: 0.4, y: 120, clipPath: "inset(100% 0% 0% 0%)" }}
-                initial={false} // the big photo shows at first paint too (no entrance animation) — page speed
                 className="group relative z-[5] order-2 lg:order-none w-full aspect-[3/2] lg:aspect-auto lg:w-[52%] lg:absolute lg:right-0 lg:bottom-0 lg:h-[min(calc(38vh+306px),37.6vw)] overflow-hidden rounded-t-[48px] lg:rounded-t-none lg:rounded-tl-[140px] bg-[color:var(--tone-deep)]"
             >
                 {/* inner layer carries the parallax; slightly oversized so edges never show */}
@@ -363,20 +349,17 @@ const Hero = () => {
                     className="absolute inset-0"
                 >
                     {slides.map((img, i) => (
-                        // next/image sends a phone-sized copy to phones (page speed); unoptimized for photos from unknown hosts
-                        <Image
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
                             key={img.src}
                             src={img.src}
                             alt={img.alt || img.label || "Extrain Web"}
                             aria-hidden={i !== slide}
-                            fill
-                            sizes="(min-width: 1024px) 52vw, 100vw"
-                            quality={70}
-                            priority={i === 0}
                             fetchPriority={i === 0 ? "high" : "low"}
-                            unoptimized={!img.src?.startsWith("/")}
+                            loading={i === 0 ? "eager" : "lazy"}
+                            decoding="async"
                             style={{ objectPosition: img.pos }}
-                            className={`object-cover transition-opacity duration-700 ease-out ${i === slide ? "opacity-100" : "opacity-0"}`}
+                            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out ${i === slide ? "opacity-100" : "opacity-0"}`}
                         />
                     ))}
                 </motion.div>
@@ -449,9 +432,7 @@ const Hero = () => {
                                         >
                                             {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img
-                                                src={m.photo.replace(/\.webp$/, "-220.webp")} // small copy for the little circle (page speed)
-                                                loading="lazy"
-                                                decoding="async"
+                                                src={m.photo}
                                                 alt={m.name}
                                                 style={faceStyle(m.id)}
                                                 className="absolute inset-0 h-full w-full object-cover"
