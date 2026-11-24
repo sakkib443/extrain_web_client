@@ -13,9 +13,9 @@ import TiltCard from "./TiltCard";
 import { Star4, OrbitRing } from "./Decor";
 
 const avatars = [
-    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=70&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=70&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100&q=70&auto=format&fit=crop",
 ];
 
 const fadeUp = {

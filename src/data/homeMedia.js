@@ -6,7 +6,7 @@
 
 import { CLIENTS } from "@/data/clients";
 
-const U = (id, w = 900) => `https://images.unsplash.com/${id}?w=${w}&q=80&auto=format&fit=crop`;
+const U = (id, w = 600) => `https://images.unsplash.com/${id}?w=${w}&q=70&auto=format&fit=crop`;
 const stock = (id, label, labelBn) => ({ src: U(id), full: U(id, 1600), label, labelBn });
 const local = (src, label, labelBn, pos) => ({ src, full: src, label, labelBn, ...(pos ? { pos } : {}) });
 // our own event photos: a small file for the tile, the big one for the lightbox
@@ -38,16 +38,16 @@ export const DEFAULT_HOME_MEDIA = {
 
     // "Services That Power Your Digital Growth" — left, centre (bigger), right
     services: [
-        { src: U("photo-1460925895917-afdab827c52f", 1000), pos: "50% 50%" }, // Digital Marketing
-        { src: U("photo-1542744095-70fccefd4b65", 1400), pos: "50% 45%" }, // Web Design & Development
-        { src: U("photo-1452587925148-ce544e77e70d", 1000), pos: "50% 50%" }, // Content & Media
+        { src: U("photo-1460925895917-afdab827c52f", 760), pos: "50% 50%" }, // Digital Marketing
+        { src: U("photo-1542744095-70fccefd4b65", 1100), pos: "50% 45%" }, // Web Design & Development
+        { src: U("photo-1452587925148-ce544e77e70d", 760), pos: "50% 50%" }, // Content & Media
     ],
 
     // "Growth roadmap" — the three-photo collage
     roadmap: [
-        { src: U("photo-1498050108023-c5249f4df085", 1000), pos: "50% 50%" }, // Web Design & Development
-        { src: U("photo-1551288049-bebda4e38f71", 1000), pos: "50% 45%" }, // Digital Marketing
-        { src: U("photo-1492691527719-9d1e07e534b4", 1000), pos: "38% 50%" }, // Content & Media
+        { src: U("photo-1498050108023-c5249f4df085", 760), pos: "50% 50%" }, // Web Design & Development
+        { src: U("photo-1551288049-bebda4e38f71", 760), pos: "50% 45%" }, // Digital Marketing
+        { src: U("photo-1492691527719-9d1e07e534b4", 760), pos: "38% 50%" }, // Content & Media
     ],
 
     // Gallery: rows that slide in opposite directions. A row is a list of columns; a column has one tall photo or

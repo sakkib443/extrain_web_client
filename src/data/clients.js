@@ -18,7 +18,7 @@
 //           readable). Without a logo a square with the company's first letter is shown instead.
 //   note  — small line under the name, for example "Founder" or "IELTS Training Centre" (optional).
 export const CLIENTS = [
-    { name: "Professor Dr. Abu Sufian", image: "/clients/professor-dr-abu-sufian.webp", pos: "50% 18%", featured: true },
-    { name: "Best IELTS BD", image: "/clients/best-ielts-bd.webp", pos: "50% 58%", featured: true },
-    { name: "Mizan's Care", image: "/clients/mizans-care.webp", pos: "50% 12%", featured: true },
+    { name: "Professor Dr. Abu Sufian", image: "/clients/professor-dr-abu-sufian-760.webp", pos: "50% 18%", featured: true },
+    { name: "Best IELTS BD", image: "/clients/best-ielts-bd-760.webp", pos: "50% 58%", featured: true },
+    { name: "Mizan's Care", image: "/clients/mizans-care-760.webp", pos: "50% 12%", featured: true },
 ];

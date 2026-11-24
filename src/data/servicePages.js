@@ -2,7 +2,7 @@
 // Both are rendered by components/ServicePage/ServicePage.jsx — edit text here, not in the component.
 // Every text has an English and a Bangla (…Bn) version. Icons are react-icons/lu names, mapped in the component.
 
-const unsplash = (id, w = 1200) => `https://images.unsplash.com/${id}?w=${w}&q=80&auto=format&fit=crop`;
+const unsplash = (id, w = 1200) => `https://images.unsplash.com/${id}?w=${w}&q=70&auto=format&fit=crop`;
 
 export const DIGITAL_MARKETING = {
     slug: "digital-marketing",

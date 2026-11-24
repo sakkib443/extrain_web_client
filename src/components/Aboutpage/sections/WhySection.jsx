@@ -81,7 +81,7 @@ const WhySection = () => {
                                 >
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
-                                        src="https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=2070&auto=format&fit=crop"
+                                        src="https://images.unsplash.com/photo-1553877522-43269d4ea984?q=70&w=2070&auto=format&fit=crop"
                                         alt="Extrain Web professional software development team working on projects"
                                         loading="lazy"
                                         className="h-full w-full object-cover grayscale-[30%] transition-all duration-700 group-hover:grayscale-0"

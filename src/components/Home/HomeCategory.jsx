@@ -16,7 +16,7 @@ const services = [
     {
         id: "marketing",
         icon: LuMegaphone,
-        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1000&q=80&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=760&q=70&auto=format&fit=crop",
         badge: "Marketing",
         badgeBn: "মার্কেটিং",
         title: "Digital Marketing",
@@ -33,7 +33,7 @@ const services = [
         id: "web",
         icon: LuCode,
         // a person working at a monitor with a full website open on it (Unsplash, by Campaign Creators)
-        image: "https://images.unsplash.com/photo-1542744095-70fccefd4b65?w=1400&q=80&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1542744095-70fccefd4b65?w=1100&q=70&auto=format&fit=crop",
         pos: "50% 45%",
         badge: "Web",
         badgeBn: "ওয়েব",
@@ -51,7 +51,7 @@ const services = [
     {
         id: "media",
         icon: LuCamera,
-        image: "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=1000&q=80&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=760&q=70&auto=format&fit=crop",
         badge: "Media",
         badgeBn: "মিডিয়া",
         title: "Content & Media",
