@@ -3,13 +3,13 @@
 
 import Link from "next/link";
 import React, { useState } from "react";
-import { FaFacebook, FaLinkedin, FaYoutube, FaInstagram } from "react-icons/fa";
+import { FaFacebook, FaYoutube } from "react-icons/fa";
 import { IoCallOutline, IoLocationOutline, IoMailOutline } from "react-icons/io5";
 import { LuSend, LuHeart } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 import PaymentMethods from "@/components/sheard/PaymentMethods";
 import { EdgeDots } from "@/components/Home/Decor";
-import { FACEBOOK_URL } from "@/config/site";
+import { FACEBOOK_URL, YOUTUBE_URL } from "@/config/site";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -35,9 +35,8 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: FaFacebook, href: FACEBOOK_URL, label: "Facebook" },
-    { icon: FaLinkedin, href: "https://www.linkedin.com/company/Extrain Web/", label: "LinkedIn" },
-    { icon: FaYoutube, href: "https://www.youtube.com/@Extrain Web", label: "YouTube" },
-    { icon: FaInstagram, href: "https://www.instagram.com/Extrain Web/", label: "Instagram" },
+    { icon: FaYoutube, href: YOUTUBE_URL, label: "YouTube" },
+    // LinkedIn / Instagram: add here when the real pages exist (the old links were broken)
   ];
 
   // Column heading (a plain function, not a component, so typing in the newsletter box never remounts it): orange bar + small bold caps. (Inline colour: the global `h4 { color }` rule beats Tailwind's text-white.)
