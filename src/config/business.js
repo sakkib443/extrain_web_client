@@ -5,7 +5,7 @@
 // If the office moves, change ADDRESS below and update the Google Business Profile the same day.
 // ===================================================================
 
-import { FACEBOOK_URL, YOUTUBE_URL, GOOGLE_MAPS_URL, GOOGLE_MAPS_EMBED_URL } from "@/config/site";
+import { FACEBOOK_URL, YOUTUBE_URL, INSTAGRAM_URL, LINKEDIN_URL, GOOGLE_MAPS_URL, GOOGLE_MAPS_EMBED_URL } from "@/config/site";
 
 // The live site answers on www (extrainweb.com redirects to it), so every canonical / sitemap URL uses www.
 export const SITE_URL = "https://www.extrainweb.com";
@@ -33,7 +33,7 @@ export const BUSINESS = {
     hoursTextBn: "প্রতিদিন: সকাল ১০টা – রাত ১০টা",
     // Only profiles that really exist. Add LinkedIn / YouTube / Google Business Profile links here once they are live.
     // the same business on other sites — tells Google the website, Maps profile and pages are one company
-    sameAs: [FACEBOOK_URL, YOUTUBE_URL, GOOGLE_MAPS_URL],
+    sameAs: [FACEBOOK_URL, INSTAGRAM_URL, LINKEDIN_URL, YOUTUBE_URL, GOOGLE_MAPS_URL],
 };
 
 export const ADDRESS_LINE = `${BUSINESS.address.street}, ${BUSINESS.address.area}, ${BUSINESS.address.city} ${BUSINESS.address.postalCode}`;

@@ -11,7 +11,7 @@ import useSectionMotion from "@/hooks/useSectionMotion";
 import BracketLabel from "@/components/Home/BracketLabel";
 import { Star4, EdgeDots, OrbitRing } from "@/components/Home/Decor";
 import { outlineStyle, filledAccent, reveal } from "@/components/Aboutpage/sections/shared";
-import { FACEBOOK_URL, YOUTUBE_URL } from "@/config/site";
+import { FACEBOOK_URL, YOUTUBE_URL, INSTAGRAM_URL, LINKEDIN_URL } from "@/config/site";
 import { BUSINESS, ADDRESS_LINE, ADDRESS_LINE_BN, MAP_EMBED_URL } from "@/config/business";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://extrain-web-server.vercel.app/api";
@@ -35,9 +35,9 @@ const DEFAULT_CONTENT = {
     socialLinks: {
         facebook: FACEBOOK_URL,
         youtube: YOUTUBE_URL,
-        linkedin: "", // add when the real page exists
+        linkedin: LINKEDIN_URL,
         whatsapp: "https://wa.me/8801711946614",
-        instagram: "", // add when the real page exists
+        instagram: INSTAGRAM_URL,
     },
 };
 
@@ -72,7 +72,7 @@ export default function ContactContent() {
                         // name, address, phone, email and hours are fixed in config/business.js — Google needs them identical everywhere
                         contactInfo: { ...prev.contactInfo, ...c.contactInfo, ...DEFAULT_CONTENT.contactInfo },
                         // the Facebook link is fixed (config/site.js), whatever an older save left in the database
-                        socialLinks: { ...prev.socialLinks, ...c.socialLinks, facebook: FACEBOOK_URL, youtube: YOUTUBE_URL, linkedin: "", instagram: "" },
+                        socialLinks: { ...prev.socialLinks, ...c.socialLinks, facebook: FACEBOOK_URL, youtube: YOUTUBE_URL, linkedin: LINKEDIN_URL, instagram: INSTAGRAM_URL },
                     }));
                 }
             } catch (error) {
